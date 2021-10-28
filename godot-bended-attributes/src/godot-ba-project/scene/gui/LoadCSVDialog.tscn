@@ -1,0 +1,218 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theme/theme_gray.tres" type="Theme" id=1]
+[ext_resource path="res://scene/gui/LoadCSVDialog.gd" type="Script" id=2]
+
+[node name="LoadCSVDialog" type="WindowDialog"]
+margin_right = 550.0
+margin_bottom = 299.0
+rect_min_size = Vector2( 550, 410 )
+theme = ExtResource( 1 )
+popup_exclusive = true
+window_title = "Import Samples from CSV"
+resizable = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainVBox" type="VBoxContainer" parent="MarginContainer"]
+margin_right = 530.0
+margin_bottom = 390.0
+
+[node name="CSVFileHBox" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+margin_right = 530.0
+margin_bottom = 29.0
+
+[node name="Label" type="Label" parent="MarginContainer/MainVBox/CSVFileHBox"]
+margin_right = 98.0
+margin_bottom = 29.0
+text = "File Path: "
+
+[node name="FilePathEdit" type="LineEdit" parent="MarginContainer/MainVBox/CSVFileHBox"]
+margin_left = 102.0
+margin_right = 530.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+editable = false
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/MainVBox"]
+margin_top = 33.0
+margin_right = 530.0
+margin_bottom = 41.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="ImportLimitContainer" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+margin_top = 45.0
+margin_right = 530.0
+margin_bottom = 74.0
+
+[node name="Label" type="Label" parent="MarginContainer/MainVBox/ImportLimitContainer"]
+margin_right = 270.0
+margin_bottom = 29.0
+text = "Import no more than the first "
+
+[node name="ImportLimitSpinbox" type="SpinBox" parent="MarginContainer/MainVBox/ImportLimitContainer"]
+margin_left = 274.0
+margin_right = 470.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1e+07
+value = 100.0
+rounded = true
+align = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/MainVBox/ImportLimitContainer"]
+margin_left = 474.0
+margin_right = 530.0
+margin_bottom = 29.0
+text = "rows."
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/MainVBox"]
+margin_top = 78.0
+margin_right = 530.0
+margin_bottom = 86.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="EmptyValuesContainer" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+margin_top = 90.0
+margin_right = 530.0
+margin_bottom = 145.0
+
+[node name="Label" type="Label" parent="MarginContainer/MainVBox/EmptyValuesContainer"]
+margin_top = 13.0
+margin_right = 326.0
+margin_bottom = 42.0
+size_flags_vertical = 6
+text = "Samples with missing values should"
+valign = 1
+
+[node name="MissingValuesList" type="ItemList" parent="MarginContainer/MainVBox/EmptyValuesContainer"]
+margin_left = 330.0
+margin_right = 530.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 200, 55 )
+size_flags_horizontal = 3
+items = [ "be ignored.", null, false, "have zeros inserted.", null, false ]
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/MainVBox"]
+margin_top = 149.0
+margin_right = 530.0
+margin_bottom = 157.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="NamingTypeContainer" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+margin_top = 161.0
+margin_right = 530.0
+margin_bottom = 216.0
+
+[node name="Label" type="Label" parent="MarginContainer/MainVBox/NamingTypeContainer"]
+margin_top = 13.0
+margin_right = 339.0
+margin_bottom = 42.0
+text = "New samples should be named after "
+valign = 1
+
+[node name="NameTypeList" type="ItemList" parent="MarginContainer/MainVBox/NamingTypeContainer"]
+margin_left = 343.0
+margin_right = 530.0
+margin_bottom = 55.0
+rect_min_size = Vector2( 0, 55 )
+size_flags_horizontal = 3
+items = [ "a column value.", null, false, "it's row index.", null, false ]
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/MainVBox"]
+margin_top = 220.0
+margin_right = 530.0
+margin_bottom = 228.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="ColumnNameContainer" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+margin_top = 232.0
+margin_right = 530.0
+margin_bottom = 332.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 10.0
+
+[node name="Label" type="Label" parent="MarginContainer/MainVBox/ColumnNameContainer"]
+margin_top = 35.0
+margin_right = 194.0
+margin_bottom = 64.0
+text = "The name column is "
+valign = 1
+
+[node name="ColumnNameList" type="ItemList" parent="MarginContainer/MainVBox/ColumnNameContainer"]
+margin_left = 198.0
+margin_right = 530.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="NamePrefixContainer" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+visible = false
+margin_top = 232.0
+margin_right = 530.0
+margin_bottom = 261.0
+
+[node name="Label" type="Label" parent="MarginContainer/MainVBox/NamePrefixContainer"]
+margin_right = 366.0
+margin_bottom = 29.0
+text = "Column indexes should be prefixed with "
+
+[node name="NamePrefixEdit" type="LineEdit" parent="MarginContainer/MainVBox/NamePrefixContainer"]
+margin_left = 370.0
+margin_right = 530.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+text = "Sample "
+
+[node name="PaddingControl" type="Control" parent="MarginContainer/MainVBox"]
+margin_top = 336.0
+margin_right = 530.0
+margin_bottom = 345.0
+rect_min_size = Vector2( 0, 2 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/MainVBox"]
+margin_top = 349.0
+margin_right = 530.0
+margin_bottom = 357.0
+rect_min_size = Vector2( 0, 8 )
+
+[node name="ButtonBarContainer" type="HBoxContainer" parent="MarginContainer/MainVBox"]
+margin_top = 361.0
+margin_right = 530.0
+margin_bottom = 390.0
+alignment = 2
+
+[node name="ImportSamplesBtn" type="Button" parent="MarginContainer/MainVBox/ButtonBarContainer"]
+margin_left = 276.0
+margin_right = 453.0
+margin_bottom = 29.0
+text = "Import Samples ..."
+
+[node name="CancelBtn" type="Button" parent="MarginContainer/MainVBox/ButtonBarContainer"]
+margin_left = 457.0
+margin_right = 530.0
+margin_bottom = 29.0
+text = "Cancel"
+[connection signal="about_to_show" from="." to="." method="_on_LoadCSVDialog_about_to_show"]
+[connection signal="item_selected" from="MarginContainer/MainVBox/NamingTypeContainer/NameTypeList" to="." method="_on_NameTypeList_item_selected"]
+[connection signal="pressed" from="MarginContainer/MainVBox/ButtonBarContainer/ImportSamplesBtn" to="." method="_on_ImportSamplesBtn_pressed"]
+[connection signal="pressed" from="MarginContainer/MainVBox/ButtonBarContainer/CancelBtn" to="." method="_on_CancelBtn_pressed"]

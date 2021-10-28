@@ -1,0 +1,184 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scene/gui/NodePopup.gd" type="Script" id=1]
+[ext_resource path="res://font/ui-font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://theme/theme_gray.tres" type="Theme" id=3]
+
+[node name="NodePopup" type="PopupDialog"]
+visible = true
+margin_right = 400.0
+margin_bottom = 180.0
+theme = ExtResource( 3 )
+popup_exclusive = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_right = 380.0
+margin_bottom = 160.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AttribContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 380.0
+margin_bottom = 21.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/AttribContainer"]
+margin_right = 112.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 112, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Attribute:"
+align = 2
+valign = 1
+
+[node name="AttribLabel" type="Label" parent="MarginContainer/VBoxContainer/AttribContainer"]
+margin_left = 116.0
+margin_right = 380.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+align = 1
+valign = 1
+clip_text = true
+
+[node name="ThreshContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 25.0
+margin_right = 380.0
+margin_bottom = 46.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ThreshContainer"]
+margin_right = 112.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 112, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Threshold:"
+align = 2
+valign = 1
+
+[node name="ThreshLabel" type="Label" parent="MarginContainer/VBoxContainer/ThreshContainer"]
+margin_left = 116.0
+margin_right = 380.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+align = 1
+valign = 1
+
+[node name="RangeMinContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 50.0
+margin_right = 380.0
+margin_bottom = 71.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/RangeMinContainer"]
+margin_right = 112.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 112, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Range Min:"
+align = 2
+valign = 1
+
+[node name="RangeMinLabel" type="Label" parent="MarginContainer/VBoxContainer/RangeMinContainer"]
+margin_left = 116.0
+margin_right = 380.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+align = 1
+valign = 1
+
+[node name="RangeMaxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 75.0
+margin_right = 380.0
+margin_bottom = 96.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/RangeMaxContainer"]
+margin_right = 112.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 112, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Range Max:"
+align = 2
+valign = 1
+
+[node name="RangeMaxLabel" type="Label" parent="MarginContainer/VBoxContainer/RangeMaxContainer"]
+margin_left = 116.0
+margin_right = 380.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+align = 1
+valign = 1
+
+[node name="LeafClassContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 100.0
+margin_right = 380.0
+margin_bottom = 121.0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/LeafClassContainer"]
+margin_right = 112.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 112, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Leaf Class:"
+align = 2
+valign = 1
+
+[node name="LeafClassLabel" type="Label" parent="MarginContainer/VBoxContainer/LeafClassContainer"]
+margin_left = 116.0
+margin_right = 380.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+custom_fonts/font = ExtResource( 2 )
+align = 1
+valign = 1
+
+[node name="PaddingControl" type="Control" parent="MarginContainer/VBoxContainer"]
+margin_top = 125.0
+margin_right = 380.0
+margin_bottom = 129.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CloseBtnContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 133.0
+margin_right = 380.0
+margin_bottom = 160.0
+
+[node name="CountSamplesBtn" type="Button" parent="MarginContainer/VBoxContainer/CloseBtnContainer"]
+margin_right = 148.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 120, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Count Samples"
+
+[node name="CenterPadding" type="Control" parent="MarginContainer/VBoxContainer/CloseBtnContainer"]
+margin_left = 152.0
+margin_right = 256.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+
+[node name="CloseBtn" type="Button" parent="MarginContainer/VBoxContainer/CloseBtnContainer"]
+margin_left = 260.0
+margin_right = 380.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 120, 0 )
+custom_fonts/font = ExtResource( 2 )
+text = "Close"
+[connection signal="pressed" from="MarginContainer/VBoxContainer/CloseBtnContainer/CountSamplesBtn" to="." method="_on_CountSamplesBtn_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/CloseBtnContainer/CloseBtn" to="." method="_on_CloseBtn_pressed"]

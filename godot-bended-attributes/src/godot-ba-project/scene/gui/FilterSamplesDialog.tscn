@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theme/theme_gray.tres" type="Theme" id=1]
+[ext_resource path="res://scene/gui/FilterSamplesDialog.gd" type="Script" id=2]
+
+[node name="FilterSamplesDialog" type="WindowDialog"]
+margin_right = 650.0
+margin_bottom = 250.0
+rect_min_size = Vector2( 550, 200 )
+theme = ExtResource( 1 )
+window_title = "Filter Samples"
+resizable = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainVbox" type="VBoxContainer" parent="MarginContainer"]
+margin_right = 630.0
+margin_bottom = 230.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MarginContainer/MainVbox"]
+margin_right = 630.0
+margin_bottom = 21.0
+text = "Filters:"
+
+[node name="Panel" type="Panel" parent="MarginContainer/MainVbox"]
+margin_top = 25.0
+margin_right = 630.0
+margin_bottom = 199.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FiltersMarginContainer" type="MarginContainer" parent="MarginContainer/MainVbox/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FiltersScrollContainer" type="ScrollContainer" parent="MarginContainer/MainVbox/Panel/FiltersMarginContainer"]
+margin_right = 610.0
+margin_bottom = 154.0
+
+[node name="FiltersVbox" type="VBoxContainer" parent="MarginContainer/MainVbox/Panel/FiltersMarginContainer/FiltersScrollContainer"]
+margin_right = 610.0
+margin_bottom = 154.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BottomButtonBar" type="HBoxContainer" parent="MarginContainer/MainVbox"]
+margin_top = 203.0
+margin_right = 630.0
+margin_bottom = 230.0
+alignment = 2
+
+[node name="NewFilterBtn" type="Button" parent="MarginContainer/MainVbox/BottomButtonBar"]
+margin_right = 101.0
+margin_bottom = 27.0
+text = "New Filter"
+
+[node name="CenterPadding" type="Control" parent="MarginContainer/MainVbox/BottomButtonBar"]
+margin_left = 105.0
+margin_right = 564.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+
+[node name="CloseBtn" type="Button" parent="MarginContainer/MainVbox/BottomButtonBar"]
+margin_left = 568.0
+margin_right = 630.0
+margin_bottom = 27.0
+text = "Close"
+[connection signal="pressed" from="MarginContainer/MainVbox/BottomButtonBar/NewFilterBtn" to="." method="_on_NewFilterBtn_pressed"]
+[connection signal="pressed" from="MarginContainer/MainVbox/BottomButtonBar/CloseBtn" to="." method="_on_CloseBtn_pressed"]

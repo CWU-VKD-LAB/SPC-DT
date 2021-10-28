@@ -1,0 +1,93 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scene/gui/FilterListItem.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.584314, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.458824, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.584314, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.266667, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.458824, 0.0980392, 0.0980392, 1 )
+
+[node name="FilterListItem" type="HBoxContainer"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FilterNameLabel" type="Label" parent="."]
+margin_top = 3.0
+margin_right = 906.0
+margin_bottom = 17.0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+text = "Filter name"
+clip_text = true
+
+[node name="VSeparator" type="VSeparator" parent="."]
+margin_left = 910.0
+margin_right = 918.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 8, 0 )
+
+[node name="ShowOnlyBtn" type="Button" parent="."]
+margin_left = 922.0
+margin_right = 1001.0
+margin_bottom = 20.0
+text = "Show Only"
+
+[node name="HideOnlyBtn" type="Button" parent="."]
+margin_left = 1005.0
+margin_right = 1081.0
+margin_bottom = 20.0
+text = "Hide Only"
+
+[node name="ShowBtn" type="Button" parent="."]
+margin_left = 1085.0
+margin_right = 1135.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 50, 0 )
+text = "Show"
+
+[node name="HideBtn" type="Button" parent="."]
+margin_left = 1139.0
+margin_right = 1189.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 50, 0 )
+text = "Hide"
+
+[node name="VSeparator2" type="VSeparator" parent="."]
+margin_left = 1193.0
+margin_right = 1201.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 8, 0 )
+
+[node name="DeleteBtn" type="Button" parent="."]
+margin_left = 1205.0
+margin_right = 1280.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 75, 0 )
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "Delete"
+[connection signal="gui_input" from="FilterNameLabel" to="." method="_on_FilterNameLabel_gui_input"]
+[connection signal="pressed" from="ShowOnlyBtn" to="." method="_on_ShowOnlyBtn_pressed"]
+[connection signal="pressed" from="HideOnlyBtn" to="." method="_on_HideOnlyBtn_pressed"]
+[connection signal="pressed" from="ShowBtn" to="." method="_on_ShowBtn_pressed"]
+[connection signal="pressed" from="HideBtn" to="." method="_on_HideBtn_pressed"]
+[connection signal="pressed" from="DeleteBtn" to="." method="_on_DeleteBtn_pressed"]

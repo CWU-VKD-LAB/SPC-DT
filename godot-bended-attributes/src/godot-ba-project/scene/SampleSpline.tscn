@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scene/SampleSpline.gd" type="Script" id=1]
+
+[node name="SampleSpline" type="Path2D"]
+self_modulate = Color( 1, 1, 1, 1 )
+z_index = 1
+z_as_relative = false
+curve = null
+script = ExtResource( 1 )

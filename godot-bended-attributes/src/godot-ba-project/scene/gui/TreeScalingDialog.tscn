@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theme/theme_gray.tres" type="Theme" id=1]
+[ext_resource path="res://scene/gui/TreeScalingDialog.gd" type="Script" id=2]
+
+[node name="TreeScalingDialog" type="ConfirmationDialog"]
+margin_right = 323.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 200, 130 )
+theme = ExtResource( 1 )
+popup_exclusive = true
+window_title = "Tree Scaling Properties"
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainMargins" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -43.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainVbox" type="VBoxContainer" parent="MainMargins"]
+margin_right = 307.0
+margin_bottom = 79.0
+
+[node name="HeightScaleHbox" type="HBoxContainer" parent="MainMargins/MainVbox"]
+margin_right = 307.0
+margin_bottom = 31.0
+
+[node name="Label" type="Label" parent="MainMargins/MainVbox/HeightScaleHbox"]
+margin_top = 5.0
+margin_right = 190.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 190, 0 )
+text = "Height Scale Factor:"
+
+[node name="HeightScaleSpinbox" type="SpinBox" parent="MainMargins/MainVbox/HeightScaleHbox"]
+margin_left = 194.0
+margin_right = 307.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 10.0
+step = 0.1
+value = 1.0
+align = 1
+
+[node name="WidthScaleHbox" type="HBoxContainer" parent="MainMargins/MainVbox"]
+margin_top = 35.0
+margin_right = 307.0
+margin_bottom = 66.0
+
+[node name="Label" type="Label" parent="MainMargins/MainVbox/WidthScaleHbox"]
+margin_top = 5.0
+margin_right = 190.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 190, 0 )
+text = "Width Scale Factor:"
+
+[node name="WidthScaleSpinbox" type="SpinBox" parent="MainMargins/MainVbox/WidthScaleHbox"]
+margin_left = 194.0
+margin_right = 307.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 10.0
+step = 0.1
+value = 1.0
+align = 1

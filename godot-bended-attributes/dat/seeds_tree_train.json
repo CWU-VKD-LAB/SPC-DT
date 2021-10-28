@@ -1,0 +1,1 @@
+{"tree_root": {"attribute": "kernel_groove_length", "threshold": 5.5755, "operator": "<", "child_left": {"attribute": "area", "threshold": 13.41, "operator": "<", "child_left": {"leaf_class": "class_3"}, "child_right": {"leaf_class": "class_1"}}, "child_right": {"leaf_class": "class_2"}}}

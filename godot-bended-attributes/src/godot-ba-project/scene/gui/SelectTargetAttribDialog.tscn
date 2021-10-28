@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theme/theme_gray.tres" type="Theme" id=1]
+[ext_resource path="res://scene/gui/SelectTargetAttribDialog.gd" type="Script" id=2]
+
+[node name="SelectTargetAttribDialog" type="ConfirmationDialog"]
+margin_right = 375.0
+margin_bottom = 175.0
+rect_min_size = Vector2( 375, 175 )
+theme = ExtResource( 1 )
+popup_exclusive = true
+window_title = "Select Target Attribute"
+resizable = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MainMargins" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -43.0
+
+[node name="MainVbox" type="VBoxContainer" parent="MainMargins"]
+margin_right = 359.0
+margin_bottom = 124.0
+
+[node name="Label" type="Label" parent="MainMargins/MainVbox"]
+margin_right = 359.0
+margin_bottom = 21.0
+text = "Please select target class atribute:"
+
+[node name="TargetAttributeList" type="ItemList" parent="MainMargins/MainVbox"]
+margin_top = 25.0
+margin_right = 359.0
+margin_bottom = 124.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+[connection signal="about_to_show" from="." to="." method="_on_SelectTargetAttribDialog_about_to_show"]

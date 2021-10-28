@@ -1,0 +1,114 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scene/gui/SampleListItem.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.584314, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.458824, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.584314, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.266667, 0.0980392, 0.0980392, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.458824, 0.0980392, 0.0980392, 1 )
+
+[node name="SampleListItem" type="MarginContainer"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 4.0
+margin_top = 4.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 1272.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartPadding" type="Control" parent="HBoxContainer"]
+margin_right = 58.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="SampleLabel" type="Label" parent="HBoxContainer"]
+margin_left = 62.0
+margin_top = 5.0
+margin_right = 530.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 150, 0 )
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+text = "Sample Name"
+clip_text = true
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+margin_left = 534.0
+margin_right = 650.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="VisibleCheckbox" type="CheckBox" parent="HBoxContainer"]
+margin_left = 654.0
+margin_right = 725.0
+margin_bottom = 24.0
+text = "Visible"
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+margin_left = 729.0
+margin_right = 846.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="HBoxContainer"]
+margin_left = 850.0
+margin_right = 967.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+color = Color( 0.470588, 0.470588, 0.470588, 1 )
+
+[node name="VSeparator3" type="VSeparator" parent="HBoxContainer"]
+margin_left = 971.0
+margin_right = 1088.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="DeleteBtn" type="Button" parent="HBoxContainer"]
+margin_left = 1092.0
+margin_right = 1209.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_horizontal = 3
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+text = "Delete"
+
+[node name="EndPadding" type="Control" parent="HBoxContainer"]
+margin_left = 1213.0
+margin_right = 1272.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+[connection signal="gui_input" from="HBoxContainer/SampleLabel" to="." method="_on_SampleLabel_gui_input"]
+[connection signal="toggled" from="HBoxContainer/VisibleCheckbox" to="." method="_on_VisibleCheckbox_toggled"]
+[connection signal="color_changed" from="HBoxContainer/ColorPickerButton" to="." method="_on_ColorPickerButton_color_changed"]
+[connection signal="pressed" from="HBoxContainer/DeleteBtn" to="." method="_on_DeleteBtn_pressed"]
