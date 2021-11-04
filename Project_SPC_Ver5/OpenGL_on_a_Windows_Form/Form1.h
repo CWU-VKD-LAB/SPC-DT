@@ -342,7 +342,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
 			this->label9->Location = System::Drawing::Point(8, 537);
 			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(89, 16);
+			this->label9->Size = System::Drawing::Size(110, 20);
 			this->label9->TabIndex = 27;
 			this->label9->Text = L"Hide Classes";
 			this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
@@ -431,7 +431,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 			this->trackBar1->LargeChange = 1;
 			this->trackBar1->Location = System::Drawing::Point(3, 100);
 			this->trackBar1->Name = L"trackBar1";
-			this->trackBar1->Size = System::Drawing::Size(185, 45);
+			this->trackBar1->Size = System::Drawing::Size(185, 56);
 			this->trackBar1->TabIndex = 9;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
 			// 
@@ -442,7 +442,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 				static_cast<System::Byte>(0)));
 			this->ZoomingLabel->Location = System::Drawing::Point(6, 75);
 			this->ZoomingLabel->Name = L"ZoomingLabel";
-			this->ZoomingLabel->Size = System::Drawing::Size(43, 16);
+			this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
 			this->ZoomingLabel->TabIndex = 11;
 			this->ZoomingLabel->Text = L"Zoom";
 			// 
@@ -471,7 +471,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 				static_cast<System::Byte>(0)));
 			this->PannningLabel->Location = System::Drawing::Point(6, 16);
 			this->PannningLabel->Name = L"PannningLabel";
-			this->PannningLabel->Size = System::Drawing::Size(57, 16);
+			this->PannningLabel->Size = System::Drawing::Size(69, 20);
 			this->PannningLabel->TabIndex = 10;
 			this->PannningLabel->Text = L"Panning";
 			// 
@@ -541,7 +541,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 				static_cast<System::Byte>(0)));
 			this->label1->Location = System::Drawing::Point(4, 1);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(127, 16);
+			this->label1->Size = System::Drawing::Size(159, 20);
 			this->label1->TabIndex = 12;
 			this->label1->Text = L"Change Class Color";
 			// 
@@ -562,7 +562,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(554, 8);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 13);
+			this->label2->Size = System::Drawing::Size(0, 15);
 			this->label2->TabIndex = 11;
 			// 
 			// panel2
@@ -595,7 +595,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 			this->transparencySlider->Location = System::Drawing::Point(3, 43);
 			this->transparencySlider->Maximum = 255;
 			this->transparencySlider->Name = L"transparencySlider";
-			this->transparencySlider->Size = System::Drawing::Size(185, 45);
+			this->transparencySlider->Size = System::Drawing::Size(185, 56);
 			this->transparencySlider->TabIndex = 10;
 			this->transparencySlider->Value = 255;
 			this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -607,7 +607,7 @@ private: System::Windows::Forms::Label^ transparencyLabel;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->transparencyLabel->Location = System::Drawing::Point(6, 18);
 			this->transparencyLabel->Name = L"transparencyLabel";
-			this->transparencyLabel->Size = System::Drawing::Size(120, 16);
+			this->transparencyLabel->Size = System::Drawing::Size(148, 20);
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Line Transparency";
 			// 
@@ -967,7 +967,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 	if (fileopened) {
 		OpenGL3->setFileName(data);
-
+		OpenGL3->setParserFileName(dataParsed);
 
 		// clear the list to prevent duplicates on update
 		this->comboBox1->Items->Clear();
@@ -998,7 +998,6 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 		for (int i = 1; i <= data.numOfClasses; i++) {
 			this->checkedListBox4->Items->Add(i); // set the combobox for "Class combobox" to the data in item1 
 		}
-
 	}
 }
 
