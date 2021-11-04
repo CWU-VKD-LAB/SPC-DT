@@ -42,9 +42,16 @@ public:
 			classColor[classnum - 1].push_back(G);
 			classColor[classnum - 1].push_back(B);
 		}
-
 	}
+	void setClassTransparency(float alpha) {
+		int size = dataTransparency.size();
 
+		for (int i = 0; i < dataTransparency.size(); i++) {
+			dataTransparency[i] = alpha;
+		}
+
+		int foo = 0;
+	}
 
 	/// <summary>	Filename of the file. </summary>
 	std::string fileName;
@@ -236,30 +243,30 @@ public:
 			glVertex2f(nonOrthoX2[i], nonOrthoY2[i]); //defines X axis, change the second element to change angle	
 			glEnd();
 			glPopMatrix(); // Removes the layer
-			if (!fOpen)
-			{
-				for (int p = 0; p < parsedData.size(); p++)
-				{
-					glColor4ub(255, 0, 0, 1);
-					glRectf(xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]],
-						    ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]],
-						    xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]],
-						    ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]]);
-				}
-				glColor4ub(255, 0, 0, 1);
-				glRectf(xgraphcoordinates[0] - graphwidth[0] / 2, ygraphcoordinates[0] + graphheight[0] / 2,
-					xgraphcoordinates[0] - graphwidth[0] / 2 + 0.255 * graphwidth[0], ygraphcoordinates[0] - graphheight[0] / 2);
-				/*glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2, data.ygraphcoordinates[1] + data.graphheight[1] / 2,
-					data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
-				glColor4ub(0, 255, 0, 1);
-				glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.ygraphcoordinates[1] + data.graphheight[1] / 2,
-					data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
-				glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0 * data.graphwidth[1], data.ygraphcoordinates[1] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1],
-					data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 1 * data.graphheight[1]);
-				glColor4ub(169, 169, 169, 6);
-				glRectf(data.xgraphcoordinates[0] - data.graphwidth[0] / 2 + 0.255 * data.graphwidth[0], data.ygraphcoordinates[0] + data.graphheight[0] / 2 - 0 * data.graphheight[1],
-					data.xgraphcoordinates[0] - data.graphwidth[0] / 2 + 1 * data.graphwidth[0], data.ygraphcoordinates[0] + data.graphheight[0] / 2 - 1 * data.graphheight[1]);*/
-			}
+			//if (!fOpen)
+			//{
+			//	for (int p = 0; p < parsedData.size(); p++)
+			//	{
+			//		glColor4ub(255, 0, 0, 1);
+			//		glRectf(xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]],
+			//			    ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]],
+			//			    xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]],
+			//			    ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]]);
+			//	}
+			//	glColor4ub(255, 0, 0, 1);
+			//	glRectf(xgraphcoordinates[0] - graphwidth[0] / 2, ygraphcoordinates[0] + graphheight[0] / 2,
+			//		xgraphcoordinates[0] - graphwidth[0] / 2 + 0.255 * graphwidth[0], ygraphcoordinates[0] - graphheight[0] / 2);
+			//	/*glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2, data.ygraphcoordinates[1] + data.graphheight[1] / 2,
+			//		data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
+			//	glColor4ub(0, 255, 0, 1);
+			//	glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.ygraphcoordinates[1] + data.graphheight[1] / 2,
+			//		data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
+			//	glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0 * data.graphwidth[1], data.ygraphcoordinates[1] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1],
+			//		data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 1 * data.graphheight[1]);
+			//	glColor4ub(169, 169, 169, 6);
+			//	glRectf(data.xgraphcoordinates[0] - data.graphwidth[0] / 2 + 0.255 * data.graphwidth[0], data.ygraphcoordinates[0] + data.graphheight[0] / 2 - 0 * data.graphheight[1],
+			//		data.xgraphcoordinates[0] - data.graphwidth[0] / 2 + 1 * data.graphwidth[0], data.ygraphcoordinates[0] + data.graphheight[0] / 2 - 1 * data.graphheight[1]);*/
+			//}
 	}
 
 	bool is_digits(const std::string &str)

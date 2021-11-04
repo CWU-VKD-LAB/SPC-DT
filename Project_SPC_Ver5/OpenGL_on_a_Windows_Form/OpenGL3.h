@@ -158,6 +158,16 @@ namespace OpenGLForm
 
 		}
 
+		// CHANGE TRANSPARENCY OF PLOTTED DATA
+		void setDataTransparency(float alpha) {
+			graph4.data.setClassTransparency(alpha);
+		}
+
+		// CHANGE TRANSPARENCT OF THE BACKGROUND GRAPH
+		void setBackgroundTransparency(float alpha) {
+			graph4.setBackgroundTransparency(alpha);
+		}
+
 		int getClassSize() {
 			//int numberOfClasses = 0; 
 			//for (int i = 1; i <= data.classNum.size(); i++)
@@ -743,7 +753,7 @@ void OpenGLForm::COpenGL3::showTrainigData()
 	int temp=0;
 	for (int t = 0; t < graph4.data.xdata.size(); t++)
 	{
-		graph4.data.dataTransparency[t] = 255;
+		graph4.data.dataTransparency[t] = 128;
 	}
 	for (int j = 1; j <= graph4.data.numOfClasses; j++)
 	{
@@ -780,7 +790,7 @@ void OpenGLForm::COpenGL3::showTestingData()
 {
 	for (int t = 0; t < graph4.data.xdata.size(); t++)
 	{
-		graph4.data.dataTransparency[t] = 255;
+		graph4.data.dataTransparency[t] = 128;
 	}
 
 	std::vector<int> dataSizePerClass;
@@ -788,7 +798,7 @@ void OpenGLForm::COpenGL3::showTestingData()
 	int temp = 0;
 	for (int t = 0; t < graph4.data.xdata.size(); t++)
 	{
-		graph4.data.dataTransparency[t] = 255;
+		graph4.data.dataTransparency[t] = 128;
 	}
 	for (int j = 1; j <= graph4.data.numOfClasses; j++)
 	{

@@ -1,0 +1,58 @@
+﻿  stdafx.cpp
+  AssemblyInfo.cpp
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\AssemblyInfo.cpp(40,29): warning C4947: 'System::Security::Permissions::SecurityAction::RequestMinimum': marked as obsolete
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\AssemblyInfo.cpp(40,29): message : Message: 'Assembly level declarative security is obsolete and is no longer enforced by the CLR by default. See http://go.microsoft.com/fwlink/?LinkID=155570 for more information.'
+  InteractiveSPC.cpp
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(241,23): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(273,29): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(282,29): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(299,10): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(27,22): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(185,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(219,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(235,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(252,21): warning C4018: '<': signed/unsigned mismatch
+  FileHandling.cpp
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(241,23): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(273,29): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(282,29): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(299,10): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(70,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(72,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(96,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(104,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(153,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(155,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(174,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(175,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(205,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(207,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(223,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(224,21): warning C4018: '<': signed/unsigned mismatch
+  OpenGL_on_a_Windows_Form.cpp
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(241,23): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(273,29): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(282,29): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(299,10): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(687,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(716,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(744,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(750,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(760,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(767,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(781,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(789,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(795,21): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(805,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(812,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(830,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(842,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(860,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(864,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(878,20): warning C4018: '<': signed/unsigned mismatch
+\\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(882,20): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+  LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
+InteractiveSPC.obj : warning LNK4248: unresolved typeref token (01000021) for 'GLUquadric'; image may not run
+  OpenGL_on_a_Windows_Form.vcxproj -> \\Mac\Home\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\Release\OpenGL_on_a_Windows_Form.exe
