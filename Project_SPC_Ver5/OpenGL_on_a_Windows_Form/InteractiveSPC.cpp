@@ -44,7 +44,9 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 	display();
 }
 
-
+void InteractiveSPC::setBackgroundTransparency(float alpha) {
+	this->backgroundTransparency = alpha;
+}
 
 // Filling Graph Locations
 void InteractiveSPC::fillGraphLocations()
@@ -182,19 +184,19 @@ void InteractiveSPC::display() {
 		{
 			if (dataParsed.parsedData[p][5] == 0)
 			{
-				glColor4ub(255, 0, 0, 100);
+				glColor4ub(255, 0, 0, backgroundTransparency);
 			}
 			else if (dataParsed.parsedData[p][5] == 1)
 			{
-				glColor4ub(0, 255, 0, 100);
+				glColor4ub(0, 255, 0, backgroundTransparency);
 			}
 			else if (dataParsed.parsedData[p][5] == 2)
 			{
-				glColor4ub(0, 0, 255, 100);
+				glColor4ub(0, 0, 255, backgroundTransparency);
 			}
 			else if (dataParsed.parsedData[p][5] == -1)
 			{
-				glColor4ub(169, 169, 169, 100);
+				glColor4ub(169, 169, 169, backgroundTransparency);
 			}
 			glRectf(data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]],
 				data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]],

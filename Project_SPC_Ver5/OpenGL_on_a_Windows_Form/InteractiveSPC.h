@@ -16,6 +16,7 @@ public:
 	ClassData data;
 	parseData dataParsed;
 	FileHandling newFile;
+	float backgroundTransparency = 100; // Default value
 
 
 	InteractiveSPC() {};
@@ -48,5 +49,6 @@ public:
 	int findClickedCoordinate(double x, double y);
 	void drawCircle(int x, int y);
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
+	void setBackgroundTransparency(float alpha);
 };
 

@@ -163,6 +163,11 @@ namespace OpenGLForm
 			graph4.data.setClassTransparency(alpha);
 		}
 
+		// CHANGE TRANSPARENCT OF THE BACKGROUND GRAPH
+		void setBackgroundTransparency(float alpha) {
+			graph4.setBackgroundTransparency(alpha);
+		}
+
 		int getClassSize() {
 			//int numberOfClasses = 0; 
 			//for (int i = 1; i <= data.classNum.size(); i++)
