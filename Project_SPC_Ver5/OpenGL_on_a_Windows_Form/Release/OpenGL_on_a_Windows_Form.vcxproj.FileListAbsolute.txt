@@ -1,0 +1,3 @@
+C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.AssemblyReference.cache
+C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.Form1.resources
+C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache

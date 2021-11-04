@@ -42,9 +42,17 @@ public:
 			classColor[classnum - 1].push_back(G);
 			classColor[classnum - 1].push_back(B);
 		}
+	}
+	void setClassTransparency(float alpha) {
+		int size = dataTransparency.size();
+
+		for (int i = 0; i < dataTransparency.size(); i++) {
+			dataTransparency[i] = alpha;
+		}
+
+		int foo = 0;
 
 	}
-
 
 	/// <summary>	Filename of the file. </summary>
 	std::string fileName;

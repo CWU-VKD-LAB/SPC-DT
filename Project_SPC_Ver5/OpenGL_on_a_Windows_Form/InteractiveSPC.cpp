@@ -106,10 +106,6 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		glEnd();
 	}
 	
-
-
-
-	
 	glColor4ub(0, 0, 0, data.dataTransparency[i]);
 	if (j == 0) {
 		glPointSize(4);
