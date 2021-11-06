@@ -168,6 +168,11 @@ namespace OpenGLForm
 			graph4.setBackgroundTransparency(alpha);
 		}
 
+		// CHANGE LIGHTNESS OF BACKGROUND GRAPH COLORS
+		void setBackgroundColorLightness(float lightnessCoeff) {
+			graph4.setBackgroundColorLightness(lightnessCoeff);
+		}
+
 		int getClassSize() {
 			//int numberOfClasses = 0; 
 			//for (int i = 1; i <= data.classNum.size(); i++)

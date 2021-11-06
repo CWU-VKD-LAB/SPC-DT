@@ -48,6 +48,10 @@ void InteractiveSPC::setBackgroundTransparency(float alpha) {
 	this->backgroundTransparency = alpha;
 }
 
+void InteractiveSPC::setBackgroundColorLightness(float lightnessCoeff) {
+	this->backgroundClassColorCoefficient = lightnessCoeff;
+}
+
 // Filling Graph Locations
 void InteractiveSPC::fillGraphLocations()
 {
@@ -182,7 +186,10 @@ void InteractiveSPC::display() {
 	{
 		for (int p = 0; p < dataParsed.parsedData.size(); p++)
 		{
-			if (dataParsed.parsedData[p][5] == 0)
+			int classNumber = dataParsed.parsedData[p][5];
+
+			// Old background color assignment
+			/*if (dataParsed.parsedData[p][5] == 0)
 			{
 				glColor4ub(255, 0, 0, backgroundTransparency);
 			}
@@ -197,7 +204,24 @@ void InteractiveSPC::display() {
 			else if (dataParsed.parsedData[p][5] == -1)
 			{
 				glColor4ub(169, 169, 169, backgroundTransparency);
+			}*/
+
+			if (classNumber == -1) {
+				glColor4ub(169, 169, 169, backgroundTransparency);
 			}
+			else {
+
+				std::vector<float> hsl = RGBtoHSL(data.classColor[classNumber]);
+
+				hsl[2] = hsl[2] * backgroundClassColorCoefficient;
+
+				std::vector<GLubyte> rgb = HSLtoRGB(hsl[0], hsl[1], hsl[2]);
+				
+				glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparency);
+			}
+
+
+
 			glRectf(data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]],
 				data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]],
 				data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]],
@@ -342,4 +366,93 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
 	glVertex2f(rect_x1, rect_y1);
 	glEnd();
 
+}
+
+std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor) {
+	std::vector<float> hsl;
+	float rprime = classColor[0] / 255.0;
+	float gprime = classColor[1] / 255.0;
+	float bprime = classColor[2] / 255.0;
+	float cMax = max(max(rprime, gprime), bprime);
+	float cMin = min(min(rprime, gprime), bprime);
+	float cDelta = cMax - cMin;
+	float saturation, lightness = 0;
+	int hue = 0;
+
+	// get hue
+	if (cDelta == 0) {
+		hue = 0;
+	}else if (cMax == rprime) {
+		hue = 60 * fmod(((gprime - bprime) / cDelta), 6);
+	}
+	else if (cMax == gprime) {
+		hue = 60 * ((bprime - rprime) / cDelta + 2);
+	}
+	else if (cMax == bprime) {
+		hue = 60 * ((rprime - gprime) / cDelta + 4);
+	}
+
+	// get lightness
+	lightness = (cMax + cMin) / 2;
+
+	// get saturation
+	if (cDelta == 0) {
+		saturation = 0;
+	} else {
+		saturation = cDelta / (1 - abs(2 * lightness - 1));
+	}
+
+	if (saturation > 1.0f) {
+		saturation = 1.0;
+	}
+
+	hsl.push_back(hue);
+	hsl.push_back(saturation);
+	hsl.push_back(lightness);
+	return hsl;
+}
+
+std::vector<GLubyte> InteractiveSPC::HSLtoRGB(float hue, float saturation, float lightness) {
+
+	std::vector<float> rgbPrimeVector;
+	std::vector<GLubyte> rgbVector;
+
+	float c = (1 - abs(2 * lightness - 1)) * saturation;
+	float x = c * (1 - abs(fmod((hue / 60.0), 2) - 1));
+	float m = lightness - (c / 2.0);
+
+	if (hue >= 0 && hue < 60) {
+		rgbPrimeVector.push_back(c);
+		rgbPrimeVector.push_back(x);
+		rgbPrimeVector.push_back(0);
+	}
+	else if (hue >= 60 && hue < 120) {
+		rgbPrimeVector.push_back(x);
+		rgbPrimeVector.push_back(c);
+		rgbPrimeVector.push_back(0);
+	} else if (hue >= 120 && hue < 180) {
+		rgbPrimeVector.push_back(0);
+		rgbPrimeVector.push_back(c);
+		rgbPrimeVector.push_back(x);
+	} else if (hue >= 180 && hue < 240) {
+		rgbPrimeVector.push_back(0);
+		rgbPrimeVector.push_back(x);
+		rgbPrimeVector.push_back(c);
+	} else if (hue >= 240 && hue < 300) {
+		rgbPrimeVector.push_back(x);
+		rgbPrimeVector.push_back(0);
+		rgbPrimeVector.push_back(c);
+	} else if (hue >= 300 && hue < 360) {
+		rgbPrimeVector.push_back(c);
+		rgbPrimeVector.push_back(0);
+		rgbPrimeVector.push_back(x);
+	}
+
+	rgbVector.push_back((rgbPrimeVector[0] + m) * 255);
+	rgbVector.push_back((rgbPrimeVector[1] + m) * 255);
+	rgbVector.push_back((rgbPrimeVector[2] + m) * 255);
+
+	std::cout << "debug" << std::endl;
+
+	return rgbVector;
 }
