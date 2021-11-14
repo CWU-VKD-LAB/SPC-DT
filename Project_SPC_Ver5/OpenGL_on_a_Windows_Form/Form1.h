@@ -865,11 +865,14 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 		// Eventually this should not be hard coded and the actual defaults should be stored globally somewhere
 		float defaultDataTransparency = 255;
 		float defaultBackgroundTransparency = 100;
+		float defaultBackgroundColorLightness = 1.0;
 		
 		backgroundTransparencySlider->Value = defaultBackgroundTransparency;
 		transparencySlider->Value = defaultDataTransparency;
+		backgroundColorLightnessSlider->Value = defaultBackgroundColorLightness;
 		OpenGL3->setBackgroundTransparency(defaultBackgroundTransparency);
 		OpenGL3->setDataTransparency(defaultDataTransparency);
+		OpenGL3->setBackgroundColorLightness(defaultBackgroundColorLightness);
 
 		for (int x = 0; x < checkedListBox4->Items->Count; x++)
 		{

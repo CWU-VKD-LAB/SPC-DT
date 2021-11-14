@@ -187,7 +187,6 @@ void InteractiveSPC::display() {
 		for (int p = 0; p < dataParsed.parsedData.size(); p++)
 		{
 			int classNumber = dataParsed.parsedData[p][5];
-
 			// Old background color assignment
 			/*if (dataParsed.parsedData[p][5] == 0)
 			{
@@ -207,31 +206,170 @@ void InteractiveSPC::display() {
 			}*/
 
 			if (classNumber == -1) {
+				// if class is -1, then it is the background;
 				glColor4ub(169, 169, 169, backgroundTransparency);
 			}
 			else {
-
+				// we need to adjust the lightness of the background color
 				std::vector<float> hsl = RGBtoHSL(data.classColor[classNumber]);
 
 				hsl[2] = hsl[2] * backgroundClassColorCoefficient;
 
 				std::vector<GLubyte> rgb = HSLtoRGB(hsl[0], hsl[1], hsl[2]);
-				
+
 				glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparency);
 			}
 
+			GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
+			GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
+			GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
+			GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
 
+			glRectf(x1, y1, x2, y2);
 
-			glRectf(data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]],
-				data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]],
-				data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]],
-				data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]]);
+			// We need to draw a dotted line from x1, y1 to x1, y2 and another one from x1, y1, to x2, y1
+			// Due to potential incompatibilities with dictating line width, we can use thin polygones as a workaround
+			GLfloat lineThickness = 2.0f;
+			GLfloat dashSpace = 10.0f;
+			//glBegin(GL_POLYGON);
+
+			GLfloat currentColor[4];
+			glGetFloatv(GL_CURRENT_COLOR, currentColor);
+			glColor4f(currentColor[0], currentColor[1], currentColor[2], 1.0f);
+
+			// Left dashed line, from top left
+			for (GLfloat y = y1; y >= y2; y -= (2 * dashSpace)) {
+				if (y < y2) {
+					y = y2;
+				}
+
+				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
+				// this is going to be super inefficient
+				int pointClass = getClassNumFromPoint(x1, y, p);
+
+				// Check if of the same class
+				if (pointClass == -2 || pointClass == classNumber) {
+					// don't draw if our test point is not a member of any background rectangle.
+					// this means that we are on the left or the right edge
+					// don't draw if the adaject class is the same as our current class
+					std::cout << "debug";
+					continue;
+				}
+
+				glBegin(GL_POLYGON);
+				glVertex2f(x1 + lineThickness / 2, y);
+				glVertex2f(x1 - lineThickness / 2, y);
+				if (y - dashSpace < y2) {
+					glVertex2f(x1 - lineThickness / 2, y2);
+					glVertex2f(x1 + lineThickness / 2, y2);
+				}
+				else {
+					glVertex2f(x1 - lineThickness / 2, y - dashSpace);
+					glVertex2f(x1 + lineThickness / 2, y - dashSpace);
+				}
+				glEnd();
+			}
+
+			// Draw top dashed line, from top left
+			for (GLfloat x = x1; x <= x2; x += dashSpace) {
+				if (x > x2) {
+					x = x2;
+				}
+
+				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
+				// this is going to be super inefficient
+				int pointClass = getClassNumFromPoint(x, y1, p);
+
+				// Check if of the same class
+				if (pointClass == -2 || pointClass == classNumber) {
+					// don't draw if our test point is not a member of any background rectangle.
+					// this means that we are on the left or the right edge
+					// don't draw if the adaject class is the same as our current class
+					continue;
+				}
+
+				glBegin(GL_POLYGON);
+				glVertex2f(x, y1 + lineThickness / 2);
+				glVertex2f(x, y1 - lineThickness / 2);
+				if (x + dashSpace > x2) {
+					glVertex2f(x2, y1 - lineThickness / 2);
+					glVertex2f(x2, y1 + lineThickness / 2);
+				}
+				else {
+					glVertex2f(x + dashSpace, y1 - lineThickness / 2);
+					glVertex2f(x + dashSpace, y1 + lineThickness / 2);
+				}
+
+				glEnd();
+			}
+
+			// Right dashed line, from top right
+			for (GLfloat y = y1 - dashSpace; y >= y2; y -= (2 * dashSpace)) {
+				if (y < y2) {
+					y = y2;
+				}
+
+				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
+				// this is going to be super inefficient
+				int pointClass = getClassNumFromPoint(x2, y, p);
+
+				// Check if of the same class
+				if (pointClass == -2 || pointClass == classNumber) {
+					// don't draw if our test point is not a member of any background rectangle.
+					// this means that we are on the left or the right edge
+					// don't draw if the adaject class is the same as our current class
+					continue;
+				}
+
+				glBegin(GL_POLYGON);
+				glVertex2f(x2 + lineThickness / 2, y);
+				glVertex2f(x2 - lineThickness / 2, y);
+				if (y - dashSpace < y2) {
+					glVertex2f(x2 - lineThickness / 2, y2);
+					glVertex2f(x2 + lineThickness / 2, y2);
+				}
+				else {
+					glVertex2f(x2 - lineThickness / 2, y - dashSpace);
+					glVertex2f(x2 + lineThickness / 2, y - dashSpace);
+				}
+
+				glEnd();
+			}
+
+			// Draw bottom dashed line, from bottom left
+			for (GLfloat x = x1 + dashSpace; x <= x2; x += (2 * dashSpace)) {
+				if (x > x2) {
+					x = x2;
+				}
+
+				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
+				// this is going to be super inefficient
+				int pointClass = getClassNumFromPoint(x, y2, p);
+
+				// Check if of the same class
+				if (pointClass == -2 || pointClass == classNumber) {
+					// don't draw if our test point is not a member of any background rectangle.
+					// this means that we are on the left or the right edge
+					// don't draw if the adaject class is the same as our current class
+					continue;
+				}
+
+				glBegin(GL_POLYGON);
+				glVertex2f(x, y2 + lineThickness / 2);
+				glVertex2f(x, y2 - lineThickness / 2);
+				if (x + dashSpace > x2) {
+					glVertex2f(x2, y2 - lineThickness / 2);
+					glVertex2f(x2, y2 + lineThickness / 2);
+				}
+				else {
+					glVertex2f(x + dashSpace, y2 - lineThickness / 2);
+					glVertex2f(x + dashSpace, y2 + lineThickness / 2);
+				}
+
+				glEnd();
+			}
 		}
-			
-			
-
-				
-		}
+	}
 
 
 	/* Plots the data. Outer loop for each dimension. Inner loop for data across each graph.  */
@@ -368,6 +506,8 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
 
 }
 
+/* Display Utilities*/
+
 std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor) {
 	std::vector<float> hsl;
 	float rprime = classColor[0] / 255.0;
@@ -410,6 +550,40 @@ std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor) {
 	hsl.push_back(saturation);
 	hsl.push_back(lightness);
 	return hsl;
+}
+
+bool InteractiveSPC::isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+	bool result = false;
+	if (px <= x2 && px >= x1) {
+		if (py <= y1 && py >= y2) {
+			result = true;
+		}
+	}
+	return result;
+}
+
+int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex) {
+	int dataIndex = -1;
+
+	for (int i = 0; i < dataParsed.parsedData.size(); i++) {
+		if (i == currentDataIndex) continue;
+		GLfloat testRectx1 = data.xgraphcoordinates[dataParsed.parsedData[i][4]] - data.graphwidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][0] * data.graphwidth[dataParsed.parsedData[i][4]];
+		GLfloat testRecty1 = data.ygraphcoordinates[dataParsed.parsedData[i][4]] + data.graphheight[dataParsed.parsedData[i][4]] / 2 - dataParsed.parsedData[i][1] * data.graphheight[dataParsed.parsedData[i][4]];
+		GLfloat testRectx2 = data.xgraphcoordinates[dataParsed.parsedData[i][4]] - data.graphwidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][2] * data.graphwidth[dataParsed.parsedData[i][4]];
+		GLfloat testRecty2 = data.ygraphcoordinates[dataParsed.parsedData[i][4]] + data.graphheight[dataParsed.parsedData[i][4]] / 2 - dataParsed.parsedData[i][3] * data.graphheight[dataParsed.parsedData[i][4]];
+
+		if (isPointWithinRect(px, py, testRectx1, testRecty1, testRectx2, testRecty2)) {
+			dataIndex = i;
+			break;
+		}
+	}
+
+	if (dataIndex == -1) {
+		return -2;
+	}
+	else {
+		return dataParsed.parsedData[dataIndex][5];
+	}
 }
 
 std::vector<GLubyte> InteractiveSPC::HSLtoRGB(float hue, float saturation, float lightness) {
