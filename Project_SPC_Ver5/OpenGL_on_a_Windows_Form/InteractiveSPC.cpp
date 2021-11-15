@@ -229,16 +229,15 @@ void InteractiveSPC::display() {
 
 			// We need to draw a dotted line from x1, y1 to x1, y2 and another one from x1, y1, to x2, y1
 			// Due to potential incompatibilities with dictating line width, we can use thin polygones as a workaround
-			GLfloat lineThickness = 2.0f;
+			GLfloat lineThickness = 3.0f;
 			GLfloat dashSpace = 10.0f;
-			//glBegin(GL_POLYGON);
-
 			GLfloat currentColor[4];
 			glGetFloatv(GL_CURRENT_COLOR, currentColor);
 			glColor4f(currentColor[0], currentColor[1], currentColor[2], 1.0f);
 
 			// Left dashed line, from top left
-			for (GLfloat y = y1; y >= y2; y -= (2 * dashSpace)) {
+			bool drawLeftColor = true;
+			for (GLfloat y = y1; y >= y2; y -= dashSpace) {
 				if (y < y2) {
 					y = y2;
 				}
@@ -252,9 +251,22 @@ void InteractiveSPC::display() {
 					// don't draw if our test point is not a member of any background rectangle.
 					// this means that we are on the left or the right edge
 					// don't draw if the adaject class is the same as our current class
-					std::cout << "debug";
 					continue;
 				}
+
+				if (drawLeftColor) {
+					if (pointClass == -1) {
+						glColor4ub(169, 169, 169, 255);
+					}
+					else {
+						glColor3f(data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2]);
+					}
+				}
+				else {
+					glColor3f(currentColor[0], currentColor[1], currentColor[2]);	
+				}
+
+				drawLeftColor = !drawLeftColor;
 
 				glBegin(GL_POLYGON);
 				glVertex2f(x1 + lineThickness / 2, y);
@@ -270,74 +282,9 @@ void InteractiveSPC::display() {
 				glEnd();
 			}
 
-			// Draw top dashed line, from top left
+			bool drawTopColor = true;
+			// Draw bottom line
 			for (GLfloat x = x1; x <= x2; x += dashSpace) {
-				if (x > x2) {
-					x = x2;
-				}
-
-				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
-				// this is going to be super inefficient
-				int pointClass = getClassNumFromPoint(x, y1, p);
-
-				// Check if of the same class
-				if (pointClass == -2 || pointClass == classNumber) {
-					// don't draw if our test point is not a member of any background rectangle.
-					// this means that we are on the left or the right edge
-					// don't draw if the adaject class is the same as our current class
-					continue;
-				}
-
-				glBegin(GL_POLYGON);
-				glVertex2f(x, y1 + lineThickness / 2);
-				glVertex2f(x, y1 - lineThickness / 2);
-				if (x + dashSpace > x2) {
-					glVertex2f(x2, y1 - lineThickness / 2);
-					glVertex2f(x2, y1 + lineThickness / 2);
-				}
-				else {
-					glVertex2f(x + dashSpace, y1 - lineThickness / 2);
-					glVertex2f(x + dashSpace, y1 + lineThickness / 2);
-				}
-
-				glEnd();
-			}
-
-			// Right dashed line, from top right
-			for (GLfloat y = y1 - dashSpace; y >= y2; y -= (2 * dashSpace)) {
-				if (y < y2) {
-					y = y2;
-				}
-
-				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
-				// this is going to be super inefficient
-				int pointClass = getClassNumFromPoint(x2, y, p);
-
-				// Check if of the same class
-				if (pointClass == -2 || pointClass == classNumber) {
-					// don't draw if our test point is not a member of any background rectangle.
-					// this means that we are on the left or the right edge
-					// don't draw if the adaject class is the same as our current class
-					continue;
-				}
-
-				glBegin(GL_POLYGON);
-				glVertex2f(x2 + lineThickness / 2, y);
-				glVertex2f(x2 - lineThickness / 2, y);
-				if (y - dashSpace < y2) {
-					glVertex2f(x2 - lineThickness / 2, y2);
-					glVertex2f(x2 + lineThickness / 2, y2);
-				}
-				else {
-					glVertex2f(x2 - lineThickness / 2, y - dashSpace);
-					glVertex2f(x2 + lineThickness / 2, y - dashSpace);
-				}
-
-				glEnd();
-			}
-
-			// Draw bottom dashed line, from bottom left
-			for (GLfloat x = x1 + dashSpace; x <= x2; x += (2 * dashSpace)) {
 				if (x > x2) {
 					x = x2;
 				}
@@ -353,6 +300,20 @@ void InteractiveSPC::display() {
 					// don't draw if the adaject class is the same as our current class
 					continue;
 				}
+
+				if (drawTopColor) {
+					glColor3f(currentColor[0], currentColor[1], currentColor[2]);
+				}
+				else {
+					if (pointClass == -1) {
+						glColor4ub(169, 169, 169, 255);
+					}
+					else {
+						glColor3f(data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2]);
+					}
+				}
+
+				drawTopColor = !drawTopColor;
 
 				glBegin(GL_POLYGON);
 				glVertex2f(x, y2 + lineThickness / 2);
