@@ -17,6 +17,7 @@ public:
 	parseData dataParsed;
 	FileHandling newFile;
 	float backgroundTransparency = 100; // Default value
+	float backgroundClassColorCoefficient = 1.0; // Default value
 
 
 	InteractiveSPC() {};
@@ -50,5 +51,10 @@ public:
 	void drawCircle(int x, int y);
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
 	void setBackgroundTransparency(float alpha);
+	void setBackgroundColorLightness(float lightness);
+	std::vector<float> RGBtoHSL(std::vector<float> classColor);
+	std::vector<GLubyte> HSLtoRGB(std::vector<float> hsl);
+	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+	int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
 };
 

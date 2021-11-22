@@ -183,6 +183,11 @@ private: System::Windows::Forms::GroupBox^ groupBox3;
 private: System::Windows::Forms::TrackBar^ backgroundTransparencySlider;
 
 private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
+private: System::Windows::Forms::GroupBox^ groupBox4;
+private: System::Windows::Forms::TrackBar^ backgroundColorLightnessSlider;
+
+private: System::Windows::Forms::Label^ backgroundLightness;
+
 
 
 
@@ -253,6 +258,9 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
+			this->backgroundColorLightnessSlider = (gcnew System::Windows::Forms::TrackBar());
+			this->backgroundLightness = (gcnew System::Windows::Forms::Label());
 			this->groupBox3 = (gcnew System::Windows::Forms::GroupBox());
 			this->backgroundTransparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->backgroundTransparencyLabel = (gcnew System::Windows::Forms::Label());
@@ -264,6 +272,8 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->groupBox1->SuspendLayout();
 			this->tableLayoutPanel1->SuspendLayout();
 			this->panel2->SuspendLayout();
+			this->groupBox4->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundColorLightnessSlider))->BeginInit();
 			this->groupBox3->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundTransparencySlider))->BeginInit();
 			this->groupBox2->SuspendLayout();
@@ -280,7 +290,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			// 
 			this->graph4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->graph4->Location = System::Drawing::Point(7, 43);
+			this->graph4->Location = System::Drawing::Point(9, 9);
 			this->graph4->Margin = System::Windows::Forms::Padding(6);
 			this->graph4->Name = L"graph4";
 			this->graph4->Size = System::Drawing::Size(191, 70);
@@ -340,7 +350,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->checkedListBox4->FormattingEnabled = true;
 			this->checkedListBox4->Location = System::Drawing::Point(129, 538);
 			this->checkedListBox4->Name = L"checkedListBox4";
-			this->checkedListBox4->Size = System::Drawing::Size(59, 17);
+			this->checkedListBox4->Size = System::Drawing::Size(59, 2);
 			this->checkedListBox4->TabIndex = 28;
 			this->checkedListBox4->ThreeDCheckBoxes = true;
 			this->checkedListBox4->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::checkedListBox4_SelectedIndexChanged);
@@ -426,7 +436,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			// button5
 			// 
 			this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button5->Location = System::Drawing::Point(13, 586);
+			this->button5->Location = System::Drawing::Point(6, 615);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(191, 52);
 			this->button5->TabIndex = 10;
@@ -509,7 +519,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->groupBox1->Controls->Add(this->ZoomingLabel);
 			this->groupBox1->Controls->Add(this->vScrollBar1);
 			this->groupBox1->Controls->Add(this->hScrollBar1);
-			this->groupBox1->Location = System::Drawing::Point(6, 122);
+			this->groupBox1->Location = System::Drawing::Point(6, 88);
 			this->groupBox1->Name = L"groupBox1";
 			this->groupBox1->Size = System::Drawing::Size(200, 145);
 			this->groupBox1->TabIndex = 7;
@@ -517,7 +527,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			// 
 			// colorButton
 			// 
-			this->colorButton->Location = System::Drawing::Point(4, 53);
+			this->colorButton->Location = System::Drawing::Point(4, 56);
 			this->colorButton->Name = L"colorButton";
 			this->colorButton->Size = System::Drawing::Size(192, 45);
 			this->colorButton->TabIndex = 0;
@@ -534,7 +544,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->tableLayoutPanel1->Controls->Add(this->label1, 0, 0);
 			this->tableLayoutPanel1->Controls->Add(this->colorButton, 0, 2);
 			this->tableLayoutPanel1->Controls->Add(this->comboBox1, 0, 1);
-			this->tableLayoutPanel1->Location = System::Drawing::Point(7, 453);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(6, 505);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 3;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
@@ -563,7 +573,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->comboBox1->FormattingEnabled = true;
 			this->comboBox1->Location = System::Drawing::Point(4, 25);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(188, 21);
+			this->comboBox1->Size = System::Drawing::Size(188, 24);
 			this->comboBox1->TabIndex = 1;
 			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
 			// 
@@ -572,12 +582,13 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(554, 8);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 15);
+			this->label2->Size = System::Drawing::Size(0, 17);
 			this->label2->TabIndex = 11;
 			// 
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel2->Controls->Add(this->groupBox4);
 			this->panel2->Controls->Add(this->groupBox3);
 			this->panel2->Controls->Add(this->groupBox2);
 			this->panel2->Controls->Add(this->tableLayoutPanel1);
@@ -589,11 +600,44 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->panel2->Size = System::Drawing::Size(209, 671);
 			this->panel2->TabIndex = 13;
 			// 
+			// groupBox4
+			// 
+			this->groupBox4->Controls->Add(this->backgroundColorLightnessSlider);
+			this->groupBox4->Controls->Add(this->backgroundLightness);
+			this->groupBox4->Location = System::Drawing::Point(6, 419);
+			this->groupBox4->Name = L"groupBox4";
+			this->groupBox4->Size = System::Drawing::Size(200, 84);
+			this->groupBox4->TabIndex = 16;
+			this->groupBox4->TabStop = false;
+			// 
+			// backgroundColorLightnessSlider
+			// 
+			this->backgroundColorLightnessSlider->BackColor = System::Drawing::SystemColors::Control;
+			this->backgroundColorLightnessSlider->LargeChange = 1;
+			this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
+			this->backgroundColorLightnessSlider->Maximum = 200;
+			this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
+			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 56);
+			this->backgroundColorLightnessSlider->TabIndex = 10;
+			this->backgroundColorLightnessSlider->Value = 2;
+			this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
+			// 
+			// backgroundLightness
+			// 
+			this->backgroundLightness->AutoSize = true;
+			this->backgroundLightness->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.5F, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->backgroundLightness->Location = System::Drawing::Point(4, 16);
+			this->backgroundLightness->Name = L"backgroundLightness";
+			this->backgroundLightness->Size = System::Drawing::Size(196, 18);
+			this->backgroundLightness->TabIndex = 11;
+			this->backgroundLightness->Text = L"Background Color Lightness";
+			// 
 			// groupBox3
 			// 
 			this->groupBox3->Controls->Add(this->backgroundTransparencySlider);
 			this->groupBox3->Controls->Add(this->backgroundTransparencyLabel);
-			this->groupBox3->Location = System::Drawing::Point(6, 363);
+			this->groupBox3->Location = System::Drawing::Point(3, 334);
 			this->groupBox3->Name = L"groupBox3";
 			this->groupBox3->Size = System::Drawing::Size(200, 84);
 			this->groupBox3->TabIndex = 15;
@@ -627,9 +671,9 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			// 
 			this->groupBox2->Controls->Add(this->transparencySlider);
 			this->groupBox2->Controls->Add(this->transparencyLabel);
-			this->groupBox2->Location = System::Drawing::Point(6, 273);
+			this->groupBox2->Location = System::Drawing::Point(6, 229);
 			this->groupBox2->Name = L"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(200, 84);
+			this->groupBox2->Size = System::Drawing::Size(200, 99);
 			this->groupBox2->TabIndex = 14;
 			this->groupBox2->TabStop = false;
 			// 
@@ -637,7 +681,7 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			// 
 			this->transparencySlider->BackColor = System::Drawing::SystemColors::Control;
 			this->transparencySlider->LargeChange = 1;
-			this->transparencySlider->Location = System::Drawing::Point(3, 43);
+			this->transparencySlider->Location = System::Drawing::Point(6, 43);
 			this->transparencySlider->Maximum = 255;
 			this->transparencySlider->Name = L"transparencySlider";
 			this->transparencySlider->Size = System::Drawing::Size(185, 56);
@@ -679,6 +723,9 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 			this->tableLayoutPanel1->ResumeLayout(false);
 			this->tableLayoutPanel1->PerformLayout();
 			this->panel2->ResumeLayout(false);
+			this->groupBox4->ResumeLayout(false);
+			this->groupBox4->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundColorLightnessSlider))->EndInit();
 			this->groupBox3->ResumeLayout(false);
 			this->groupBox3->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundTransparencySlider))->EndInit();
@@ -818,11 +865,14 @@ private: System::Windows::Forms::Label^ backgroundTransparencyLabel;
 		// Eventually this should not be hard coded and the actual defaults should be stored globally somewhere
 		float defaultDataTransparency = 255;
 		float defaultBackgroundTransparency = 100;
+		float defaultBackgroundColorLightness = 1.0;
 		
 		backgroundTransparencySlider->Value = defaultBackgroundTransparency;
 		transparencySlider->Value = defaultDataTransparency;
+		backgroundColorLightnessSlider->Value = defaultBackgroundColorLightness;
 		OpenGL3->setBackgroundTransparency(defaultBackgroundTransparency);
 		OpenGL3->setDataTransparency(defaultDataTransparency);
+		OpenGL3->setBackgroundColorLightness(defaultBackgroundColorLightness);
 
 		for (int x = 0; x < checkedListBox4->Items->Count; x++)
 		{
@@ -1266,6 +1316,9 @@ private: System::Void backgroundTransparencyLabel_Click(System::Object^ sender, 
 }
 private: System::Void backgroundTransparencySlider_Scroll(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->setBackgroundTransparency((float)backgroundTransparencySlider->Value);
+}
+private: System::Void trackBar2_Scroll_1(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setBackgroundColorLightness(backgroundColorLightnessSlider->Value / 100.0);
 }
 };
 }
