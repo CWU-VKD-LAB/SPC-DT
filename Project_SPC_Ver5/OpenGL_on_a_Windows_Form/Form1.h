@@ -187,6 +187,8 @@ private: System::Windows::Forms::GroupBox^ groupBox4;
 private: System::Windows::Forms::TrackBar^ backgroundColorLightnessSlider;
 
 private: System::Windows::Forms::Label^ backgroundLightness;
+private: System::Windows::Forms::Button^ drawRectangleButton;
+
 
 
 
@@ -267,6 +269,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
+			this->drawRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -302,6 +305,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			// panel1
 			// 
 			this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel1->Controls->Add(this->drawRectangleButton);
 			this->panel1->Controls->Add(this->button7);
 			this->panel1->Controls->Add(this->button8);
 			this->panel1->Controls->Add(this->checkedListBox4);
@@ -315,14 +319,14 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->panel1->ForeColor = System::Drawing::SystemColors::ControlText;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(200, 676);
+			this->panel1->Size = System::Drawing::Size(200, 698);
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
 			// 
 			// button7
 			// 
 			this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button7->Location = System::Drawing::Point(102, 443);
+			this->button7->Location = System::Drawing::Point(102, 522);
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(80, 62);
 			this->button7->TabIndex = 30;
@@ -333,7 +337,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			// button8
 			// 
 			this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button8->Location = System::Drawing::Point(12, 443);
+			this->button8->Location = System::Drawing::Point(12, 522);
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(81, 62);
 			this->button8->TabIndex = 29;
@@ -348,7 +352,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->checkedListBox4->CheckOnClick = true;
 			this->checkedListBox4->ForeColor = System::Drawing::SystemColors::WindowText;
 			this->checkedListBox4->FormattingEnabled = true;
-			this->checkedListBox4->Location = System::Drawing::Point(129, 538);
+			this->checkedListBox4->Location = System::Drawing::Point(129, 617);
 			this->checkedListBox4->Name = L"checkedListBox4";
 			this->checkedListBox4->Size = System::Drawing::Size(59, 2);
 			this->checkedListBox4->TabIndex = 28;
@@ -359,9 +363,9 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			// 
 			this->label9->AutoSize = true;
 			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->label9->Location = System::Drawing::Point(8, 537);
+			this->label9->Location = System::Drawing::Point(8, 616);
 			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(110, 20);
+			this->label9->Size = System::Drawing::Size(89, 16);
 			this->label9->TabIndex = 27;
 			this->label9->Text = L"Hide Classes";
 			this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
@@ -369,9 +373,9 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			// checkBox1
 			// 
 			this->checkBox1->CheckAlign = System::Drawing::ContentAlignment::TopLeft;
-			this->checkBox1->Location = System::Drawing::Point(12, 582);
+			this->checkBox1->Location = System::Drawing::Point(12, 661);
 			this->checkBox1->Name = L"checkBox1";
-			this->checkBox1->Size = System::Drawing::Size(173, 58);
+			this->checkBox1->Size = System::Drawing::Size(173, 31);
 			this->checkBox1->TabIndex = 14;
 			this->checkBox1->Text = L"Enable Data Display Based on Selected Area";
 			this->checkBox1->TextAlign = System::Drawing::ContentAlignment::TopLeft;
@@ -450,7 +454,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->trackBar1->LargeChange = 1;
 			this->trackBar1->Location = System::Drawing::Point(3, 100);
 			this->trackBar1->Name = L"trackBar1";
-			this->trackBar1->Size = System::Drawing::Size(185, 56);
+			this->trackBar1->Size = System::Drawing::Size(185, 45);
 			this->trackBar1->TabIndex = 9;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
 			// 
@@ -461,7 +465,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 				static_cast<System::Byte>(0)));
 			this->ZoomingLabel->Location = System::Drawing::Point(6, 75);
 			this->ZoomingLabel->Name = L"ZoomingLabel";
-			this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
+			this->ZoomingLabel->Size = System::Drawing::Size(43, 16);
 			this->ZoomingLabel->TabIndex = 11;
 			this->ZoomingLabel->Text = L"Zoom";
 			// 
@@ -490,7 +494,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 				static_cast<System::Byte>(0)));
 			this->PannningLabel->Location = System::Drawing::Point(6, 16);
 			this->PannningLabel->Name = L"PannningLabel";
-			this->PannningLabel->Size = System::Drawing::Size(69, 20);
+			this->PannningLabel->Size = System::Drawing::Size(57, 16);
 			this->PannningLabel->TabIndex = 10;
 			this->PannningLabel->Text = L"Panning";
 			// 
@@ -527,7 +531,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			// 
 			// colorButton
 			// 
-			this->colorButton->Location = System::Drawing::Point(4, 56);
+			this->colorButton->Location = System::Drawing::Point(4, 49);
 			this->colorButton->Name = L"colorButton";
 			this->colorButton->Size = System::Drawing::Size(192, 45);
 			this->colorButton->TabIndex = 0;
@@ -561,7 +565,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 				static_cast<System::Byte>(0)));
 			this->label1->Location = System::Drawing::Point(4, 1);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(159, 20);
+			this->label1->Size = System::Drawing::Size(127, 16);
 			this->label1->TabIndex = 12;
 			this->label1->Text = L"Change Class Color";
 			// 
@@ -571,9 +575,9 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->comboBox1->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(4, 25);
+			this->comboBox1->Location = System::Drawing::Point(4, 21);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(188, 24);
+			this->comboBox1->Size = System::Drawing::Size(188, 21);
 			this->comboBox1->TabIndex = 1;
 			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
 			// 
@@ -582,7 +586,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(554, 8);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 17);
+			this->label2->Size = System::Drawing::Size(0, 13);
 			this->label2->TabIndex = 11;
 			// 
 			// panel2
@@ -617,7 +621,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
 			this->backgroundColorLightnessSlider->Maximum = 200;
 			this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 56);
+			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 45);
 			this->backgroundColorLightnessSlider->TabIndex = 10;
 			this->backgroundColorLightnessSlider->Value = 2;
 			this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -629,7 +633,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->backgroundLightness->Location = System::Drawing::Point(4, 16);
 			this->backgroundLightness->Name = L"backgroundLightness";
-			this->backgroundLightness->Size = System::Drawing::Size(196, 18);
+			this->backgroundLightness->Size = System::Drawing::Size(161, 15);
 			this->backgroundLightness->TabIndex = 11;
 			this->backgroundLightness->Text = L"Background Color Lightness";
 			// 
@@ -650,7 +654,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
 			this->backgroundTransparencySlider->Maximum = 255;
 			this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-			this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 56);
+			this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 45);
 			this->backgroundTransparencySlider->TabIndex = 10;
 			this->backgroundTransparencySlider->Value = 100;
 			this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -662,7 +666,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
 			this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-			this->backgroundTransparencyLabel->Size = System::Drawing::Size(182, 18);
+			this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
 			this->backgroundTransparencyLabel->TabIndex = 11;
 			this->backgroundTransparencyLabel->Text = L"Background Transparency";
 			this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -684,7 +688,7 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 			this->transparencySlider->Location = System::Drawing::Point(6, 43);
 			this->transparencySlider->Maximum = 255;
 			this->transparencySlider->Name = L"transparencySlider";
-			this->transparencySlider->Size = System::Drawing::Size(185, 56);
+			this->transparencySlider->Size = System::Drawing::Size(185, 45);
 			this->transparencySlider->TabIndex = 10;
 			this->transparencySlider->Value = 255;
 			this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -696,9 +700,19 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->transparencyLabel->Location = System::Drawing::Point(6, 18);
 			this->transparencyLabel->Name = L"transparencyLabel";
-			this->transparencyLabel->Size = System::Drawing::Size(148, 20);
+			this->transparencyLabel->Size = System::Drawing::Size(120, 16);
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Line Transparency";
+			// 
+			// drawRectangleButton
+			// 
+			this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->drawRectangleButton->Location = System::Drawing::Point(12, 438);
+			this->drawRectangleButton->Name = L"drawRectangleButton";
+			this->drawRectangleButton->Size = System::Drawing::Size(173, 61);
+			this->drawRectangleButton->TabIndex = 31;
+			this->drawRectangleButton->Text = L"Draw Rectangle";
+			this->drawRectangleButton->UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
