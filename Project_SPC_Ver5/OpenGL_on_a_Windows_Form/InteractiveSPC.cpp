@@ -94,19 +94,58 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	float x2Coord = (x2 - x1) + data.graphwidth[j + 1] * data.xdata[i][j + 1];
 	float y1Coord = -data.graphheight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
 	float y2Coord = (y2 - y1) - data.graphheight[j+1] * data.ydata[i][j + 1];
-		
+	float x1CoordTrans = x1Coord + (x1 + data.pan_x);
+	float x2CoordTrans = x2Coord + (x1 + data.pan_x);
+	float y1CoordTrans = y1Coord + (y1 + data.pan_y);
+	float y2CoordTrans = y2Coord + (y1 + data.pan_y);
+
 
 	int classnum = data.classNum[i] - 1;
+
+	
+	// If in drawn rectangle mode, check if the points make a line that intersects the rectangle
+	GLfloat middleX;
+	GLfloat middleY;
+	bool drawMiddleVertex = false;
+
+	if (isRectangleMode && doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
+		// draw point within rectangle based on how many classes there are
+		// TODO: later could add a selection based on class
+		GLfloat deltaX = abs(rectX1 - rectX2);
+		GLfloat deltaY = abs(rectY1 - rectY2);
+		GLfloat highX = max(rectX1, rectX2);
+		GLfloat lowX = min(rectX1, rectX2);
+		GLfloat highY = max(rectY1, rectY2);
+		GLfloat lowY = min(rectY1, rectY2);
+
+		middleX = lowX + ((highX - lowX) / 5) + ((deltaX / data.numOfClasses) * classnum) - (x1 + data.pan_x);
+		middleY = lowY + ((highY - lowY) / 5) + ((deltaY / data.numOfClasses) * classnum) - (y1 + data.pan_y);
+
+		drawMiddleVertex = true;
+
+		//debug
+		glColor4ub(255, 0, 0, 255);
+		glPointSize(8.0);
+		glBegin(GL_POINTS);
+		glVertex2f(x1CoordTrans, y1CoordTrans);
+		glVertex2f(x2CoordTrans, y2CoordTrans);
+		glPointSize(4.0);
+		glEnd();
+	}
 
 	glPushMatrix();	// Makes a new layer
 
 	glTranslatef(x1 + data.pan_x, y1 + data.pan_y, 0); // Translates starting position to draw
+
 	if (data.showHideLinesVar)
 	{
 		glBegin(GL_LINE_STRIP);
 		//data.classTransparency[1] = 70;
 		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
 		glVertex2f(x1Coord, y1Coord);
+		if (drawMiddleVertex) {
+			glVertex2f(middleX, middleY);
+		}
 		if(data.classsize!=1)
 			glVertex2f(x2Coord, y2Coord); // ending vertex
 		glEnd();
@@ -123,9 +162,10 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	
 	//glVertex2f(0 + xratio * data.xdata[i][j], 0 - yratio * data.ydata[i][j]);                                     // starting vertex
 	glVertex2f(x1Coord, y1Coord);
+	if (drawMiddleVertex) {
+		glVertex2f(middleX, middleY);
+	}
 	glEnd();
-	
-
 
 	glPointSize(4);
 	glBegin(GL_POINTS);
@@ -351,6 +391,11 @@ void InteractiveSPC::display() {
 		}
 	}
 
+	// Draws rectangle if rectangle mode is enabled
+	if (isRectangleMode) {
+		drawRectangle();
+	}
+
 
 	/* Plots the data. Outer loop for each dimension. Inner loop for data across each graph.  */
 	if (data.classsize > 1)
@@ -403,6 +448,85 @@ void InteractiveSPC::display() {
 	data.drawLabels();
 	
 }
+
+bool InteractiveSPC::doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+{	
+	GLfloat boundingBoxLeft = min(rectX1, rectX2);
+	GLfloat boundingBoxTop = max(rectY1, rectY2);
+	GLfloat boundingBoxRight = max(rectX1, rectX2);
+	GLfloat boundingBoxBottom = min(rectY1, rectY2);
+	bool* startPointCode = getPointTrivialityCode(x1, y1, rectX1, rectY1, rectX2, rectY2);
+	bool* endPointCode = getPointTrivialityCode(x2, y2, rectX1, rectY1, rectX2, rectY2);
+	bool result = false;
+
+	int lineTriviality = isLineTrivial(startPointCode, endPointCode);
+
+	switch (lineTriviality) {
+	case 0:
+		// Line is completely within rectangle
+		result =  true;
+		break;
+	case 1:
+		// trivial reject
+		break;
+	case 2:
+		// Line intersects rectangle
+		result = true;
+		break;
+	default:
+		break;
+	}
+
+	return result;
+}
+
+int InteractiveSPC::isLineTrivial(bool* startPointTriviality, bool* endPointTriviality) {
+	bool startPointCode = !startPointTriviality[0] &&
+		!startPointTriviality[1] &&
+		!startPointTriviality[2] &&
+		!startPointTriviality[3];
+
+	bool endPointCode = !endPointTriviality[0] &&
+		!endPointTriviality[1] &&
+		!endPointTriviality[2] &&
+		!endPointTriviality[3];
+
+	if (startPointCode && endPointCode) {
+		return 0;
+	}
+
+	for (int i = 0; i < 4; i++) {
+		if (startPointTriviality[i] && endPointTriviality[i]) {
+			return 1;
+		}
+	}
+
+	return 2;
+}
+
+bool* InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2) {
+	bool* triviality = new bool[] {false, false, false, false};
+	GLfloat boundingBoxLeft = min(rectX1, rectX2);
+	GLfloat boundingBoxTop = max(rectY1, rectY2);
+	GLfloat boundingBoxRight = max(rectX1, rectX2);
+	GLfloat boundingBoxBottom = min(rectY1, rectY2);
+
+	if (px < boundingBoxLeft) {
+		triviality[0] = true;
+	}
+	if (py > boundingBoxTop) {
+		triviality[1] = true;
+	}
+	if (px > boundingBoxRight) {
+		triviality[2] = true;
+	}
+	if (py < boundingBoxBottom) {
+		triviality[3] = true;
+	}
+
+	return triviality;
+}
+
 
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y) 
@@ -470,7 +594,6 @@ void InteractiveSPC::drawCircle(int x, int y)
 
 void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b)
 {
-	
 	glBegin(GL_LINE_STRIP);
 	//glLineWidth(10);
 
@@ -484,6 +607,10 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
 	glVertex2f(rect_x1, rect_y1);
 	glEnd();
 
+}
+
+void InteractiveSPC::drawRectangle() {
+	drawRectangle(rectX1, rectX2, rectY1, rectY2, 0.0f, 0.0f, 0.0f);
 }
 
 /* Display Utilities*/

@@ -34,6 +34,12 @@ Class OpenGLForm.COpenGL3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Double worldMouseX : Public
     Double worldMouseY : Public
     Boolean drawingDragged : Public
+    Boolean drawingRectangleEnabled : Public
+    Boolean drawingRectangleVertex1 : Public
+    Single drawingRectangleX1 : Public
+    Single drawingRectangleY1 : Public
+    Single drawingRectangleX2 : Public
+    Single drawingRectangleY2 : Public
     Boolean mouseButtonDown : Public
     Boolean drawingAndRectEnabled : Public
     Boolean drawingOrRectEnabled : Public
@@ -51,6 +57,7 @@ Class OpenGLForm.COpenGL3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     setDataTransparency(Single): PrivateScope, Public, HideBySig
     setBackgroundTransparency(Single): PrivateScope, Public, HideBySig
     setBackgroundColorLightness(Single): PrivateScope, Public, HideBySig
+    setDrawingRectangleState(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
     getClassSize(): PrivateScope, Public, HideBySig
     Render4(): PrivateScope, Public, HideBySig
     SwapOpenGLBuffers(): PrivateScope, Public, HideBySig

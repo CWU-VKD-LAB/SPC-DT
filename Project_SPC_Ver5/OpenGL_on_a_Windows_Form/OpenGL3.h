@@ -69,6 +69,12 @@ namespace OpenGLForm
 
 		/// <summary>	Is made true via mouselistener when dragging the mouse. </summary>
 		bool drawingDragged;
+		bool drawingRectangleEnabled = false;
+		bool drawingRectangleVertex1 = true;
+		GLfloat drawingRectangleX1;
+		GLfloat drawingRectangleY1;
+		GLfloat drawingRectangleX2;
+		GLfloat drawingRectangleY2;
 		bool mouseButtonDown = false;
 		bool drawingAndRectEnabled;
 		bool drawingOrRectEnabled;
@@ -171,6 +177,11 @@ namespace OpenGLForm
 		// CHANGE LIGHTNESS OF BACKGROUND GRAPH COLORS
 		void setBackgroundColorLightness(float lightnessCoeff) {
 			graph4.setBackgroundColorLightness(lightnessCoeff);
+		}
+
+		// Set draw rectangle state
+		void setDrawingRectangleState(bool state) {
+			graph4.isRectangleMode = state;
 		}
 
 		int getClassSize() {
@@ -511,6 +522,27 @@ namespace OpenGLForm
 
 			case WM_LBUTTONDOWN:
 			{
+
+				if (drawingRectangleEnabled) {
+
+					if (drawingRectangleVertex1) {
+						drawingRectangleX1 = worldMouseX;
+						drawingRectangleY1 = worldMouseY;
+					}
+					else {
+						drawingRectangleX2 = worldMouseX;
+						drawingRectangleY2 = worldMouseY;
+						drawingRectangleEnabled = !drawingRectangleEnabled;
+						graph4.rectX1 = drawingRectangleX1;
+						graph4.rectY1 = drawingRectangleY1;
+						graph4.rectX2 = drawingRectangleX2;
+						graph4.rectY2 = drawingRectangleY2;
+						drawingRectangleEnabled = false;
+						setDrawingRectangleState(true);
+					}
+					drawingRectangleVertex1 = !drawingRectangleVertex1;
+					break;
+				}
 
 				if (graphType == 1) { // S-CPC
 					//No graph dragging

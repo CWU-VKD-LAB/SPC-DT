@@ -188,6 +188,7 @@ private: System::Windows::Forms::TrackBar^ backgroundColorLightnessSlider;
 
 private: System::Windows::Forms::Label^ backgroundLightness;
 private: System::Windows::Forms::Button^ drawRectangleButton;
+private: System::Windows::Forms::Button^ clearRectangleButton;
 
 
 
@@ -234,6 +235,7 @@ private: System::Windows::Forms::Button^ drawRectangleButton;
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->graph4 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->drawRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->checkedListBox4 = (gcnew System::Windows::Forms::CheckedListBox());
@@ -269,7 +271,7 @@ private: System::Windows::Forms::Button^ drawRectangleButton;
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->drawRectangleButton = (gcnew System::Windows::Forms::Button());
+			this->clearRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -305,6 +307,7 @@ private: System::Windows::Forms::Button^ drawRectangleButton;
 			// panel1
 			// 
 			this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel1->Controls->Add(this->clearRectangleButton);
 			this->panel1->Controls->Add(this->drawRectangleButton);
 			this->panel1->Controls->Add(this->button7);
 			this->panel1->Controls->Add(this->button8);
@@ -322,6 +325,17 @@ private: System::Windows::Forms::Button^ drawRectangleButton;
 			this->panel1->Size = System::Drawing::Size(200, 698);
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
+			// 
+			// drawRectangleButton
+			// 
+			this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->drawRectangleButton->Location = System::Drawing::Point(12, 438);
+			this->drawRectangleButton->Name = L"drawRectangleButton";
+			this->drawRectangleButton->Size = System::Drawing::Size(85, 61);
+			this->drawRectangleButton->TabIndex = 31;
+			this->drawRectangleButton->Text = L"Draw Rectangle";
+			this->drawRectangleButton->UseVisualStyleBackColor = true;
+			this->drawRectangleButton->Click += gcnew System::EventHandler(this, &Form1::drawRectangleButton_Click);
 			// 
 			// button7
 			// 
@@ -704,15 +718,16 @@ private: System::Windows::Forms::Button^ drawRectangleButton;
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Line Transparency";
 			// 
-			// drawRectangleButton
+			// clearRectangleButton
 			// 
-			this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->drawRectangleButton->Location = System::Drawing::Point(12, 438);
-			this->drawRectangleButton->Name = L"drawRectangleButton";
-			this->drawRectangleButton->Size = System::Drawing::Size(173, 61);
-			this->drawRectangleButton->TabIndex = 31;
-			this->drawRectangleButton->Text = L"Draw Rectangle";
-			this->drawRectangleButton->UseVisualStyleBackColor = true;
+			this->clearRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->clearRectangleButton->Location = System::Drawing::Point(103, 438);
+			this->clearRectangleButton->Name = L"clearRectangleButton";
+			this->clearRectangleButton->Size = System::Drawing::Size(85, 61);
+			this->clearRectangleButton->TabIndex = 32;
+			this->clearRectangleButton->Text = L"Clear Rectangle";
+			this->clearRectangleButton->UseVisualStyleBackColor = true;
+			this->clearRectangleButton->Click += gcnew System::EventHandler(this, &Form1::clearRectangleButton_Click);
 			// 
 			// Form1
 			// 
@@ -1333,6 +1348,16 @@ private: System::Void backgroundTransparencySlider_Scroll(System::Object^ sender
 }
 private: System::Void trackBar2_Scroll_1(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->setBackgroundColorLightness(backgroundColorLightnessSlider->Value / 100.0);
+}
+private: System::Void drawRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	String^ str = "To draw a rectangle, click once for the first corner, then click again for the opposite corner.";
+	MessageBox::Show(str);
+	OpenGL3->drawingRectangleEnabled = true;
+}
+private: System::Void clearRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Clear rectangle
+	OpenGL3->drawingRectangleEnabled = false;
+	OpenGL3->setDrawingRectangleState(false);
 }
 };
 }
