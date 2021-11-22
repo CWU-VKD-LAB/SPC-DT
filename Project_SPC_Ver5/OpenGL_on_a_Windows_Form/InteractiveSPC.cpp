@@ -215,15 +215,15 @@ void InteractiveSPC::display() {
 
 				hsl[2] = hsl[2] * backgroundClassColorCoefficient;
 
-				std::vector<GLubyte> rgb = HSLtoRGB(hsl[0], hsl[1], hsl[2]);
+				std::vector<GLubyte> rgb = HSLtoRGB(hsl);
 
 				glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparency);
 			}
 
-			GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
-			GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
-			GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
-			GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
+			const GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
+			const GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
+			const GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
+			const GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
 
 			glRectf(x1, y1, x2, y2);
 
@@ -237,6 +237,7 @@ void InteractiveSPC::display() {
 
 			// Left dashed line, from top left
 			bool drawLeftColor = true;
+			const GLfloat x1Backup = x1;
 			for (GLfloat y = y1; y >= y2; y -= dashSpace) {
 				if (y < y2) {
 					y = y2;
@@ -256,14 +257,24 @@ void InteractiveSPC::display() {
 
 				if (drawLeftColor) {
 					if (pointClass == -1) {
-						glColor4ub(169, 169, 169, 255);
+						glColor4ub(0, 0, 0, 255);
 					}
 					else {
-						glColor3f(data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2]);
+						std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
+						std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
+						pointClassColorHSL[2] *= backgroundClassColorCoefficient;
+						std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
+						glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
+
 					}
 				}
 				else {
-					glColor3f(currentColor[0], currentColor[1], currentColor[2]);	
+					if (classNumber == -1) {
+						glColor4ub(0, 0, 0, 255);
+					}
+					else {
+						glColor3f(currentColor[0], currentColor[1], currentColor[2]);
+					}
 				}
 
 				drawLeftColor = !drawLeftColor;
@@ -271,7 +282,7 @@ void InteractiveSPC::display() {
 				glBegin(GL_POLYGON);
 				glVertex2f(x1 + lineThickness / 2, y);
 				glVertex2f(x1 - lineThickness / 2, y);
-				if (y - dashSpace < y2) {
+				if (y - dashSpace <= y2) {
 					glVertex2f(x1 - lineThickness / 2, y2);
 					glVertex2f(x1 + lineThickness / 2, y2);
 				}
@@ -302,14 +313,22 @@ void InteractiveSPC::display() {
 				}
 
 				if (drawTopColor) {
-					glColor3f(currentColor[0], currentColor[1], currentColor[2]);
+					if (classNumber == -1) {
+						glColor4ub(0, 0, 0, 255);
+					} else {
+						glColor3f(currentColor[0], currentColor[1], currentColor[2]);
+					}
 				}
 				else {
 					if (pointClass == -1) {
-						glColor4ub(169, 169, 169, 255);
+						glColor4ub(0, 0, 0, 255);
 					}
 					else {
-						glColor3f(data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2]);
+						std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
+						std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
+						pointClassColorHSL[2] *= backgroundClassColorCoefficient;
+						std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
+						glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
 					}
 				}
 
@@ -318,9 +337,9 @@ void InteractiveSPC::display() {
 				glBegin(GL_POLYGON);
 				glVertex2f(x, y2 + lineThickness / 2);
 				glVertex2f(x, y2 - lineThickness / 2);
-				if (x + dashSpace > x2) {
+				if (x + dashSpace >= x2) {
 					glVertex2f(x2, y2 - lineThickness / 2);
-					glVertex2f(x2, y2 + lineThickness / 2);
+					glVertex2f(x2, y2 + lineThickness / 2); 
 				}
 				else {
 					glVertex2f(x + dashSpace, y2 - lineThickness / 2);
@@ -547,10 +566,13 @@ int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentData
 	}
 }
 
-std::vector<GLubyte> InteractiveSPC::HSLtoRGB(float hue, float saturation, float lightness) {
+std::vector<GLubyte> InteractiveSPC::HSLtoRGB(std::vector<float> hsl) {
 
 	std::vector<float> rgbPrimeVector;
 	std::vector<GLubyte> rgbVector;
+	float hue = hsl[0];
+	float saturation = hsl[1];
+	float lightness = hsl[2];
 
 	float c = (1 - abs(2 * lightness - 1)) * saturation;
 	float x = c * (1 - abs(fmod((hue / 60.0), 2) - 1));
