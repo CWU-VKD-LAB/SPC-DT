@@ -235,6 +235,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->graph4 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->clearRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->drawRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
@@ -271,7 +272,6 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->clearRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -326,6 +326,17 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
 			// 
+			// clearRectangleButton
+			// 
+			this->clearRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->clearRectangleButton->Location = System::Drawing::Point(103, 438);
+			this->clearRectangleButton->Name = L"clearRectangleButton";
+			this->clearRectangleButton->Size = System::Drawing::Size(85, 61);
+			this->clearRectangleButton->TabIndex = 32;
+			this->clearRectangleButton->Text = L"Clear Rectangle";
+			this->clearRectangleButton->UseVisualStyleBackColor = true;
+			this->clearRectangleButton->Click += gcnew System::EventHandler(this, &Form1::clearRectangleButton_Click);
+			// 
 			// drawRectangleButton
 			// 
 			this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
@@ -379,7 +390,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
 			this->label9->Location = System::Drawing::Point(8, 616);
 			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(89, 16);
+			this->label9->Size = System::Drawing::Size(110, 20);
 			this->label9->TabIndex = 27;
 			this->label9->Text = L"Hide Classes";
 			this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
@@ -468,7 +479,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->trackBar1->LargeChange = 1;
 			this->trackBar1->Location = System::Drawing::Point(3, 100);
 			this->trackBar1->Name = L"trackBar1";
-			this->trackBar1->Size = System::Drawing::Size(185, 45);
+			this->trackBar1->Size = System::Drawing::Size(185, 56);
 			this->trackBar1->TabIndex = 9;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
 			// 
@@ -479,7 +490,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				static_cast<System::Byte>(0)));
 			this->ZoomingLabel->Location = System::Drawing::Point(6, 75);
 			this->ZoomingLabel->Name = L"ZoomingLabel";
-			this->ZoomingLabel->Size = System::Drawing::Size(43, 16);
+			this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
 			this->ZoomingLabel->TabIndex = 11;
 			this->ZoomingLabel->Text = L"Zoom";
 			// 
@@ -508,7 +519,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				static_cast<System::Byte>(0)));
 			this->PannningLabel->Location = System::Drawing::Point(6, 16);
 			this->PannningLabel->Name = L"PannningLabel";
-			this->PannningLabel->Size = System::Drawing::Size(57, 16);
+			this->PannningLabel->Size = System::Drawing::Size(69, 20);
 			this->PannningLabel->TabIndex = 10;
 			this->PannningLabel->Text = L"Panning";
 			// 
@@ -545,7 +556,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			// 
 			// colorButton
 			// 
-			this->colorButton->Location = System::Drawing::Point(4, 49);
+			this->colorButton->Location = System::Drawing::Point(4, 55);
 			this->colorButton->Name = L"colorButton";
 			this->colorButton->Size = System::Drawing::Size(192, 45);
 			this->colorButton->TabIndex = 0;
@@ -579,7 +590,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				static_cast<System::Byte>(0)));
 			this->label1->Location = System::Drawing::Point(4, 1);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(127, 16);
+			this->label1->Size = System::Drawing::Size(159, 20);
 			this->label1->TabIndex = 12;
 			this->label1->Text = L"Change Class Color";
 			// 
@@ -589,7 +600,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->comboBox1->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(4, 21);
+			this->comboBox1->Location = System::Drawing::Point(4, 25);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(188, 21);
 			this->comboBox1->TabIndex = 1;
@@ -600,7 +611,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(554, 8);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 13);
+			this->label2->Size = System::Drawing::Size(0, 15);
 			this->label2->TabIndex = 11;
 			// 
 			// panel2
@@ -635,7 +646,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
 			this->backgroundColorLightnessSlider->Maximum = 200;
 			this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 45);
+			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 56);
 			this->backgroundColorLightnessSlider->TabIndex = 10;
 			this->backgroundColorLightnessSlider->Value = 2;
 			this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -647,7 +658,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->backgroundLightness->Location = System::Drawing::Point(4, 16);
 			this->backgroundLightness->Name = L"backgroundLightness";
-			this->backgroundLightness->Size = System::Drawing::Size(161, 15);
+			this->backgroundLightness->Size = System::Drawing::Size(196, 18);
 			this->backgroundLightness->TabIndex = 11;
 			this->backgroundLightness->Text = L"Background Color Lightness";
 			// 
@@ -668,7 +679,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
 			this->backgroundTransparencySlider->Maximum = 255;
 			this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-			this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 45);
+			this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 56);
 			this->backgroundTransparencySlider->TabIndex = 10;
 			this->backgroundTransparencySlider->Value = 100;
 			this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -680,7 +691,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
 			this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-			this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
+			this->backgroundTransparencyLabel->Size = System::Drawing::Size(182, 18);
 			this->backgroundTransparencyLabel->TabIndex = 11;
 			this->backgroundTransparencyLabel->Text = L"Background Transparency";
 			this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -702,7 +713,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->transparencySlider->Location = System::Drawing::Point(6, 43);
 			this->transparencySlider->Maximum = 255;
 			this->transparencySlider->Name = L"transparencySlider";
-			this->transparencySlider->Size = System::Drawing::Size(185, 45);
+			this->transparencySlider->Size = System::Drawing::Size(185, 56);
 			this->transparencySlider->TabIndex = 10;
 			this->transparencySlider->Value = 255;
 			this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -714,20 +725,9 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->transparencyLabel->Location = System::Drawing::Point(6, 18);
 			this->transparencyLabel->Name = L"transparencyLabel";
-			this->transparencyLabel->Size = System::Drawing::Size(120, 16);
+			this->transparencyLabel->Size = System::Drawing::Size(148, 20);
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Line Transparency";
-			// 
-			// clearRectangleButton
-			// 
-			this->clearRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->clearRectangleButton->Location = System::Drawing::Point(103, 438);
-			this->clearRectangleButton->Name = L"clearRectangleButton";
-			this->clearRectangleButton->Size = System::Drawing::Size(85, 61);
-			this->clearRectangleButton->TabIndex = 32;
-			this->clearRectangleButton->Text = L"Clear Rectangle";
-			this->clearRectangleButton->UseVisualStyleBackColor = true;
-			this->clearRectangleButton->Click += gcnew System::EventHandler(this, &Form1::clearRectangleButton_Click);
 			// 
 			// Form1
 			// 
