@@ -118,8 +118,11 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		GLfloat highY = max(rectY1, rectY2);
 		GLfloat lowY = min(rectY1, rectY2);
 
-		middleX = lowX + ((highX - lowX) / 5) + ((deltaX / data.numOfClasses) * classnum) - (x1 + data.pan_x);
-		middleY = lowY + ((highY - lowY) / 5) + ((deltaY / data.numOfClasses) * classnum) - (y1 + data.pan_y);
+//		middleX = lowX + ((highX - lowX) / 5) + ((deltaX / data.numOfClasses) * classnum) - (x1 + data.pan_x);
+//		middleY = lowY + ((highY - lowY) / 5) + ((deltaY / data.numOfClasses) * classnum) - (y1 + data.pan_y);
+
+		middleX = lowX + ((highX - lowX) / 2) - (x1 + data.pan_x);
+		middleY = lowY + ((highY - lowY) / data.numOfClasses + 1) * classnum - (y1 + data.pan_y);
 
 		drawMiddleVertex = true;
 
