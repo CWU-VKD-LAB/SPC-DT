@@ -36,6 +36,17 @@ public:
 
 	void display();
 
+	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
+
+	GLfloat rectX1;
+	GLfloat rectY1;
+	GLfloat rectX2;
+	GLfloat rectY2;
+	bool isRectangleMode;
+	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);
+	bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+	bool* getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2);
+
 	// *** STUFF BELOW THIS IS FOR DRAGGING GRAPHS *** //////////////////////////////////////////
 
 	/* DRAGGING GRAPH STUFF */
@@ -49,12 +60,14 @@ public:
 	float findClickedGraph(double x, double y);
 	int findClickedCoordinate(double x, double y);
 	void drawCircle(int x, int y);
+	void drawRectangle();
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
 	void setBackgroundTransparency(float alpha);
 	void setBackgroundColorLightness(float lightness);
 	std::vector<float> RGBtoHSL(std::vector<float> classColor);
 	std::vector<GLubyte> HSLtoRGB(std::vector<float> hsl);
 	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+	bool shouldLineBeClipped(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, bool* startPointCode, bool* endPointCode);
 	int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
 };
 
