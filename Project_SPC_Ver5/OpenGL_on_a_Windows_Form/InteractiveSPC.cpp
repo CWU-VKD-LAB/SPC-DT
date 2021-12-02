@@ -106,7 +106,12 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	// If in drawn rectangle mode, check if the points make a line that intersects the rectangle
 	GLfloat middleX;
 	GLfloat middleY;
+	GLfloat middleXTerminating;
+	GLfloat middleYTerminating;
+
 	bool drawMiddleVertex = false;
+	bool drawVertex1 = true;
+	bool drawVertex2 = true;
 
 	if (isRectangleMode && doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
 		// draw point within rectangle based on how many classes there are
@@ -121,20 +126,37 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 //		middleX = lowX + ((highX - lowX) / 5) + ((deltaX / data.numOfClasses) * classnum) - (x1 + data.pan_x);
 //		middleY = lowY + ((highY - lowY) / 5) + ((deltaY / data.numOfClasses) * classnum) - (y1 + data.pan_y);
 
-		middleX = lowX + ((highX - lowX) / 2) - (x1 + data.pan_x);
+		middleX = lowX + 2 * ((highX - lowX) / 3) - (x1 + data.pan_x);
 		middleY = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
+		middleXTerminating = lowX + ((highX - lowX) / 3) - (x1 + data.pan_x);
+		middleYTerminating = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
+
+		if (isPointWithinRect(x1CoordTrans, y1CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
+			drawVertex1 = false;
+		}
+		if (isPointWithinRect(x2CoordTrans, y2CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
+			drawVertex2 = false;
+		}
+
+		// Check if line terminates with this point
+		if (false) { // placeholder
+			x1Coord = middleXTerminating;
+			y1Coord = middleYTerminating;
+			x2Coord = middleXTerminating;
+			y2Coord = middleYTerminating;
+		}
 
 		drawMiddleVertex = true;
 
 		//debug
-		glColor4ub(255, 0, 0, 255);
-		glPointSize(8.0);
-		glBegin(GL_POINTS);
-		glVertex2f(x1CoordTrans, y1CoordTrans);
-		glColor4ub(0, 0, 255, 255);
-		glVertex2f(x2CoordTrans, y2CoordTrans);
-		glPointSize(4.0);
-		glEnd();
+		//glColor4ub(255, 0, 0, 255);
+		//glPointSize(8.0);
+		//glBegin(GL_POINTS);
+		//glVertex2f(x1CoordTrans, y1CoordTrans);
+		//glColor4ub(0, 0, 255, 255);
+		//glVertex2f(x2CoordTrans, y2CoordTrans);
+		//glPointSize(4.0);
+		//glEnd();
 	}
 
 	glPushMatrix();	// Makes a new layer
@@ -146,11 +168,13 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		glBegin(GL_LINE_STRIP);
 		//data.classTransparency[1] = 70;
 		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
-		glVertex2f(x1Coord, y1Coord);
+		if (drawVertex1) {
+			glVertex2f(x1Coord, y1Coord);
+		}
 		if (drawMiddleVertex) {
 			glVertex2f(middleX, middleY);
 		}
-		if(data.classsize!=1)
+		if(drawVertex2 && data.classsize!=1)
 			glVertex2f(x2Coord, y2Coord); // ending vertex
 		glEnd();
 	}
@@ -165,7 +189,9 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	glBegin(GL_POINTS);
 	
 	//glVertex2f(0 + xratio * data.xdata[i][j], 0 - yratio * data.ydata[i][j]);                                     // starting vertex
-	glVertex2f(x1Coord, y1Coord);
+	if (drawVertex1) {
+		glVertex2f(x1Coord, y1Coord);
+	}
 	if (drawMiddleVertex) {
 		glVertex2f(middleX, middleY);
 	}
@@ -174,13 +200,15 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	glPointSize(4);
 	glBegin(GL_POINTS);
 	//glVertex2f((x2 - x1) + xratio * data.xdata[i][j + 1], (y2 - y1) - yratio * data.ydata[i][j + 1]);                         // ending vertex
-	if (data.classsize != 1)
+	if (drawVertex2 && data.classsize != 1)
 		glVertex2f(x2Coord, y2Coord);	
 	glEnd();
 	if (j == 0)
 	{
 		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
-		drawCircle(x1Coord, y1Coord);
+		if (drawVertex1) {
+			glVertex2f(x1Coord, y1Coord);
+		}
 	}
 
 	glPopMatrix();
@@ -577,7 +605,7 @@ bool InteractiveSPC::shouldLineBeClipped(GLfloat startX, GLfloat startY, GLfloat
 	}
 
 	// Debug
-	glColor4ub(0, 255, 0, 255);
+	/*glColor4ub(0, 255, 0, 255);
 	glPointSize(8.0);
 	glBegin(GL_POINTS);
 	glVertex2f(startX, startY);
@@ -604,7 +632,7 @@ bool InteractiveSPC::shouldLineBeClipped(GLfloat startX, GLfloat startY, GLfloat
 	glColor4ub(255, 0, 255, 255);
 	glVertex2f(boundingBoxRight, 0.0f);
 	glVertex2f(boundingBoxRight, 1000);
-	glEnd();
+	glEnd();*/
 
 	return isAccepted;
 }
