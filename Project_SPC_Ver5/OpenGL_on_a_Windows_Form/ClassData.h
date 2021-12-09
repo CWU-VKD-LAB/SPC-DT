@@ -43,13 +43,23 @@ public:
 			classColor[classnum - 1].push_back(B);
 		}
 	}
-	void setClassTransparency(float alpha) {
-		int size = dataTransparency.size();
-
-		for (int i = 0; i < dataTransparency.size(); i++) {
-			dataTransparency[i] = alpha;
+	void setClassTransparency(float alpha, int classNum) {
+		
+		//int size = dataTransparency.size();
+		if (classNum == -1) { // Sets transparency of all data
+			int size = classTransparencies.size();
+			for (int i = 0; i < classTransparencies.size(); i++) {
+				//dataTransparency[i] = alpha;
+				classTransparencies[i] = alpha;
+			}
+		}
+		else {
+			
+			classTransparencies[classNum] = alpha;
+			
 		}
 
+		// Debug breakpoint
 		int foo = 0;
 	}
 
@@ -122,6 +132,7 @@ public:
 	std::vector<std::vector<float> > xdata;
 	std::vector<double> x1CoordGraph, x2CoordGraph, y1CoordGraph, y2CoordGraph;
 	std::vector<float> dataTransparency;
+	std::vector<float> classTransparencies;
 	bool hdDisplay; //to display high dimension data
 	int numOfGraphsPerRowHdDisplay;
 	std::vector< std::vector<float>> originalXData;

@@ -165,8 +165,8 @@ namespace OpenGLForm
 		}
 
 		// CHANGE TRANSPARENCY OF PLOTTED DATA
-		void setDataTransparency(float alpha) {
-			graph4.data.setClassTransparency(alpha);
+		void setDataTransparency(float alpha, int classNum) {
+			graph4.data.setClassTransparency(alpha, classNum);
 		}
 
 		// CHANGE TRANSPARENCT OF THE BACKGROUND GRAPH

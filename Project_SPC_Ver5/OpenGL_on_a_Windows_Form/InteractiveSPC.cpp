@@ -168,6 +168,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		glBegin(GL_LINE_STRIP);
 		//data.classTransparency[1] = 70;
 		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
+		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
 		if (drawVertex1) {
 			glVertex2f(x1Coord, y1Coord);
 		}
@@ -205,7 +206,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	glEnd();
 	if (j == 0)
 	{
-		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
+		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
 		if (drawVertex1) {
 			glVertex2f(x1Coord, y1Coord);
 		}
