@@ -99,6 +99,9 @@ void FileHandling::sortGraph(ClassData &data)
 			stoi(data.values[i][(data.values[0].size() - 1)]);          // Get the class of the node
 		if (nodeClass > data.numOfClasses)                              // Get the highest class number
 			data.numOfClasses = nodeClass;
+		if (nodeClass > data.classTransparencies.size()) {
+			data.classTransparencies.push_back(255); // init class transparencies
+		}
 		data.classNum.push_back(nodeClass);                             // Add to vector of class numbers
 
 		for (int j = 1; j < (data.values[i].size() - 1); j++)			// Rows

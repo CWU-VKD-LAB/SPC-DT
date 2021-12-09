@@ -54,7 +54,7 @@ Class OpenGLForm.COpenGL3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Methods:
     resetDrawingArea(): PrivateScope, Public, HideBySig
     setClassColor(Single, Single, Single, Int32): PrivateScope, Public, HideBySig
-    setDataTransparency(Single): PrivateScope, Public, HideBySig
+    setDataTransparency(Single, Int32): PrivateScope, Public, HideBySig
     setBackgroundTransparency(Single): PrivateScope, Public, HideBySig
     setBackgroundColorLightness(Single): PrivateScope, Public, HideBySig
     setDrawingRectangleState(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig

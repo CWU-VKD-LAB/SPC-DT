@@ -189,6 +189,8 @@ private: System::Windows::Forms::TrackBar^ backgroundColorLightnessSlider;
 private: System::Windows::Forms::Label^ backgroundLightness;
 private: System::Windows::Forms::Button^ drawRectangleButton;
 private: System::Windows::Forms::Button^ clearRectangleButton;
+private: System::Windows::Forms::ComboBox^ classTransparencySelection;
+
 
 
 
@@ -272,6 +274,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
+			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -477,7 +480,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			// 
 			this->trackBar1->BackColor = System::Drawing::SystemColors::Control;
 			this->trackBar1->LargeChange = 1;
-			this->trackBar1->Location = System::Drawing::Point(3, 100);
+			this->trackBar1->Location = System::Drawing::Point(4, 71);
 			this->trackBar1->Name = L"trackBar1";
 			this->trackBar1->Size = System::Drawing::Size(185, 56);
 			this->trackBar1->TabIndex = 9;
@@ -488,7 +491,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->ZoomingLabel->AutoSize = true;
 			this->ZoomingLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->ZoomingLabel->Location = System::Drawing::Point(6, 75);
+			this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
 			this->ZoomingLabel->Name = L"ZoomingLabel";
 			this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
 			this->ZoomingLabel->TabIndex = 11;
@@ -496,7 +499,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			// 
 			// vScrollBar1
 			// 
-			this->vScrollBar1->Location = System::Drawing::Point(71, 47);
+			this->vScrollBar1->Location = System::Drawing::Point(152, 18);
 			this->vScrollBar1->Minimum = -100;
 			this->vScrollBar1->Name = L"vScrollBar1";
 			this->vScrollBar1->Size = System::Drawing::Size(42, 50);
@@ -505,7 +508,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			// 
 			// hScrollBar1
 			// 
-			this->hScrollBar1->Location = System::Drawing::Point(9, 32);
+			this->hScrollBar1->Location = System::Drawing::Point(102, 16);
 			this->hScrollBar1->Minimum = -100;
 			this->hScrollBar1->Name = L"hScrollBar1";
 			this->hScrollBar1->Size = System::Drawing::Size(50, 40);
@@ -550,13 +553,13 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->groupBox1->Controls->Add(this->hScrollBar1);
 			this->groupBox1->Location = System::Drawing::Point(6, 88);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(200, 145);
+			this->groupBox1->Size = System::Drawing::Size(200, 111);
 			this->groupBox1->TabIndex = 7;
 			this->groupBox1->TabStop = false;
 			// 
 			// colorButton
 			// 
-			this->colorButton->Location = System::Drawing::Point(4, 57);
+			this->colorButton->Location = System::Drawing::Point(4, 56);
 			this->colorButton->Name = L"colorButton";
 			this->colorButton->Size = System::Drawing::Size(192, 45);
 			this->colorButton->TabIndex = 0;
@@ -575,10 +578,11 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			this->tableLayoutPanel1->Controls->Add(this->comboBox1, 0, 1);
 			this->tableLayoutPanel1->Location = System::Drawing::Point(6, 505);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
-			this->tableLayoutPanel1->RowCount = 3;
+			this->tableLayoutPanel1->RowCount = 4;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
 			this->tableLayoutPanel1->Size = System::Drawing::Size(200, 104);
 			this->tableLayoutPanel1->TabIndex = 9;
 			this->tableLayoutPanel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::tableLayoutPanel1_Paint);
@@ -698,11 +702,12 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			// 
 			// groupBox2
 			// 
+			this->groupBox2->Controls->Add(this->classTransparencySelection);
 			this->groupBox2->Controls->Add(this->transparencySlider);
 			this->groupBox2->Controls->Add(this->transparencyLabel);
-			this->groupBox2->Location = System::Drawing::Point(6, 229);
+			this->groupBox2->Location = System::Drawing::Point(6, 205);
 			this->groupBox2->Name = L"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(200, 99);
+			this->groupBox2->Size = System::Drawing::Size(200, 142);
 			this->groupBox2->TabIndex = 14;
 			this->groupBox2->TabStop = false;
 			// 
@@ -710,7 +715,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 			// 
 			this->transparencySlider->BackColor = System::Drawing::SystemColors::Control;
 			this->transparencySlider->LargeChange = 1;
-			this->transparencySlider->Location = System::Drawing::Point(6, 43);
+			this->transparencySlider->Location = System::Drawing::Point(3, 80);
 			this->transparencySlider->Maximum = 255;
 			this->transparencySlider->Name = L"transparencySlider";
 			this->transparencySlider->Size = System::Drawing::Size(185, 56);
@@ -725,9 +730,21 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->transparencyLabel->Location = System::Drawing::Point(6, 18);
 			this->transparencyLabel->Name = L"transparencyLabel";
-			this->transparencyLabel->Size = System::Drawing::Size(148, 20);
+			this->transparencyLabel->Size = System::Drawing::Size(159, 20);
 			this->transparencyLabel->TabIndex = 11;
-			this->transparencyLabel->Text = L"Line Transparency";
+			this->transparencyLabel->Text = L"Class Transparency";
+			// 
+			// classTransparencySelection
+			// 
+			this->classTransparencySelection->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->classTransparencySelection->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->classTransparencySelection->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->classTransparencySelection->FormattingEnabled = true;
+			this->classTransparencySelection->Location = System::Drawing::Point(4, 50);
+			this->classTransparencySelection->Name = L"classTransparencySelection";
+			this->classTransparencySelection->Size = System::Drawing::Size(188, 24);
+			this->classTransparencySelection->TabIndex = 13;
+			this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
 			// 
 			// Form1
 			// 
@@ -826,7 +843,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 				graphType = 1;
 				OpenGL3->graphType = 1;
 				trackBar1->Value = graph1_oldZoom;
-				classnumberselected = -1;
+				classnumberselectedForColor = -1;
 
 				fileopened = true;
 		
@@ -900,7 +917,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 		transparencySlider->Value = defaultDataTransparency;
 		backgroundColorLightnessSlider->Value = defaultBackgroundColorLightness;
 		OpenGL3->setBackgroundTransparency(defaultBackgroundTransparency);
-		OpenGL3->setDataTransparency(defaultDataTransparency);
+		OpenGL3->setDataTransparency(defaultDataTransparency, -1);
 		OpenGL3->setBackgroundColorLightness(defaultBackgroundColorLightness);
 
 		for (int x = 0; x < checkedListBox4->Items->Count; x++)
@@ -1055,7 +1072,7 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 
 
 
-	int classnumberselected = -1;
+	int classnumberselectedForColor = -1;
 private: System::Void colorButton_Click(System::Object^  sender, System::EventArgs^  e) {
 	// FOR CHANGING COLOR
 	if (colorDialog1->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
@@ -1064,14 +1081,14 @@ private: System::Void colorButton_Click(System::Object^  sender, System::EventAr
 		float green = this->colorDialog1->Color.G;
 		float blue = this->colorDialog1->Color.B;
 
-		OpenGL3->setClassColor(red, green, blue, classnumberselected);
+		OpenGL3->setClassColor(red, green, blue, classnumberselectedForColor);
 	}
 
 	
 }
 
 private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-	classnumberselected = comboBox1->SelectedIndex+1;
+	classnumberselectedForColor = comboBox1->SelectedIndex+1;
 
 }
 
@@ -1108,9 +1125,15 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 		// clear the list to prevent duplicates on update
 		this->comboBox1->Items->Clear();
 		this->comboBox1->Items->Clear();
+		this->classTransparencySelection->Items->Clear();
+		this->classTransparencySelection->Items->Clear();
+		
+		this->classTransparencySelection->Items->Add("All");
+
 		data.numOfClasses = OpenGL3->getClassSize();
 		for (int i = 1; i <= data.numOfClasses; i++) {
 			this->comboBox1->Items->Add(i); // set the combobox for "Class combobox" to the data in item1 
+			this->classTransparencySelection->Items->Add(i);
 		}
 
 		
@@ -1122,17 +1145,27 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 		loadInteractiveSPC();
 
-
-
+		
+		// Note: not sure why we do this twice in this method
 
 		data.numOfClasses = OpenGL3->getClassSize();
 
+		for (int i = 0; i < data.numOfClasses; i++) {
+			data.classTransparencies.push_back(255); // Make all classes fully opaque to begin
+		}
 
 		this->checkedListBox4->Items->Clear();
 		this->checkedListBox4->Items->Clear();
+
+		this->classTransparencySelection->Items->Clear();
+		this->classTransparencySelection->Items->Clear();
+
+		this->classTransparencySelection->Items->Add("All");
+
 		data.numOfClasses = OpenGL3->getClassSize();
 		for (int i = 1; i <= data.numOfClasses; i++) {
 			this->checkedListBox4->Items->Add(i); // set the combobox for "Class combobox" to the data in item1 
+			this->classTransparencySelection->Items->Add(i);
 		}
 	}
 }
@@ -1336,9 +1369,7 @@ private: System::Void button7_Click_1(System::Object^ sender, System::EventArgs^
 	checkBox1->Checked = false;
 	OpenGL3->reverseDataAxis = 2;
 }
-private: System::Void transparencySlider_Scroll(System::Object^ sender, System::EventArgs^ e) {
-	OpenGL3->setDataTransparency((float) transparencySlider->Value);
-}
+
 private: System::Void tableLayoutPanel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 private: System::Void backgroundTransparencyLabel_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -1358,6 +1389,14 @@ private: System::Void clearRectangleButton_Click(System::Object^ sender, System:
 	// Clear rectangle
 	OpenGL3->drawingRectangleEnabled = false;
 	OpenGL3->setDrawingRectangleState(false);
+}
+
+	int classSelectionForTransparency = -1;
+private: System::Void classTransparencySelection_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	classSelectionForTransparency = classTransparencySelection->SelectedIndex - 1;
+}
+private: System::Void transparencySlider_Scroll(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setDataTransparency((float)transparencySlider->Value, classSelectionForTransparency);
 }
 };
 }
