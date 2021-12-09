@@ -36,6 +36,10 @@ public:
 
 	void display();
 
+	// *** USED FOR DRAWING LINE COLORS
+	int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
+	bool shouldPointTerminate(GLfloat px, GLfloat py);
+
 	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
 
 	GLfloat rectX1;

@@ -138,12 +138,17 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 			drawVertex2 = false;
 		}
 
+
 		// Check if line terminates with this point
-		if (false) { // placeholder
+		if (shouldPointTerminate(x1Coord, y1Coord)) { // Need to check if we should be checking point 1 or point2
 			x1Coord = middleXTerminating;
 			y1Coord = middleYTerminating;
 			x2Coord = middleXTerminating;
 			y2Coord = middleYTerminating;
+		}
+
+		if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
+
 		}
 
 		drawMiddleVertex = true;
@@ -157,6 +162,15 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		//glVertex2f(x2CoordTrans, y2CoordTrans);
 		//glPointSize(4.0);
 		//glEnd();
+	}
+
+	// Check if line terminates with this point
+	if (shouldPointTerminate(x1Coord, y1Coord)) { // Need to check if we should be checking point 1 or point2
+		// TODO
+	}
+
+	if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
+		// TODO
 	}
 
 	glPushMatrix();	// Makes a new layer
@@ -726,6 +740,10 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
 
 		
 	} return -1;
+}
+
+int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
+	// TODO
 }
 
 void InteractiveSPC::drawCircle(int x, int y)
