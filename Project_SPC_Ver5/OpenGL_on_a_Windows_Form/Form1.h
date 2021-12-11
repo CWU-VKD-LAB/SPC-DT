@@ -1121,6 +1121,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	if (fileopened) {
 		OpenGL3->setFileName(data);
 		OpenGL3->setParserFileName(dataParsed);
+		OpenGL3->calculateDataTerminationPoints();
 
 		// clear the list to prevent duplicates on update
 		this->comboBox1->Items->Clear();
@@ -1141,7 +1142,6 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 		
 		data.numOfClasses = OpenGL3->getClassSize();
-
 
 		loadInteractiveSPC();
 

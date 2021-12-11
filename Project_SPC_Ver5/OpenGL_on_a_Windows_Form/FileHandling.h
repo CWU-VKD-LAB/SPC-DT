@@ -15,6 +15,5 @@ public:
 	void openParserFile(parseData&, ClassData&);
 	void sortGraph(ClassData&);
 	void normalizeData(ClassData &data);
-
 };
 

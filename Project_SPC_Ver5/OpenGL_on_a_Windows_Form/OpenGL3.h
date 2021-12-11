@@ -254,16 +254,9 @@ namespace OpenGLForm
 			newFile.sortGraph(data);
 			newFile.normalizeData(data);
 
-
-
-
-
-		
 			// C-SPC
 			graph4.data = data;
-			//graph4.dataParsed = dataParsed;
-
-			
+			graph4.dataParsed = dataParsed;
 		
 			graph4.data.classsize = int(data.xdata[0].size());
 
@@ -288,9 +281,6 @@ namespace OpenGLForm
 			//}
 
 			//graph4.data.setClassColor(255.0, 0.0, 0.0, 1);
-
-
-			
 		
 			originalWH = worldHeight; // Saves orginals to use for increments like for zooming.
 			originalWW = worldWidth;
@@ -306,7 +296,11 @@ namespace OpenGLForm
 			dataParsed.parserFileName = pfile.parserFileName;
 			newFile.openParserFile(dataParsed, data);
 			graph4.dataParsed.parsedData = dataParsed.parsedData;
+			graph4.data.parsedData = dataParsed.parsedData;
+		}
 
+		void calculateDataTerminationPoints() {
+			graph4.data.calculateTerminationPoints();
 		}
 
 

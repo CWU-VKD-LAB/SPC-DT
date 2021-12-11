@@ -7,6 +7,9 @@
 #include "stdafx.h"
 #include "InteractiveSPC.h"
 
+// Debug
+#include <set>
+
 
 
 InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double worldW, double worldH)
@@ -80,9 +83,15 @@ void InteractiveSPC::fillGraphLocations()
 
 /* Draws data sets. */
 
-
+std::set<int> backgroundClassSet; // Debug
+std::set<int> pointClassSet; // Debug
 void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int j)
 {
+	// Don't draw data past its termination point
+	if (noDrawAfterTerminationPointMode && j > data.dataTerminationIndex[i] - 1) {
+		std::cout << "debug";
+		return;
+	}
 	
 	float xratio = data.graphwidth[j] / data.xmax; // Normalize data to the graph size
 	float yratio = data.graphheight[j] / data.ymax;	
@@ -101,6 +110,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 
 
 	int classnum = data.classNum[i] - 1;
+	pointClassSet.insert(classnum);
 
 	
 	// If in drawn rectangle mode, check if the points make a line that intersects the rectangle
@@ -148,7 +158,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		}
 
 		if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
-
+            // Do nothing for now
 		}
 
 		drawMiddleVertex = true;
@@ -169,10 +179,42 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		// TODO
 	}
 
-	if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
-		// TODO
+	
+	int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+	backgroundClassSet.insert(backgroundClass);
+
+	if (backgroundClass != -1 && backgroundClass != classnum) {
+		glColor4ub(255, 0, 0, 255);
+		glPointSize(8.0);
+		glBegin(GL_POINTS);
+		glVertex2f(x1CoordTrans, y1CoordTrans);
+		glEnd();
+		glPointSize(4.0);
 	}
 
+	//if (backgroundClass != -1) {
+	//	if (backgroundClass != classnum) { // do something special if point class doesnt match background zone
+	//	// TODO
+	//		std::cout << "debug";
+	//		glColor4ub(255, 0, 0, 255);
+	//		glPointSize(8.0);
+	//		glBegin(GL_POINTS);
+	//		glVertex2f(x1CoordTrans, y1CoordTrans);
+	//		glEnd();
+	//		glPointSize(4.0);
+	//	}
+	//	else {
+	//		std::cout << "debug2: electric boogaloo";
+	//		data.dataTerminationIndex[i] = j;
+	//		glColor4ub(0, 0, 255, 255);
+	//		glPointSize(8.0);
+	//		glBegin(GL_POINTS);
+	//		glVertex2f(x1CoordTrans, y1CoordTrans);
+	//		glEnd();
+	//		glPointSize(4.0);
+	//	}
+	//}
+	//
 	glPushMatrix();	// Makes a new layer
 
 	glTranslatef(x1 + data.pan_x, y1 + data.pan_y, 0); // Translates starting position to draw
@@ -496,6 +538,12 @@ void InteractiveSPC::display() {
 	
 }
 
+bool InteractiveSPC::shouldPointTerminate(GLfloat px, GLfloat py) {
+	// TODO
+	return false;
+}
+
+
 bool InteractiveSPC::doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {	
 	GLfloat boundingBoxLeft = min(rectX1, rectX2);
@@ -699,6 +747,47 @@ bool* InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rec
 	return triviality;
 }
 
+void InteractiveSPC::calculateDataTerminationPoints() {
+	for (int i = 0; i < data.dataTerminationIndex.size(); i++) {
+		int classnum = data.classNum[i] - 1;
+		for (int j = 0; j < data.dataTerminationIndex[i]; i++) {
+			float px = data.xgraphcoordinates[j];
+			float py = data.ygraphcoordinates[j];
+			px -= (data.graphwidth[j] / 2);
+			py += (data.graphheight[j] / 2);
+			float x1Coord = data.graphwidth[j] * data.xdata[i][j];
+			float y1Coord = -data.graphheight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
+			float x1CoordTrans = x1Coord + (px + data.pan_x);
+			float y1CoordTrans = y1Coord + (py + data.pan_y);
+
+			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+
+
+			if (backgroundClass != -1) {
+				if (backgroundClass != classnum) { // do something special if point class doesnt match background zone
+				// TODO
+				// debug
+					//glColor4ub(255, 0, 0, 255);
+					//glPointSize(8.0);
+					//glBegin(GL_POINTS);
+					//glVertex2f(x1CoordTrans, y1CoordTrans);
+					//glEnd();
+					//glPointSize(4.0);
+				}
+				else {
+					data.dataTerminationIndex[i] = j;
+					// debug
+					/*glColor4ub(0, 0, 255, 255);
+					glPointSize(8.0);
+					glBegin(GL_POINTS);
+					glVertex2f(x1CoordTrans, y1CoordTrans);
+					glEnd();
+					glPointSize(4.0);*/
+				}
+			}
+		}
+	}
+}
 
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y) 
@@ -744,6 +833,24 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
 
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 	// TODO
+    int resultClass = -1;
+	for (int p = 0; p < dataParsed.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+        int classNumber = dataParsed.parsedData[p][5];
+		const GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
+		const GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
+		const GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
+		const GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
+        if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+            resultClass = classNumber;
+        } // Check to see if these need to be rearranged.
+		std::cout << "debug" << x1 << x2 << y1 << y2;
+	}
+
+	if (resultClass != -1) {
+		std::cout << "debug";
+	}
+
+    return resultClass;
 }
 
 void InteractiveSPC::drawCircle(int x, int y)

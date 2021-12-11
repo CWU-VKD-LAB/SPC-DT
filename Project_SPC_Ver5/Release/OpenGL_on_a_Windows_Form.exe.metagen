@@ -64,6 +64,7 @@ Class OpenGLForm.COpenGL3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     clearAllGraphData(): PrivateScope, Public, HideBySig
     setFileName(ClassData*): PrivateScope, Public, HideBySig
     setParserFileName(parseData*): PrivateScope, Public, HideBySig
+    calculateDataTerminationPoints(): PrivateScope, Public, HideBySig
     zoom(Int32): PrivateScope, Public, HideBySig
     panHorizontal(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
     panVertical(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
