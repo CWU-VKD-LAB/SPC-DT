@@ -190,6 +190,8 @@ private: System::Windows::Forms::Label^ backgroundLightness;
 private: System::Windows::Forms::Button^ drawRectangleButton;
 private: System::Windows::Forms::Button^ clearRectangleButton;
 private: System::Windows::Forms::ComboBox^ classTransparencySelection;
+private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
+private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 
 
 
@@ -265,6 +267,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
 			this->backgroundColorLightnessSlider = (gcnew System::Windows::Forms::TrackBar());
 			this->backgroundLightness = (gcnew System::Windows::Forms::Label());
@@ -272,9 +275,10 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->backgroundTransparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->backgroundTransparencyLabel = (gcnew System::Windows::Forms::Label());
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
+			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
+			this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -393,7 +397,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
 			this->label9->Location = System::Drawing::Point(8, 616);
 			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(110, 20);
+			this->label9->Size = System::Drawing::Size(89, 16);
 			this->label9->TabIndex = 27;
 			this->label9->Text = L"Hide Classes";
 			this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
@@ -482,7 +486,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->trackBar1->LargeChange = 1;
 			this->trackBar1->Location = System::Drawing::Point(4, 71);
 			this->trackBar1->Name = L"trackBar1";
-			this->trackBar1->Size = System::Drawing::Size(185, 56);
+			this->trackBar1->Size = System::Drawing::Size(185, 45);
 			this->trackBar1->TabIndex = 9;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
 			// 
@@ -493,7 +497,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 				static_cast<System::Byte>(0)));
 			this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
 			this->ZoomingLabel->Name = L"ZoomingLabel";
-			this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
+			this->ZoomingLabel->Size = System::Drawing::Size(43, 16);
 			this->ZoomingLabel->TabIndex = 11;
 			this->ZoomingLabel->Text = L"Zoom";
 			// 
@@ -522,7 +526,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 				static_cast<System::Byte>(0)));
 			this->PannningLabel->Location = System::Drawing::Point(6, 16);
 			this->PannningLabel->Name = L"PannningLabel";
-			this->PannningLabel->Size = System::Drawing::Size(69, 20);
+			this->PannningLabel->Size = System::Drawing::Size(57, 16);
 			this->PannningLabel->TabIndex = 10;
 			this->PannningLabel->Text = L"Panning";
 			// 
@@ -559,7 +563,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			// 
 			// colorButton
 			// 
-			this->colorButton->Location = System::Drawing::Point(4, 56);
+			this->colorButton->Location = System::Drawing::Point(4, 49);
 			this->colorButton->Name = L"colorButton";
 			this->colorButton->Size = System::Drawing::Size(192, 45);
 			this->colorButton->TabIndex = 0;
@@ -594,7 +598,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 				static_cast<System::Byte>(0)));
 			this->label1->Location = System::Drawing::Point(4, 1);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(159, 20);
+			this->label1->Size = System::Drawing::Size(127, 16);
 			this->label1->TabIndex = 12;
 			this->label1->Text = L"Change Class Color";
 			// 
@@ -604,9 +608,9 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->comboBox1->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(4, 25);
+			this->comboBox1->Location = System::Drawing::Point(4, 21);
 			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(188, 24);
+			this->comboBox1->Size = System::Drawing::Size(188, 21);
 			this->comboBox1->TabIndex = 1;
 			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
 			// 
@@ -615,12 +619,14 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(554, 8);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 17);
+			this->label2->Size = System::Drawing::Size(0, 13);
 			this->label2->TabIndex = 11;
 			// 
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel2->Controls->Add(this->highlightMisclassificationsCheckbox);
+			this->panel2->Controls->Add(this->lineTerminationModeCheckbox);
 			this->panel2->Controls->Add(this->groupBox4);
 			this->panel2->Controls->Add(this->groupBox3);
 			this->panel2->Controls->Add(this->groupBox2);
@@ -632,6 +638,17 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(209, 671);
 			this->panel2->TabIndex = 13;
+			// 
+			// lineTerminationModeCheckbox
+			// 
+			this->lineTerminationModeCheckbox->AutoSize = true;
+			this->lineTerminationModeCheckbox->Location = System::Drawing::Point(3, 313);
+			this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
+			this->lineTerminationModeCheckbox->Size = System::Drawing::Size(134, 17);
+			this->lineTerminationModeCheckbox->TabIndex = 17;
+			this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
+			this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
+			this->lineTerminationModeCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineTerminationModeCheckbox_CheckedChanged);
 			// 
 			// groupBox4
 			// 
@@ -650,7 +667,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
 			this->backgroundColorLightnessSlider->Maximum = 200;
 			this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 56);
+			this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 45);
 			this->backgroundColorLightnessSlider->TabIndex = 10;
 			this->backgroundColorLightnessSlider->Value = 2;
 			this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -662,7 +679,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->backgroundLightness->Location = System::Drawing::Point(4, 16);
 			this->backgroundLightness->Name = L"backgroundLightness";
-			this->backgroundLightness->Size = System::Drawing::Size(196, 18);
+			this->backgroundLightness->Size = System::Drawing::Size(161, 15);
 			this->backgroundLightness->TabIndex = 11;
 			this->backgroundLightness->Text = L"Background Color Lightness";
 			// 
@@ -670,9 +687,9 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			// 
 			this->groupBox3->Controls->Add(this->backgroundTransparencySlider);
 			this->groupBox3->Controls->Add(this->backgroundTransparencyLabel);
-			this->groupBox3->Location = System::Drawing::Point(3, 334);
+			this->groupBox3->Location = System::Drawing::Point(3, 344);
 			this->groupBox3->Name = L"groupBox3";
-			this->groupBox3->Size = System::Drawing::Size(200, 84);
+			this->groupBox3->Size = System::Drawing::Size(200, 74);
 			this->groupBox3->TabIndex = 15;
 			this->groupBox3->TabStop = false;
 			// 
@@ -683,7 +700,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
 			this->backgroundTransparencySlider->Maximum = 255;
 			this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-			this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 56);
+			this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 45);
 			this->backgroundTransparencySlider->TabIndex = 10;
 			this->backgroundTransparencySlider->Value = 100;
 			this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -695,7 +712,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
 			this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-			this->backgroundTransparencyLabel->Size = System::Drawing::Size(182, 18);
+			this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
 			this->backgroundTransparencyLabel->TabIndex = 11;
 			this->backgroundTransparencyLabel->Text = L"Background Transparency";
 			this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -707,18 +724,30 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->groupBox2->Controls->Add(this->transparencyLabel);
 			this->groupBox2->Location = System::Drawing::Point(6, 205);
 			this->groupBox2->Name = L"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(200, 142);
+			this->groupBox2->Size = System::Drawing::Size(200, 102);
 			this->groupBox2->TabIndex = 14;
 			this->groupBox2->TabStop = false;
+			// 
+			// classTransparencySelection
+			// 
+			this->classTransparencySelection->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->classTransparencySelection->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->classTransparencySelection->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->classTransparencySelection->FormattingEnabled = true;
+			this->classTransparencySelection->Location = System::Drawing::Point(6, 37);
+			this->classTransparencySelection->Name = L"classTransparencySelection";
+			this->classTransparencySelection->Size = System::Drawing::Size(188, 21);
+			this->classTransparencySelection->TabIndex = 13;
+			this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
 			// 
 			// transparencySlider
 			// 
 			this->transparencySlider->BackColor = System::Drawing::SystemColors::Control;
 			this->transparencySlider->LargeChange = 1;
-			this->transparencySlider->Location = System::Drawing::Point(3, 80);
+			this->transparencySlider->Location = System::Drawing::Point(6, 64);
 			this->transparencySlider->Maximum = 255;
 			this->transparencySlider->Name = L"transparencySlider";
-			this->transparencySlider->Size = System::Drawing::Size(185, 56);
+			this->transparencySlider->Size = System::Drawing::Size(185, 45);
 			this->transparencySlider->TabIndex = 10;
 			this->transparencySlider->Value = 255;
 			this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -730,21 +759,20 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->transparencyLabel->Location = System::Drawing::Point(6, 18);
 			this->transparencyLabel->Name = L"transparencyLabel";
-			this->transparencyLabel->Size = System::Drawing::Size(159, 20);
+			this->transparencyLabel->Size = System::Drawing::Size(129, 16);
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Class Transparency";
 			// 
-			// classTransparencySelection
+			// highlightMisclassificationsCheckbox
 			// 
-			this->classTransparencySelection->BackColor = System::Drawing::SystemColors::ButtonFace;
-			this->classTransparencySelection->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->classTransparencySelection->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
-			this->classTransparencySelection->FormattingEnabled = true;
-			this->classTransparencySelection->Location = System::Drawing::Point(4, 50);
-			this->classTransparencySelection->Name = L"classTransparencySelection";
-			this->classTransparencySelection->Size = System::Drawing::Size(188, 24);
-			this->classTransparencySelection->TabIndex = 13;
-			this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
+			this->highlightMisclassificationsCheckbox->AutoSize = true;
+			this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(3, 330);
+			this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
+			this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
+			this->highlightMisclassificationsCheckbox->TabIndex = 18;
+			this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
+			this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
+			this->highlightMisclassificationsCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::highlightMisclassificationsCheckbox_CheckedChanged);
 			// 
 			// Form1
 			// 
@@ -769,6 +797,7 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 			this->tableLayoutPanel1->ResumeLayout(false);
 			this->tableLayoutPanel1->PerformLayout();
 			this->panel2->ResumeLayout(false);
+			this->panel2->PerformLayout();
 			this->groupBox4->ResumeLayout(false);
 			this->groupBox4->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundColorLightnessSlider))->EndInit();
@@ -919,6 +948,10 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 		OpenGL3->setBackgroundTransparency(defaultBackgroundTransparency);
 		OpenGL3->setDataTransparency(defaultDataTransparency, -1);
 		OpenGL3->setBackgroundColorLightness(defaultBackgroundColorLightness);
+		OpenGL3->setColorTerminationMode(false);
+		OpenGL3->setHighlightMisclassficationsMode(false);
+		OpenGL3->setLineTerminationMode(false);
+		
 
 		for (int x = 0; x < checkedListBox4->Items->Count; x++)
 		{
@@ -937,6 +970,9 @@ private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 		//	
 		//	dataParsed. data.parsedData;
 		//}
+
+		OpenGL3->calculateDataTerminationPoints();
+
 		loadInteractiveSPC();
 	}
 	protected:
@@ -1389,6 +1425,7 @@ private: System::Void clearRectangleButton_Click(System::Object^ sender, System:
 	// Clear rectangle
 	OpenGL3->drawingRectangleEnabled = false;
 	OpenGL3->setDrawingRectangleState(false);
+	OpenGL3->calculateDataTerminationPoints();
 }
 
 	int classSelectionForTransparency = -1;
@@ -1397,6 +1434,13 @@ private: System::Void classTransparencySelection_SelectedIndexChanged(System::Ob
 }
 private: System::Void transparencySlider_Scroll(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->setDataTransparency((float)transparencySlider->Value, classSelectionForTransparency);
+}
+private: System::Void lineTerminationModeCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setLineTerminationMode(lineTerminationModeCheckbox->Checked);
+	OpenGL3->setColorTerminationMode(lineTerminationModeCheckbox->Checked);
+}
+private: System::Void highlightMisclassificationsCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setHighlightMisclassficationsMode(highlightMisclassificationsCheckbox->Checked);
 }
 };
 }

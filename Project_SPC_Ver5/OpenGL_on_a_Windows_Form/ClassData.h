@@ -360,6 +360,29 @@ public:
 		}
 	}
 
+	void calculateTerminationPoint(int i) {
+		int classnum = classNum[i] - 1;
+		for (int j = 0; j < dataTerminationIndex[i]; j++) {
+			float px = xgraphcoordinates[j];
+			float py = ygraphcoordinates[j];
+			px -= (graphwidth[j] / 2);
+			py += (graphheight[j] / 2);
+			float x1Coord = graphwidth[j] * xdata[i][j];
+			float y1Coord = -graphheight[j] * ydata[i][j]; //height of graph is constant = 328.5
+			float x1CoordTrans = x1Coord + (px + pan_x);
+			float y1CoordTrans = y1Coord + (py + pan_y);
+
+			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+
+			if (backgroundClass != -1) {
+				std::cout << "debug";
+				if (backgroundClass == classnum) {
+					dataTerminationIndex[i] = j;
+				}
+			}
+		}
+	}
+
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 		// TODO
 		int resultClass = -1;

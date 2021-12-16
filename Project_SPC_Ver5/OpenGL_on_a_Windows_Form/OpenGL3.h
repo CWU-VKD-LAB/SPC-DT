@@ -179,6 +179,20 @@ namespace OpenGLForm
 			graph4.setBackgroundColorLightness(lightnessCoeff);
 		}
 
+		// Set line termination mode state
+		void setLineTerminationMode(bool state) {
+			graph4.isLineTerminationMode = state;
+		}
+		// Set highlight missclassification mode state
+		void setHighlightMisclassficationsMode(bool state) {
+			graph4.isHighlightMisclassficationsMode = state;
+		}
+
+		// Set line termination color mode state
+		void setColorTerminationMode(bool state) {
+			graph4.isColorTerminationMode = state;
+		}
+
 		// Set draw rectangle state
 		void setDrawingRectangleState(bool state) {
 			graph4.isRectangleMode = state;

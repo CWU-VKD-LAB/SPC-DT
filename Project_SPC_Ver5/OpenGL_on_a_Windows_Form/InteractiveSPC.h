@@ -54,7 +54,11 @@ public:
 	bool* getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2);
 
 	/// *** USED FOR DETERMINING LINE TERMINATION MODE
-	bool noDrawAfterTerminationPointMode = true; // TODO: DEBUG TRUE. in the end it will be set to false and controlled by a button
+	bool isLineTerminationMode = false; // TODO: DEBUG TRUE. in the end it will be set to false and controlled by a button
+	bool isColorTerminationMode = false;
+	
+	/// *** USED FOR DETERMINING MISCLASSIFICATION HIGHLIGHTING MODE
+	bool isHighlightMisclassficationsMode = false;
 
 	// *** STUFF BELOW THIS IS FOR DRAGGING GRAPHS *** //////////////////////////////////////////
 
