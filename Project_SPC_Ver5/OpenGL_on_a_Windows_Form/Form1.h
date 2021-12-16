@@ -192,6 +192,11 @@ private: System::Windows::Forms::Button^ clearRectangleButton;
 private: System::Windows::Forms::ComboBox^ classTransparencySelection;
 private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
 private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
+private: System::Windows::Forms::CheckBox^ pointColorMode;
+
+
+
+
 
 
 
@@ -267,6 +272,8 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->pointColorMode = (gcnew System::Windows::Forms::CheckBox());
+			this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
 			this->backgroundColorLightnessSlider = (gcnew System::Windows::Forms::TrackBar());
@@ -278,7 +285,6 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -329,7 +335,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			this->panel1->ForeColor = System::Drawing::SystemColors::ControlText;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(200, 698);
+			this->panel1->Size = System::Drawing::Size(200, 775);
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
 			// 
@@ -472,7 +478,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			// button5
 			// 
 			this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button5->Location = System::Drawing::Point(6, 615);
+			this->button5->Location = System::Drawing::Point(9, 682);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(191, 52);
 			this->button5->TabIndex = 10;
@@ -542,7 +548,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			// statusStrip1
 			// 
 			this->statusStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
-			this->statusStrip1->Location = System::Drawing::Point(0, 697);
+			this->statusStrip1->Location = System::Drawing::Point(0, 778);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(1530, 22);
 			this->statusStrip1->TabIndex = 6;
@@ -580,7 +586,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			this->tableLayoutPanel1->Controls->Add(this->label1, 0, 0);
 			this->tableLayoutPanel1->Controls->Add(this->colorButton, 0, 2);
 			this->tableLayoutPanel1->Controls->Add(this->comboBox1, 0, 1);
-			this->tableLayoutPanel1->Location = System::Drawing::Point(6, 505);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(6, 572);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 4;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
@@ -625,6 +631,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel2->Controls->Add(this->pointColorMode);
 			this->panel2->Controls->Add(this->highlightMisclassificationsCheckbox);
 			this->panel2->Controls->Add(this->lineTerminationModeCheckbox);
 			this->panel2->Controls->Add(this->groupBox4);
@@ -636,13 +643,35 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			this->panel2->Controls->Add(this->graph4);
 			this->panel2->Location = System::Drawing::Point(1320, 27);
 			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(209, 671);
+			this->panel2->Size = System::Drawing::Size(209, 748);
 			this->panel2->TabIndex = 13;
+			// 
+			// pointColorMode
+			// 
+			this->pointColorMode->AutoSize = true;
+			this->pointColorMode->Location = System::Drawing::Point(3, 325);
+			this->pointColorMode->Name = L"pointColorMode";
+			this->pointColorMode->Size = System::Drawing::Size(107, 17);
+			this->pointColorMode->TabIndex = 19;
+			this->pointColorMode->Text = L"Point Color Mode";
+			this->pointColorMode->UseVisualStyleBackColor = true;
+			this->pointColorMode->CheckedChanged += gcnew System::EventHandler(this, &Form1::pointColorMode_CheckedChanged);
+			// 
+			// highlightMisclassificationsCheckbox
+			// 
+			this->highlightMisclassificationsCheckbox->AutoSize = true;
+			this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(3, 344);
+			this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
+			this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
+			this->highlightMisclassificationsCheckbox->TabIndex = 18;
+			this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
+			this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
+			this->highlightMisclassificationsCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::highlightMisclassificationsCheckbox_CheckedChanged);
 			// 
 			// lineTerminationModeCheckbox
 			// 
 			this->lineTerminationModeCheckbox->AutoSize = true;
-			this->lineTerminationModeCheckbox->Location = System::Drawing::Point(3, 313);
+			this->lineTerminationModeCheckbox->Location = System::Drawing::Point(3, 307);
 			this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
 			this->lineTerminationModeCheckbox->Size = System::Drawing::Size(134, 17);
 			this->lineTerminationModeCheckbox->TabIndex = 17;
@@ -654,7 +683,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			// 
 			this->groupBox4->Controls->Add(this->backgroundColorLightnessSlider);
 			this->groupBox4->Controls->Add(this->backgroundLightness);
-			this->groupBox4->Location = System::Drawing::Point(6, 419);
+			this->groupBox4->Location = System::Drawing::Point(9, 486);
 			this->groupBox4->Name = L"groupBox4";
 			this->groupBox4->Size = System::Drawing::Size(200, 84);
 			this->groupBox4->TabIndex = 16;
@@ -687,7 +716,7 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			// 
 			this->groupBox3->Controls->Add(this->backgroundTransparencySlider);
 			this->groupBox3->Controls->Add(this->backgroundTransparencyLabel);
-			this->groupBox3->Location = System::Drawing::Point(3, 344);
+			this->groupBox3->Location = System::Drawing::Point(6, 411);
 			this->groupBox3->Name = L"groupBox3";
 			this->groupBox3->Size = System::Drawing::Size(200, 74);
 			this->groupBox3->TabIndex = 15;
@@ -763,21 +792,10 @@ private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Class Transparency";
 			// 
-			// highlightMisclassificationsCheckbox
-			// 
-			this->highlightMisclassificationsCheckbox->AutoSize = true;
-			this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(3, 330);
-			this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
-			this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
-			this->highlightMisclassificationsCheckbox->TabIndex = 18;
-			this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
-			this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
-			this->highlightMisclassificationsCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::highlightMisclassificationsCheckbox_CheckedChanged);
-			// 
 			// Form1
 			// 
 			this->BackColor = System::Drawing::SystemColors::Control;
-			this->ClientSize = System::Drawing::Size(1530, 719);
+			this->ClientSize = System::Drawing::Size(1530, 800);
 			this->Controls->Add(this->panel2);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->statusStrip1);
@@ -1441,6 +1459,9 @@ private: System::Void lineTerminationModeCheckbox_CheckedChanged(System::Object^
 }
 private: System::Void highlightMisclassificationsCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->setHighlightMisclassficationsMode(highlightMisclassificationsCheckbox->Checked);
+}
+private: System::Void pointColorMode_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setPointColorMode(pointColorMode->Checked);
 }
 };
 }

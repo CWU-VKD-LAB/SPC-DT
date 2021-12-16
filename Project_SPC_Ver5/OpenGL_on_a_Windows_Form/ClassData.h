@@ -58,9 +58,6 @@ public:
 			classTransparencies[classNum] = alpha;
 			
 		}
-
-		// Debug breakpoint
-		int foo = 0;
 	}
 
 	/// <summary>	Filename of the file. </summary>
@@ -377,7 +374,12 @@ public:
 			if (backgroundClass != -1) {
 				std::cout << "debug";
 				if (backgroundClass == classnum) {
-					dataTerminationIndex[i] = j;
+					if (j < 2) {
+						dataTerminationIndex[i] = 2; // might need to be 2
+					}
+					else {
+						dataTerminationIndex[i] = j;
+					}
 				}
 			}
 		}

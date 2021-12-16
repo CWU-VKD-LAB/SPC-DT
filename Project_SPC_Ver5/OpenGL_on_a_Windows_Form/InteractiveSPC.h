@@ -60,6 +60,9 @@ public:
 	/// *** USED FOR DETERMINING MISCLASSIFICATION HIGHLIGHTING MODE
 	bool isHighlightMisclassficationsMode = false;
 
+	/// *** USED FOR DETERMINING POINT COLORING MODE
+	bool isPointColorMode = false;
+
 	// *** STUFF BELOW THIS IS FOR DRAGGING GRAPHS *** //////////////////////////////////////////
 
 	/* DRAGGING GRAPH STUFF */

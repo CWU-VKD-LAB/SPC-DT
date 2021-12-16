@@ -188,6 +188,11 @@ namespace OpenGLForm
 			graph4.isHighlightMisclassficationsMode = state;
 		}
 
+		// Set point color mode state
+		void setPointColorMode(bool state) {
+			graph4.isPointColorMode = state;
+		}
+
 		// Set line termination color mode state
 		void setColorTerminationMode(bool state) {
 			graph4.isColorTerminationMode = state;
