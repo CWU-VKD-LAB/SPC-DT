@@ -104,10 +104,15 @@ void FileHandling::sortGraph(ClassData &data)
 		}
 		data.classNum.push_back(nodeClass);                             // Add to vector of class numbers
 
+		int counter = 0;
+		int xcounter = 0;
+		int ycounter = 0;
 		for (int j = 1; j < (data.values[i].size() - 1); j++)			// Rows
-		{                                          
+		{               
+			counter++;
 			if (xdatatemp.size() <= ydatatemp.size())					// Get X-coords
-			{                                        
+			{            
+				xcounter++;
 				xCoord = stof(data.values[i][j]);
 				xdatatemp.push_back(xCoord);
 				if (xCoord > data.xmax)
@@ -115,12 +120,16 @@ void FileHandling::sortGraph(ClassData &data)
 			}
 			else
 			{                                                            // Get y coords
+				ycounter++;
 				yCoord = stof(data.values[i][j]);
 				ydatatemp.push_back(yCoord);
 				if (yCoord > data.ymax)
 					data.ymax = yCoord;
 			}
 		}
+
+		std::cout << "debug" << counter << xcounter << ycounter;
+
 		if (xdatatemp.size() != ydatatemp.size())						// Duplicate last pair if odd # of columns
 		{                                            
 			ydatatemp.push_back(xCoord);
