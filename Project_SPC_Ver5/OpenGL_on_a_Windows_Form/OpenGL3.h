@@ -239,7 +239,7 @@ namespace OpenGLForm
 
 
 		void setFileName(ClassData file) {
-			clearAllGraphData();
+			// clearAllGraphData(); // why do we clear here?
 
 
 			/* Opens the file and process the data */
@@ -250,8 +250,9 @@ namespace OpenGLForm
 			data.xmax = 0;
 			data.ymax = 0;
 			newFile.openFile(data);
-			newFile.openParserFile(dataParsed,data);
-			newFile.sortGraph(data);
+			// newFile.openParserFile(dataParsed,data); // should already be open when we load parser
+			// newFile.sortGraphNotBasedOnParser(data); // OLD
+			newFile.sortGraphBasedOnParser(data);
 			newFile.normalizeData(data);
 
 
@@ -297,7 +298,7 @@ namespace OpenGLForm
 		}
 
 
-		void setParserFileName(parseData pfile) {
+		void setParserFileName(parseData &pfile) {
 			
 
 
@@ -305,8 +306,9 @@ namespace OpenGLForm
 			//data.fileName = "input.csv";
 			dataParsed.parserFileName = pfile.parserFileName;
 			newFile.openParserFile(dataParsed, data);
-			graph4.dataParsed.parsedData = dataParsed.parsedData;
-
+			// graph4.dataParsed.parsedData = dataParsed.parsedData;
+			graph4.dataParsed = dataParsed;
+			pfile = dataParsed;
 		}
 
 

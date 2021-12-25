@@ -6,7 +6,7 @@
 
 #include "stdafx.h"
 #include "FileHandling.h"
-
+#include <map>
 
 FileHandling::FileHandling() {}
 
@@ -69,13 +69,31 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 	}
 	for (int i = 0; i < data.strparsedData.size(); i++)
 	{
+		std::vector<string> attributePair;
 		for (int j = 0; j < data.strparsedData[i].size(); j++)
 		{
-			temp.push_back(stof(data.strparsedData[i][j]));
+			if (j < data.strparsedData[i].size() - 2) {
+				temp.push_back(stof(data.strparsedData[i][j]));
+			}
+			else if (j == data.strparsedData.size() - 1) {
+				string str = data.strparsedData[i][j];
+				str = str.substr(1, str.length() - 3);
+				attributePair.push_back(str);
+			}
+			else {
+				string str = data.strparsedData[i][j];
+				str = str.substr(1, str.length() - 2);
+				attributePair.push_back(str);
+			}
 			//temp.push_back(stof(dataParsed.strparsedData[i][j]));
+
+
 		}
 		data.parsedData.push_back(temp);
 		dataParsed.parsedData.push_back(temp);
+		data.parsedAttributePairs.push_back(attributePair);
+		dataParsed.parsedAttributePairs.push_back(attributePair);
+		std::cout << "debug";
 		temp.clear();
 	}
 	myParserFile.close();
@@ -83,8 +101,64 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 
 // Input: Contents of input.csv -- Splits the values into x and y coords
 
+void FileHandling::sortGraphBasedOnParser(ClassData& data) {
+	std::vector<float> xdatatemp;
+	std::vector<float> ydatatemp;
+	float xCoord = 0;
+	float yCoord = 0;
 
-void FileHandling::sortGraph(ClassData &data)
+	data.getLabelsFromParser();
+
+	// step through each row of data excluding first row which is labels
+	for (int i = 1; i < data.values.size(); i++) {
+		// Get point class
+		int nodeClass = stoi(data.values[i][data.values[0].size() - 1]);
+		if (nodeClass > data.numOfClasses) {
+			data.numOfClasses = nodeClass;
+		}
+		data.classNum.push_back(nodeClass);
+
+		std::map<std::string, float> attributeValueMap;
+
+		// Step through each column and add them to map
+		for (int j = 0; j < data.values[i].size(); j++) {
+			std::string attributeName = data.values[0][j];
+			float attributeValue = stof(data.values[i][j]);
+			attributeValueMap.insert({ attributeName, attributeValue });
+		}
+
+		for (int j = 0; j < data.parsedAttributePairs.size(); j++) {
+			std::string attr1 = data.parsedAttributePairs[j][0];
+			std::string attr2 = data.parsedAttributePairs[j][1];
+
+			xCoord = attributeValueMap[attr1];
+			yCoord = attributeValueMap[attr2];
+
+			if (xCoord > data.xmax) {
+				data.xmax = xCoord;
+			}
+			if (yCoord > data.ymax) {
+				data.ymax = yCoord;
+			}
+
+			xdatatemp.push_back(xCoord);
+			ydatatemp.push_back(yCoord);
+		}
+
+		data.xdata.push_back(xdatatemp);
+		data.dataTransparency.push_back(255);
+		data.originalXData.push_back(xdatatemp); // Add line plot coords
+		data.ydata.push_back(ydatatemp);
+		data.originalYData.push_back(ydatatemp);
+		xdatatemp.clear();                                              // Clear for the next plot line
+		ydatatemp.clear();
+	}
+	std::cout << "debug";
+}
+
+
+
+void FileHandling::sortGraphNotBasedOnParser(ClassData &data)
 {
 	std::vector<float> xdatatemp;
 	std::vector<float> ydatatemp;
@@ -92,6 +166,8 @@ void FileHandling::sortGraph(ClassData &data)
 	float yCoord = 0;
 	
 	data.getLabels();
+
+	std::cout << "debug";
 
 	for (int i = 1; i < (data.values.size()); i++)					// OLD: for (int i = 1; i < (data.values.size() - 1); i++)
 	{																	// Columns

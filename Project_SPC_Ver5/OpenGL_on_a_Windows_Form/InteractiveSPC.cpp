@@ -21,7 +21,7 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 
 	//newFile.openFile(data);
 	//newFile.openParserFile(dataParsed, data);
-	newFile.sortGraph(data);
+	newFile.sortGraphNotBasedOnParser(data);
 
 	data.classsize = int(data.xdata[0].size());
 	for (int y1 = 0; y1 < data.graphwidth.size(); y1++)

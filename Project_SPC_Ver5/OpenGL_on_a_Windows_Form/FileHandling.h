@@ -13,7 +13,8 @@ public:
 
 	void openFile(ClassData&);
 	void openParserFile(parseData&, ClassData&);
-	void sortGraph(ClassData&);
+	void sortGraphNotBasedOnParser(ClassData&);
+	void sortGraphBasedOnParser(ClassData&);
 	void normalizeData(ClassData &data);
 
 };

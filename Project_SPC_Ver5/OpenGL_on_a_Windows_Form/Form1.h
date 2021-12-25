@@ -1103,7 +1103,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 	if (fileopened) {
 		OpenGL3->setFileName(data);
-		OpenGL3->setParserFileName(dataParsed);
+		//OpenGL3->setParserFileName(dataParsed);
 
 		// clear the list to prevent duplicates on update
 		this->comboBox1->Items->Clear();
@@ -1270,6 +1270,10 @@ private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^
 		parsefileOpened = true;
 	}
 	OpenGL3->setParserFileName(dataParsed);
+	data.parsedData = dataParsed.parsedData;
+	data.parsedAttributePairs = dataParsed.parsedAttributePairs;
+	data.strparsedData = dataParsed.strparsedData;
+
 	//OpenGL3->parserFileOpen();
 	//openParserFile(); // starts select file window
 

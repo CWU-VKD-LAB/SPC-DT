@@ -109,6 +109,7 @@ public:
 
 	std::vector<std::vector<float>> parsedData;
 	std::vector<std::vector<std::string>> strparsedData;
+	std::vector<std::vector<std::string>> parsedAttributePairs;
 	double temprx2;
 	double temprectAndCoordy2;
 	//bool seeLabels;
@@ -274,6 +275,19 @@ public:
 		return str.find_first_not_of("0123456789") == std::string::npos;
 	}
 	//late entry: separate function for adding x,y labels
+	void getLabelsFromParser() {
+		xlabels = "";
+		ylabels = "";
+		for (int i = 0; i < parsedAttributePairs.size(); i++) {
+			if (i > 1) {
+				xlabels += ", ";
+				ylabels += ", ";
+			}
+			xlabels += parsedAttributePairs[i][0];
+			ylabels += parsedAttributePairs[i][1];
+		}
+	}
+
 	void getLabels()
 	{
 		//stores x axis labels, but skips first and last cell
@@ -333,6 +347,7 @@ public:
 	std::string parserFileName;
 	std::vector<std::vector<float>> parsedData;
 	std::vector<std::vector<std::string>> strparsedData;
+	std::vector<std::vector<std::string>> parsedAttributePairs;
 	bool parserFileOpen;
 
 	parseData() {};
