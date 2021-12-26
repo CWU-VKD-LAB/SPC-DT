@@ -40,8 +40,6 @@ void FileHandling::openFile(ClassData &data)
 
 
 
-
-
 void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 {
 	using namespace std;
@@ -82,7 +80,6 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 }
 
 // Input: Contents of input.csv -- Splits the values into x and y coords
-
 
 void FileHandling::sortGraph(ClassData &data)
 {
@@ -141,11 +138,11 @@ void FileHandling::sortGraph(ClassData &data)
 		data.originalXData.push_back(xdatatemp); // Add line plot coords
 		data.ydata.push_back(ydatatemp);
 		data.originalYData.push_back(ydatatemp);
+
+		data.dataTerminationIndex.push_back(xdatatemp.size());
+
 		xdatatemp.clear();                                              // Clear for the next plot line
 		ydatatemp.clear();
-
-
-
 	}
 }
 

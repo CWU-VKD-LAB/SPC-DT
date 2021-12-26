@@ -179,6 +179,25 @@ namespace OpenGLForm
 			graph4.setBackgroundColorLightness(lightnessCoeff);
 		}
 
+		// Set line termination mode state
+		void setLineTerminationMode(bool state) {
+			graph4.isLineTerminationMode = state;
+		}
+		// Set highlight missclassification mode state
+		void setHighlightMisclassficationsMode(bool state) {
+			graph4.isHighlightMisclassficationsMode = state;
+		}
+
+		// Set point color mode state
+		void setPointColorMode(bool state) {
+			graph4.isPointColorMode = state;
+		}
+
+		// Set line termination color mode state
+		void setColorTerminationMode(bool state) {
+			graph4.isColorTerminationMode = state;
+		}
+
 		// Set draw rectangle state
 		void setDrawingRectangleState(bool state) {
 			graph4.isRectangleMode = state;
@@ -254,16 +273,9 @@ namespace OpenGLForm
 			newFile.sortGraph(data);
 			newFile.normalizeData(data);
 
-
-
-
-
-		
 			// C-SPC
 			graph4.data = data;
-			//graph4.dataParsed = dataParsed;
-
-			
+			graph4.dataParsed = dataParsed;
 		
 			graph4.data.classsize = int(data.xdata[0].size());
 
@@ -288,9 +300,6 @@ namespace OpenGLForm
 			//}
 
 			//graph4.data.setClassColor(255.0, 0.0, 0.0, 1);
-
-
-			
 		
 			originalWH = worldHeight; // Saves orginals to use for increments like for zooming.
 			originalWW = worldWidth;
@@ -306,7 +315,11 @@ namespace OpenGLForm
 			dataParsed.parserFileName = pfile.parserFileName;
 			newFile.openParserFile(dataParsed, data);
 			graph4.dataParsed.parsedData = dataParsed.parsedData;
+			graph4.data.parsedData = dataParsed.parsedData;
+		}
 
+		void calculateDataTerminationPoints() {
+			graph4.data.calculateTerminationPoints();
 		}
 
 

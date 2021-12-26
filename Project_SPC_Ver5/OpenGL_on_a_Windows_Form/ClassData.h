@@ -58,9 +58,6 @@ public:
 			classTransparencies[classNum] = alpha;
 			
 		}
-
-		// Debug breakpoint
-		int foo = 0;
 	}
 
 	/// <summary>	Filename of the file. </summary>
@@ -140,6 +137,8 @@ public:
 	/// <summary>	Holds different dimensions of y data. </summary>
 	std::vector<std::vector<float> > ydata;
 
+	/// <summary> Holds information for when a point ends
+	std::vector<int> dataTerminationIndex;
 	//std::vector<ClassData> classes;
 
 	/// <summary>	The initial xclasses. </summary>
@@ -333,6 +332,90 @@ public:
 		drawBitmapText(ylabels.c_str(), .05*worldWidth, .05*worldHeight);
 	}
 
+	void calculateTerminationPoints() {
+		for (int i = 0; i < dataTerminationIndex.size(); i++) {
+			int classnum = classNum[i] - 1;
+			for (int j = 0; j < dataTerminationIndex[i]; j++) {
+				float px = xgraphcoordinates[j];
+				float py = ygraphcoordinates[j];
+				px -= (graphwidth[j] / 2);
+				py += (graphheight[j] / 2);
+				float x1Coord = graphwidth[j] * xdata[i][j];
+				float y1Coord = -graphheight[j] * ydata[i][j]; //height of graph is constant = 328.5
+				float x1CoordTrans = x1Coord + (px + pan_x);
+				float y1CoordTrans = y1Coord + (py + pan_y);
+
+				int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+
+				if (backgroundClass != -1) {
+					std::cout << "debug";
+					if (backgroundClass == classnum) {
+						dataTerminationIndex[i] = j;
+					}
+				}
+			}
+		}
+	}
+
+	void calculateTerminationPoint(int i) {
+		int classnum = classNum[i] - 1;
+		for (int j = 0; j < dataTerminationIndex[i]; j++) {
+			float px = xgraphcoordinates[j];
+			float py = ygraphcoordinates[j];
+			px -= (graphwidth[j] / 2);
+			py += (graphheight[j] / 2);
+			float x1Coord = graphwidth[j] * xdata[i][j];
+			float y1Coord = -graphheight[j] * ydata[i][j]; //height of graph is constant = 328.5
+			float x1CoordTrans = x1Coord + (px + pan_x);
+			float y1CoordTrans = y1Coord + (py + pan_y);
+
+			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+
+			if (backgroundClass != -1) {
+				std::cout << "debug";
+				if (backgroundClass == classnum) {
+					if (j < 2) {
+						dataTerminationIndex[i] = 2; // might need to be 2
+					}
+					else {
+						dataTerminationIndex[i] = j;
+					}
+				}
+			}
+		}
+	}
+
+	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
+		// TODO
+		int resultClass = -1;
+		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+			int classNumber = parsedData[p][5];
+			GLfloat x1 = xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]];
+			GLfloat y1 = ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]];
+			GLfloat x2 = xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]];
+			GLfloat y2 = ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]];
+			if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+				resultClass = classNumber;
+			} // Check to see if these need to be rearranged.
+			std::cout << "debug" << x1 << x2 << y1 << y2;
+		}
+
+		if (resultClass != -1) {
+			std::cout << "debug";
+		}
+
+		return resultClass;
+	}
+
+	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+		bool result = false;
+		if (px <= x2 && px >= x1) {
+			if (py <= y1 && py >= y2) {
+				result = true;
+			}
+		}
+		return result;
+	}
 };
 
 
