@@ -40,8 +40,6 @@ void FileHandling::openFile(ClassData &data)
 
 
 
-
-
 void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 {
 	using namespace std;
@@ -196,12 +194,20 @@ void FileHandling::sortGraphNotBasedOnParser(ClassData &data)
 			stoi(data.values[i][(data.values[0].size() - 1)]);          // Get the class of the node
 		if (nodeClass > data.numOfClasses)                              // Get the highest class number
 			data.numOfClasses = nodeClass;
+		if (nodeClass > data.classTransparencies.size()) {
+			data.classTransparencies.push_back(255); // init class transparencies
+		}
 		data.classNum.push_back(nodeClass);                             // Add to vector of class numbers
 
+		int counter = 0;
+		int xcounter = 0;
+		int ycounter = 0;
 		for (int j = 1; j < (data.values[i].size() - 1); j++)			// Rows
-		{                                          
+		{               
+			counter++;
 			if (xdatatemp.size() <= ydatatemp.size())					// Get X-coords
-			{                                        
+			{            
+				xcounter++;
 				xCoord = stof(data.values[i][j]);
 				xdatatemp.push_back(xCoord);
 				if (xCoord > data.xmax)
@@ -209,12 +215,16 @@ void FileHandling::sortGraphNotBasedOnParser(ClassData &data)
 			}
 			else
 			{                                                            // Get y coords
+				ycounter++;
 				yCoord = stof(data.values[i][j]);
 				ydatatemp.push_back(yCoord);
 				if (yCoord > data.ymax)
 					data.ymax = yCoord;
 			}
 		}
+
+		std::cout << "debug" << counter << xcounter << ycounter;
+
 		if (xdatatemp.size() != ydatatemp.size())						// Duplicate last pair if odd # of columns
 		{                                            
 			ydatatemp.push_back(xCoord);
@@ -226,11 +236,11 @@ void FileHandling::sortGraphNotBasedOnParser(ClassData &data)
 		data.originalXData.push_back(xdatatemp); // Add line plot coords
 		data.ydata.push_back(ydatatemp);
 		data.originalYData.push_back(ydatatemp);
+
+		data.dataTerminationIndex.push_back(xdatatemp.size());
+
 		xdatatemp.clear();                                              // Clear for the next plot line
 		ydatatemp.clear();
-
-
-
 	}
 }
 

@@ -165,8 +165,8 @@ namespace OpenGLForm
 		}
 
 		// CHANGE TRANSPARENCY OF PLOTTED DATA
-		void setDataTransparency(float alpha) {
-			graph4.data.setClassTransparency(alpha);
+		void setDataTransparency(float alpha, int classNum) {
+			graph4.data.setClassTransparency(alpha, classNum);
 		}
 
 		// CHANGE TRANSPARENCT OF THE BACKGROUND GRAPH
@@ -177,6 +177,25 @@ namespace OpenGLForm
 		// CHANGE LIGHTNESS OF BACKGROUND GRAPH COLORS
 		void setBackgroundColorLightness(float lightnessCoeff) {
 			graph4.setBackgroundColorLightness(lightnessCoeff);
+		}
+
+		// Set line termination mode state
+		void setLineTerminationMode(bool state) {
+			graph4.isLineTerminationMode = state;
+		}
+		// Set highlight missclassification mode state
+		void setHighlightMisclassficationsMode(bool state) {
+			graph4.isHighlightMisclassficationsMode = state;
+		}
+
+		// Set point color mode state
+		void setPointColorMode(bool state) {
+			graph4.isPointColorMode = state;
+		}
+
+		// Set line termination color mode state
+		void setColorTerminationMode(bool state) {
+			graph4.isColorTerminationMode = state;
 		}
 
 		// Set draw rectangle state
@@ -255,16 +274,9 @@ namespace OpenGLForm
 			newFile.sortGraphBasedOnParser(data);
 			newFile.normalizeData(data);
 
-
-
-
-
-		
 			// C-SPC
 			graph4.data = data;
-			//graph4.dataParsed = dataParsed;
-
-			
+			graph4.dataParsed = dataParsed;
 		
 			graph4.data.classsize = int(data.xdata[0].size());
 
@@ -289,9 +301,6 @@ namespace OpenGLForm
 			//}
 
 			//graph4.data.setClassColor(255.0, 0.0, 0.0, 1);
-
-
-			
 		
 			originalWH = worldHeight; // Saves orginals to use for increments like for zooming.
 			originalWW = worldWidth;
@@ -309,6 +318,11 @@ namespace OpenGLForm
 			// graph4.dataParsed.parsedData = dataParsed.parsedData;
 			graph4.dataParsed = dataParsed;
 			pfile = dataParsed;
+			graph4.data.parsedData = dataParsed.parsedData;
+		}
+
+		void calculateDataTerminationPoints() {
+			graph4.data.calculateTerminationPoints();
 		}
 
 

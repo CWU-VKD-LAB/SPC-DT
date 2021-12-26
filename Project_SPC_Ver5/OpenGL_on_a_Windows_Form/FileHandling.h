@@ -16,6 +16,5 @@ public:
 	void sortGraphNotBasedOnParser(ClassData&);
 	void sortGraphBasedOnParser(ClassData&);
 	void normalizeData(ClassData &data);
-
 };
 

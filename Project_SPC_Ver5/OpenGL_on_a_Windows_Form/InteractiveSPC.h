@@ -25,7 +25,6 @@ public:
 
 	InteractiveSPC(ClassData&, parseData&, double, double);
 
-
 	void fillGraphLocations();
 
 	/* Drawing data sets. */
@@ -36,16 +35,33 @@ public:
 
 	void display();
 
+	// Calculates termination nodes for each datapoint
+	void calculateDataTerminationPoints();
+
+	// *** USED FOR DRAWING LINE COLORS
+	int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
+	bool shouldPointTerminate(GLfloat px, GLfloat py);
+
 	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
 
 	GLfloat rectX1;
 	GLfloat rectY1;
 	GLfloat rectX2;
 	GLfloat rectY2;
-	bool isRectangleMode;
+	bool isRectangleMode = false;
 	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);
 	bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	bool* getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2);
+
+	/// *** USED FOR DETERMINING LINE TERMINATION MODE
+	bool isLineTerminationMode = false; // TODO: DEBUG TRUE. in the end it will be set to false and controlled by a button
+	bool isColorTerminationMode = false;
+	
+	/// *** USED FOR DETERMINING MISCLASSIFICATION HIGHLIGHTING MODE
+	bool isHighlightMisclassficationsMode = false;
+
+	/// *** USED FOR DETERMINING POINT COLORING MODE
+	bool isPointColorMode = false;
 
 	// *** STUFF BELOW THIS IS FOR DRAGGING GRAPHS *** //////////////////////////////////////////
 

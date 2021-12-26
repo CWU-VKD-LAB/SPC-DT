@@ -7,6 +7,9 @@
 #include "stdafx.h"
 #include "InteractiveSPC.h"
 
+// Debug
+#include <set>
+
 
 
 InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double worldW, double worldH)
@@ -80,9 +83,14 @@ void InteractiveSPC::fillGraphLocations()
 
 /* Draws data sets. */
 
-
+std::set<int> backgroundClassSet; // Debug
+std::set<int> pointClassSet; // Debug
 void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int j)
 {
+	// Don't draw data past its termination point
+	if (isLineTerminationMode && j > data.dataTerminationIndex[i] - 1) {
+		if (j != 0) return;
+	}
 	
 	float xratio = data.graphwidth[j] / data.xmax; // Normalize data to the graph size
 	float yratio = data.graphheight[j] / data.ymax;	
@@ -101,6 +109,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 
 
 	int classnum = data.classNum[i] - 1;
+	pointClassSet.insert(classnum);
 
 	
 	// If in drawn rectangle mode, check if the points make a line that intersects the rectangle
@@ -113,79 +122,121 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	bool drawVertex1 = true;
 	bool drawVertex2 = true;
 
-	if (isRectangleMode && doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
-		// draw point within rectangle based on how many classes there are
-		// TODO: later could add a selection based on class
-		GLfloat deltaX = abs(rectX1 - rectX2);
-		GLfloat deltaY = abs(rectY1 - rectY2);
-		GLfloat highX = max(rectX1, rectX2);
-		GLfloat lowX = min(rectX1, rectX2);
-		GLfloat highY = max(rectY1, rectY2);
-		GLfloat lowY = min(rectY1, rectY2);
+	if (isLineTerminationMode && data.dataTerminationIndex[i] == 0) {
+		drawVertex2 = false;
+	}
 
-//		middleX = lowX + ((highX - lowX) / 5) + ((deltaX / data.numOfClasses) * classnum) - (x1 + data.pan_x);
-//		middleY = lowY + ((highY - lowY) / 5) + ((deltaY / data.numOfClasses) * classnum) - (y1 + data.pan_y);
+	if (isRectangleMode) {
+		if (doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
+			// draw point within rectangle based on how many classes there are
+			// TODO: later could add a selection based on class
+			GLfloat deltaX = abs(rectX1 - rectX2);
+			GLfloat deltaY = abs(rectY1 - rectY2);
+			GLfloat highX = max(rectX1, rectX2);
+			GLfloat lowX = min(rectX1, rectX2);
+			GLfloat highY = max(rectY1, rectY2);
+			GLfloat lowY = min(rectY1, rectY2);
 
-		middleX = lowX + 2 * ((highX - lowX) / 3) - (x1 + data.pan_x);
-		middleY = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
-		middleXTerminating = lowX + ((highX - lowX) / 3) - (x1 + data.pan_x);
-		middleYTerminating = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
+			middleX = lowX + 2 * ((highX - lowX) / 3) - (x1 + data.pan_x);
+			middleY = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
+			middleXTerminating = lowX + ((highX - lowX) / 3) - (x1 + data.pan_x);
+			middleYTerminating = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
 
-		if (isPointWithinRect(x1CoordTrans, y1CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
-			drawVertex1 = false;
+			if (isPointWithinRect(x1CoordTrans, y1CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
+				drawVertex1 = false;
+			}
+			if (isPointWithinRect(x2CoordTrans, y2CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
+				drawVertex2 = false;
+			}
+
+			if (data.dataTerminationIndex[i] == j + 1) { // Need to check if we should be checking point 1 or point2
+				//x1Coord = middleXTerminating;
+				//y1Coord = middleYTerminating;
+				x2Coord = middleXTerminating;
+				y2Coord = middleYTerminating;
+			}
+
+			if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
+				// Do nothing for now
+			}
+
+			drawMiddleVertex = true;
 		}
-		if (isPointWithinRect(x2CoordTrans, y2CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
-			drawVertex2 = false;
+		else {
+			data.calculateTerminationPoint(i);
 		}
+	}
 
-		// Check if line terminates with this point
-		if (false) { // placeholder
-			x1Coord = middleXTerminating;
-			y1Coord = middleYTerminating;
-			x2Coord = middleXTerminating;
-			y2Coord = middleYTerminating;
-		}
+	//debug
+	//glColor4ub(255, 0, 0, 255);
+	//glPointSize(8.0);
+	//glBegin(GL_POINTS);
+	//glVertex2f(x1CoordTrans, y1CoordTrans);
+	//glColor4ub(0, 0, 255, 255);
+	//glVertex2f(x2CoordTrans, y2CoordTrans);
+	//glPointSize(4.0);
+	//glEnd();
+	
+	int backgroundClassP1 = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+	int backgroundClassP2 = findBackgroundClassOfPoint(x2CoordTrans, y2CoordTrans);
+	backgroundClassSet.insert(backgroundClassP1);
 
-		drawMiddleVertex = true;
-
-		//debug
-		//glColor4ub(255, 0, 0, 255);
-		//glPointSize(8.0);
-		//glBegin(GL_POINTS);
-		//glVertex2f(x1CoordTrans, y1CoordTrans);
-		//glColor4ub(0, 0, 255, 255);
-		//glVertex2f(x2CoordTrans, y2CoordTrans);
-		//glPointSize(4.0);
-		//glEnd();
+	if (isHighlightMisclassficationsMode && (backgroundClassP1 != -1 && backgroundClassP1 != classnum)) {
+		glColor4ub(255, 0, 0, data.classTransparencies[classnum]);
+		glPointSize(8.0);
+		glBegin(GL_POINTS);
+		glVertex2f(x1CoordTrans, y1CoordTrans);
+		glEnd();
+		glPointSize(4.0);
 	}
 
 	glPushMatrix();	// Makes a new layer
 
 	glTranslatef(x1 + data.pan_x, y1 + data.pan_y, 0); // Translates starting position to draw
 
+	// If point terminates on the next point, color it
+	// COLORING FOR LINES
+	if (isPointColorMode || (isColorTerminationMode && data.dataTerminationIndex[i] != j + 1)) {
+		glColor4ub(128, 128, 128, data.classTransparencies[classnum]);
+	}
+	else {
+		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+	}
+
 	if (data.showHideLinesVar)
 	{
-		glBegin(GL_LINE_STRIP);
+		glBegin(GL_LINE_STRIP); 
 		//data.classTransparency[1] = 70;
-		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
+		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
+		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
 		if (drawVertex1) {
 			glVertex2f(x1Coord, y1Coord);
 		}
 		if (drawMiddleVertex) {
-			glVertex2f(middleX, middleY);
+			if (drawVertex2) {
+				GLfloat currentColor[4];
+				glGetFloatv(GL_CURRENT_COLOR, currentColor);
+				glColor4ub(128, 128, 128, data.classTransparencies[classnum]);
+				glVertex2f(middleX, middleY);
+				glColor4ub(currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
+			}
+			else {
+				glVertex2f(middleX, middleY);
+			}
 		}
 		if(drawVertex2 && data.classsize!=1)
 			glVertex2f(x2Coord, y2Coord); // ending vertex
 		glEnd();
 	}
 	
-	glColor4ub(0, 0, 0, data.dataTransparency[i]);
-	if (j == 0) {
-		glPointSize(4);
+	// POINT 1 COLOR
+	if (isPointColorMode && backgroundClassP1 != -1) {
+		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
 	}
 	else {
-		glPointSize(4);
+		glColor4ub(0, 0, 0, data.classTransparencies[classnum]);
 	}
+	
 	glBegin(GL_POINTS);
 	
 	//glVertex2f(0 + xratio * data.xdata[i][j], 0 - yratio * data.ydata[i][j]);                                     // starting vertex
@@ -193,19 +244,29 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		glVertex2f(x1Coord, y1Coord);
 	}
 	if (drawMiddleVertex) {
+		//glColor4ub(0, 255, 0, 255); // debug
 		glVertex2f(middleX, middleY);
 	}
 	glEnd();
+
+	// POINT 2 COLOR
+	if (isPointColorMode && backgroundClassP2 != -1) {
+		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+	}
+	else {
+		glColor4ub(0, 0, 0, data.classTransparencies[classnum]);
+	}
 
 	glPointSize(4);
 	glBegin(GL_POINTS);
 	//glVertex2f((x2 - x1) + xratio * data.xdata[i][j + 1], (y2 - y1) - yratio * data.ydata[i][j + 1]);                         // ending vertex
 	if (drawVertex2 && data.classsize != 1)
+		//glColor4ub(0, 0, 255, 255); // debug
 		glVertex2f(x2Coord, y2Coord);	
 	glEnd();
 	if (j == 0)
 	{
-		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
+		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
 		if (drawVertex1) {
 			glVertex2f(x1Coord, y1Coord);
 		}
@@ -481,6 +542,7 @@ void InteractiveSPC::display() {
 	
 }
 
+
 bool InteractiveSPC::doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {	
 	GLfloat boundingBoxLeft = min(rectX1, rectX2);
@@ -684,6 +746,47 @@ bool* InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rec
 	return triviality;
 }
 
+void InteractiveSPC::calculateDataTerminationPoints() {
+	for (int i = 0; i < data.dataTerminationIndex.size(); i++) {
+		int classnum = data.classNum[i] - 1;
+		for (int j = 0; j < data.dataTerminationIndex[i]; i++) {
+			float px = data.xgraphcoordinates[j];
+			float py = data.ygraphcoordinates[j];
+			px -= (data.graphwidth[j] / 2);
+			py += (data.graphheight[j] / 2);
+			float x1Coord = data.graphwidth[j] * data.xdata[i][j];
+			float y1Coord = -data.graphheight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
+			float x1CoordTrans = x1Coord + (px + data.pan_x);
+			float y1CoordTrans = y1Coord + (py + data.pan_y);
+
+			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+
+
+			if (backgroundClass != -1) {
+				if (backgroundClass != classnum) { // do something special if point class doesnt match background zone
+				// TODO
+				// debug
+					//glColor4ub(255, 0, 0, 255);
+					//glPointSize(8.0);
+					//glBegin(GL_POINTS);
+					//glVertex2f(x1CoordTrans, y1CoordTrans);
+					//glEnd();
+					//glPointSize(4.0);
+				}
+				else {
+					data.dataTerminationIndex[i] = j;
+					// debug
+					/*glColor4ub(0, 0, 255, 255);
+					glPointSize(8.0);
+					glBegin(GL_POINTS);
+					glVertex2f(x1CoordTrans, y1CoordTrans);
+					glEnd();
+					glPointSize(4.0);*/
+				}
+			}
+		}
+	}
+}
 
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y) 
@@ -725,6 +828,28 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
 
 		
 	} return -1;
+}
+
+int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
+	// TODO
+    int resultClass = -1;
+	for (int p = 0; p < dataParsed.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+        int classNumber = dataParsed.parsedData[p][5];
+		const GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
+		const GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
+		const GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
+		const GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
+        if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+            resultClass = classNumber;
+        } // Check to see if these need to be rearranged.
+		std::cout << "debug" << x1 << x2 << y1 << y2;
+	}
+
+	if (resultClass != -1) {
+		std::cout << "debug";
+	}
+
+    return resultClass;
 }
 
 void InteractiveSPC::drawCircle(int x, int y)
