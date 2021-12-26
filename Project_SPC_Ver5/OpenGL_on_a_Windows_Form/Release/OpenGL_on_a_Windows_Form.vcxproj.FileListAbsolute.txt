@@ -7,9 +7,12 @@ C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assis
 C:\Users\worlanda\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.AssemblyReference.cache
 C:\Users\worlanda\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.Form1.resources
 C:\Users\worlanda\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache
+<<<<<<< HEAD
 Z:\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.AssemblyReference.cache
 Z:\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.Form1.resources
 Z:\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache
+=======
+>>>>>>> main
 C:\Users\Alex Worland\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.AssemblyReference.cache
 C:\Users\Alex Worland\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.Form1.resources
 C:\Users\Alex Worland\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\Release\OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache
