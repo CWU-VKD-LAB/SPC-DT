@@ -91,8 +91,12 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		}
 		data.parsedData.push_back(temp);
 		dataParsed.parsedData.push_back(temp);
-		data.parsedAttributePairs.push_back(attributePair);
-		dataParsed.parsedAttributePairs.push_back(attributePair);
+		if (std::find(data.parsedAttributePairs.begin(), data.parsedAttributePairs.end(), attributePair) == data.parsedAttributePairs.end()) {
+			data.parsedAttributePairs.push_back(attributePair);
+		}
+		if (std::find(dataParsed.parsedAttributePairs.begin(), dataParsed.parsedAttributePairs.end(), attributePair) == dataParsed.parsedAttributePairs.end()) {
+			dataParsed.parsedAttributePairs.push_back(attributePair);
+		}
 		std::cout << "debug";
 		temp.clear();
 	}
@@ -109,7 +113,7 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 
 	data.getLabelsFromParser();
 
-	// step through each row of data excluding first row which is labels
+	// step through each row of data, except for first which is attribute labels
 	for (int i = 1; i < data.values.size(); i++) {
 		// Get point class
 		int nodeClass = stoi(data.values[i][data.values[0].size() - 1]);
@@ -124,15 +128,32 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 		for (int j = 0; j < data.values[i].size(); j++) {
 			std::string attributeName = data.values[0][j];
 			float attributeValue = stof(data.values[i][j]);
-			attributeValueMap.insert({ attributeName, attributeValue });
+			if (attributeValue == 0.0f) {
+				std::cout << "debug";
+			}
+			attributeValueMap.insert(std::make_pair(attributeName, attributeValue));
 		}
 
+		int size = attributeValueMap.size();
+		std::cout << "debug" << size;
+
+		// step through each attribute pair and plot their coordinates
 		for (int j = 0; j < data.parsedAttributePairs.size(); j++) {
 			std::string attr1 = data.parsedAttributePairs[j][0];
 			std::string attr2 = data.parsedAttributePairs[j][1];
 
+			size = attributeValueMap.size();
+			std::cout << "debug" << size;
+
 			xCoord = attributeValueMap[attr1];
 			yCoord = attributeValueMap[attr2];
+
+			size = attributeValueMap.size();
+			std::cout << "debug" << size;
+
+			if (xCoord == 0 || yCoord == 0) {
+				std::cout << "debug";
+			}
 
 			if (xCoord > data.xmax) {
 				data.xmax = xCoord;

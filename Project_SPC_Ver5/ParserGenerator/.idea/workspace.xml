@@ -11,6 +11,7 @@
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/ipch/1a2f87bb36447eb8.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/ipch/1a2f87bb36447eb8.ipch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Data/Original Data/breast_cancer - delete.xls" beforeDir="false" afterPath="$PROJECT_DIR$/../Data/Original Data/breast_cancer - delete.xls" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.h" afterDir="false" />
@@ -44,7 +45,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wisconsin-breast-cancer.xls" beforeDir="false" afterPath="$PROJECT_DIR$/Wisconsin-breast-cancer.xls" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/normalize_dataset.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" afterDir="false" />
@@ -61,10 +61,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/tanagra_file.tdm" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/requirements.txt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tanagra_file.tdm" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/generatedParser.txt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/.conda/envs/ParserGenerator/lib/python3.8/site-packages/pandas/core/ops/array_ops.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/.conda/envs/ParserGenerator/lib/python3.8/site-packages/pandas/io/parsers/base_parser.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -174,13 +176,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>37</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -189,5 +184,9 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ParserGenerator$normalize_dataset.coverage" NAME="normalize_dataset Coverage Results" MODIFIED="1639865668322" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1640373617246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
