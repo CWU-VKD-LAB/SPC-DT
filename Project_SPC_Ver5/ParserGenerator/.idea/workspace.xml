@@ -5,52 +5,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/breast.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/breast.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generatedParser.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/ipch/1a2f87bb36447eb8.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/ipch/1a2f87bb36447eb8.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Data/Original Data/breast_cancer - delete.xls" beforeDir="false" afterPath="$PROJECT_DIR$/../Data/Original Data/breast_cancer - delete.xls" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes-Alex’s MacBook Air.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.asm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo-Alex’s MacBook Air.obj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling-Alex’s MacBook Air.obj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC-Alex’s MacBook Air.obj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1-Alex’s MacBook Air.tlog" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.read.1-Alex’s MacBook Air.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.read.1-Alex’s MacBook Air.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.write.1-Alex’s MacBook Air.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.write.1-Alex’s MacBook Air.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.lastbuildstate" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.lastbuildstate" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.read.1-Alex’s MacBook Air.tlog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.write.1-Alex’s MacBook Air.tlog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form-Alex’s MacBook Air.lastbuildstate" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u-Alex’s MacBook Air.tlog" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1-Alex’s MacBook Air.tlog" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.delete.1.tlog" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.read.1-Alex’s MacBook Air.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.write.1-Alex’s MacBook Air.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.write.1-Alex’s MacBook Air.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.write.1-Alex’s MacBook Air.tlog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1-Alex’s MacBook Air.tlog" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.read.1-Alex’s MacBook Air.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.read.1-Alex’s MacBook Air.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.write.1-Alex’s MacBook Air.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.write.1-Alex’s MacBook Air.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe.recipe" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe.recipe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.read.1-Alex’s MacBook Air.tlog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.write.1-Alex’s MacBook Air.tlog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form-Alex’s MacBook Air.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form-Alex’s MacBook Air.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form-Alex’s MacBook Air.pch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.Build.CppClean.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe-Alex’s MacBook Air.recipe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.log" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.pch" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.pch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute-Alex’s MacBook Air.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxprojAssemblyReference.cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx-Alex’s MacBook Air.obj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142-Alex’s MacBook Air.pdb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/normalize_dataset.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generatedParser.txt" beforeDir="false" afterPath="$PROJECT_DIR$/generatedParser.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe.metagen" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe.metagen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../parserBreastCancer - Copy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../parserBreastCancer - Copy.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,12 +70,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/requirements.txt" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tanagra_file.tdm" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/requirements.txt" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tanagra_output.html" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/generatedParser.txt" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/.conda/envs/ParserGenerator/lib/python3.8/site-packages/pandas/core/ops/array_ops.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/.conda/envs/ParserGenerator/lib/python3.8/site-packages/pandas/io/parsers/base_parser.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tanagra_output.txt" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -184,9 +193,5 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ParserGenerator$normalize_dataset.coverage" NAME="normalize_dataset Coverage Results" MODIFIED="1639865668322" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1640373617246" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

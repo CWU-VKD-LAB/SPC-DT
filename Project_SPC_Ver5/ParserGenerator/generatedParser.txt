@@ -1,7 +1,7 @@
-1, 1, 0.45, 0.25, 0, 0, 'bnuclei', 'ucellsize'
-0.45, 1, 0, 0.25, 0, 1, 'bnuclei', 'ucellsize'
-1, 0.25, 0.15, 0, 0, 0, 'bnuclei', 'ucellsize'
-0.25, 0.15, 0, 0, 1, 1, 'clump', 'bchromatin'
-0.15, 0.25, 0, 0.45, 1, 1, 'clump', 'bchromatin'
-0.25, 0.15, 0.45, 0.6, 2, 0, 'mgadhesion', 'bnuclei'
-0.25, 0.15, 0.45, 0.6, 2, 1, 'mgadhesion', 'bnuclei'
+0, 0, 0.45, 0.25, 0, 0, bnuclei, ucellsize
+0.45, 0, 1, 0.25, 0, 1, bnuclei, ucellsize
+0, 0.25, 0.15, 1, 1, 0, bchromatin, ucellsize
+0.25, 0.15, 1, 1, 2, 1, clump, bchromatin
+0.15, 0.25, 1, 0.45, 3, 1, bnuclei, clump
+0.25, 0.15, 0.45, 0.6, 4, 0, mgadhesion, bnuclei
+0.25, 0.15, 0.45, 0.6, 4, 1, mgadhesion, bnuclei

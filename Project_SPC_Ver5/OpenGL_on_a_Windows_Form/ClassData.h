@@ -289,7 +289,7 @@ public:
 		xlabels = "";
 		ylabels = "";
 		for (int i = 0; i < parsedAttributePairs.size(); i++) {
-			if (i > 1) {
+			if (i > 0) {
 				xlabels += ", ";
 				ylabels += ", ";
 			}

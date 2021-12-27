@@ -75,12 +75,12 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 			}
 			else if (j == data.strparsedData.size() - 1) {
 				string str = data.strparsedData[i][j];
-				str = str.substr(1, str.length() - 3);
+				// str = str.substr(1, str.length() - 3);
 				attributePair.push_back(str);
 			}
 			else {
 				string str = data.strparsedData[i][j];
-				str = str.substr(1, str.length() - 2);
+				// str = str.substr(1, str.length() - 2);
 				attributePair.push_back(str);
 			}
 			//temp.push_back(stof(dataParsed.strparsedData[i][j]));
@@ -117,6 +117,9 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 		int nodeClass = stoi(data.values[i][data.values[0].size() - 1]);
 		if (nodeClass > data.numOfClasses) {
 			data.numOfClasses = nodeClass;
+		}
+		if (nodeClass > data.classTransparencies.size()) {
+			data.classTransparencies.push_back(255); // init class transparencies
 		}
 		data.classNum.push_back(nodeClass);
 
@@ -169,6 +172,9 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 		data.originalXData.push_back(xdatatemp); // Add line plot coords
 		data.ydata.push_back(ydatatemp);
 		data.originalYData.push_back(ydatatemp);
+
+		data.dataTerminationIndex.push_back(xdatatemp.size());
+
 		xdatatemp.clear();                                              // Clear for the next plot line
 		ydatatemp.clear();
 	}
