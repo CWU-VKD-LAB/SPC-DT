@@ -7,6 +7,7 @@
 #include "stdafx.h"
 #include "FileHandling.h"
 #include <map>
+#include <string>
 
 FileHandling::FileHandling() {}
 
@@ -75,12 +76,12 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 			}
 			else if (j == data.strparsedData.size() - 1) {
 				string str = data.strparsedData[i][j];
-				// str = str.substr(1, str.length() - 3);
+				str.erase(std::remove(str.begin(), str.end(), ','), str.end());
 				attributePair.push_back(str);
 			}
 			else {
 				string str = data.strparsedData[i][j];
-				// str = str.substr(1, str.length() - 2);
+				str.erase(std::remove(str.begin(), str.end(), ','), str.end());
 				attributePair.push_back(str);
 			}
 			//temp.push_back(stof(dataParsed.strparsedData[i][j]));
@@ -89,12 +90,19 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		}
 		data.parsedData.push_back(temp);
 		dataParsed.parsedData.push_back(temp);
-		if (std::find(data.parsedAttributePairs.begin(), data.parsedAttributePairs.end(), attributePair) == data.parsedAttributePairs.end()) {
-			data.parsedAttributePairs.push_back(attributePair);
+
+		bool dataParsedContainsAttributePair = false;
+		for (int i = 0; i < data.parsedAttributePairs.size(); i++) {
+			if (attributePair[0] == data.parsedAttributePairs[i][0] && attributePair[1] == data.parsedAttributePairs[i][1]) {
+				dataParsedContainsAttributePair = true;
+			}
 		}
-		if (std::find(dataParsed.parsedAttributePairs.begin(), dataParsed.parsedAttributePairs.end(), attributePair) == dataParsed.parsedAttributePairs.end()) {
+
+		if (!dataParsedContainsAttributePair) {
+			data.parsedAttributePairs.push_back(attributePair);
 			dataParsed.parsedAttributePairs.push_back(attributePair);
 		}
+
 		std::cout << "debug";
 		temp.clear();
 	}

@@ -35,19 +35,57 @@ def compare(item1, item2):
 def writeParser(parser_contents, orig_labels):
     parser_file = open("generatedParser.txt", 'w', encoding="utf-8")
     for parser_el in parser_contents:
-        string_to_write = str(parser_el).strip("[]") + "\n"
+        parserStr = parser_el.toString()
+        string_to_write = str(parserStr).strip("[]") + "\n"
         for label in orig_labels:
             if label in string_to_write:
                 string_to_write = string_to_write.replace("'" + label + "'", orig_labels[label])
         parser_file.write(string_to_write)
 
 
+class ParserElement:
+    def __init__(self):
+        self.x1 = 0
+        self.y1 = 0
+        self.x2 = 1
+        self.y2 = 1
+        self.graphNum = -1
+        self.classNum = -1
+        self.x_attribute = None
+        self.y_attribute = None
+
+    def toString(self):
+        return str(self.x1) + ", " + str(self.y1) + ", " + str(self.x2) + ", " + str(self.y2) + ", " + \
+               str(self.graphNum) + ", " + str(self.classNum) + ", " + tree.orig_labels[self.x_attribute] + ", " + \
+               tree.orig_labels[self.y_attribute]
+
+
+def findPairs(path_list):
+    pairs = dict()
+    path_list = sorted(path_list, key=functools.cmp_to_key(compare), reverse=True)
+    attributeList = []
+    usedAttributeList = []
+    for path in path_list:
+        for j in range(len(path) - 1, 0, -1):
+            node1 = path[j]
+            node2 = path[j - 1]
+            if node1.attr not in classes and node2.attr not in classes:
+                if node1.attr not in attributeList:
+                    attributeList.append(node1.attr)
+                if node2.attr not in attributeList:
+                    attributeList.append(node2.attr)
+                if node1.attr not in pairs and node2.attr not in pairs:
+                    pairs[node1.attr] = node2.attr
+                    pairs[node2.attr] = node1.attr
+                    usedAttributeList.append(node1.attr)
+                    usedAttributeList.append(node2.attr)
+    if len(attributeList) != len(usedAttributeList):
+        print("debug, this will be used later")
+
+    return pairs
+
+
 if __name__ == '__main__':
-
-    # look at notes for updated parser strategy
-
-
-
 
     tree = t2t.Tanagra_Parser()
     tree.parse("tanagra_output.txt")
@@ -70,51 +108,69 @@ if __name__ == '__main__':
 
     path_list = printPaths(tree.root)
     path_list = sorted(path_list, key=functools.cmp_to_key(compare))
-    graphAttributePairs = []
     parserElements = []
-    used_attributes = []
-    graphNum = -1
-    for i in range(len(path_list)):
-        parserElement = [0, 0, 1, 1, 0, -1, None, None]
-        path = path_list[i]
-        node_class = path[len(path) - 1].attr  # class is determined by end of path
-        parserElement[5] = classes[node_class]
-        node1 = None
-        node2 = None
+    attribute_pairs = dict()
+    pair_to_graphNum = dict()
+    graphNum = 0
+
+    pairs = findPairs(path_list)
+    graphNumId = dict()
+    graphNumPair = dict()
+    seenAttributes = []
+    graphNum = 0
+    for attribute in tree.orig_labels:
+        if "malignant" in attribute or "begnin" in attribute:
+            continue
+        if attribute not in seenAttributes and pairs[attribute] not in seenAttributes:
+            seenAttributes.append(attribute)
+            seenAttributes.append(pairs[attribute])
+            graphNumId[(attribute, pairs[attribute])] = graphNum
+            graphNumPair[graphNum] = (attribute, pairs[attribute])
+            graphNum += 1
+
+    # step through each path
+    for path in path_list:
         is_x_axis = True
+        class_node = path[len(path) - 1]
+        classNum = classes[class_node.attr]
+        parserElement = ParserElement()
+
         for j in range(len(path) - 1, 0, -1):
             node1 = path[j]
             node2 = path[j - 1]
-
-            # Determine what the coordinates are for a given decision node
-            if is_x_axis:
-                is_x_axis = not is_x_axis
-                if node1.parent_op is not None and (node1.parent_op == '<' or node1.parent_op == '<='):
-                    parserElement[2] = node2.value / 10.0
-                elif node1.parent_op is not None and (node1.parent_op == '>' or node1.parent_op == '>='):
-                    parserElement[0] = node2.value / 10.0
+            parserElement.classNum = classNum
+            if node1.attr not in classes and node2.attr not in classes:
+                if pairs[node1.attr] == node2.attr:
+                    parserElement.x_attribute = node2.attr
+                    parserElement.y_attribute = node1.attr
+                else:
+                    parserElement.x_attribute = node2.attr
+                    parserElement.y_attribute = pairs[node2.attr]
+                    parserElement.classNum = -1
             else:
-                is_x_axis = not is_x_axis
-                if node1.parent_op is not None and (node1.parent_op == '<' or node1.parent_op == '<='):
-                    parserElement[3] = node2.value / 10.0
-                elif node1.parent_op is not None and (node1.parent_op == '>' or node1.parent_op == '>='):
-                    parserElement[1] = node2.value / 10.0
+                parserElement.x_attribute = node2.attr
+                parserElement.y_attribute = pairs[node2.attr]
 
-            # Make and add pairings of attributes to be displayed
-            if node1 is not None and node2 is not None:
-                if node1.attr not in classes and node2.attr not in classes:
-                    if (node1.attr, node2.attr) not in graphAttributePairs:
-                        graphAttributePairs.append((node1.attr, node2.attr))
-                        graphNum += 1
-            elif (node1.attr, graphAttributePairs[len(graphAttributePairs) - 1][0]) not in graphAttributePairs and \
-                    (node1.attr not in used_attributes and
-                     graphAttributePairs[len(graphAttributePairs) - 1][0] not in used_attributes):
-                if node1.attr not in classes and node2.attr not in classes:
-                    graphAttributePairs.append((node1.attr, graphAttributePairs[len(graphAttributePairs) - 1][0]))
-                    graphNum += 1
+            if (parserElement.x_attribute, parserElement.y_attribute) in graphNumId:
+                parserElement.graphNum = graphNumId[(parserElement.x_attribute, parserElement.y_attribute)]
+            else:
+                parserElement.graphNum = graphNumId[(parserElement.y_attribute, parserElement.x_attribute)]
 
-        parserElement[4] = graphNum
-        parserElement[6] = graphAttributePairs[graphNum][0]
-        parserElement[7] = graphAttributePairs[graphNum][1]
-        parserElements.append(parserElement.copy())
+            parserPairOrdered = graphNumPair[parserElement.graphNum]
+            parserElement.x_attribute = parserPairOrdered[0]
+            parserElement.y_attribute = parserPairOrdered[1]
+
+            if is_x_axis:
+                if node1.parent_op == '<' or node1.parent_op == '<=':
+                    parserElement.x2 = node2.value / 10.0  # TODO: parameterize
+                elif node1.parent_op == '>' or node1.parent_op == '>=':
+                    parserElement.x1 = node2.value / 10.0
+            else:
+                if node1.parent_op == '<' or node1.parent_op == '<=':
+                    parserElement.y2 = node2.value / 10.0  # TODO: parameterize
+                elif node1.parent_op == '>' or node1.parent_op == '>=':
+                    parserElement.y1 = node2.value / 10.0
+                parserElements.append(parserElement)
+                parserElement = ParserElement()
+            is_x_axis = not is_x_axis
     writeParser(parserElements, tree.orig_labels)
