@@ -1,4 +1,1 @@
 tana2tree
-xlrd
-openpyxl
-pandas
