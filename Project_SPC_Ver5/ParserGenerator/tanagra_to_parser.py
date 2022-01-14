@@ -64,8 +64,8 @@ def findPairs(path_list, classes):
     # pair is (x_attr, y_attr)
     pairs = dict()
     path_list = sorted(path_list, key=functools.cmp_to_key(compare), reverse=True)
-    attributeList = []
-    usedAttributeList = []
+    attributeSet = set()
+    usedAttributeSet = set()
 
     for path in path_list:
         # special case: path is only two nodes long
@@ -73,96 +73,32 @@ def findPairs(path_list, classes):
         if len(path) < 3 and len(pairs) == 0:
             pair = (path[0].attr, path[0].attr)
             pairs[path[0].attr] = pair
-            usedAttributeList.append(pair[0])
+            usedAttributeSet.add(pair[0])
             continue
 
         for j in range(len(path) - 1, 0, -1):
             node1 = path[j]
             node2 = path[j - 1]
             if node1.attr not in classes and node2.attr not in classes:
-                if node1.attr not in attributeList:
-                    attributeList.append(node1.attr)
-                if node2.attr not in attributeList:
-                    attributeList.append(node2.attr)
+                if node1.attr not in attributeSet:
+                    attributeSet.add(node1.attr)
+                if node2.attr not in attributeSet:
+                    attributeSet.add(node2.attr)
                 if node1.attr not in pairs and node2.attr not in pairs:
                     pair = (node1.attr, node2.attr)
                     pairs[node1.attr] = pair
                     pairs[node2.attr] = pair
                     # pairs[node1.attr] = node2.attr
                     # pairs[node2.attr] = node1.attr
-                    usedAttributeList.append(node1.attr)
-                    usedAttributeList.append(node2.attr)
-    if len(attributeList) != len(usedAttributeList):
-        print("debug, this will be used later")
+                    usedAttributeSet.add(node1.attr)
+                    usedAttributeSet.add(node2.attr)
+
+    # if there are unpaired attributes, pair with itself
+    if len(attributeSet) != len(usedAttributeSet):
+        for attribute in attributeSet.difference(usedAttributeSet):
+            pairs[attribute] = (attribute, attribute)
 
     return pairs
-
-
-# def generateParserElementFromClassNode(node1, classNode, node1PairedAttr, graphNum, classes, orig_labels, pairs):
-#     # node1 -> class
-#     # X or Y         classNide
-#     parserElement = ParserElement()
-#     parserElement.orig_labels = orig_labels
-#
-#     # need to determine if node1.attr is X or Y in its pair
-#     node1AttrIsX = True
-#     if pairs[node1.attr][0] == node1.attr:
-#         node1AttrIsX = False
-#
-#     if node1AttrIsX:
-#         if "<" in classNode.parent_op:
-#             parserElement.x2 = node1.value / 10.0 # todo : paramterize
-#         elif ">" in classNode.parent_op:
-#             parserElement.x1 = node1.value / 10.0
-#     else:
-#         if "<" in classNode.parent_op:
-#             parserElement.y2 = node1.value / 10.0 # todo : paramterize
-#         elif ">" in classNode.parent_op:
-#             parserElement.y1 = node1.value / 10.0
-#
-#     parserElement.graphNum = graphNum
-#     if classNode.attr not in classes:
-#         print("Debug")
-#     parserElement.classNum = classes[classNode.attr]
-#     if node1AttrIsX:
-#         parserElement.x_attribute = node1.attr
-#         parserElement.y_attribute = node1PairedAttr
-#     else:
-#         parserElement.y_attribute = node1.attr
-#         parserElement.x_attribute = node1PairedAttr
-#     return parserElement
-
-
-# def generateParserDecisionParserElement(node1, node2, classNode, graphNum, classes, orig_labels):
-#     # node1 -> node2 -> classNode
-#     #  X         Y
-#     parserElement = ParserElement()
-#     parserElement.orig_labels = orig_labels
-#
-#     if isinstance(node2, str):
-#         parserElement.graphNum = graphNum
-#         parserElement.classNum = classes
-#
-#
-#     if node1.value is not None:
-#         if "<" in node2.parent_op:
-#             parserElement.y2 = node1.value / 10.0 # TODO: Parameterize
-#         elif ">" in node2.parent_op:
-#             parserElement.y1 = node1.value / 10.0
-#
-#     if node2.value is not None:
-#         if "<" in classNode.parent_op:
-#             parserElement.x2 = node2.value / 10.0
-#         elif ">" in classNode.parent_op:
-#             parserElement.x1 = node2.value / 10.0
-#
-#     parserElement.graphNum = graphNum
-#     if classNode.attr not in classes:
-#         print("Debug")
-#     parserElement.classNum = classes[classNode.attr]
-#     parserElement.y_attribute = node1.attr
-#     parserElement.x_attribute = node2.attr
-#     return parserElement
 
 def generateAllDecisionElements(path_list, pairs, graphIdMap, orig_labels, classes):
     decision_elements = []
@@ -315,7 +251,7 @@ def generateAllDecisionElements(path_list, pairs, graphIdMap, orig_labels, class
 def generateAllContinueElements(path_list, pairs, graphIdMap, orig_labels):
     # traverse through longest path
     # any pair that has memebers of two different pairs, we add a decision node
-    decisionElements = []
+    continueElements = []
     seen_decisions = []
     for j in range(len(path_list)):
         path = path_list[j]
@@ -362,25 +298,27 @@ def generateAllContinueElements(path_list, pairs, graphIdMap, orig_labels):
                     parserElement.y_attribute = node1.attr
                     parserElement.x_attribute = node1PairedAttr
                 if parserElement.toString() not in seen_decisions:
-                    decisionElements.append(parserElement)
+                    continueElements.append(parserElement)
                     seen_decisions.append(parserElement.toString())
-    return decisionElements
+    return continueElements
 
 
 def getGraphIdMap(pairs):
     # special case, only one pair
-    if len(pairs) == 1:
-        graphId = 0
-    else:
-        graphId = (len(pairs) // 2) - 1
+    # if len(pairs) == 1:
+    #     graphId = 0
+    # else:
+    #     graphId = (len(pairs) // 2) - 1
+
+    graphId = 0
 
     graphIdMap = dict()
     isReciprocal = False  # every pair will be represented twice, so we use this to keep track of that
     for pair in pairs:
-        graphIdMap[pairs[pair]] = graphId
-        if isReciprocal is True:
-            graphId -= 1
-        isReciprocal = not isReciprocal
+        if pairs[pair] in graphIdMap:
+            graphId += 1
+        else:
+            graphIdMap[pairs[pair]] = graphId
     return graphIdMap
 
 
@@ -446,8 +384,8 @@ def generateParser(input_file, output_file):
 
 if __name__ == '__main__':
     # debug / test
-    sys.argv.append("two_attribute_tree.txt")
-    sys.argv.append("two_attribute_tree_parser.txt")
+    sys.argv.append("two_attribute_tree_2.txt")
+    sys.argv.append("two_attribute_tree_2_parser.txt")
 
     if len(sys.argv) < 3:
         print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
