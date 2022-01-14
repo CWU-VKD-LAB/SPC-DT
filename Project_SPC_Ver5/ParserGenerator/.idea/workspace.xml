@@ -5,48 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/generatedParser -- copy.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/default.tdm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/one_attribute_tree.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tanagra_settings.tdm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/ipch/1a2f87bb36447eb8.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/ipch/1a2f87bb36447eb8.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/xs/UserPrefs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/xs/UserPrefs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Data/Original Data/.idea/Original Data.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Data/Original Data/.idea/Original Data.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Data/Original Data/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Data/Original Data/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.lastbuildstate" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.lastbuildstate" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.read.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe.recipe" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe.recipe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.log" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.pch" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.pch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace-Alex’s MacBook Air.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace-Alex’s MacBook Air.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/breast.txt" beforeDir="false" afterPath="$PROJECT_DIR$/breast.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generatedParser.txt" beforeDir="false" afterPath="$PROJECT_DIR$/generatedParser.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parserbyHand.txt" beforeDir="false" afterPath="$PROJECT_DIR$/parserbyHand.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_output.html" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_output.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_output.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_output.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../breast_cancer - Copy.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../breast_cancer - Copy.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../parserBreastCancer - Copy.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../parserBreastCancer - Copy.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,10 +26,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/tanagra_output.txt" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/tanagra_output.html" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/requirements.txt" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tanagra_file.tdm" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -156,6 +122,8 @@
       <workItem from="1641603604158" duration="34000" />
       <workItem from="1641603649264" duration="4000" />
       <workItem from="1641832223125" duration="10943000" />
+      <workItem from="1641856318271" duration="3281000" />
+      <workItem from="1642189751790" duration="3507000" />
     </task>
     <servers />
   </component>
@@ -181,53 +149,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>475</line>
-          <option name="timeStamp" value="11" />
+          <line>411</line>
+          <option name="timeStamp" value="76" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>494</line>
-          <option name="timeStamp" value="12" />
+          <line>412</line>
+          <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>499</line>
-          <option name="timeStamp" value="13" />
+          <line>219</line>
+          <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>513</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>481</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>350</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>444</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>677</line>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>239</line>
-          <option name="timeStamp" value="49" />
+          <line>420</line>
+          <option name="timeStamp" value="86" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1641844155682" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1642192777299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
