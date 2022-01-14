@@ -70,7 +70,7 @@ def findPairs(path_list, classes):
     for path in path_list:
         # special case: path is only two nodes long
         # pair up the attribute in path[0] with itself
-        if len(path) < 3:
+        if len(path) < 3 and len(pairs) == 0:
             pair = (path[0].attr, path[0].attr)
             pairs[path[0].attr] = pair
             usedAttributeList.append(pair[0])
@@ -176,46 +176,67 @@ def generateAllDecisionElements(path_list, pairs, graphIdMap, orig_labels, class
             pair = pairs[node1.attr]
             graphId = graphIdMap[pair]
             classNum = classes[node2.attr]
-            if '<' in node2.parent_op:
-                parserElement1 = ParserElement()
-                parserElement1.orig_labels = orig_labels
-                parserElement1.x2 = node1.value / 10.0 # todo: parameterize
-                parserElement1.y2 = node1.value / 10.0  # todo: parameterize
-                parserElement1.x_attribute = pair[0]
-                parserElement1.y_attribute = pair[1]
-                parserElement1.graphNum = graphId
-                parserElement1.classNum = classNum
+            if pair[0] == pair[1]:
+                if '<' in node2.parent_op:
+                    parserElement1 = ParserElement()
+                    parserElement1.orig_labels = orig_labels
+                    parserElement1.x2 = node1.value / 10.0 # todo: parameterize
+                    parserElement1.y2 = node1.value / 10.0  # todo: parameterize
+                    parserElement1.x_attribute = pair[0]
+                    parserElement1.y_attribute = pair[1]
+                    parserElement1.graphNum = graphId
+                    parserElement1.classNum = classNum
 
-                parserElement2 = ParserElement()
-                parserElement2.orig_labels = orig_labels
-                parserElement2.x1 = node1.value / 10.0
-                parserElement2.y2 = node1.value / 10.0
-                parserElement2.x_attribute = pair[0]
-                parserElement2.y_attribute = pair[1]
-                parserElement2.graphNum = graphId
-                parserElement2.classNum = classNum
+                    parserElement2 = ParserElement()
+                    parserElement2.orig_labels = orig_labels
+                    parserElement2.x1 = node1.value / 10.0
+                    parserElement2.y2 = node1.value / 10.0
+                    parserElement2.x_attribute = pair[0]
+                    parserElement2.y_attribute = pair[1]
+                    parserElement2.graphNum = graphId
+                    parserElement2.classNum = classNum
 
-                parserElement3 = ParserElement()
-                parserElement3.orig_labels = orig_labels
-                parserElement3.y1 = node1.value / 10.0
-                parserElement3.x2 = node1.value / 10.0
-                parserElement3.x_attribute = pair[0]
-                parserElement3.y_attribute = pair[1]
-                parserElement3.graphNum = graphId
-                parserElement3.classNum = classNum
+                    parserElement3 = ParserElement()
+                    parserElement3.orig_labels = orig_labels
+                    parserElement3.y1 = node1.value / 10.0
+                    parserElement3.x2 = node1.value / 10.0
+                    parserElement3.x_attribute = pair[0]
+                    parserElement3.y_attribute = pair[1]
+                    parserElement3.graphNum = graphId
+                    parserElement3.classNum = classNum
 
-                decision_elements.append(parserElement1)
-                decision_elements.append(parserElement2)
-                decision_elements.append(parserElement3)
-            elif '>' in node2.parent_op:
+                    decision_elements.append(parserElement1)
+                    decision_elements.append(parserElement2)
+                    decision_elements.append(parserElement3)
+                elif '>' in node2.parent_op:
+                    parserElement = ParserElement()
+                    parserElement.orig_labels = orig_labels
+                    parserElement.x1 = node1.value / 10.0  # todo: parameterize
+                    parserElement.y1 = node1.value / 10.0  # todo: parameterize
+                    parserElement.x_attribute = pair[0]
+                    parserElement.y_attribute = pair[1]
+                    parserElement.graphNum = graphId
+                    parserElement.classNum = classNum
+                    decision_elements.append(parserElement)
+            else:
+                pair = pairs[node1.attr]
+                isNode1X = (node1.attr == pair[0])
                 parserElement = ParserElement()
                 parserElement.orig_labels = orig_labels
-                parserElement.x1 = node1.value / 10.0  # todo: parameterize
-                parserElement.y1 = node1.value / 10.0  # todo: parameterize
+                parserElement.classNum = classes[node2.attr]
+                parserElement.graphNum = graphIdMap[pair]
                 parserElement.x_attribute = pair[0]
                 parserElement.y_attribute = pair[1]
-                parserElement.graphNum = graphId
-                parserElement.classNum = classNum
+                if '<' in node2.parent_op:
+                    if isNode1X:
+                        parserElement.x2 = node1.value / 10
+                    else:
+                        parserElement.y2 = node1.value / 10 #todo : parameterize
+                elif '>' in node2.parent_op:
+                    if isNode1X:
+                        parserElement.x1 = node1.value / 10
+                    else:
+                        parserElement.y1 = node1.value / 10 #todo : parameterize
                 decision_elements.append(parserElement)
             continue
 
@@ -425,8 +446,8 @@ def generateParser(input_file, output_file):
 
 if __name__ == '__main__':
     # debug / test
-    sys.argv.append("one_attribute_tree.txt")
-    sys.argv.append("one_attribute_tree_parser.txt")
+    sys.argv.append("two_attribute_tree.txt")
+    sys.argv.append("two_attribute_tree_parser.txt")
 
     if len(sys.argv) < 3:
         print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "

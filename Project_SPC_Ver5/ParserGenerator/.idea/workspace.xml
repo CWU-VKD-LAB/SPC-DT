@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/default.tdm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/one_attribute_tree.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tanagra_settings.tdm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/two_attribute_tree.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/two_attribute_tree.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/two_attribute_tree_parser.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_output.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_output.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +120,7 @@
       <workItem from="1641603649264" duration="4000" />
       <workItem from="1641832223125" duration="10943000" />
       <workItem from="1641856318271" duration="3281000" />
-      <workItem from="1642189751790" duration="3507000" />
+      <workItem from="1642189751790" duration="4571000" />
     </task>
     <servers />
   </component>
@@ -149,28 +146,23 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>411</line>
-          <option name="timeStamp" value="76" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>412</line>
-          <option name="timeStamp" value="77" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>219</line>
+          <line>240</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>420</line>
-          <option name="timeStamp" value="86" />
+          <line>65</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>177</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1642192777299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1642194302354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
