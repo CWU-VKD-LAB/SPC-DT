@@ -303,19 +303,21 @@ def generateAllContinueElements(path_list, pairs, graphIdMap, orig_labels):
     return continueElements
 
 
-def getGraphIdMap(pairs):
+def getGraphIdMap(pairs, root):
     # special case, only one pair
     # if len(pairs) == 1:
     #     graphId = 0
     # else:
     #     graphId = (len(pairs) // 2) - 1
 
-    graphId = 0
+    graphId = 1
 
     graphIdMap = dict()
     isReciprocal = False  # every pair will be represented twice, so we use this to keep track of that
     for pair in pairs:
-        if pairs[pair] in graphIdMap:
+        if root in pair:
+            graphIdMap[pairs[pair]] = 0
+        elif pairs[pair] in graphIdMap:
             graphId += 1
         else:
             graphIdMap[pairs[pair]] = graphId
@@ -365,7 +367,7 @@ def generateParser(input_file, output_file):
     graphNum = 0
 
     pairs = findPairs(path_list, classes)
-    graphIdMap = getGraphIdMap(pairs)
+    graphIdMap = getGraphIdMap(pairs, tree.root.attr)
     seen_continue_elements = []
 
     continueElements = generateAllContinueElements(path_list, pairs, graphIdMap, tree.orig_labels)
@@ -384,8 +386,8 @@ def generateParser(input_file, output_file):
 
 if __name__ == '__main__':
     # debug / test
-    sys.argv.append("two_attribute_tree_2.txt")
-    sys.argv.append("two_attribute_tree_2_parser.txt")
+    sys.argv.append("three_attribute_tree_one_duplicate.txt")
+    sys.argv.append("three_attribute_tree_one_duplicate_parser.txt")
 
     if len(sys.argv) < 3:
         print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
