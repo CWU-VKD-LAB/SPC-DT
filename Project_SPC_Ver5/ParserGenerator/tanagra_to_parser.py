@@ -60,7 +60,7 @@ class ParserElement:
                self.orig_labels[self.y_attribute]
 
 
-def findPairs(path_list, classes):
+def findPairs(path_list, classes, orig_labels):
     # pair is (x_attr, y_attr)
     pairs = dict()
     path_list = sorted(path_list, key=functools.cmp_to_key(compare), reverse=True)
@@ -76,9 +76,16 @@ def findPairs(path_list, classes):
             usedAttributeSet.add(pair[0])
             continue
 
-        for j in range(len(path) - 1, 0, -1):
+        # for j in range(len(path) - 1, 0, -1):
+        for j in range(0, len(path) - 1, 1):
             node1 = path[j]
-            node2 = path[j - 1]
+            node2 = path[j + 1]
+            # node2 = path[j - 1]
+
+            # Don't pair up similar nodes unless at the end
+            if orig_labels[node1.attr] == orig_labels[node2.attr]:
+                continue
+
             if node1.attr not in classes and node2.attr not in classes:
                 if node1.attr not in attributeSet:
                     attributeSet.add(node1.attr)
@@ -95,8 +102,7 @@ def findPairs(path_list, classes):
 
     # if there are unpaired attributes, pair with itself
     if len(attributeSet) != len(usedAttributeSet):
-        for attribute in attributeSet.difference(usedAttributeSet):
-            pairs[attribute] = (attribute, attribute)
+        unusedAttributes = attributeSet.difference(usedAttributeSet)
 
     return pairs
 
@@ -183,8 +189,34 @@ def generateAllDecisionElements(path_list, pairs, graphIdMap, orig_labels, class
         parserElement = ParserElement()
         parserElement.orig_labels = orig_labels
 
-        # Case 1: node1 and node2 are paired
-        if node1.attr == pairs[node2.attr][0] or node1.attr == pairs[node2.attr][1]:
+        # Case 2: node1 and node2 are the same attribute
+        if node1.attr == node2.attr:
+            pair = pairs[node1.attr]
+            isNode1X = node1.attr == pair[0]
+            parserElement.x_attribute = pair[0]
+            parserElement.y_attribute = pair[1]
+            parserElement.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute, graphIdMap)
+            parserElement.classNum = classes[classNode.attr]
+            if isNode1X:
+                if '<' in classNode.parent_op:
+                    parserElement.x2 = node1.value / 10.0  # todo parameterize
+                elif '>' in classNode.parent_op:
+                    parserElement.x1 = node1.value / 10.0
+                if '<' in node1.parent_op:
+                    parserElement.x2 = node2.value / 10.0
+                elif '>' in node1.parent_op:
+                    parserElement.x1 = node2.value / 10.0
+            else:
+                if '<' in classNode.parent_op:
+                    parserElement.y2 = node1.value / 10.0  # todo parameterize
+                elif '>' in classNode.parent_op:
+                    parserElement.y1 = node1.value / 10.0
+                if '<' in node1.parent_op:
+                    parserElement.y2 = node2.value / 10.0
+                elif '>' in node1.parent_op:
+                    parserElement.y1 = node2.value / 10.0
+        # Case 2: node1 and node2 are paired
+        elif node1.attr == pairs[node2.attr][0] or node1.attr == pairs[node2.attr][1]:
             pair = pairs[node1.attr]
             attributeX = pair[0]
             attributeY = pair[1]
@@ -200,12 +232,12 @@ def generateAllDecisionElements(path_list, pairs, graphIdMap, orig_labels, class
                 if isNode1X:
                     parserElement.x2 = node1.value / 10  # todo: parameterize
                 else:
-                    parserElement.y2 = node1.value
+                    parserElement.y2 = node1.value / 10
             elif ">" in classNode.parent_op:
                 if isNode1X:
                     parserElement.x1 = node1.value / 10  # todo: parameterize
                 else:
-                    parserElement.y1 = node1.value
+                    parserElement.y1 = node1.value / 10
 
             # get second entry
             if "<" in node1.parent_op:
@@ -218,8 +250,7 @@ def generateAllDecisionElements(path_list, pairs, graphIdMap, orig_labels, class
                     parserElement.y1 = node2.value / 10
                 else:
                     parserElement.x1 = node2.value / 10
-
-        # Case 2: node1 and node2 are not paired
+        # Case 3: node1 and node2 are not paired
         else:
             pair = pairs[node1.attr]
             attributeX = pair[0]
@@ -315,7 +346,7 @@ def getGraphIdMap(pairs, root):
     graphIdMap = dict()
     isReciprocal = False  # every pair will be represented twice, so we use this to keep track of that
     for pair in pairs:
-        if root in pair:
+        if root == pair:
             graphIdMap[pairs[pair]] = 0
         elif pairs[pair] in graphIdMap:
             graphId += 1
@@ -334,6 +365,10 @@ def getGraphNum(attr1, attr2, graphIdMap):
         print("undefined")
     return graphNum
 
+def replaceAttributeNames(node_list, orig_labels):
+    for node in node_list:
+        node.attr = orig_labels[node.attr]
+    return node_list
 
 def generateParser(input_file, output_file):
     if not exists(input_file):
@@ -344,6 +379,13 @@ def generateParser(input_file, output_file):
     tree.parse(input_file)  # todo : parameterize
     tree.print_tree()
     node_list = tree.traverse()
+    node_list = replaceAttributeNames(node_list, tree.orig_labels)
+    newLabels = dict()
+    for label in tree.orig_labels:
+        name = tree.orig_labels[label]
+        newLabels[label] = name
+        newLabels[name] = name
+    tree.orig_labels = newLabels
 
     # Determine number of classes
     for node in node_list:
@@ -366,7 +408,7 @@ def generateParser(input_file, output_file):
     pair_to_graphNum = dict()
     graphNum = 0
 
-    pairs = findPairs(path_list, classes)
+    pairs = findPairs(path_list, classes, tree.orig_labels)
     graphIdMap = getGraphIdMap(pairs, tree.root.attr)
     seen_continue_elements = []
 
@@ -386,8 +428,8 @@ def generateParser(input_file, output_file):
 
 if __name__ == '__main__':
     # debug / test
-    sys.argv.append("three_attribute_tree_one_duplicate.txt")
-    sys.argv.append("three_attribute_tree_one_duplicate_parser.txt")
+    sys.argv.append("test_tree.txt")
+    sys.argv.append("test_tree_parser.txt")
 
     if len(sys.argv) < 3:
         print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
