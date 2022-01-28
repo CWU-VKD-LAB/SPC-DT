@@ -1,6 +1,6 @@
 [Diagram]
 Title=Default title
-Database=C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator\breast.txt
+Database=X:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator\breast.txt
 
 [Dataset]
 MLClassGenerator=TMLGenDataset
