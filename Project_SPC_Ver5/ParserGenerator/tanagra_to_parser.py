@@ -221,346 +221,347 @@ def generatePairs(path_list, classes, orig_labels):
     path_list = sorted(path_list, key=functools.cmp_to_key(compare), reverse=True)
 
 
-def generateAllDecisionElements(path_list, pairs, pairMap, node_map, isAttributePairedList, graphIdMap, orig_labels,
-                                classes):
-    decision_elements = []
-    pathDebug = False
-    for i in range(len(path_list)):
-        path = path_list[i]
-        if pathDebug: print("\t\tstart path")
-        # special case, if the path is less than three nodes long
-        if len(path) < 3:
-            if pathDebug: print("path < 3")
-            # TODO
-            node1 = path[0]
-            node2 = path[1]
-            pair = pairMap[node1.attr][0]  # TODO: will this ever be larger than one?
-            graphId = graphIdMap[pair]
-            classNum = classes[node2.attr]
-            if pair[0] == pair[1]:
-                if pathDebug: print("Path pair[0] == [1]")
-                if '<' in node2.parent_op:
-                    if pathDebug: print("path < in node2")
-                    parserElement1 = ParserElement()
-                    parserElement1.orig_labels = orig_labels
-                    parserElement1.x2 = node1.value / 10.0  # todo: parameterize
-                    parserElement1.y2 = node1.value / 10.0  # todo: parameterize
-                    parserElement1.x_attribute = pair[0]
-                    parserElement1.y_attribute = pair[1]
-                    parserElement1.graphNum = graphId
-                    parserElement1.classNum = classNum
-
-                    parserElement2 = ParserElement()
-                    parserElement2.orig_labels = orig_labels
-                    parserElement2.x1 = node1.value / 10.0
-                    parserElement2.y2 = node1.value / 10.0
-                    parserElement2.x_attribute = pair[0]
-                    parserElement2.y_attribute = pair[1]
-                    parserElement2.graphNum = graphId
-                    parserElement2.classNum = classNum
-
-                    parserElement3 = ParserElement()
-                    parserElement3.orig_labels = orig_labels
-                    parserElement3.y1 = node1.value / 10.0
-                    parserElement3.x2 = node1.value / 10.0
-                    parserElement3.x_attribute = pair[0]
-                    parserElement3.y_attribute = pair[1]
-                    parserElement3.graphNum = graphId
-                    parserElement3.classNum = classNum
-
-                    parserElement1 = adjustParserElementBounds(parserElement1, path, orig_labels, node_map)
-                    parserElement2 = adjustParserElementBounds(parserElement2, path, orig_labels, node_map)
-                    parserElement3 = adjustParserElementBounds(parserElement3, path, orig_labels, node_map)
-                    decision_elements.append(parserElement1)
-                    decision_elements.append(parserElement2)
-                    decision_elements.append(parserElement3)
-                    if pathDebug: print("append:", parserElement1.toString())
-                    if pathDebug: print("append:", parserElement2.toString())
-                    if pathDebug: print("append:", parserElement3.toString())
-                elif '>' in node2.parent_op:
-                    if pathDebug: print("path > in node2")
-                    parserElement = ParserElement()
-                    parserElement.orig_labels = orig_labels
-                    parserElement.x1 = node1.value / 10.0  # todo: parameterize
-                    parserElement.y1 = node1.value / 10.0  # todo: parameterize
-                    parserElement.x_attribute = pair[0]
-                    parserElement.y_attribute = pair[1]
-                    parserElement.y_attribute = pair[1]
-                    parserElement.graphNum = graphId
-                    parserElement.classNum = classNum
-                    parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map)
-                    decision_elements.append(parserElement)
-                    if pathDebug: print("append:", parserElement.toString())
-            else:
-                if pathDebug: print("path pair[0] != pair[1]")
-                pair = pairMap[node1.attr][0]
-                isNode1X = (node1.attr == pair[0])
-                parserElement = ParserElement()
-                parserElement.orig_labels = orig_labels
-                parserElement.classNum = classes[node2.attr]
-                parserElement.graphNum = graphIdMap[pair]
-                parserElement.x_attribute = pair[0]
-                parserElement.y_attribute = pair[1]
-                if '<' in node2.parent_op:
-                    if pathDebug: print("path < in node2")
-                    if isNode1X:
-                        parserElement.x2 = node1.value / 10
-                    else:
-                        parserElement.y2 = node1.value / 10  # todo : parameterize
-                elif '>' in node2.parent_op:
-                    if pathDebug: print("path > in node2")
-                    if isNode1X:
-                        parserElement.x1 = node1.value / 10
-                    else:
-                        parserElement.y1 = node1.value / 10  # todo : parameterize
-                parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map)
-                decision_elements.append(parserElement)
-                if pathDebug: print("append:", parserElement.toString())
-            if pathDebug: print("End path")
-            continue
-
-        # root -> ... -> node2 -> node1 -> classNode
-        classNode = path[len(path) - 1]
-        node1 = path[len(path) - 2]
-        node2 = path[len(path) - 3]
-        parserElement = ParserElement()
-        parserElement.orig_labels = orig_labels
-
-        if 'uc' in node1.attr and 'uc' in node2.attr:
-            if pathDebug: print("debug")
-
-        # Case 1: node1 and node2 are the same attribute
-        if orig_labels[node1.attr] == orig_labels[node2.attr]:
-            if pathDebug: print("node1 attr == node2 attr names")
-            pair = pairMap[node1.attr][0]
-            isNode1X = node1.attr == pair[0]
-            parserElement.x_attribute = pair[0]
-            parserElement.y_attribute = pair[1]
-            parserElement.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute, graphIdMap)
-            parserElement.classNum = classes[classNode.attr]
-
-            # # if attributes are not paired (but are still the same)
-            # if (node1.attr, node2.attr) not in pairMap[node1.attr] and (node2.attr, node1.attr) not in pairMap[node1.attr]:
-            #     if pathDebug: print("attributes the same, but not paired together")
-            #     if '<' in classNode.parent_op:
-            #         parserElement.x1 = node2.value / 10 # todo
-            #         parserElement.y1 = 0
-            #         parserElement.x2 = node1.value / 10 # todo
-            #         parserElement.y2 = 1
-            #     #elif '>' in classNode.parent_op
-
-            # if isNode1X:
-            # if classNode parent operation is different from node1 parent op
-            if node1.parent_op not in classNode.parent_op or classNode.parent_op not in node1.parent_op:
-                if pathDebug: print("classNode parent op and node1 parent op not the same")
-                # if these attributes are paired together, then we possibly need two parserElements
-                if orig_labels[node2.attr] not in map(lambda x: orig_labels[x], pair):  # if they are paired
-                    # todo
-                    if pathDebug: print("node1 and node2 are the same but not paired")
-                    if '>' in node1.parent_op:
-                        parserElement.x1 = node2.value / 10  # todo
-                        parserElement.y1 = 0
-                        if '<' in classNode.parent_op:
-                            parserElement.x2 = node1.value / 10  # todo
-                            parserElement.y2 = 1
-                        elif '>' in classNode.parent_op:
-                            print("I think already covered debug")
-                # if they are not paired together,
-                # TODO: may need another case here
-                elif '>' in node1.parent_op:
-                    if pathDebug: print("node1 parent op >")
-                    node1PairedNode = node_map[pair[0]] if node1.attr == pair[1] else node_map[pair[1]]
-                    parserElement.x1 = node2.value / 10  # todo
-                    parserElement.y1 = 0  # todo
-                    parserElement.x2 = node1.value / 10  # todo
-                    if not isNode1X:
-                        parserElement.y2 = node1PairedNode.value / 10  # todo
-                    # parserElement.x1 = 0 # todo : tentative accept
-                    # parserElement.y1 = node2.value / 10  # todo
-                    # # parserElement.x1 = node2.value
-                    # # parserElement.y1 = 0
-                    # parserElement.x2 = node1.value / 10  # todo
-                    # parserElement.y2 = node1.value / 10  # todo
-                    # # parser will be appended at the end
-                    # parserElement2 = ParserElement(orig_labels)
-                    # parserElement2.x_attribute = pair[0]
-                    # parserElement2.y_attribute = pair[1]
-                    # parserElement2.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute,
-                    #                                       graphIdMap)
-                    # parserElement2.classNum = classes[classNode.attr]
-                    # parserElement2.x1 = node2.value / 10  # todo
-                    # parserElement2.y1 = 0
-                    # parserElement2.x2 = node1.value / 10  # todo
-                    # parserElement2.y2 = node2.value / 10  # todo
-                    # decision_elements.append(parserElement2)
-                    # if pathDebug: print("append:", parserElement2.toString())
-                elif '<' in node1.parent_op:
-                    if pathDebug: print("node1 parent op <")
-                    # parserElement.x1 = 0
-                    # parserElement.y2 = node1.value / 10  # todo
-                    # parserElement.x2 = node2.value / 10  # todo
-                    # parserElement.y2 = node2.value / 10  # todo
-                    # # parser will be appended at the end
-                    # parserElement2 = ParserElement(orig_labels)
-                    # parserElement2.x_attribute = pair[0]
-                    # parserElement2.y_attribute = pair[1]
-                    # parserElement2.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute,
-                    #                                       graphIdMap)
-                    # parserElement2.classNum = classes[classNode.attr]
-                    # parserElement2.x1 = node1.value / 10  # todo
-                    # parserElement2.y1 = 0
-                    # parserElement2.x2 = node2.value / 10  # todo
-                    # parserElement2.y2 = node1.value / 10  # todo
-
-                    # decision_elements.append(parserElement2)
-                    # if pathDebug: print("append:", parserElement2.toString())
-            else:
-                if pathDebug: print("classNode parent op and node1 parent op are the same")
-                parserElement.x1 = 0
-                parserElement.y1 = node1.value / 10  # todo
-                parserElement.x2 = 1
-                parserElement.y2 = 1
-                # will be added at the end of loop
-                parserElement2 = ParserElement(orig_labels)
-                parserElement2.x_attribute = pair[0]
-                parserElement2.y_attribute = pair[1]
-                parserElement2.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute, graphIdMap)
-                parserElement2.classNum = classes[classNode.attr]
-                parserElement2.x1 = node1.value / 10  # todo
-                parserElement2.y1 = 0
-                parserElement2.x2 = 1
-                parserElement2.y2 = node1.value / 10  # todo
-                parserElement2 = adjustParserElementBounds(parserElement2, path, orig_labels, node_map)
-                decision_elements.append(parserElement2)
-                if pathDebug: print("append:", parserElement2.toString())
-                #
-
-                # if '<' in classNode.parent_op:
-                #     parserElement.x2 = node1.value / 10.0  # todo parameterize
-                # elif '>' in classNode.parent_op:
-                #     parserElement.x1 = node1.value / 10.0
-                # if '<' in node1.parent_op:
-                #     parserElement.x2 = node2.value / 10.0
-                # elif '>' in node1.parent_op:
-                #     parserElement.x1 = node2.value / 10.0
-            # else:
-            #     if '<' in classNode.parent_op:
-            #         parserElement.y2 = node1.value / 10.0  # todo parameterize
-            #     elif '>' in classNode.parent_op:
-            #         parserElement.y1 = node1.value / 10.0
-            #     if '<' in node1.parent_op:
-            #         parserElement.y2 = node2.value / 10.0
-            #     elif '>' in node1.parent_op:
-            #         parserElement.y1 = node2.value / 10.0
-        # Case 2: node1 and node2 are paired together
-        elif (node1.attr, node2.attr) in pairs or (node2.attr, node1.attr) in pairs:
-            if pathDebug: print("node1 and node2 are paired together")
-            pair = pairMap[node1.attr][0]  # todo: check if this length is ever greater than 1
-            attributeX = pair[0]
-            attributeY = pair[1]
-            isNode1X = (node1.attr == pair[0])
-
-            parserElement.x_attribute = attributeX
-            parserElement.y_attribute = attributeY
-            parserElement.graphNum = getGraphNum(attributeX, attributeY, graphIdMap)
-            parserElement.classNum = classes[classNode.attr]
-
-            # get first entry
-            if "<" in classNode.parent_op:
-                if pathDebug: print("classNode parent op is <")
-                if isNode1X:
-                    parserElement.x2 = node1.value / 10  # todo: parameterize
-                else:
-                    parserElement.y2 = node1.value / 10
-            elif ">" in classNode.parent_op:
-                if pathDebug: print("classNode parent op is >")
-                if isNode1X:
-                    parserElement.x1 = node1.value / 10  # todo: parameterize
-                else:
-                    parserElement.y1 = node1.value / 10
-
-            # get second entry
-            if "<" in node1.parent_op:
-                if pathDebug: print("node1 parent op is <")
-                if isNode1X:
-                    parserElement.y2 = node2.value / 10
-                else:
-                    parserElement.x2 = node2.value / 10
-            elif ">" in node1.parent_op:
-                if pathDebug: print("node1 parent op is >")
-                if isNode1X:
-                    parserElement.y1 = node2.value / 10
-                else:
-                    parserElement.x1 = node2.value / 10
-        # Case 3: node1 and node2 are not paired, node 1 is a single attribute pair
-        elif pairMap[node1.attr][0][0] == pairMap[node1.attr][0][1]:
-            if pathDebug: print("node1 and node2 are not paired and node1 is a single attribute pair")
-            pair = pairMap[node1.attr][0]
-            parserElement = ParserElement(orig_labels)
-            parserElement.x_attribute = pair[0]
-            parserElement.y_attribute = pair[1]
-            parserElement.graphNum = getGraphNum(pair[0], pair[1], graphIdMap)
-            parserElement.classNum = classes[classNode.attr]
-            if '<' in classNode.parent_op:
-                if pathDebug: print("classNode parent op is <")
-                parserElement.x1 = 0
-                parserElement.y1 = 0
-                parserElement.x2 = node1.value / 10  # TODO: Parameterize
-                parserElement.y2 = node1.value / 10
-            elif '>' in classNode.parent_op:
-                if pathDebug: print("classNode parent op is >")
-                parserElement.x1 = 0
-                parserElement.y1 = node1.value / 10  # todo
-                parserElement.x2 = 1
-                parserElement.y2 = 1
-                # Will be added at the end of this loop
-
-                parserElement2 = ParserElement(orig_labels)
-                parserElement2.x_attribute = pair[0]
-                parserElement2.y_attribute = pair[1]
-                parserElement2.graphNum = getGraphNum(pair[0], pair[1], graphIdMap)
-                parserElement2.classNum = classes[classNode.attr]
-                parserElement2.x1 = node1.value / 10  # todo
-                parserElement2.y1 = 0
-                parserElement2.x2 = 1
-                parserElement2.y2 = node1.value / 10  # todo
-                parserElement2 = adjustParserElementBounds(parserElement2, path, orig_labels, node_map)
-                decision_elements.append(parserElement2)
-                if pathDebug: print("append:", parserElement2.toString())
-
-        # Case 4: node1 and node2 are not paired
-        else:
-            if pathDebug: print("node1 and node2 are not paired")
-            pair = pairMap[node1.attr][0]
-            attributeX = pair[0]
-            attributeY = pair[1]
-            isNode1X = (node1.attr == pair[0])
-
-            if "<" in classNode.parent_op:
-                if isNode1X:
-                    parserElement.x2 = node1.value / 10  # todo: param
-                else:
-                    parserElement.y2 = node1.value / 10
-            elif ">" in classNode.parent_op:
-                if isNode1X:
-                    parserElement.x1 = node1.value / 10
-                else:
-                    parserElement.y1 = node1.value / 10
-
-            parserElement.graphNum = getGraphNum(attributeX, attributeY, graphIdMap)
-            parserElement.classNum = classes[classNode.attr]
-            parserElement.x_attribute = attributeX
-            parserElement.y_attribute = attributeY
-
-        if parserElement.x_attribute == "bc" and parserElement.y_attribute == "cl":
-            if pathDebug: print("debug")
-
-        parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map)
-
-        decision_elements.append(parserElement)
-        if pathDebug: print("append:", parserElement.toString())
-        if pathDebug: print("end path")
-    return decision_elements
+#
+# def generateAllDecisionElements(path_list, pairs, pairMap, node_map, isAttributePairedList, graphIdMap, orig_labels,
+#                                 classes):
+#     decision_elements = []
+#     pathDebug = False
+#     for i in range(len(path_list)):
+#         path = path_list[i]
+#         if pathDebug: print("\t\tstart path")
+#         # special case, if the path is less than three nodes long
+#         if len(path) < 3:
+#             if pathDebug: print("path < 3")
+#             # TODO
+#             node1 = path[0]
+#             node2 = path[1]
+#             pair = pairMap[node1.attr][0]  # TODO: will this ever be larger than one?
+#             graphId = graphIdMap[pair]
+#             classNum = classes[node2.attr]
+#             if pair[0] == pair[1]:
+#                 if pathDebug: print("Path pair[0] == [1]")
+#                 if '<' in node2.parent_op:
+#                     if pathDebug: print("path < in node2")
+#                     parserElement1 = ParserElement()
+#                     parserElement1.orig_labels = orig_labels
+#                     parserElement1.x2 = node1.value / 10.0  # todo: parameterize
+#                     parserElement1.y2 = node1.value / 10.0  # todo: parameterize
+#                     parserElement1.x_attribute = pair[0]
+#                     parserElement1.y_attribute = pair[1]
+#                     parserElement1.graphNum = graphId
+#                     parserElement1.classNum = classNum
+#
+#                     parserElement2 = ParserElement()
+#                     parserElement2.orig_labels = orig_labels
+#                     parserElement2.x1 = node1.value / 10.0
+#                     parserElement2.y2 = node1.value / 10.0
+#                     parserElement2.x_attribute = pair[0]
+#                     parserElement2.y_attribute = pair[1]
+#                     parserElement2.graphNum = graphId
+#                     parserElement2.classNum = classNum
+#
+#                     parserElement3 = ParserElement()
+#                     parserElement3.orig_labels = orig_labels
+#                     parserElement3.y1 = node1.value / 10.0
+#                     parserElement3.x2 = node1.value / 10.0
+#                     parserElement3.x_attribute = pair[0]
+#                     parserElement3.y_attribute = pair[1]
+#                     parserElement3.graphNum = graphId
+#                     parserElement3.classNum = classNum
+#
+#                     parserElement1 = adjustParserElementBounds(parserElement1, path, orig_labels, node_map)
+#                     parserElement2 = adjustParserElementBounds(parserElement2, path, orig_labels, node_map)
+#                     parserElement3 = adjustParserElementBounds(parserElement3, path, orig_labels, node_map)
+#                     decision_elements.append(parserElement1)
+#                     decision_elements.append(parserElement2)
+#                     decision_elements.append(parserElement3)
+#                     if pathDebug: print("append:", parserElement1.toString())
+#                     if pathDebug: print("append:", parserElement2.toString())
+#                     if pathDebug: print("append:", parserElement3.toString())
+#                 elif '>' in node2.parent_op:
+#                     if pathDebug: print("path > in node2")
+#                     parserElement = ParserElement()
+#                     parserElement.orig_labels = orig_labels
+#                     parserElement.x1 = node1.value / 10.0  # todo: parameterize
+#                     parserElement.y1 = node1.value / 10.0  # todo: parameterize
+#                     parserElement.x_attribute = pair[0]
+#                     parserElement.y_attribute = pair[1]
+#                     parserElement.y_attribute = pair[1]
+#                     parserElement.graphNum = graphId
+#                     parserElement.classNum = classNum
+#                     parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map)
+#                     decision_elements.append(parserElement)
+#                     if pathDebug: print("append:", parserElement.toString())
+#             else:
+#                 if pathDebug: print("path pair[0] != pair[1]")
+#                 pair = pairMap[node1.attr][0]
+#                 isNode1X = (node1.attr == pair[0])
+#                 parserElement = ParserElement()
+#                 parserElement.orig_labels = orig_labels
+#                 parserElement.classNum = classes[node2.attr]
+#                 parserElement.graphNum = graphIdMap[pair]
+#                 parserElement.x_attribute = pair[0]
+#                 parserElement.y_attribute = pair[1]
+#                 if '<' in node2.parent_op:
+#                     if pathDebug: print("path < in node2")
+#                     if isNode1X:
+#                         parserElement.x2 = node1.value / 10
+#                     else:
+#                         parserElement.y2 = node1.value / 10  # todo : parameterize
+#                 elif '>' in node2.parent_op:
+#                     if pathDebug: print("path > in node2")
+#                     if isNode1X:
+#                         parserElement.x1 = node1.value / 10
+#                     else:
+#                         parserElement.y1 = node1.value / 10  # todo : parameterize
+#                 parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map)
+#                 decision_elements.append(parserElement)
+#                 if pathDebug: print("append:", parserElement.toString())
+#             if pathDebug: print("End path")
+#             continue
+#
+#         # root -> ... -> node2 -> node1 -> classNode
+#         classNode = path[len(path) - 1]
+#         node1 = path[len(path) - 2]
+#         node2 = path[len(path) - 3]
+#         parserElement = ParserElement()
+#         parserElement.orig_labels = orig_labels
+#
+#         if 'uc' in node1.attr and 'uc' in node2.attr:
+#             if pathDebug: print("debug")
+#
+#         # Case 1: node1 and node2 are the same attribute
+#         if orig_labels[node1.attr] == orig_labels[node2.attr]:
+#             if pathDebug: print("node1 attr == node2 attr names")
+#             pair = pairMap[node1.attr][0]
+#             isNode1X = node1.attr == pair[0]
+#             parserElement.x_attribute = pair[0]
+#             parserElement.y_attribute = pair[1]
+#             parserElement.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute, graphIdMap)
+#             parserElement.classNum = classes[classNode.attr]
+#
+#             # # if attributes are not paired (but are still the same)
+#             # if (node1.attr, node2.attr) not in pairMap[node1.attr] and (node2.attr, node1.attr) not in pairMap[node1.attr]:
+#             #     if pathDebug: print("attributes the same, but not paired together")
+#             #     if '<' in classNode.parent_op:
+#             #         parserElement.x1 = node2.value / 10 # todo
+#             #         parserElement.y1 = 0
+#             #         parserElement.x2 = node1.value / 10 # todo
+#             #         parserElement.y2 = 1
+#             #     #elif '>' in classNode.parent_op
+#
+#             # if isNode1X:
+#             # if classNode parent operation is different from node1 parent op
+#             if node1.parent_op not in classNode.parent_op or classNode.parent_op not in node1.parent_op:
+#                 if pathDebug: print("classNode parent op and node1 parent op not the same")
+#                 # if these attributes are paired together, then we possibly need two parserElements
+#                 if orig_labels[node2.attr] not in map(lambda x: orig_labels[x], pair):  # if they are paired
+#                     # todo
+#                     if pathDebug: print("node1 and node2 are the same but not paired")
+#                     if '>' in node1.parent_op:
+#                         parserElement.x1 = node2.value / 10  # todo
+#                         parserElement.y1 = 0
+#                         if '<' in classNode.parent_op:
+#                             parserElement.x2 = node1.value / 10  # todo
+#                             parserElement.y2 = 1
+#                         elif '>' in classNode.parent_op:
+#                             print("I think already covered debug")
+#                 # if they are not paired together,
+#                 # TODO: may need another case here
+#                 elif '>' in node1.parent_op:
+#                     if pathDebug: print("node1 parent op >")
+#                     node1PairedNode = node_map[pair[0]] if node1.attr == pair[1] else node_map[pair[1]]
+#                     parserElement.x1 = node2.value / 10  # todo
+#                     parserElement.y1 = 0  # todo
+#                     parserElement.x2 = node1.value / 10  # todo
+#                     if not isNode1X:
+#                         parserElement.y2 = node1PairedNode.value / 10  # todo
+#                     # parserElement.x1 = 0 # todo : tentative accept
+#                     # parserElement.y1 = node2.value / 10  # todo
+#                     # # parserElement.x1 = node2.value
+#                     # # parserElement.y1 = 0
+#                     # parserElement.x2 = node1.value / 10  # todo
+#                     # parserElement.y2 = node1.value / 10  # todo
+#                     # # parser will be appended at the end
+#                     # parserElement2 = ParserElement(orig_labels)
+#                     # parserElement2.x_attribute = pair[0]
+#                     # parserElement2.y_attribute = pair[1]
+#                     # parserElement2.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute,
+#                     #                                       graphIdMap)
+#                     # parserElement2.classNum = classes[classNode.attr]
+#                     # parserElement2.x1 = node2.value / 10  # todo
+#                     # parserElement2.y1 = 0
+#                     # parserElement2.x2 = node1.value / 10  # todo
+#                     # parserElement2.y2 = node2.value / 10  # todo
+#                     # decision_elements.append(parserElement2)
+#                     # if pathDebug: print("append:", parserElement2.toString())
+#                 elif '<' in node1.parent_op:
+#                     if pathDebug: print("node1 parent op <")
+#                     # parserElement.x1 = 0
+#                     # parserElement.y2 = node1.value / 10  # todo
+#                     # parserElement.x2 = node2.value / 10  # todo
+#                     # parserElement.y2 = node2.value / 10  # todo
+#                     # # parser will be appended at the end
+#                     # parserElement2 = ParserElement(orig_labels)
+#                     # parserElement2.x_attribute = pair[0]
+#                     # parserElement2.y_attribute = pair[1]
+#                     # parserElement2.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute,
+#                     #                                       graphIdMap)
+#                     # parserElement2.classNum = classes[classNode.attr]
+#                     # parserElement2.x1 = node1.value / 10  # todo
+#                     # parserElement2.y1 = 0
+#                     # parserElement2.x2 = node2.value / 10  # todo
+#                     # parserElement2.y2 = node1.value / 10  # todo
+#
+#                     # decision_elements.append(parserElement2)
+#                     # if pathDebug: print("append:", parserElement2.toString())
+#             else:
+#                 if pathDebug: print("classNode parent op and node1 parent op are the same")
+#                 parserElement.x1 = 0
+#                 parserElement.y1 = node1.value / 10  # todo
+#                 parserElement.x2 = 1
+#                 parserElement.y2 = 1
+#                 # will be added at the end of loop
+#                 parserElement2 = ParserElement(orig_labels)
+#                 parserElement2.x_attribute = pair[0]
+#                 parserElement2.y_attribute = pair[1]
+#                 parserElement2.graphNum = getGraphNum(parserElement.x_attribute, parserElement.y_attribute, graphIdMap)
+#                 parserElement2.classNum = classes[classNode.attr]
+#                 parserElement2.x1 = node1.value / 10  # todo
+#                 parserElement2.y1 = 0
+#                 parserElement2.x2 = 1
+#                 parserElement2.y2 = node1.value / 10  # todo
+#                 parserElement2 = adjustParserElementBounds(parserElement2, path, orig_labels, node_map)
+#                 decision_elements.append(parserElement2)
+#                 if pathDebug: print("append:", parserElement2.toString())
+#                 #
+#
+#                 # if '<' in classNode.parent_op:
+#                 #     parserElement.x2 = node1.value / 10.0  # todo parameterize
+#                 # elif '>' in classNode.parent_op:
+#                 #     parserElement.x1 = node1.value / 10.0
+#                 # if '<' in node1.parent_op:
+#                 #     parserElement.x2 = node2.value / 10.0
+#                 # elif '>' in node1.parent_op:
+#                 #     parserElement.x1 = node2.value / 10.0
+#             # else:
+#             #     if '<' in classNode.parent_op:
+#             #         parserElement.y2 = node1.value / 10.0  # todo parameterize
+#             #     elif '>' in classNode.parent_op:
+#             #         parserElement.y1 = node1.value / 10.0
+#             #     if '<' in node1.parent_op:
+#             #         parserElement.y2 = node2.value / 10.0
+#             #     elif '>' in node1.parent_op:
+#             #         parserElement.y1 = node2.value / 10.0
+#         # Case 2: node1 and node2 are paired together
+#         elif (node1.attr, node2.attr) in pairs or (node2.attr, node1.attr) in pairs:
+#             if pathDebug: print("node1 and node2 are paired together")
+#             pair = pairMap[node1.attr][0]  # todo: check if this length is ever greater than 1
+#             attributeX = pair[0]
+#             attributeY = pair[1]
+#             isNode1X = (node1.attr == pair[0])
+#
+#             parserElement.x_attribute = attributeX
+#             parserElement.y_attribute = attributeY
+#             parserElement.graphNum = getGraphNum(attributeX, attributeY, graphIdMap)
+#             parserElement.classNum = classes[classNode.attr]
+#
+#             # get first entry
+#             if "<" in classNode.parent_op:
+#                 if pathDebug: print("classNode parent op is <")
+#                 if isNode1X:
+#                     parserElement.x2 = node1.value / 10  # todo: parameterize
+#                 else:
+#                     parserElement.y2 = node1.value / 10
+#             elif ">" in classNode.parent_op:
+#                 if pathDebug: print("classNode parent op is >")
+#                 if isNode1X:
+#                     parserElement.x1 = node1.value / 10  # todo: parameterize
+#                 else:
+#                     parserElement.y1 = node1.value / 10
+#
+#             # get second entry
+#             if "<" in node1.parent_op:
+#                 if pathDebug: print("node1 parent op is <")
+#                 if isNode1X:
+#                     parserElement.y2 = node2.value / 10
+#                 else:
+#                     parserElement.x2 = node2.value / 10
+#             elif ">" in node1.parent_op:
+#                 if pathDebug: print("node1 parent op is >")
+#                 if isNode1X:
+#                     parserElement.y1 = node2.value / 10
+#                 else:
+#                     parserElement.x1 = node2.value / 10
+#         # Case 3: node1 and node2 are not paired, node 1 is a single attribute pair
+#         elif pairMap[node1.attr][0][0] == pairMap[node1.attr][0][1]:
+#             if pathDebug: print("node1 and node2 are not paired and node1 is a single attribute pair")
+#             pair = pairMap[node1.attr][0]
+#             parserElement = ParserElement(orig_labels)
+#             parserElement.x_attribute = pair[0]
+#             parserElement.y_attribute = pair[1]
+#             parserElement.graphNum = getGraphNum(pair[0], pair[1], graphIdMap)
+#             parserElement.classNum = classes[classNode.attr]
+#             if '<' in classNode.parent_op:
+#                 if pathDebug: print("classNode parent op is <")
+#                 parserElement.x1 = 0
+#                 parserElement.y1 = 0
+#                 parserElement.x2 = node1.value / 10  # TODO: Parameterize
+#                 parserElement.y2 = node1.value / 10
+#             elif '>' in classNode.parent_op:
+#                 if pathDebug: print("classNode parent op is >")
+#                 parserElement.x1 = 0
+#                 parserElement.y1 = node1.value / 10  # todo
+#                 parserElement.x2 = 1
+#                 parserElement.y2 = 1
+#                 # Will be added at the end of this loop
+#
+#                 parserElement2 = ParserElement(orig_labels)
+#                 parserElement2.x_attribute = pair[0]
+#                 parserElement2.y_attribute = pair[1]
+#                 parserElement2.graphNum = getGraphNum(pair[0], pair[1], graphIdMap)
+#                 parserElement2.classNum = classes[classNode.attr]
+#                 parserElement2.x1 = node1.value / 10  # todo
+#                 parserElement2.y1 = 0
+#                 parserElement2.x2 = 1
+#                 parserElement2.y2 = node1.value / 10  # todo
+#                 parserElement2 = adjustParserElementBounds(parserElement2, path, orig_labels, node_map)
+#                 decision_elements.append(parserElement2)
+#                 if pathDebug: print("append:", parserElement2.toString())
+#
+#         # Case 4: node1 and node2 are not paired
+#         else:
+#             if pathDebug: print("node1 and node2 are not paired")
+#             pair = pairMap[node1.attr][0]
+#             attributeX = pair[0]
+#             attributeY = pair[1]
+#             isNode1X = (node1.attr == pair[0])
+#
+#             if "<" in classNode.parent_op:
+#                 if isNode1X:
+#                     parserElement.x2 = node1.value / 10  # todo: param
+#                 else:
+#                     parserElement.y2 = node1.value / 10
+#             elif ">" in classNode.parent_op:
+#                 if isNode1X:
+#                     parserElement.x1 = node1.value / 10
+#                 else:
+#                     parserElement.y1 = node1.value / 10
+#
+#             parserElement.graphNum = getGraphNum(attributeX, attributeY, graphIdMap)
+#             parserElement.classNum = classes[classNode.attr]
+#             parserElement.x_attribute = attributeX
+#             parserElement.y_attribute = attributeY
+#
+#         if parserElement.x_attribute == "bc" and parserElement.y_attribute == "cl":
+#             if pathDebug: print("debug")
+#
+#         parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map)
+#
+#         decision_elements.append(parserElement)
+#         if pathDebug: print("append:", parserElement.toString())
+#         if pathDebug: print("end path")
+#     return decision_elements
 
 
 def generateAllDecisionElementsV2(path_list, pairs, pairMap, node_map, isAttributePairedList, graphIdMap, orig_labels,
@@ -583,9 +584,11 @@ def generateAllDecisionElementsV2(path_list, pairs, pairMap, node_map, isAttribu
         parentNode = path[len(path) - 2]
 
         if len(path) < 3:
-            singleAttributeElements = generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels, graphIdMap)
+            singleAttributeElements = generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels,
+                                                                            graphIdMap)
             for parser in singleAttributeElements:
-                adjustedParserElements = adjustSingleAttributeParserElementBounds(parser, path, orig_labels, pairMap, rootNode, graphIdMap)
+                adjustedParserElements = adjustSingleAttributeParserElementBounds(parser, path, orig_labels, pairMap,
+                                                                                  rootNode, graphIdMap)
                 for adjustedParser in adjustedParserElements:
                     decisionElements.append(adjustedParser)
             continue
@@ -601,9 +604,11 @@ def generateAllDecisionElementsV2(path_list, pairs, pairMap, node_map, isAttribu
         parserElement.y_attribute = parentNodePair[1]
 
         if orig_labels[parentNode.attr] == orig_labels[parentNodePairedNode.attr]:
-            singleAttributeElements = generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels, graphIdMap)
+            singleAttributeElements = generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels,
+                                                                            graphIdMap)
             for parser in singleAttributeElements:
-                adjustedParserElements = adjustSingleAttributeParserElementBounds(parser, path, orig_labels, pairMap, rootNode, graphIdMap)
+                adjustedParserElements = adjustSingleAttributeParserElementBounds(parser, path, orig_labels, pairMap,
+                                                                                  rootNode, graphIdMap)
                 for adjustedParser in adjustedParserElements:
                     decisionElements.append(adjustedParser)
             continue
@@ -670,13 +675,13 @@ def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, p
     for i in reversed(range(len(path) - 2)):
         node2 = path[i]
         node1 = path[i + 1]
-        if orig_labels[node2.attr] == orig_labels[parentNode.attr]: # if node2 and the parent node are the same
-            if parserElement.x1 == 0 and parserElement.y1 == 0: # parserElement is a less than element
-                parserElement.y1 = node2.value / 10 # todo
+        if orig_labels[node2.attr] == orig_labels[parentNode.attr]:  # if node2 and the parent node are the same
+            if parserElement.x1 == 0 and parserElement.y1 == 0:  # parserElement is a less than element
+                parserElement.y1 = node2.value / 10  # todo
                 newParserEl = parserElement.copy()
-                newParserEl.x1 = node2.value / 10 # todo
+                newParserEl.x1 = node2.value / 10  # todo
                 newParserEl.y1 = 0
-                newParserEl.y2 = node2.value / 10 # todo
+                newParserEl.y2 = node2.value / 10  # todo
                 returnParserElements.append(newParserEl)
                 break
             if '<' in classNode.parent_op and '<' not in node1.parent_op or '>' in classNode.parent_op and '>' not in node1.parent_op:
@@ -695,24 +700,24 @@ def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, p
         parserElement.x_attribute = rootPair[0]
         parserElement.y_attribute = rootPair[1]
         parserElement.graphNum = getGraphNum(rootPair[0], rootPair[1], graphIdMap)
-        if rootNode.attr == rootPair[0]: # if root attr is X axis
-            if parserElement.y1 == 1: # greater than
+        if rootNode.attr == rootPair[0]:  # if root attr is X axis
+            if parserElement.y1 == 1:  # greater than
                 parserElement.x1 = parserElement.y2
                 parserElement.y1 = 0
                 parserElement.x2 = 1
                 parserElement.y2 = 1
-            else: # less than
+            else:  # less than
                 parserElement.x1 = 0
                 parserElement.y1 = 0
                 parserElement.x2 = parserElement.y2
                 parserElement.y2 = 1
-        else: # if root attr is X axis
-            if parserElement.y1 == 1: # greater than
+        else:  # if root attr is X axis
+            if parserElement.y1 == 1:  # greater than
                 parserElement.x1 = 0
                 parserElement.y1 = parserElement.y2
                 parserElement.x2 = 1
                 parserElement.y2 = 1
-            else: # less than
+            else:  # less than
                 parserElement.x1 = 0
                 parserElement.y1 = 0
                 parserElement.x2 = 1
@@ -721,6 +726,9 @@ def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, p
 
 
 def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMap):
+    if parserElement.x_attribute == parserElement.y_attribute:
+        return adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMap)
+
     child = path[len(path) - 1]
     parent = path[len(path) - 2]
     parentPair = pairMap[parent.attr][0]
@@ -784,7 +792,42 @@ def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMa
     return parserElement
 
 
-def generateAllContinueElements(path_list, pairs, pairMap, graphIdMap, orig_labels):
+def adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map):
+    node1 = node_map[parserElement.x_attribute]
+    node2 = node_map[parserElement.y_attribute]
+    # check x attribute
+    for i in reversed(range(len(path) - 1)):
+        node3 = path[i]
+        node4 = path[i + 1]
+        if node3.attr == node1.attr:
+            for j in range(i):
+                node5 = path[j]
+                if orig_labels[node5.attr] == orig_labels[node1.attr]:
+                    if '>' in node3.parent_op and '>' not in node4.parent_op:
+                        parserElement.x1 = node5.value / 10  # todo
+                        break
+                    elif '<' in node3.parent_op and '<' not in node4.parent_op:
+                        parserElement.x2 = node5.value / 10  # todo
+                        break
+
+    # check y attribute
+    for i in reversed(range(len(path) - 1)):
+        node3 = path[i]
+        node4 = path[i + 1]
+        if node3.attr == node2.attr:
+            for j in range(i):
+                node5 = path[j]
+                if orig_labels[node5.attr] == orig_labels[node2.attr]:
+                    if '>' in node3.parent_op and '<' not in node4.parent_op:
+                        parserElement.y1 = node5.value / 10  # todo
+                        break
+                    elif '>' in node3.parent_op and '>' not in node4.parent_op:
+                        parserElement.y2 = node5.value / 10  # todo
+                        break
+    return parserElement
+
+
+def generateAllContinueElements(path_list, pairs, pairMap, graphIdMap, orig_labels, node_map):
     # traverse through longest path
     # any pair that has memebers of two different pairs, we add a decision node
     continueElements = []
@@ -863,6 +906,8 @@ def generateAllContinueElements(path_list, pairs, pairMap, graphIdMap, orig_labe
                 destinationPair = pairMap[node2.attr][0]
                 destinationGraphId = getGraphNum(destinationPair[0], destinationPair[1], graphIdMap)
                 parserElement.destinationGraphId = destinationGraphId
+
+                parserElement = adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map)
 
                 if parserElement.toString() not in seen_decisions:
                     continueElements.append(parserElement)
@@ -972,7 +1017,7 @@ def generateParser(input_file, output_file):
     graphIdMap = getGraphIdMap(pairs, tree.root.attr)
     seen_continue_elements = []
 
-    continueElements = generateAllContinueElements(path_list, pairs, pairMap, graphIdMap, tree.orig_labels)
+    continueElements = generateAllContinueElements(path_list, pairs, pairMap, graphIdMap, tree.orig_labels, nodeMap)
     # decisionElements = generateAllDecisionElements(path_list, pairs, pairMap, nodeMap, isAttributePairedList,
     #                                                graphIdMap,
     #                                                tree.orig_labels, classes)
@@ -995,7 +1040,7 @@ def generateParser(input_file, output_file):
 
 def tests(file, output):
     print()
-    print("Testing:", file, "with output:\n", output)
+    # print("Testing:", file, "with output:\n", output)
     if file == "./TestTanagraOutputs/two_attribute_tree.txt":
         correctAnswer = ["0.25, 0, 1, 0.65, 0, 1, ucellsize, clump", "0.25, 0.65, 1, 1, 0, 1, ucellsize, clump",
                          "0, 0, 0.25, 1, 0, 0, ucellsize, clump"]
@@ -1087,29 +1132,72 @@ def tests(file, output):
         else:
             print(file, "NOT PASSED")
 
+    elif file == "./TestTanagraOutputs/medium_tree.txt":
+        correctAnswer = [
+            "0.25, 0, 1, 1, 0, -1, ucellsize, bnuclei, 1",
+            "0.45, 0, 1, 0.65, 1, -1, ucellsize, clump, 2",
+            "0, 0.45, 0.85, 1, 2, -1, bnuclei, bchromatin, 8",
+            "0.25, 0, 0.45, 1, 1, -2, ucellsize, clump, 3",
+            "0.25, 0, 1, 0.65, 3, -1, bnuclei, clump, 6",
+            "0.25, 0.65, 1, 1, 3, -2, bnuclei, clump, 7",
+            "0, 0, 0.25, 1, 3, -3, bnuclei, clump, 5",
+            "0, 0, 0.25, 0.45, 0, -2, ucellsize, bnuclei, 4",
+            "0, 0, 0.85, 0.85, 8, 1, mgadhesion, mgadhesion",
+            "0, 0.85, 1, 1, 8, 1, mgadhesion, mgadhesion",
+            "0.85, 0, 1, 0.85, 8, 1, mgadhesion, mgadhesion",
+            "0, 0, 0.35, 0.35, 6, 0, bchromatin, bchromatin",
+            "0, 0.35, 1, 1, 6, 1, bchromatin, bchromatin",
+            "0.35, 0, 1, 0.35, 6, 1, bchromatin, bchromatin",
+            "0, 0, 0.7, 0.7, 7, 1, normnucl, normnucl",
+            "0, 0.7, 1, 1, 7, 1, normnucl, normnucl",
+            "0.7, 0, 1, 0.7, 7, 1, normnucl, normnucl",
+            "0, 0, 0.85, 0.45, 2, 0, bnuclei, bchromatin",
+            "0, 0, 0.25, 0.25, 5, 0, normnucl, normnucl",
+            "0, 0.25, 1, 1, 5, 0, normnucl, normnucl",
+            "0.25, 0, 1, 0.25, 5, 0, normnucl, normnucl",
+            "0.85, 0, 1, 1, 2, 1, bnuclei, bchromatin",
+            "0, 0, 0.65, 0.65, 4, 0, clump, clump",
+            "0, 0.65, 1, 1, 4, 1, clump, clump",
+            "0.65, 0, 1, 0.65, 4, 1, clump, clump",
+            "0.45, 0.65, 1, 1, 1, 1, ucellsize, clump",
+            "0, 0.45, 0.25, 1, 0, 1, ucellsize, bnuclei"
+        ]
+        counter = -1
+        for row in correctAnswer:
+            if row not in output:
+                break
+            counter += 1
+        if counter == len(correctAnswer) - 1:
+            print(file, "TEST PASSED")
+        else:
+            print(file, "NOT PASSED")
+
 
 if __name__ == '__main__':
     # debug / test
-    filesToTest = [
-        # "./TestTanagraOutputs/two_attribute_tree.txt",
-        # "./TestTanagraOutputs/one_attribute_tree.txt",
-        # "./TestTanagraOutputs/two_attribute_tree_2.txt"
-        # "./TestTanagraOutputs/three_attribute_tree_two_duplicates.txt",
-        # "./TestTanagraOutputs/three_attribute_tree_one_duplicate.txt"
-        "./TestTanagraOutputs/medium_tree.txt"
-    ]
-
-    # sys.argv.append("./TestTanagraOutputs/tanagra_output_C45_copy.txt")
-    # sys.argv.append("./TestTanagraOutputs/one_attribute_tree.txt")
-    # sys.argv.append("./TestTanagraOutputs/two_attribute_tree.txt")
-    # sys.argv.append("test.txt")
-    sys.argv.append("")
-    sys.argv.append("test.txt")
-    for file in filesToTest:
-        sys.argv[1] = file
+    isDebugMode = False
+    if isDebugMode:
+        filesToTest = [
+            "./TestTanagraOutputs/two_attribute_tree.txt",
+            "./TestTanagraOutputs/one_attribute_tree.txt",
+            "./TestTanagraOutputs/two_attribute_tree_2.txt",
+            "./TestTanagraOutputs/three_attribute_tree_two_duplicates.txt",
+            "./TestTanagraOutputs/three_attribute_tree_one_duplicate.txt",
+            "./TestTanagraOutputs/medium_tree.txt"
+        ]
+        sys.argv.append("")
+        sys.argv.append("debug.txt")
+        for file in filesToTest:
+            sys.argv[1] = file
+            if len(sys.argv) < 3:
+                print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
+                      "<output_file>")
+            else:
+                output = generateParser(sys.argv[1], sys.argv[2])
+                tests(file, output)
+    else:
         if len(sys.argv) < 3:
             print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
                   "<output_file>")
         else:
             output = generateParser(sys.argv[1], sys.argv[2])
-            tests(file, output)
