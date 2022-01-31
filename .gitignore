@@ -23,3 +23,6 @@ Release
 *.vbproj.user
 ipch
 *sdf
+
+#idea files
+.idea/
