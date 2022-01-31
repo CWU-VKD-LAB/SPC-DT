@@ -1093,9 +1093,10 @@ if __name__ == '__main__':
     filesToTest = [
         # "./TestTanagraOutputs/two_attribute_tree.txt",
         # "./TestTanagraOutputs/one_attribute_tree.txt",
-        "./TestTanagraOutputs/two_attribute_tree_2.txt"
+        # "./TestTanagraOutputs/two_attribute_tree_2.txt"
         # "./TestTanagraOutputs/three_attribute_tree_two_duplicates.txt",
         # "./TestTanagraOutputs/three_attribute_tree_one_duplicate.txt"
+        "./TestTanagraOutputs/medium_tree.txt"
     ]
 
     # sys.argv.append("./TestTanagraOutputs/tanagra_output_C45_copy.txt")
