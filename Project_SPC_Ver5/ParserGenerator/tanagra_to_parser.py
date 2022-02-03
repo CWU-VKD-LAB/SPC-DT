@@ -6,6 +6,14 @@ import tana2tree as t2t
 
 # Generates a list of all decision paths
 def generatePathsRecursively(node, path, length, path_list):
+    """
+    Generates a list of the shortest paths from the root node to all leaves
+    :param node: Root node of tree
+    :param path: Current path being constructed
+    :param length: Length of the current path
+    :param path_list: A list of the shortest paths from root to leaves
+    :return: Returns the list of paths
+    """
     if node is None:
         return
     path[length] = node
@@ -21,20 +29,38 @@ def generatePathsRecursively(node, path, length, path_list):
 
 
 # Returns a list of all decision paths
-def printPaths(node):
-    path = [0] * 1000
+def getPaths(node, numElements):
+    """
+    Driver function for generating all paths from root to leaves
+    :param node: The root of the tree
+    :return: Returns the list of paths
+    """
+    # initialize array equal to the length of all elements in tree as an upper bound to the length of paths
+    path = [0] * numElements
     path_list = []
     path_list = generatePathsRecursively(node, path, 0, path_list)
     return path_list
 
 
 # Custom comparator for sorting based on path length
-def compare(item1, item2):
-    return len(item1) - len(item2)
+def compare(path1, path2):
+    """
+    Custom comparator for sorting paths based on their length
+    :param path1: First path to be compared
+    :param path2: Second path to be compared
+    :return: Returns the difference between the two.
+    """
+    return len(path1) - len(path2)
 
 
 # Write the parser to a file
 def writeParser(parser_contents, output_file):
+    """
+    Steps through the calculated parser elements and writes them to the outputfile
+    :param parser_contents: Generated parser elements to be written
+    :param output_file: The filepath of the output file
+    :return:
+    """
     parser_file = open(output_file, 'w', encoding="utf-8")
     for parser_el in parser_contents:
         parserStr = parser_el.toString()
@@ -43,6 +69,9 @@ def writeParser(parser_contents, output_file):
 
 
 class ParserElement:
+    """
+    Class representing an element of a parser
+    """
 
     def __init__(self, orig_labels=None):
         if orig_labels is None:
@@ -76,9 +105,13 @@ class ParserElement:
 
 
 class ContinueElement(ParserElement):
+    """
+    A type of parser element that includes a destination plot.
+    """
+
     def __init__(self):
         super().__init__()
-        self.destinationGraphId = -1
+        self.destinationPlotId = -1
 
     def copy(self):
         copy = super().copy()
@@ -95,7 +128,7 @@ class ContinueElement(ParserElement):
         return copyContEl
 
     def toString(self):
-        return super().toString() + ", " + str(self.destinationGraphId)
+        return super().toString() + ", " + str(self.destinationPlotId)
 
 
 # def findPairs(path_list, classes, orig_labels):
@@ -500,6 +533,13 @@ class ContinueElement(ParserElement):
 # #     return decision_elements
 
 def findPairsV2(path_list, classes, orig_labels):
+    """
+    Computes the optimal attribute pairs for use in parser generation
+    :param path_list: The list of paths from root to leaves
+    :param classes: A dictionary that maps class strings to class integers
+    :param orig_labels: A dictionary of original labels used in the tree and their original values
+    :return: A list of pairs
+    """
     pairs = []
     pairMap = dict()
     usedAttributes = set()
@@ -553,6 +593,14 @@ def findPairsV2(path_list, classes, orig_labels):
 
 
 def addOrAppend(attr, pair, pairMap):
+    """
+    A helper function that appends a pair to the dictionary of pairs if it doesnt exist,
+    and adds it to the list of pairs if it doesn't.
+    :param attr: Attribute name
+    :param pair: Pair belonging to attr
+    :param pairMap: A dictionary of pairs. Format is dict[attribute_name] -> [pair1, pair2, ...]
+    :return:
+    """
     if attr in pairMap:
         if pair not in pairMap[attr]:
             pairMap[attr].append(pair)
@@ -560,8 +608,19 @@ def addOrAppend(attr, pair, pairMap):
         pairMap[attr] = [pair]
 
 
-def generateAllDecisionElementsV2(path_list, pairMap, node_map, graphIdMap, orig_labels,
+def generateAllDecisionElementsV2(path_list, pairMap, node_map, plotIdMap, orig_labels,
                                   classes, rootNode):
+    """
+    Generate all decision elements present in current pair configuration
+    :param path_list: A list of all paths from root to leaves
+    :param pairMap: A dictionary of attribute names to pairs they belong to
+    :param node_map: A dictionary of all nodes in the tree.
+    :param plotIdMap: A map holding the id for each paired coordinate plots
+    :param orig_labels: A dictionary holding the original label names
+    :param classes: A dictionary mapping class strings to class integers
+    :param rootNode: Root of the tree
+    :return: A list of decision elements
+    """
     decisionElements = []
     # idea: for each path, take the last two elements and name them classNode and parentNode
     # find the pair of parentNode
@@ -581,10 +640,10 @@ def generateAllDecisionElementsV2(path_list, pairMap, node_map, graphIdMap, orig
 
         if len(path) < 3:
             singleAttributeElements = generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels,
-                                                                            graphIdMap)
+                                                                            plotIdMap)
             for parser in singleAttributeElements:
                 adjustedParserElements = adjustSingleAttributeParserElementBounds(parser, path, orig_labels, pairMap,
-                                                                                  rootNode, graphIdMap)
+                                                                                  rootNode, plotIdMap)
                 for adjustedParser in adjustedParserElements:
                     decisionElements.append(adjustedParser)
             continue
@@ -595,16 +654,16 @@ def generateAllDecisionElementsV2(path_list, pairMap, node_map, graphIdMap, orig
         isParentNodeXAxis = parentNode.attr == parentNodePair[0]
         parserElement = ParserElement(orig_labels)
         parserElement.classNum = classes[classNode.attr]
-        parserElement.graphNum = getGraphNum(parentNode.attr, parentNodePairedNode.attr, graphIdMap)
+        parserElement.graphNum = getGraphNum(parentNode.attr, parentNodePairedNode.attr, plotIdMap)
         parserElement.x_attribute = parentNodePair[0]
         parserElement.y_attribute = parentNodePair[1]
 
         if orig_labels[parentNode.attr] == orig_labels[parentNodePairedNode.attr]:
             singleAttributeElements = generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels,
-                                                                            graphIdMap)
+                                                                            plotIdMap)
             for parser in singleAttributeElements:
                 adjustedParserElements = adjustSingleAttributeParserElementBounds(parser, path, orig_labels, pairMap,
-                                                                                  rootNode, graphIdMap)
+                                                                                  rootNode, plotIdMap)
                 for adjustedParser in adjustedParserElements:
                     decisionElements.append(adjustedParser)
             continue
@@ -890,7 +949,7 @@ def generateAllContinueElements(path_list, pairMap, graphIdMap, orig_labels, nod
                 parserElement.classNum = parentPairMap[parentPair][pair]
                 destinationPair = pairMap[node2.attr][0]
                 destinationGraphId = getGraphNum(destinationPair[0], destinationPair[1], graphIdMap)
-                parserElement.destinationGraphId = destinationGraphId
+                parserElement.destinationPlotId = destinationGraphId
 
                 parserElement = adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map)
 
@@ -976,7 +1035,7 @@ def generateParser(input_file, output_file):
         if node.attr not in classes:
             nodeMap[node.attr] = node
 
-    path_list = printPaths(tree.root)
+    path_list = getPaths(tree.root, len(node_list))
     path_list = sorted(path_list, key=functools.cmp_to_key(compare), reverse=True)
     parserElements = []
 
@@ -1139,7 +1198,7 @@ def tests(file, output):
 
 if __name__ == '__main__':
     # debug / test
-    isDebugMode = False
+    isDebugMode = True
     if isDebugMode:
         filesToTest = [
             "./TestTanagraOutputs/two_attribute_tree.txt",
