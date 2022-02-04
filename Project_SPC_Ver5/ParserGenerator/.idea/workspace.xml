@@ -194,7 +194,8 @@
       <workItem from="1643034743177" duration="19177000" />
       <workItem from="1643291824329" duration="28759000" />
       <workItem from="1643647021592" duration="77000" />
-      <workItem from="1643903889569" duration="1463000" />
+      <workItem from="1643903889569" duration="2041000" />
+      <workItem from="1643930438885" duration="2708000" />
     </task>
     <servers />
   </component>
@@ -220,7 +221,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>1106</line>
+          <line>1188</line>
           <option name="timeStamp" value="248" />
         </line-breakpoint>
       </breakpoints>
@@ -232,6 +233,6 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1643904658081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1643932806825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

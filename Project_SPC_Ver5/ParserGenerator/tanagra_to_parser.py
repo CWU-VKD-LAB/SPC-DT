@@ -611,15 +611,15 @@ def addOrAppend(attr, pair, pairMap):
 def generateAllDecisionElementsV2(path_list, pairMap, node_map, plotIdMap, orig_labels,
                                   classes, rootNode):
     """
-    Generate all decision elements present in current pair configuration
-    :param path_list: A list of all paths from root to leaves
-    :param pairMap: A dictionary of attribute names to pairs they belong to
+    Generate all decision elements present in current pair configuration.
+    :param path_list: A list of all paths from root to leaves.
+    :param pairMap: A dictionary of attribute names to pairs they belong to.
     :param node_map: A dictionary of all nodes in the tree.
-    :param plotIdMap: A map holding the id for each paired coordinate plots
-    :param orig_labels: A dictionary holding the original label names
-    :param classes: A dictionary mapping class strings to class integers
-    :param rootNode: Root of the tree
-    :return: A list of decision elements
+    :param plotIdMap: A map holding the id for each paired coordinate plots.
+    :param orig_labels: A dictionary holding the original label names.
+    :param classes: A dictionary mapping class strings to class integers.
+    :param rootNode: Root of the tree.
+    :return: A list of decision elements.
     """
     decisionElements = []
     # idea: for each path, take the last two elements and name them classNode and parentNode
@@ -654,7 +654,7 @@ def generateAllDecisionElementsV2(path_list, pairMap, node_map, plotIdMap, orig_
         isParentNodeXAxis = parentNode.attr == parentNodePair[0]
         parserElement = ParserElement(orig_labels)
         parserElement.classNum = classes[classNode.attr]
-        parserElement.graphNum = getGraphNum(parentNode.attr, parentNodePairedNode.attr, plotIdMap)
+        parserElement.graphNum = getPlotId(parentNode.attr, parentNodePairedNode.attr, plotIdMap)
         parserElement.x_attribute = parentNodePair[0]
         parserElement.y_attribute = parentNodePair[1]
 
@@ -688,13 +688,22 @@ def generateAllDecisionElementsV2(path_list, pairMap, node_map, plotIdMap, orig_
     return decisionElements
 
 
-def generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels, graphIdMap):
+def generateSingleAttributeParserElements(parentNode, classNode, classes, orig_labels, plotIdMap):
+    """
+    Helper function to generate single attribute parser elements.
+    :param parentNode: The node penultimate node of the path.
+    :param classNode: The end node of the path which represented which class the path belongs to.
+    :param classes: A dictionary of class name string to class integers.
+    :param orig_labels: A diction of labels used during processing and original labels
+    :param plotIdMap: A dictionary containing which pairs map to which plots
+    :return: A list containing the single attribute parser elements.
+    """
     singleAttributeParserElements = []
     parserElement = ParserElement(orig_labels)
     parserElement.x_attribute = parentNode.attr
     parserElement.y_attribute = parentNode.attr
     parserElement.classNum = classes[classNode.attr]
-    parserElement.graphNum = getGraphNum(parentNode.attr, parentNode.attr, graphIdMap)
+    parserElement.graphNum = getPlotId(parentNode.attr, parentNode.attr, plotIdMap)
 
     if '<' in classNode.parent_op:
         parserElement.x1 = 0
@@ -712,7 +721,7 @@ def generateSingleAttributeParserElements(parentNode, classNode, classes, orig_l
         parserElement2.x_attribute = parentNode.attr
         parserElement2.y_attribute = parentNode.attr
         parserElement2.classNum = classes[classNode.attr]
-        parserElement2.graphNum = getGraphNum(parentNode.attr, parentNode.attr, graphIdMap)
+        parserElement2.graphNum = getPlotId(parentNode.attr, parentNode.attr, plotIdMap)
         parserElement2.x1 = parentNode.value / 10  # todo
         parserElement2.y1 = 0
         parserElement2.x2 = 1
@@ -723,7 +732,17 @@ def generateSingleAttributeParserElements(parentNode, classNode, classes, orig_l
     return singleAttributeParserElements
 
 
-def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, pairMap, rootNode, graphIdMap):
+def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, pairMap, rootNode, plotIdMap):
+    """
+    Adjusts single attribute parser values so that they are within bounds of previous instances of attributein same path
+    :param parserElement: The parser element to be adjusted.
+    :param path: The path that the parser element belongs to.
+    :param orig_labels: A dictionary of labels used during processing and original labels
+    :param pairMap: A dictionary of attribute names to pairs they belong to
+    :param rootNode: Root node of the tree.
+    :param plotIdMap: A dictionary containing which pairs map to which plots.
+    :return: The adjusted single attribute parsers
+    """
     classNode = path[len(path) - 1]
     parentNode = path[len(path) - 2]
     returnParserElements = []
@@ -754,7 +773,7 @@ def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, p
         rootPair = pairMap[rootNode.attr][0]
         parserElement.x_attribute = rootPair[0]
         parserElement.y_attribute = rootPair[1]
-        parserElement.graphNum = getGraphNum(rootPair[0], rootPair[1], graphIdMap)
+        parserElement.graphNum = getPlotId(rootPair[0], rootPair[1], plotIdMap)
         if rootNode.attr == rootPair[0]:  # if root attr is X axis
             if parserElement.y1 == 1:  # greater than
                 parserElement.x1 = parserElement.y2
@@ -781,6 +800,15 @@ def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, p
 
 
 def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMap):
+    """
+    Adjusts parser values so that they are within bounds of previous instances of attributes in the same path.
+    :param parserElement: The parser element to adjust.
+    :param path: The path that the current parser element belongs to.
+    :param orig_labels: A dictionary of labels used during processing and original labels.
+    :param node_map: A dictionary of node attributes to their corresponding node in the tree.
+    :param pairMap: A dictionary of attribute names to pairs they belong to.
+    :return: The adjusted parser.
+    """
     if parserElement.x_attribute == parserElement.y_attribute:
         return adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMap)
 
@@ -848,6 +876,14 @@ def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMa
 
 
 def adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map):
+    """
+    A special case of the parser adjustment process. Adjusts continue elements specficially.
+    :param parserElement: The original continue parser element to be adjusted.
+    :param path: The path the parser element belongs to.
+    :param orig_labels: A dictionary of labels used during processing and original labels.
+    :param node_map: A dictionary of node attributes to their corresponding node in the tree.
+    :return:
+    """
     node1 = node_map[parserElement.x_attribute]
     node2 = node_map[parserElement.y_attribute]
     # check x attribute
@@ -882,7 +918,16 @@ def adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map
     return parserElement
 
 
-def generateAllContinueElements(path_list, pairMap, graphIdMap, orig_labels, node_map):
+def generateAllContinueElements(path_list, pairMap, plotIdMap, orig_labels, node_map):
+    """
+    Function that generates all continue elements present given the pairings in pairMap
+    :param path_list: List of all paths from root to leaves.
+    :param pairMap: A dictionary of attribute names to pairs they belong to.
+    :param plotIdMap: A dictionary containing which pairs map to which plots.
+    :param orig_labels: A dictionary of labels used during processing and original labels.
+    :param node_map: A dictionary of node attributes to their corresponding node in the tree.
+    :return: Generates a list of all continue parser elements.
+    """
     # traverse through longest path
     # any pair that has memebers of two different pairs, we add a decision node
     continueElements = []
@@ -929,7 +974,7 @@ def generateAllContinueElements(path_list, pairMap, graphIdMap, orig_labels, nod
                             parserElement.x1 = node3.value / 10.0
                         else:
                             print("debug")  # todo
-                graphNum = getGraphNum(node1.attr, node1PairedAttr, graphIdMap)
+                graphNum = getPlotId(node1.attr, node1PairedAttr, plotIdMap)
                 if isNode1AttrX:
                     parserElement.x_attribute = node1.attr
                     parserElement.y_attribute = node1PairedAttr
@@ -948,7 +993,7 @@ def generateAllContinueElements(path_list, pairMap, graphIdMap, orig_labels, nod
 
                 parserElement.classNum = parentPairMap[parentPair][pair]
                 destinationPair = pairMap[node2.attr][0]
-                destinationGraphId = getGraphNum(destinationPair[0], destinationPair[1], graphIdMap)
+                destinationGraphId = getPlotId(destinationPair[0], destinationPair[1], plotIdMap)
                 parserElement.destinationPlotId = destinationGraphId
 
                 parserElement = adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map)
@@ -961,45 +1006,76 @@ def generateAllContinueElements(path_list, pairMap, graphIdMap, orig_labels, nod
 
 
 def attrInPairList(attr, pair_list):
+    """
+    Helper function that tests if a attribute exists as part of a pair.
+    :param attr: The attribute being tested.
+    :param pair_list: The list of all attribute pairs.
+    :return: A boolean representing whether or not an attribute is in the pair_list.
+    """
     for pair in pair_list:
         if attr in pair:
             return True
     return False
 
 
-def getGraphIdMap(pairs, root):
+def getGraphIdMap(pair_list, root):
+    """
+    Assigns each pair to a plot number.
+    :param pair_list: The list of all pairs.
+    :param root: The root node of the tree.
+    :return: A dictionary of attribute pairs to their plot id.
+    """
     graphId = 1
     # TODO: Kind of funny, think about optimizing
-    graphIdMap = dict()
-    for pair in pairs:
+    plotIdMap = dict()
+    for pair in pair_list:
         if root in pair:
-            graphIdMap[pair] = 0
-        elif pair in graphIdMap:
+            plotIdMap[pair] = 0
+        elif pair in plotIdMap:
             graphId += 1
         else:
-            graphIdMap[pair] = graphId
+            plotIdMap[pair] = graphId
             graphId += 1
-    return graphIdMap
+    return plotIdMap
 
 
-def getGraphNum(attr1, attr2, graphIdMap):
-    graphNum = -1
-    if (attr1, attr2) in graphIdMap:
-        graphNum = graphIdMap[(attr1, attr2)]
-    elif (attr2, attr1) in graphIdMap:
-        graphNum = graphIdMap[(attr2, attr1)]
+def getPlotId(attr1, attr2, plotIdMap):
+    """
+    Gets the plot id for two attributes in a pair, regardless of their order.
+    :param attr1: The first attribute pair memember.
+    :param attr2: The first attribute pair memember.
+    :param plotIdMap: A dictionary of attribute pairs to their plot id.
+    :return: The plot id of the given pair
+    """
+    plotId = -1
+    if (attr1, attr2) in plotIdMap:
+        plotId = plotIdMap[(attr1, attr2)]
+    elif (attr2, attr1) in plotIdMap:
+        plotId = plotIdMap[(attr2, attr1)]
     else:
         print("undefined")
-    return graphNum
+    return plotId
 
 
 def replaceAttributeNames(node_list, orig_labels):
+    """
+    Helper function to replace all attribute names in node_list with those of the original labels.
+    :param node_list: A list of nodes in the tree.
+    :param orig_labels: A dictionary of labels used during processing and original labels.
+    :return: The list of nodes that have had their attributes renamed.
+    """
     for node in node_list:
         node.attr = orig_labels[node.attr]
     return node_list
 
 
 def generateParser(input_file, output_file):
+    """
+    Main function. Returns the parser elements based on the input file.
+    :param input_file: Filepath of input file.
+    :param output_file: Filepath of output file.
+    :return:
+    """
     if not exists(input_file):
         print("Error. Could not find file:", input_file, "in project directory")
         exit()
@@ -1061,10 +1137,16 @@ def generateParser(input_file, output_file):
     return stringToReturn
 
 
-def tests(file, output):
+def tests(fileName, output):
+    """
+    Tests for a selection of decision trees.
+    :param fileName: The name of the file the parser generated belongs to.
+    :param output: The output of the parser generation process.
+    :return: None
+    """
     print()
     # print("Testing:", file, "with output:\n", output)
-    if file == "./TestTanagraOutputs/two_attribute_tree.txt":
+    if fileName == "./TestTanagraOutputs/two_attribute_tree.txt":
         correctAnswer = ["0.25, 0, 1, 0.65, 0, 1, ucellsize, clump", "0.25, 0.65, 1, 1, 0, 1, ucellsize, clump",
                          "0, 0, 0.25, 1, 0, 0, ucellsize, clump"]
         counter = -1
@@ -1073,10 +1155,10 @@ def tests(file, output):
                 break
             counter += 1
         if counter == len(correctAnswer) - 1:
-            print(file, "TEST PASSED")
+            print(fileName, "TEST PASSED")
         else:
-            print(file, "NOT PASSED")
-    elif file == "./TestTanagraOutputs/one_attribute_tree.txt":
+            print(fileName, "NOT PASSED")
+    elif fileName == "./TestTanagraOutputs/one_attribute_tree.txt":
         correctAnswer = [
             "0, 0, 0.25, 0.25, 0, 0, ucellsize, ucellsize",
             "0, 0.25, 1, 1, 0, 1, ucellsize, ucellsize",
@@ -1088,10 +1170,10 @@ def tests(file, output):
                 break
             counter += 1
         if counter == len(correctAnswer) - 1:
-            print(file, "TEST PASSED")
+            print(fileName, "TEST PASSED")
         else:
-            print(file, "NOT PASSED")
-    elif file == "./TestTanagraOutputs/two_attribute_tree_2.txt":
+            print(fileName, "NOT PASSED")
+    elif fileName == "./TestTanagraOutputs/two_attribute_tree_2.txt":
         correctAnswer = [
             "0.25, 0, 1, 1, 0, -1, ucellsize, sepics, 1",
             "0, 0, 0.25, 0.25, 0, 0, ucellsize, sepics",
@@ -1107,10 +1189,10 @@ def tests(file, output):
                 break
             counter += 1
         if counter == len(correctAnswer) - 1:
-            print(file, "TEST PASSED")
+            print(fileName, "TEST PASSED")
         else:
-            print(file, "NOT PASSED")
-    elif file == "./TestTanagraOutputs/three_attribute_tree_two_duplicates.txt":
+            print(fileName, "NOT PASSED")
+    elif fileName == "./TestTanagraOutputs/three_attribute_tree_two_duplicates.txt":
         correctAnswer = [
             "0, 0, 0.25, 0.45, 0, -1, ucellsize, bnuclei, 2",
             "0.25, 0, 1, 1, 0, -2, ucellsize, bnuclei, 1",
@@ -1129,10 +1211,10 @@ def tests(file, output):
                 break
             counter += 1
         if counter == len(correctAnswer) - 1:
-            print(file, "TEST PASSED")
+            print(fileName, "TEST PASSED")
         else:
-            print(file, "NOT PASSED")
-    elif file == "./TestTanagraOutputs/three_attribute_tree_one_duplicate.txt":
+            print(fileName, "NOT PASSED")
+    elif fileName == "./TestTanagraOutputs/three_attribute_tree_one_duplicate.txt":
         correctAnswer = [
             "0, 0, 0.25, 0.45, 0, -1, ucellsize, bnuclei, 1",
             "0.25, 0, 1, 1, 0, -2, ucellsize, bnuclei, 2",
@@ -1151,11 +1233,11 @@ def tests(file, output):
                 break
             counter += 1
         if counter == len(correctAnswer) - 1:
-            print(file, "TEST PASSED")
+            print(fileName, "TEST PASSED")
         else:
-            print(file, "NOT PASSED")
+            print(fileName, "NOT PASSED")
 
-    elif file == "./TestTanagraOutputs/medium_tree.txt":
+    elif fileName == "./TestTanagraOutputs/medium_tree.txt":
         correctAnswer = [
             "0.25, 0, 1, 1, 0, -1, ucellsize, bnuclei, 1",
             "0.45, 0, 1, 0.65, 1, -1, ucellsize, clump, 2",
@@ -1191,15 +1273,18 @@ def tests(file, output):
                 break
             counter += 1
         if counter == len(correctAnswer) - 1:
-            print(file, "TEST PASSED")
+            print(fileName, "TEST PASSED")
         else:
-            print(file, "NOT PASSED")
+            print(fileName, "NOT PASSED")
 
 
 if __name__ == '__main__':
-    # debug / test
-    isDebugMode = True
-    if isDebugMode:
+    """
+    Main function
+    """
+    # test mode
+    isTestingMode = True
+    if isTestingMode:
         filesToTest = [
             "./TestTanagraOutputs/two_attribute_tree.txt",
             "./TestTanagraOutputs/one_attribute_tree.txt",
