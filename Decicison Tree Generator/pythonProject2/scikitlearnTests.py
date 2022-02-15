@@ -5,7 +5,7 @@ import graphviz
 import numpy as np
 import sklearn.datasets
 from sklearn import tree
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_diabetes, load_iris
 from sklearn.datasets import load_breast_cancer
 import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report, precision_score
@@ -13,6 +13,7 @@ from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold, cross_
 from sklearn.model_selection import train_test_split
 import hashlib
 from sklearn.metrics import classification_report, accuracy_score, make_scorer
+
 
 
 fold = 0
@@ -24,18 +25,26 @@ def classification_report_with_accuracy_score(target_true, target_pred):
     return 0
 
 # Mushroom dataset
-input_file = "./SimpleMushroomData.csv"
+# input_file = "./SimpleMushroomData.csv"
+# outputName = "./SimpleMushroomData_tree"
+# Breast cancer dataset
+input_file = "./breast.csv"
+# outputName = "./breast_cancer_tree"
+
 
 # Read mushroom from csv
 df = pd.read_csv(input_file, header=0)
 
-# Split data into features and labels
-attr_names = np.array(df.columns.values[1:23])
-target_names = np.array(["poison", "edible"])
+# Split data into features and labels (mushroom data)
+# attr_names = np.array(df.columns.values[1:23])
+# target_names = np.array(["poison", "edible"])
+numAttributes = len(df.columns.values)
+attr_names = np.array(df.columns.values[1:len(df.columns.values) - 1])
+target_names = np.array(["benign", "malignant"])
 
 # Split data into attributes and labels
-data = df.values[:, 1:23]
-target = df.values[:, 23]
+data = df.values[:, 1:numAttributes - 1]
+target = df.values[:, numAttributes - 1]
 
 #TODO Do our own breast cancer dataset
 
@@ -45,6 +54,16 @@ target = df.values[:, 23]
 # target = breast.target
 # attr_names = breast.feature_names
 # target_names = breast.target_names
+# outputName = "./breast_cancer_tree"
+
+print("Loading data...")
+forest = sklearn.datasets.fetch_covtype()
+print("Loading Finished.")
+data = forest.data
+target = forest.target
+attr_names = forest.feature_names
+target_names = forest.target_names
+outputName = "./covtype_tree"
 
 # Split data into training and testing sets
 data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.2, stratify=target)
@@ -53,10 +72,23 @@ data_train, data_test, target_train, target_test = train_test_split(data, target
 clf = tree.DecisionTreeClassifier()
 
 # Fit the classifier to the training data
+print("Fitting data...")
 clf = clf.fit(data_train, target_train)
+print("Fitting finished.")
 
 # Evaluate the classifier on the test data
 print("Traditional Test Data Evaluation Score:", clf.score(data_test, target_test))
+
+# Use graphviz to visualize the decision tree
+dot_data = tree.export_graphviz(clf, out_file=None,
+                                feature_names=attr_names,
+                                class_names=target_names,
+                                filled=True, rounded=True,
+                                special_characters=True)
+graph = graphviz.Source(dot_data, format='png')
+# Write graph to file
+graph.render(outputName)
+
 
 # Reset the classifier
 # clf = tree.DecisionTreeClassifier()
@@ -64,7 +96,7 @@ print("Traditional Test Data Evaluation Score:", clf.score(data_test, target_tes
 # n-fold cross validation parameters
 n_folds = 10
 n_jobs = 1 # thread count
-n_times = 10
+n_times = 1 # number of times to run the cross validation
 
 # Create dictionary of parameters to search
 # scoring = {'accuracy': 'accuracy', 'precision': 'precision'}
@@ -73,7 +105,9 @@ scoring = {'accuracy': 'accuracy', 'precision': 'precision', 'printClassificatio
 # Perform n-fold cross validation
 print("Performing", str(n_folds) + "-fold cross validation...")
 # scoreMap = cross_validate(estimator=tree.DecisionTreeClassifier(), X=data, y=target, cv=n_folds, n_jobs=n_jobs, verbose=True, scoring=scoring)
-scoreMap = cross_validate(estimator=tree.DecisionTreeClassifier(), X=data, y=target, cv=n_folds, n_jobs=n_jobs, verbose=10, scoring=scoring, return_estimator=True, return_train_score=True)
+scoreMap = cross_validate(estimator=tree.DecisionTreeClassifier(max_depth=None, max_leaf_nodes=None, criterion="entropy"),
+                                                                X=data, y=target, cv=n_folds, n_jobs=n_jobs, verbose=10, 
+                                                                scoring=scoring, return_estimator=True, return_train_score=True)
 clf = scoreMap['estimator'][0]
 print()
 
@@ -117,8 +151,12 @@ dot_data = tree.export_graphviz(clf, out_file=None,
                                 feature_names=attr_names,
                                 class_names=target_names,
                                 filled=True, rounded=True,
-                                special_characters=True)
-graph = graphviz.Source(dot_data)
+                                special_characters=True,
+                                max_depth=None,
+                                proportion=False,
+                                rotate=False,
+                                leaves_parallel=True)
+graph = graphviz.Source(dot_data, format='png')
 
 # Write graph to file
-graph.render("MushroomDecisionTree")
+graph.render(outputName)

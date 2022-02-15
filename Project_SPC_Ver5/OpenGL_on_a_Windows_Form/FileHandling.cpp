@@ -48,6 +48,10 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 	string line;
 	//int i = 0;
 	std::vector<float> temp;
+	std::vector<float> coordinatesPlotnumAndClassnum;
+	std::vector<std::string> attributePair;
+	int destination;
+
 	myParserFile.open(dataParsed.parserFileName);											// Open the file
 
 	if (myParserFile.is_open()) {												/* Valid File: Begin reading data form the file */
@@ -66,31 +70,63 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		}
 
 	}
+	// step through each row of data
 	for (int i = 0; i < data.strparsedData.size(); i++)
 	{
-		std::vector<string> attributePair;
-		for (int j = 0; j < data.strparsedData[i].size(); j++)
-		{
-			if (j < data.strparsedData[i].size() - 2) {
-				temp.push_back(stof(data.strparsedData[i][j]));
-			}
-			else if (j == data.strparsedData.size() - 1) {
-				string str = data.strparsedData[i][j];
-				str.erase(std::remove(str.begin(), str.end(), ','), str.end());
-				attributePair.push_back(str);
-			}
-			else {
-				string str = data.strparsedData[i][j];
-				str.erase(std::remove(str.begin(), str.end(), ','), str.end());
-				attributePair.push_back(str);
-			}
-			//temp.push_back(stof(dataParsed.strparsedData[i][j]));
+		// Get coordinate data
+		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][0]));
+		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][1]));
+		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][2]));
+		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][3]));
 
+		// get plotnum and classnum
+		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][4]));
+		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][5]));
 
+		// Get attribute pair names and strip commas 
+		string attr1 = data.strparsedData[i][6];
+		string attr2 = data.strparsedData[i][7];
+		attr1.erase(std::remove(attr1.begin(), attr1.end(), ','), attr1.end());
+		attr2.erase(std::remove(attr2.begin(), attr2.end(), ','), attr2.end());
+		attributePair.push_back(attr1);
+		attributePair.push_back(attr2);
+
+		if (i < data.strparsedData.size() - 1) {
+			data.plotDestinationList.push_back(i + 1);
 		}
-		data.parsedData.push_back(temp);
-		dataParsed.parsedData.push_back(temp);
 
+		// If row is a continue element, get its destination
+		if (data.strparsedData[i].size() > 8) {
+			destination = stoi(data.strparsedData[i][8]);
+			coordinatesPlotnumAndClassnum.push_back(destination);
+			//data.plotDestinationList.push_back(destination);
+		}
+
+
+		//std::vector<string> attributePair;
+		//for (int j = 0; j < data.strparsedData[i].size(); j++)
+		//{
+		//	if (j < data.strparsedData[i].size() - 2) {
+		//		temp.push_back(stof(data.strparsedData[i][j]));
+		//	}
+		//	else if (j == data.strparsedData.size() - 1) {
+		//		string str = data.strparsedData[i][j];
+		//		str.erase(std::remove(str.begin(), str.end(), ','), str.end());
+		//		attributePair.push_back(str);
+		//	}
+		//	else {
+		//		string str = data.strparsedData[i][j];
+		//		str.erase(std::remove(str.begin(), str.end(), ','), str.end());
+		//		attributePair.push_back(str);
+		//	}
+		//	//temp.push_back(stof(dataParsed.strparsedData[i][j]));
+		//}
+
+
+		data.parsedData.push_back(coordinatesPlotnumAndClassnum);
+		dataParsed.parsedData.push_back(coordinatesPlotnumAndClassnum);
+
+        // TODO: Try to remember what this does
 		bool dataParsedContainsAttributePair = false;
 		for (int i = 0; i < data.parsedAttributePairs.size(); i++) {
 			if (attributePair[0] == data.parsedAttributePairs[i][0] && attributePair[1] == data.parsedAttributePairs[i][1]) {
@@ -98,15 +134,19 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 			}
 		}
 
+        // When would this be true?
 		if (!dataParsedContainsAttributePair) {
 			data.parsedAttributePairs.push_back(attributePair);
 			dataParsed.parsedAttributePairs.push_back(attributePair);
 		}
 
 		std::cout << "debug";
-		temp.clear();
+		coordinatesPlotnumAndClassnum.clear();
+		attributePair.clear();
 	}
+	std::cout << &data.parsedData;
 	myParserFile.close();
+	std::cout << "debug2";
 }
 
 // Input: Contents of input.csv -- Splits the values into x and y coords
@@ -140,7 +180,7 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 			if (attributeValue == 0.0f) {
 				std::cout << "debug";
 			}
-			attributeValueMap.insert(std::make_pair(attributeName, attributeValue));
+			attributeValueMap[attributeName] = attributeValue;
 		}
 
 		int size = attributeValueMap.size();

@@ -61,6 +61,7 @@ void InteractiveSPC::fillGraphLocations()
 	//for (int k = 1; k <= data.xdata.size(); k++)
 	//{
 
+		// constructs plots in a single line
 		for (int i = 1; i <= data.classsize; i++)
 		{
 

@@ -322,6 +322,7 @@ namespace OpenGLForm
 		}
 
 		void calculateDataTerminationPoints() {
+			graph4.data.computeDecisionTreeBranches();
 			graph4.data.calculateTerminationPoints();
 		}
 
