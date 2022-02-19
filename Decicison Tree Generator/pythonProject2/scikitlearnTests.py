@@ -13,7 +13,7 @@ from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold, cross_
 from sklearn.model_selection import train_test_split
 import hashlib
 from sklearn.metrics import classification_report, accuracy_score, make_scorer
-
+from sklearn.tree import export_text
 
 
 fold = 0
@@ -25,10 +25,10 @@ def classification_report_with_accuracy_score(target_true, target_pred):
     return 0
 
 # Mushroom dataset
-# input_file = "./SimpleMushroomData.csv"
-# outputName = "./SimpleMushroomData_tree"
+input_file = "./SimpleMushroomData.csv"
+outputName = "./SimpleMushroomData_tree"
 # Breast cancer dataset
-input_file = "./breast.csv"
+# input_file = "./breast.csv"
 # outputName = "./breast_cancer_tree"
 
 
@@ -36,11 +36,12 @@ input_file = "./breast.csv"
 df = pd.read_csv(input_file, header=0)
 
 # Split data into features and labels (mushroom data)
-# attr_names = np.array(df.columns.values[1:23])
-# target_names = np.array(["poison", "edible"])
+attr_names = np.array(df.columns.values[1:23])
+target_names = np.array(["poison", "edible"])
+attr_names_no_np = df.columns.values[1:23]
 numAttributes = len(df.columns.values)
-attr_names = np.array(df.columns.values[1:len(df.columns.values) - 1])
-target_names = np.array(["benign", "malignant"])
+# attr_names = np.array(df.columns.values[1:len(df.columns.values) - 1])
+# target_names = np.array(["benign", "malignant"])
 
 # Split data into attributes and labels
 data = df.values[:, 1:numAttributes - 1]
@@ -56,14 +57,14 @@ target = df.values[:, numAttributes - 1]
 # target_names = breast.target_names
 # outputName = "./breast_cancer_tree"
 
-print("Loading data...")
-forest = sklearn.datasets.fetch_covtype()
-print("Loading Finished.")
-data = forest.data
-target = forest.target
-attr_names = forest.feature_names
-target_names = forest.target_names
-outputName = "./covtype_tree"
+# print("Loading data...")
+# forest = sklearn.datasets.fetch_covtype()
+# print("Loading Finished.")
+# data = forest.data
+# target = forest.target
+# attr_names = forest.feature_names
+# target_names = forest.target_names
+# outputName = "./covtype_tree"
 
 # Split data into training and testing sets
 data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.2, stratify=target)
@@ -79,17 +80,6 @@ print("Fitting finished.")
 # Evaluate the classifier on the test data
 print("Traditional Test Data Evaluation Score:", clf.score(data_test, target_test))
 
-# Use graphviz to visualize the decision tree
-dot_data = tree.export_graphviz(clf, out_file=None,
-                                feature_names=attr_names,
-                                class_names=target_names,
-                                filled=True, rounded=True,
-                                special_characters=True)
-graph = graphviz.Source(dot_data, format='png')
-# Write graph to file
-graph.render(outputName)
-
-
 # Reset the classifier
 # clf = tree.DecisionTreeClassifier()
 
@@ -104,11 +94,16 @@ scoring = {'accuracy': 'accuracy', 'precision': 'precision', 'printClassificatio
 
 # Perform n-fold cross validation
 print("Performing", str(n_folds) + "-fold cross validation...")
-# scoreMap = cross_validate(estimator=tree.DecisionTreeClassifier(), X=data, y=target, cv=n_folds, n_jobs=n_jobs, verbose=True, scoring=scoring)
-scoreMap = cross_validate(estimator=tree.DecisionTreeClassifier(max_depth=None, max_leaf_nodes=None, criterion="entropy"),
-                                                                X=data, y=target, cv=n_folds, n_jobs=n_jobs, verbose=10, 
-                                                                scoring=scoring, return_estimator=True, return_train_score=True)
+scoreMap = cross_validate(estimator=clf,
+                          X=data, y=target, cv=n_folds, n_jobs=n_jobs, verbose=10,
+                          scoring=scoring, return_estimator=True, return_train_score=True)
+
 clf = scoreMap['estimator'][0]
+
+decisionTreeText = export_text(clf, feature_names=list(attr_names_no_np))
+
+print(decisionTreeText)
+
 print()
 
 # TODO LOOK INTO PRECISION DATA
@@ -145,6 +140,7 @@ print()
 # Print average and standard deviation of scores
 print("Average Accuracy:", scoreMap['test_accuracy'].mean(), "\t|", "Accuracy Standard Deviation:", scoreMap['test_accuracy'].std())
 print("Average Precision:", scoreMap['test_precision'].mean(), "\t|", "Precision Standard Deviation:", scoreMap['test_precision'].std())
+
 
 # Use graphviz to visualize the decision tree
 dot_data = tree.export_graphviz(clf, out_file=None,

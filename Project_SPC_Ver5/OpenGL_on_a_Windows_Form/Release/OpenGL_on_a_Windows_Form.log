@@ -1,83 +1,107 @@
-﻿  FileHandling.cpp
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(55,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(73,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(116,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(357,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(370,29): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(379,29): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(396,10): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(431,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(466,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(479,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(538,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(74,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(94,9): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(131,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(163,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(169,17): warning C4018: '>': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(177,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(190,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(245,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(251,17): warning C4018: '>': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(259,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(314,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(316,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(335,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(336,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(366,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(368,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(384,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(385,21): warning C4018: '<': signed/unsigned mismatch
+﻿  stdafx.cpp
+  AssemblyInfo.cpp
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\AssemblyInfo.cpp(40,29): warning C4947: 'System::Security::Permissions::SecurityAction::RequestMinimum': marked as obsolete
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\AssemblyInfo.cpp(40,29): message : Message: 'Assembly level declarative security is obsolete and is no longer enforced by the CLR by default. See http://go.microsoft.com/fwlink/?LinkID=155570 for more information.'
   InteractiveSPC.cpp
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(55,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(73,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(116,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(357,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(370,29): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(379,29): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(396,10): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(431,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(466,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(479,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(538,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(30,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(321,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(498,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(514,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(531,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(751,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(837,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(958,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(75,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(78,23): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(94,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(116,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(134,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(175,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(177,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(187,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(225,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(466,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(479,29): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(488,29): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(505,10): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(540,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(575,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(588,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(643,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(30,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(92,37): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(371,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(554,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(570,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(587,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(807,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(893,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\InteractiveSPC.cpp(1014,20): warning C4018: '<': signed/unsigned mismatch
+  FileHandling.cpp
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(75,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(78,23): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(94,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(116,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(134,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(175,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(177,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(187,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(225,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(466,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(479,29): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(488,29): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(505,10): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(540,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(575,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(588,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(643,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(74,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(94,9): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(131,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(163,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(169,17): warning C4018: '>': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(177,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(190,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(245,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(251,17): warning C4018: '>': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(259,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(314,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(316,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(335,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(336,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(366,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(368,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(384,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\FileHandling.cpp(385,21): warning C4018: '<': signed/unsigned mismatch
   OpenGL_on_a_Windows_Form.cpp
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(55,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(73,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(116,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(357,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(370,29): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(379,29): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(396,10): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(431,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(466,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(479,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(538,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(751,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(780,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(808,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(814,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(824,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(831,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(845,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(853,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(859,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(869,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(876,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(894,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(906,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(924,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(928,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(942,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(946,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(75,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(78,23): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(94,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(116,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(134,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(175,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(177,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(187,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(225,22): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(466,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(479,29): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(488,29): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(505,10): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(540,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(575,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(588,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\ClassData.h(643,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(752,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(781,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(809,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(815,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(825,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(832,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(846,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(854,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(860,21): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(870,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(877,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(895,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(907,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(925,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(929,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(943,20): warning C4018: '<': signed/unsigned mismatch
+Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\OpenGL_on_a_Windows_Form\OpenGL3.h(947,20): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
+  .NETFramework,Version=v4.0.AssemblyAttributes.cpp
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
 InteractiveSPC.obj : warning LNK4248: unresolved typeref token (01000022) for 'GLUquadric'; image may not run
-  OpenGL_on_a_Windows_Form.vcxproj -> C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\Release\OpenGL_on_a_Windows_Form.exe
+  OpenGL_on_a_Windows_Form.vcxproj -> Y:\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\Release\OpenGL_on_a_Windows_Form.exe

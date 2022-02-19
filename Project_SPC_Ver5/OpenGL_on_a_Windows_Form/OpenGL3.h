@@ -292,6 +292,7 @@ namespace OpenGLForm
 				
 			}
 	
+			graph4.data.computeDecisionTreeBranches();
 			graph4.fillGraphLocations(); // Creates starting graph positions, and fills example data for now.
 			graph4.data.setClassColors();
 
@@ -323,7 +324,7 @@ namespace OpenGLForm
 
 		void calculateDataTerminationPoints() {
 			graph4.data.computeDecisionTreeBranches();
-			graph4.data.calculateTerminationPoints();
+			//graph4.data.calculateTerminationPoints();
 		}
 
 

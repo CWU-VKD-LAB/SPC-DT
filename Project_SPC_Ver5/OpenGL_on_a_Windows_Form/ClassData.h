@@ -17,7 +17,9 @@
 
 //currently setup for EACH INDIVIDUAL CLASS
 
+
 struct Node {
+public:
 	std::vector<Node*> destinationList;
 	int plotNum;
 	int subtreeSpan = -1;
@@ -41,7 +43,74 @@ struct Node {
 	void computeSubtreeDepth() {
 		subtreeDepth = computeDepth();
 	}
+
+	int getSpanAtDepth(int depth) {
+        if (depth == 0) {
+            return 1;
+        }
+
+		if (depth > subtreeDepth) {
+			return 0;
+		}
+
+		return getSpanAtDepthDFS(depth);
+	}
+
+	std::vector<Node*> getAllNodesAtDepth(int depth) {
+		std::vector<Node*> nodes;
+        if (depth == 0) {
+            nodes.push_back(this);
+            return nodes;
+        }
+        
+		if (depth > subtreeDepth) {
+			return nodes;
+		}
+
+		findAllNodesAtTargetDepth(nodes, depth);
+        
+		return nodes;
+	}
+
 private:
+	void findAllNodesAtTargetDepth(std::vector<Node*>& nodeList, int targetDepth) {
+		if (targetDepth == 0) {
+			nodeList.push_back(this);
+			return;
+		}
+
+		for (int i = 0; i < destinationList.size(); i++) {
+			std::vector<Node*> tmpList = destinationList[i]->getAllNodesAtDepth(targetDepth - 1);
+			if (tmpList.size() > 0) {
+				for (int j = 0; j < tmpList.size(); j++) {
+					nodeList.push_back(tmpList[j]);
+				}
+			}
+		}
+
+		return;
+	}
+
+
+	int getSpanAtDepthDFS(int targetDepth) {
+		if (targetDepth == 0) {
+			return 1;
+		}
+
+		if (targetDepth == 1) {
+			return destinationList.size();
+		}
+
+		int spanAtDepth = 0;
+		for (int i = 0; i < destinationList.size(); i++) {
+			spanAtDepth += destinationList[i]->getSpanAtDepth(targetDepth - 1);
+			
+		}
+
+		return spanAtDepth;
+	}
+
+
 	int computeSubtreeSpan() {
 		if (destinationList.empty()) {
 			return 1;
@@ -82,12 +151,60 @@ private:
 	}
 };
 
+struct Tree {
+	Tree(Node* root) {
+		this->root = root;
+		buildNodeList(root);
+		buildNodeMap();
+	}
+
+	Node* findPlotNum(int plotNum) {
+		if (nodeMap.find(plotNum) != nodeMap.end()) {
+			return nodeMap[plotNum];
+		}
+		return nullptr;
+	}
+
+	std::map<int, Node*> getNodeMap() {
+		return nodeMap;
+	}
+
+	std::vector<Node*> getNodeList() {
+		return nodeList;
+	}
+private:
+	Node* root;
+	std::vector<Node*> nodeList;
+	std::map<int, Node*> nodeMap;
+
+	std::vector<Node*> buildNodeList(Node* node) {
+		std::vector<Node*> localNodeList;
+		localNodeList.push_back(node);
+		for (int i = 0; i < node->destinationList.size(); i++) {
+			localNodeList = buildNodeList(node->destinationList[i]);
+			for (int j = 0; j < localNodeList.size(); j++) {
+				nodeList.push_back(localNodeList[j]);
+			}
+		}
+
+		return localNodeList;
+	}
+
+	void buildNodeMap() {
+		std::map<int, Node*> localNodeMap;
+		for (int i = 0; i < nodeList.size(); i++) {
+			localNodeMap.insert(std::pair<int, Node*>(nodeList[i]->plotNum, nodeList[i]));
+		}
+	}
+};
+
 class ClassData // copy class before changing
 {
 public: 
 	std::vector<std::vector<float> > classColor;
 	std::vector<float>  classTransparency;
 	int classToDisplayOnTop;
+	Node* root;
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
@@ -111,7 +228,7 @@ public:
 	void setClassTransparency(float alpha, int classNum) {
 		
 		//int size = dataTransparency.size();
-		if (classNum == -1) { // Sets transparency of all data
+		if (classNum < 0) { // Sets transparency of all data
 			int size = classTransparencies.size();
 			for (int i = 0; i < classTransparencies.size(); i++) {
 				//dataTransparency[i] = alpha;
@@ -484,7 +601,7 @@ public:
 			}
 		}
 
-		Node* root = nodeMap[0];
+		root = nodeMap[0]; // TODO: investigate why this is necessary
 		
 		root->computeSubtreeDepth();
 		root->computeSubTreeMaxSpan();
@@ -495,10 +612,6 @@ public:
 		std::cout << "debug treespan" << rootSpan;
 
 		std::cout << "debug treedepth" << rootDepth;
-
-		std::cout << "debug tree";
-
-		std::cout << "debug tree compute";
 	}
 
 	void calculateTerminationPoint(int i) {
@@ -537,10 +650,11 @@ public:
 		int resultClass;
 		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which graph we are looking at?
 			int classNumber = parsedData[p][5];
-			GLfloat x1 = xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]];
-			GLfloat y1 = ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]];
-			GLfloat x2 = xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]];
-			GLfloat y2 = ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]];
+			int plot = parsedData[p][4];
+			GLfloat x1 = xgraphcoordinates[plot] - graphwidth[plot] / 2 + parsedData[p][0] * graphwidth[plot];
+			GLfloat y1 = ygraphcoordinates[plot] + graphheight[plot] / 2 - parsedData[p][1] * graphheight[plot];
+			GLfloat x2 = xgraphcoordinates[plot] - graphwidth[plot] / 2 + parsedData[p][2] * graphwidth[plot];
+			GLfloat y2 = ygraphcoordinates[plot] + graphheight[plot] / 2 - parsedData[p][3] * graphheight[plot];
 			if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
 				resultClass = classNumber;
 			} // Check to see if these need to be rearranged.

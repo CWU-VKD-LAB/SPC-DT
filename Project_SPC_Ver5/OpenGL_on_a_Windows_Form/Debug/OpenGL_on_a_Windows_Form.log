@@ -1,6 +1,1 @@
-﻿  OpenGL_on_a_Windows_Form.cpp
-D:\MyDocs\CWU\Winter2020\Individual Study_DataViz\InteractiveSPC\SMART-Data-Visualization-Release-Versions-master\SMART-Data-Vis-v1\OpenGL_on_a_Windows_Form\ClassData.h(253,29): warning C4018: '<': signed/unsigned mismatch
-D:\MyDocs\CWU\Winter2020\Individual Study_DataViz\InteractiveSPC\SMART-Data-Visualization-Release-Versions-master\SMART-Data-Vis-v1\OpenGL_on_a_Windows_Form\ClassData.h(262,29): warning C4018: '<': signed/unsigned mismatch
-D:\MyDocs\CWU\Winter2020\Individual Study_DataViz\InteractiveSPC\SMART-Data-Visualization-Release-Versions-master\SMART-Data-Vis-v1\OpenGL_on_a_Windows_Form\ClassData.h(279,10): warning C4018: '<': signed/unsigned mismatch
-  AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
-  OpenGL_on_a_Windows_Form.vcxproj -> D:\MyDocs\CWU\Winter2020\Individual Study_DataViz\InteractiveSPC\SMART-Data-Visualization-Release-Versions-master\SMART-Data-Vis-v1\Debug\OpenGL_on_a_Windows_Form.exe
+﻿
