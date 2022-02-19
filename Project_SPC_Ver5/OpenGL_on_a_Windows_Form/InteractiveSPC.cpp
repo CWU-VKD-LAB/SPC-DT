@@ -24,7 +24,7 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 
 	//newFile.openFile(data);
 	//newFile.openParserFile(dataParsed, data);
-	newFile.sortGraph(data);
+	newFile.sortGraphNotBasedOnParser(data);
 
 	data.classsize = int(data.xdata[0].size());
 	for (int y1 = 0; y1 < data.graphwidth.size(); y1++)
@@ -61,23 +61,81 @@ void InteractiveSPC::fillGraphLocations()
 	//for (int k = 1; k <= data.xdata.size(); k++)
 	//{
 
-		for (int i = 1; i <= data.classsize; i++)
-		{
+	int numPlots = data.classsize;
+	Node* root = data.root;
+	int treeDepth = root->subtreeDepth;
 
-			//data.xgraphcoordinates.push_back(data.graphwidth[i - 1] * i + i * 0.08 * data.graphwidth[data.graphwidth.size() - 1]);			
-			data.xgraphcoordinates.push_back(data.graphwidth[i - 1] * i + i * 10);
-			data.ygraphcoordinates.push_back(data.graphheight[i - 1]);
+	// Compute spans for each depth
+	std::vector<int> depthSpanList;
+	std::vector<std::vector<Node*> > depthList;
+	for (int i = 0; i < treeDepth; i++) {
+		depthSpanList.push_back(root->getSpanAtDepth(i));
+		depthList.push_back(root->getAllNodesAtDepth(i));
+	}
 
-			//set coordinates to draw rectangles
-			data.x1CoordGraph.push_back(data.xgraphcoordinates[i - 1] - data.graphwidth[i - 1] / 2);
-			data.x2CoordGraph.push_back(data.xgraphcoordinates[i - 1] + data.graphwidth[i - 1] / 2);
-			data.y1CoordGraph.push_back(data.ygraphcoordinates[i - 1] - data.graphheight[i - 1] / 2);
-			data.y2CoordGraph.push_back(data.ygraphcoordinates[i - 1] + data.graphheight[i - 1] / 2);
+	// For every depth, compute
+	for (int currentDepth = 0; currentDepth < treeDepth; currentDepth++) {
+		int currentSpan = depthSpanList[currentDepth];
+		// get all nodes at given depth
+		std::vector<Node*> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
+		int plotWidth = data.graphwidth[currentDepth];
+		double plotHeight = data.graphheight[0] / (nodesAtCurrentDepth.size() + 1); // need to figure this out
+		std::cout << currentSpan << plotWidth << &nodesAtCurrentDepth << plotHeight;
 
+		float plotX1 = (plotWidth * (currentDepth + 1) + currentDepth * 10) - plotWidth / 2;
+		float plotX2 = plotX1 + plotWidth;
+
+		double screenHeight = data.graphheight[0] * 2;
+		double plotHeightAtThisDepth = screenHeight / (nodesAtCurrentDepth.size() + 1);
+		
+		double plotHeightGap = 0;
+		if (nodesAtCurrentDepth.size() > 1) {
+			plotHeightGap = 50;
 		}
+		
 
-		data.xclasses.push_back(data.xgraphcoordinates);
-		data.yclasses.push_back(data.ygraphcoordinates);
+		double plotVerticalSeparation = 50;
+        // iterate through each node at this depth
+		for (int nodeIndex = 0; nodeIndex < nodesAtCurrentDepth.size(); nodeIndex++) {
+			Node* currentNode = root;
+			// data.graphheight[]
+            
+			data.xgraphcoordinates.push_back(plotWidth * (currentDepth + 1) + currentDepth * 10);
+			data.ygraphcoordinates.push_back((nodeIndex + 1) * plotHeightAtThisDepth);
+
+			data.x1CoordGraph.push_back(plotX1);
+			data.x2CoordGraph.push_back(plotX2);
+			data.y1CoordGraph.push_back(data.ygraphcoordinates[nodeIndex] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
+			data.y2CoordGraph.push_back(data.ygraphcoordinates[nodeIndex] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+		}
+		std::cout << "debug";
+		std::cout << &data.xgraphcoordinates << &data.ygraphcoordinates;
+		std::cout << &data.x1CoordGraph << &data.x2CoordGraph << &data.y1CoordGraph << &data.y2CoordGraph;
+	}
+
+
+	std::cout << &data.x1CoordGraph << &data.x2CoordGraph << &data.y1CoordGraph << &data.y2CoordGraph;
+
+
+
+		// // constructs plots in a single line
+		// for (int i = 1; i <= data.classsize; i++)
+		// {
+
+		// 	//data.xgraphcoordinates.push_back(data.graphwidth[currentDepth - 1] * currentDepth + currentDepth * 0.08 * data.graphwidth[data.graphwidth.size() - 1]);			
+		// 	data.xgraphcoordinates.push_back(data.graphwidth[i - 1] * i + i * 10);
+		// 	data.ygraphcoordinates.push_back(data.graphheight[i - 1]);
+
+		// 	//set coordinates to draw rectangles
+		// 	data.x1CoordGraph.push_back(data.xgraphcoordinates[i - 1] - data.graphwidth[i - 1] / 2);
+		// 	data.x2CoordGraph.push_back(data.xgraphcoordinates[i - 1] + data.graphwidth[i - 1] / 2);
+		// 	data.y1CoordGraph.push_back(data.ygraphcoordinates[i - 1] - data.graphheight[i - 1] / 2);
+		// 	data.y2CoordGraph.push_back(data.ygraphcoordinates[i - 1] + data.graphheight[i - 1] / 2);
+
+		// }
+
+		// data.xclasses.push_back(data.xgraphcoordinates);
+		// data.yclasses.push_back(data.ygraphcoordinates);
 	//}
 }
 
@@ -207,7 +265,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	{
 		glBegin(GL_LINE_STRIP); 
 		//data.classTransparency[1] = 70;
-		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[i]);
+		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[currentDepth]);
 		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
 		if (drawVertex1) {
 			glVertex2f(x1Coord, y1Coord);
@@ -239,7 +297,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	
 	glBegin(GL_POINTS);
 	
-	//glVertex2f(0 + xratio * data.xdata[i][j], 0 - yratio * data.ydata[i][j]);                                     // starting vertex
+	//glVertex2f(0 + xratio * data.xdata[currentDepth][nodeIndex], 0 - yratio * data.ydata[currentDepth][nodeIndex]);                                     // starting vertex
 	if (drawVertex1) {
 		glVertex2f(x1Coord, y1Coord);
 	}
@@ -259,7 +317,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 
 	glPointSize(4);
 	glBegin(GL_POINTS);
-	//glVertex2f((x2 - x1) + xratio * data.xdata[i][j + 1], (y2 - y1) - yratio * data.ydata[i][j + 1]);                         // ending vertex
+	//glVertex2f((x2 - x1) + xratio * data.xdata[currentDepth][nodeIndex + 1], (y2 - y1) - yratio * data.ydata[currentDepth][nodeIndex + 1]);                         // ending vertex
 	if (drawVertex2 && data.classsize != 1)
 		//glColor4ub(0, 0, 255, 255); // debug
 		glVertex2f(x2Coord, y2Coord);	
@@ -338,11 +396,14 @@ void InteractiveSPC::display() {
 				glColor4ub(169, 169, 169, backgroundTransparency);
 			}*/
 
-			if (classNumber == -1) {
-				// if class is -1, then it is the background;
-				glColor4ub(169, 169, 169, backgroundTransparency);
-			}
-			else {
+			// TODO: handle multiple decision classes
+			if (classNumber < 0) {
+				GLubyte defaultBackground[3] = { 169, 169, 169 };
+				int index = abs(classNumber) % 3;
+				defaultBackground[index] = (GLubyte)((double)defaultBackground[index] * .4);
+				glColor4ub(defaultBackground[0], defaultBackground[1], defaultBackground[2], backgroundTransparency);
+			} else 
+			{
 				// we need to adjust the lightness of the background color
 				std::vector<float> hsl = RGBtoHSL(data.classColor[classNumber]);
 
@@ -353,10 +414,12 @@ void InteractiveSPC::display() {
 				glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparency);
 			}
 
-			const GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
-			const GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
-			const GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
-			const GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
+			int plot = dataParsed.parsedData[p][4];
+
+			const GLfloat x1 = data.xgraphcoordinates[plot] - data.graphwidth[plot] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[plot];
+			const GLfloat y1 = data.ygraphcoordinates[plot] + data.graphheight[plot] / 2 - dataParsed.parsedData[p][1] * data.graphheight[plot];
+			const GLfloat x2 = data.xgraphcoordinates[plot] - data.graphwidth[plot] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[plot];
+			const GLfloat y2 = data.ygraphcoordinates[plot] + data.graphheight[plot] / 2 - dataParsed.parsedData[p][3] * data.graphheight[plot];
 
 			glRectf(x1, y1, x2, y2);
 
@@ -368,119 +431,122 @@ void InteractiveSPC::display() {
 			glGetFloatv(GL_CURRENT_COLOR, currentColor);
 			glColor4f(currentColor[0], currentColor[1], currentColor[2], 1.0f);
 
-			// Left dashed line, from top left
-			bool drawLeftColor = true;
-			const GLfloat x1Backup = x1;
-			for (GLfloat y = y1; y >= y2; y -= dashSpace) {
-				if (y < y2) {
-					y = y2;
-				}
+			//// Left dashed line, from top left
+			//bool drawLeftColor = true;
+			//const GLfloat x1Backup = x1;
 
-				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
-				// this is going to be super inefficient
-				int pointClass = getClassNumFromPoint(x1, y, p);
+			//// todo: built for single line plots
+			//for (GLfloat y = y1; y >= y2; y -= dashSpace) {
+			//	if (y < y2) {
+			//		y = y2;
+			//	}
 
-				// Check if of the same class
-				if (pointClass == -2 || pointClass == classNumber) {
-					// don't draw if our test point is not a member of any background rectangle.
-					// this means that we are on the left or the right edge
-					// don't draw if the adaject class is the same as our current class
-					continue;
-				}
+			//	// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
+			//	// this is going to be super inefficient
+			//	int pointClass = getClassNumFromPoint(x1, y, p);
 
-				if (drawLeftColor) {
-					if (pointClass == -1) {
-						glColor4ub(0, 0, 0, 255);
-					}
-					else {
-						std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
-						std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
-						pointClassColorHSL[2] *= backgroundClassColorCoefficient;
-						std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
-						glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
+			//	// Check if of the same class
+			//	if (pointClass == -200 || pointClass == classNumber) { // todo: adjust. there could be 200 decision zones per plot
+			//		// don't draw if our test point is not a member of any background rectangle.
+			//		// this means that we are on the left or the right edge
+			//		// don't draw if the adaject class is the same as our current class
+			//		continue;
+			//	}
 
-					}
-				}
-				else {
-					if (classNumber == -1) {
-						glColor4ub(0, 0, 0, 255);
-					}
-					else {
-						glColor3f(currentColor[0], currentColor[1], currentColor[2]);
-					}
-				}
+			//	if (drawLeftColor) {
+			//		if (pointClass < 0) {
+			//			glColor4ub(0, 0, 0, 255);
+			//		}
+			//		else {
+			//			std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
+			//			std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
+			//			pointClassColorHSL[2] *= backgroundClassColorCoefficient;
+			//			std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
+			//			glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
 
-				drawLeftColor = !drawLeftColor;
+			//		}
+			//	}
+			//	else {
+			//		if (classNumber < 0) {
+			//			glColor4ub(0, 0, 0, 255);
+			//		}
+			//		else {
+			//			glColor3f(currentColor[0], currentColor[1], currentColor[2]);
+			//		}
+			//	}
 
-				glBegin(GL_POLYGON);
-				glVertex2f(x1 + lineThickness / 2, y);
-				glVertex2f(x1 - lineThickness / 2, y);
-				if (y - dashSpace <= y2) {
-					glVertex2f(x1 - lineThickness / 2, y2);
-					glVertex2f(x1 + lineThickness / 2, y2);
-				}
-				else {
-					glVertex2f(x1 - lineThickness / 2, y - dashSpace);
-					glVertex2f(x1 + lineThickness / 2, y - dashSpace);
-				}
-				glEnd();
-			}
+			//	drawLeftColor = !drawLeftColor;
 
-			bool drawTopColor = true;
-			// Draw bottom line
-			for (GLfloat x = x1; x <= x2; x += dashSpace) {
-				if (x > x2) {
-					x = x2;
-				}
+			//	glBegin(GL_POLYGON);
+			//	glVertex2f(x1 + lineThickness / 2, y);
+			//	glVertex2f(x1 - lineThickness / 2, y);
+			//	if (y - dashSpace <= y2) {
+			//		glVertex2f(x1 - lineThickness / 2, y2);
+			//		glVertex2f(x1 + lineThickness / 2, y2);
+			//	}
+			//	else {
+			//		glVertex2f(x1 - lineThickness / 2, y - dashSpace);
+			//		glVertex2f(x1 + lineThickness / 2, y - dashSpace);
+			//	}
+			//	glEnd();
+			//}
 
-				// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
-				// this is going to be super inefficient
-				int pointClass = getClassNumFromPoint(x, y2, p);
+			//bool drawTopColor = true;
+			//// Draw bottom line
+			//// todo: built for single line plots
+			//for (GLfloat x = x1; x <= x2; x += dashSpace) {
+			//	if (x > x2) {
+			//		x = x2;
+			//	}
 
-				// Check if of the same class
-				if (pointClass == -2 || pointClass == classNumber) {
-					// don't draw if our test point is not a member of any background rectangle.
-					// this means that we are on the left or the right edge
-					// don't draw if the adaject class is the same as our current class
-					continue;
-				}
+			//	// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
+			//	// this is going to be super inefficient
+			//	int pointClass = getClassNumFromPoint(x, y2, p);
 
-				if (drawTopColor) {
-					if (classNumber == -1) {
-						glColor4ub(0, 0, 0, 255);
-					} else {
-						glColor3f(currentColor[0], currentColor[1], currentColor[2]);
-					}
-				}
-				else {
-					if (pointClass == -1) {
-						glColor4ub(0, 0, 0, 255);
-					}
-					else {
-						std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
-						std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
-						pointClassColorHSL[2] *= backgroundClassColorCoefficient;
-						std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
-						glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
-					}
-				}
+			//	// Check if of the same class
+			//	if (pointClass == -200 || pointClass == classNumber) {
+			//		// don't draw if our test point is not a member of any background rectangle.
+			//		// this means that we are on the left or the right edge
+			//		// don't draw if the adaject class is the same as our current class
+			//		continue;
+			//	}
 
-				drawTopColor = !drawTopColor;
+			//	if (drawTopColor) {
+			//		if (classNumber < 0) {
+			//			glColor4ub(0, 0, 0, 255);
+			//		} else {
+			//			glColor3f(currentColor[0], currentColor[1], currentColor[2]);
+			//		}
+			//	}
+			//	else {
+			//		if (pointClass < 0) {
+			//			glColor4ub(0, 0, 0, 255);
+			//		}
+			//		else {
+			//			std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
+			//			std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
+			//			pointClassColorHSL[2] *= backgroundClassColorCoefficient;
+			//			std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
+			//			glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
+			//		}
+			//	}
 
-				glBegin(GL_POLYGON);
-				glVertex2f(x, y2 + lineThickness / 2);
-				glVertex2f(x, y2 - lineThickness / 2);
-				if (x + dashSpace >= x2) {
-					glVertex2f(x2, y2 - lineThickness / 2);
-					glVertex2f(x2, y2 + lineThickness / 2); 
-				}
-				else {
-					glVertex2f(x + dashSpace, y2 - lineThickness / 2);
-					glVertex2f(x + dashSpace, y2 + lineThickness / 2);
-				}
+			//	drawTopColor = !drawTopColor;
 
-				glEnd();
-			}
+			//	glBegin(GL_POLYGON);
+			//	glVertex2f(x, y2 + lineThickness / 2);
+			//	glVertex2f(x, y2 - lineThickness / 2);
+			//	if (x + dashSpace >= x2) {
+			//		glVertex2f(x2, y2 - lineThickness / 2);
+			//		glVertex2f(x2, y2 + lineThickness / 2); 
+			//	}
+			//	else {
+			//		glVertex2f(x + dashSpace, y2 - lineThickness / 2);
+			//		glVertex2f(x + dashSpace, y2 + lineThickness / 2);
+			//	}
+
+			//	glEnd();
+			//}
 		}
 	}
 
@@ -502,7 +568,7 @@ void InteractiveSPC::display() {
 				if (data.classNum[i] != (data.classToDisplayOnTop ))
 				{
 					drawData(data.xgraphcoordinates[j], data.ygraphcoordinates[j],
-						data.xgraphcoordinates[j + 1], data.ygraphcoordinates[j + 1], i, j); //((1 + i) % data.xdata.size());
+						data.xgraphcoordinates[j + 1], data.ygraphcoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
 				}
 
 
@@ -518,7 +584,7 @@ void InteractiveSPC::display() {
 				if (data.classNum[i] == (data.classToDisplayOnTop) )
 				{
 					drawData(data.xgraphcoordinates[j], data.ygraphcoordinates[j],
-						data.xgraphcoordinates[j + 1], data.ygraphcoordinates[j + 1], i, j); //((1 + i) % data.xdata.size());
+						data.xgraphcoordinates[j + 1], data.ygraphcoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
 				}
 
 			}
@@ -863,12 +929,12 @@ void InteractiveSPC::drawCircle(int x, int y)
 	//glRotatef(10.0f, 0.0, 1.0, 0.0);
 	gluDisk(g_normalObject, 5, 6, 10, 1);
 	
-	//for (int i = 0; i < numOfClasses; i++) {
+	//for (int currentDepth = 0; currentDepth < numOfClasses; currentDepth++) {
 	//	classColor.push_back({});
-	//	//0, (data.classNum[i] * 50) + 1, 100
-	//	classColor[i].push_back(0);
-	//	classColor[i].push_back((i + 1) * 50 + 1);
-	//	classColor[i].push_back(100);
+	//	//0, (data.classNum[currentDepth] * 50) + 1, 100
+	//	classColor[currentDepth].push_back(0);
+	//	classColor[currentDepth].push_back((currentDepth + 1) * 50 + 1);
+	//	classColor[currentDepth].push_back(100);
 	//	classTransparency.push_back(255);
 	//}
 
@@ -952,7 +1018,7 @@ bool InteractiveSPC::isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLflo
 }
 
 int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex) {
-	int dataIndex = -1;
+	int dataIndex = -100;
 
 	for (int i = 0; i < dataParsed.parsedData.size(); i++) {
 		if (i == currentDataIndex) continue;
@@ -967,8 +1033,8 @@ int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentData
 		}
 	}
 
-	if (dataIndex == -1) {
-		return -2;
+	if (dataIndex == -100) {
+		return -200;
 	}
 	else {
 		return dataParsed.parsedData[dataIndex][5];

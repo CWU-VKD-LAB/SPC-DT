@@ -258,7 +258,7 @@ namespace OpenGLForm
 
 
 		void setFileName(ClassData file) {
-			clearAllGraphData();
+			// clearAllGraphData(); // why do we clear here?
 
 
 			/* Opens the file and process the data */
@@ -269,8 +269,9 @@ namespace OpenGLForm
 			data.xmax = 0;
 			data.ymax = 0;
 			newFile.openFile(data);
-			newFile.openParserFile(dataParsed,data);
-			newFile.sortGraph(data);
+			// newFile.openParserFile(dataParsed,data); // should already be open when we load parser
+			// newFile.sortGraphNotBasedOnParser(data); // OLD
+			newFile.sortGraphBasedOnParser(data);
 			newFile.normalizeData(data);
 
 			// C-SPC
@@ -291,6 +292,7 @@ namespace OpenGLForm
 				
 			}
 	
+			graph4.data.computeDecisionTreeBranches();
 			graph4.fillGraphLocations(); // Creates starting graph positions, and fills example data for now.
 			graph4.data.setClassColors();
 
@@ -306,7 +308,7 @@ namespace OpenGLForm
 		}
 
 
-		void setParserFileName(parseData pfile) {
+		void setParserFileName(parseData &pfile) {
 			
 
 
@@ -314,12 +316,15 @@ namespace OpenGLForm
 			//data.fileName = "input.csv";
 			dataParsed.parserFileName = pfile.parserFileName;
 			newFile.openParserFile(dataParsed, data);
-			graph4.dataParsed.parsedData = dataParsed.parsedData;
+			// graph4.dataParsed.parsedData = dataParsed.parsedData;
+			graph4.dataParsed = dataParsed;
+			pfile = dataParsed;
 			graph4.data.parsedData = dataParsed.parsedData;
 		}
 
 		void calculateDataTerminationPoints() {
-			graph4.data.calculateTerminationPoints();
+			graph4.data.computeDecisionTreeBranches();
+			//graph4.data.calculateTerminationPoints();
 		}
 
 

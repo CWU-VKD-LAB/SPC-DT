@@ -5,17 +5,198 @@
 ///-------------------------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include <Windows.h>
+ #include <Windows.h>
 #include <GL/glu.h>
 #include "glut.h"
 #include <locale>         // std::locale, std::isalpha
 #include <fstream>
+#include <map>
+#include <set>
 
 #pragma once
 
 //currently setup for EACH INDIVIDUAL CLASS
 
 
+struct Node {
+public:
+	std::vector<Node*> destinationList;
+	int plotNum;
+	int subtreeSpan = -1;
+	int subtreeDepth = -1;
+
+	Node(int plotNum, int destination) {
+		this->plotNum = plotNum;
+		addDestination(&Node(destination));
+	}
+	Node(int plotNum) {
+		this->plotNum = plotNum;
+	}
+	void addDestination(Node* node) {
+		destinationList.push_back(node);
+	}
+
+	void computeSubTreeMaxSpan() {
+		subtreeSpan = computeSubtreeSpan();
+	}
+
+	void computeSubtreeDepth() {
+		subtreeDepth = computeDepth();
+	}
+
+	int getSpanAtDepth(int depth) {
+        if (depth == 0) {
+            return 1;
+        }
+
+		if (depth > subtreeDepth) {
+			return 0;
+		}
+
+		return getSpanAtDepthDFS(depth);
+	}
+
+	std::vector<Node*> getAllNodesAtDepth(int depth) {
+		std::vector<Node*> nodes;
+        if (depth == 0) {
+            nodes.push_back(this);
+            return nodes;
+        }
+        
+		if (depth > subtreeDepth) {
+			return nodes;
+		}
+
+		findAllNodesAtTargetDepth(nodes, depth);
+        
+		return nodes;
+	}
+
+private:
+	void findAllNodesAtTargetDepth(std::vector<Node*>& nodeList, int targetDepth) {
+		if (targetDepth == 0) {
+			nodeList.push_back(this);
+			return;
+		}
+
+		for (int i = 0; i < destinationList.size(); i++) {
+			std::vector<Node*> tmpList = destinationList[i]->getAllNodesAtDepth(targetDepth - 1);
+			if (tmpList.size() > 0) {
+				for (int j = 0; j < tmpList.size(); j++) {
+					nodeList.push_back(tmpList[j]);
+				}
+			}
+		}
+
+		return;
+	}
+
+
+	int getSpanAtDepthDFS(int targetDepth) {
+		if (targetDepth == 0) {
+			return 1;
+		}
+
+		if (targetDepth == 1) {
+			return destinationList.size();
+		}
+
+		int spanAtDepth = 0;
+		for (int i = 0; i < destinationList.size(); i++) {
+			spanAtDepth += destinationList[i]->getSpanAtDepth(targetDepth - 1);
+			
+		}
+
+		return spanAtDepth;
+	}
+
+
+	int computeSubtreeSpan() {
+		if (destinationList.empty()) {
+			return 1;
+		}
+
+		if (subtreeSpan != -1) {
+			return subtreeSpan;
+		}
+
+		int span = 0;
+		for (int i = 0; i < destinationList.size(); i++) {
+			destinationList[i]->computeSubTreeMaxSpan();
+			span += destinationList[i]->subtreeSpan;
+		}
+
+		return span;
+	}
+
+	int computeDepth() {
+		if (destinationList.empty()) {
+			return 1; // TODO: look into if this should be 0
+		}
+
+		if (subtreeDepth != -1) {
+			return subtreeDepth;
+		}
+
+		int maxChildDepth = 0;
+		for (int i = 0; i < destinationList.size(); i++) {
+			destinationList[i]->computeSubtreeDepth();
+			int childDepth = destinationList[i]->subtreeDepth;
+			if (childDepth > maxChildDepth) {
+				maxChildDepth = childDepth;
+			}
+		}
+
+		return maxChildDepth + 1;
+	}
+};
+
+struct Tree {
+	Tree(Node* root) {
+		this->root = root;
+		buildNodeList(root);
+		buildNodeMap();
+	}
+
+	Node* findPlotNum(int plotNum) {
+		if (nodeMap.find(plotNum) != nodeMap.end()) {
+			return nodeMap[plotNum];
+		}
+		return nullptr;
+	}
+
+	std::map<int, Node*> getNodeMap() {
+		return nodeMap;
+	}
+
+	std::vector<Node*> getNodeList() {
+		return nodeList;
+	}
+private:
+	Node* root;
+	std::vector<Node*> nodeList;
+	std::map<int, Node*> nodeMap;
+
+	std::vector<Node*> buildNodeList(Node* node) {
+		std::vector<Node*> localNodeList;
+		localNodeList.push_back(node);
+		for (int i = 0; i < node->destinationList.size(); i++) {
+			localNodeList = buildNodeList(node->destinationList[i]);
+			for (int j = 0; j < localNodeList.size(); j++) {
+				nodeList.push_back(localNodeList[j]);
+			}
+		}
+
+		return localNodeList;
+	}
+
+	void buildNodeMap() {
+		std::map<int, Node*> localNodeMap;
+		for (int i = 0; i < nodeList.size(); i++) {
+			localNodeMap.insert(std::pair<int, Node*>(nodeList[i]->plotNum, nodeList[i]));
+		}
+	}
+};
 
 class ClassData // copy class before changing
 {
@@ -23,6 +204,7 @@ public:
 	std::vector<std::vector<float> > classColor;
 	std::vector<float>  classTransparency;
 	int classToDisplayOnTop;
+	Node* root;
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
@@ -46,7 +228,7 @@ public:
 	void setClassTransparency(float alpha, int classNum) {
 		
 		//int size = dataTransparency.size();
-		if (classNum == -1) { // Sets transparency of all data
+		if (classNum < 0) { // Sets transparency of all data
 			int size = classTransparencies.size();
 			for (int i = 0; i < classTransparencies.size(); i++) {
 				//dataTransparency[i] = alpha;
@@ -116,6 +298,8 @@ public:
 
 	std::vector<std::vector<float>> parsedData;
 	std::vector<std::vector<std::string>> strparsedData;
+	std::vector<std::vector<std::string>> parsedAttributePairs;
+	std::vector<int> plotDestinationList;
 	double temprx2;
 	double temprectAndCoordy2;
 	//bool seeLabels;
@@ -284,6 +468,19 @@ public:
 		return str.find_first_not_of("0123456789") == std::string::npos;
 	}
 	//late entry: separate function for adding x,y labels
+	void getLabelsFromParser() {
+		xlabels = "";
+		ylabels = "";
+		for (int i = 0; i < parsedAttributePairs.size(); i++) {
+			if (i > 0) {
+				xlabels += ", ";
+				ylabels += ", ";
+			}
+			xlabels += parsedAttributePairs[i][0];
+			ylabels += parsedAttributePairs[i][1];
+		}
+	}
+
 	void getLabels()
 	{
 		//stores x axis labels, but skips first and last cell
@@ -333,6 +530,21 @@ public:
 	}
 
 	void calculateTerminationPoints() {
+		//int currentPlot = 0;
+		//while (currentPlot < dataTerminationIndex[currentPlot]) {
+
+		//	int backgroundClass = -1;
+		//	if (backgroundClass >= 0) {
+		//		currentPlot += 1;
+		//	}
+		//	else {
+		//		
+		//	}
+		//}
+
+
+
+
 		for (int i = 0; i < dataTerminationIndex.size(); i++) {
 			int classnum = classNum[i] - 1;
 			for (int j = 0; j < dataTerminationIndex[i]; j++) {
@@ -347,14 +559,59 @@ public:
 
 				int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
 
-				if (backgroundClass != -1) {
+				if (backgroundClass >= 0) {
 					std::cout << "debug";
 					if (backgroundClass == classnum) {
 						dataTerminationIndex[i] = j;
 					}
 				}
+				else {
+
+				}
 			}
 		}
+	}
+
+
+	void computeDecisionTreeBranches() {
+		std::map<int, std::vector<int>> plotSourceDestinationMap;
+		std::map<int, Node*> nodeMap;
+		std::vector<Node*> nodeList;
+		std::set<int> constructedNodes;
+
+		// Construct nodes
+		for (int i = 0; i < strparsedData.size(); i++) {
+			// plot num
+			int plotNum = stoi(strparsedData[i][4]);
+			if (constructedNodes.empty() || constructedNodes.find(plotNum) == constructedNodes.end()) {
+				Node * n = new Node(plotNum);
+				nodeList.push_back(n);
+				nodeMap[plotNum] = n;
+				constructedNodes.insert(plotNum);
+			}
+		}
+
+		// Construct tree of nodes
+		// TODO: Optimization: parser generation places all continue elements at the top. Could save time to not cycle the whole list
+		for (int i = 0; i < strparsedData.size(); i++) {
+			if (strparsedData[i].size() == 9) {
+				int plotNum = stoi(strparsedData[i][4]);
+				int dest = stoi(strparsedData[i][8]);
+				nodeMap[plotNum]->addDestination(nodeMap[dest]);
+			}
+		}
+
+		root = nodeMap[0]; // TODO: investigate why this is necessary
+		
+		root->computeSubtreeDepth();
+		root->computeSubTreeMaxSpan();
+
+		int rootDepth = root->subtreeDepth;
+		int rootSpan = root->subtreeSpan;
+
+		std::cout << "debug treespan" << rootSpan;
+
+		std::cout << "debug treedepth" << rootDepth;
 	}
 
 	void calculateTerminationPoint(int i) {
@@ -371,7 +628,7 @@ public:
 
 			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
 
-			if (backgroundClass != -1) {
+			if (backgroundClass >= 0) {
 				std::cout << "debug";
 				if (backgroundClass == classnum) {
 					if (j < 2) {
@@ -382,18 +639,22 @@ public:
 					}
 				}
 			}
+			else {
+				// TODO
+			}
 		}
 	}
 
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 		// TODO
-		int resultClass = -1;
+		int resultClass;
 		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which graph we are looking at?
 			int classNumber = parsedData[p][5];
-			GLfloat x1 = xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]];
-			GLfloat y1 = ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]];
-			GLfloat x2 = xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]];
-			GLfloat y2 = ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]];
+			int plot = parsedData[p][4];
+			GLfloat x1 = xgraphcoordinates[plot] - graphwidth[plot] / 2 + parsedData[p][0] * graphwidth[plot];
+			GLfloat y1 = ygraphcoordinates[plot] + graphheight[plot] / 2 - parsedData[p][1] * graphheight[plot];
+			GLfloat x2 = xgraphcoordinates[plot] - graphwidth[plot] / 2 + parsedData[p][2] * graphwidth[plot];
+			GLfloat y2 = ygraphcoordinates[plot] + graphheight[plot] / 2 - parsedData[p][3] * graphheight[plot];
 			if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
 				resultClass = classNumber;
 			} // Check to see if these need to be rearranged.
@@ -427,6 +688,7 @@ public:
 	std::string parserFileName;
 	std::vector<std::vector<float>> parsedData;
 	std::vector<std::vector<std::string>> strparsedData;
+	std::vector<std::vector<std::string>> parsedAttributePairs;
 	bool parserFileOpen;
 
 	parseData() {};

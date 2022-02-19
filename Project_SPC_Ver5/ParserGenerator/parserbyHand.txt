@@ -1,0 +1,23 @@
+0, 0, 0.25, 1, 0, -1, bnuclei, ucellsize
+.25, 0, 1, .45, 0, 1, bnuclei, ucellsize
+.25, .45, 1, 1, 0, 0, bnuclei, ucellsize
+0, 0, 1, .15, 1, 0, bchromatin, clump
+.45, .15, 1, 1, 1, 1, bchromatin, clump
+0, .15, .45, 1, 1, -1, bchromatin, clump
+0, 0, .6, .35, 2, 0, mgadhesion, bnuclei
+.6, 0, 1, 1, 2, 1, mgadhesion, bnuclei
+0, .35, .6, 1, 2, 1, mgadhesion, bnuclei
+
+************
+
+0, 0, .45, .25, 0, 0, ucellsize, bnuclei
+.45, 0, 1, .23, 0, 1, ucellsize, bnuclei
+0, .25, 1, 1, 0, -1, ucellsize, bnuclei
+
+0, 0, .15, 1, 1, 0, clump, bchromatin
+.15, 0, 1, .45, 1, -1, clump, bchromatin
+.15, .45, 1, 1, 1, 1, clump, bchromatin
+
+0, 0, .35, .60, 2, 0, bnuclei, mgadhesion
+.35, 0, 1, 1, 2, 1, bnuclei, mgadhesion
+0, .60, 1, 1, 2, 1, bnuclei, mgadhesion

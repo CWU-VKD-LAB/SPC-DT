@@ -1,0 +1,47 @@
+[Diagram]
+Title=Default title
+Database=Z:\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator\breast.txt
+
+[Dataset]
+MLClassGenerator=TMLGenDataset
+successors=1
+succ_1=Define status 1
+
+[Define status 1]
+MLClassGenerator=TMLGenFSDefStatus
+target_count=1
+target_1=classe
+input_count=9
+input_1=clump
+input_2=ucellsize
+input_3=ucellshape
+input_4=mgadhesion
+input_5=sepics
+input_6=bnuclei
+input_7=bchromatin
+input_8=normnucl
+input_9=mitoses
+illus_count=0
+successors=1
+succ_1=Sampling 1
+
+[Sampling 1]
+MLClassGenerator=TMLGenCompSampling
+sample_type=0
+proportion=0.5
+size=200
+seed=1802
+successors=1
+succ_1=Supervised Learning 1 (C4.5)
+
+[Supervised Learning 1 (C4.5)]
+MLClassGenerator=TMLGCompOneInstance
+embedded_spv=1
+embedded_section=Supervised Learning 1 (C4.5)--C4.5
+successors=0
+
+[Supervised Learning 1 (C4.5)--C4.5]
+MLClassGenerator=TMLGCompSpvTreeC45
+min_size_leaf=5
+p_level=0.25
+

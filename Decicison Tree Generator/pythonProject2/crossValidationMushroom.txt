@@ -1,0 +1,252 @@
+/opt/homebrew/bin/python3.9 "/Users/alexworland/Library/CloudStorage/OneDrive-CentralWashingtonUniversity/CS DEGREE/Research Assistant/Git Repos/cs556_project/Decicison Tree Generator/pythonProject2/scikitlearnTests.py"
+Fitting data...
+Fitting finished.
+Traditional Test Data Evaluation Score: 1.0
+Performing 10-fold cross validation...
+[CV] START .....................................................................
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+***** FOLD 1 *****
+              precision    recall  f1-score   support
+
+           1       1.00      0.35      0.52       392
+           2       0.62      1.00      0.77       421
+
+    accuracy                           0.69       813
+   macro avg       0.81      0.67      0.64       813
+weighted avg       0.80      0.69      0.65       813
+
+***** FOLD 2 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3524
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7311
+   macro avg       1.00      1.00      1.00      7311
+weighted avg       1.00      1.00      1.00      7311
+
+[CV] END  accuracy: (train=1.000, test=0.685) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 3 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       392
+           2       1.00      1.00      1.00       421
+
+    accuracy                           1.00       813
+   macro avg       1.00      1.00      1.00       813
+weighted avg       1.00      1.00      1.00       813
+
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s remaining:    0.0s
+***** FOLD 4 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3524
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7311
+   macro avg       1.00      1.00      1.00      7311
+weighted avg       1.00      1.00      1.00      7311
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+[Parallel(n_jobs=1)]: Done   2 out of   2 | elapsed:    0.0s remaining:    0.0s
+***** FOLD 5 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       392
+           2       1.00      1.00      1.00       421
+
+    accuracy                           1.00       813
+   macro avg       1.00      1.00      1.00       813
+weighted avg       1.00      1.00      1.00       813
+
+***** FOLD 6 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3524
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7311
+   macro avg       1.00      1.00      1.00      7311
+weighted avg       1.00      1.00      1.00      7311
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 7 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       392
+           2       1.00      1.00      1.00       421
+
+    accuracy                           1.00       813
+   macro avg       1.00      1.00      1.00       813
+weighted avg       1.00      1.00      1.00       813
+
+***** FOLD 8 *****
+[Parallel(n_jobs=1)]: Done   3 out of   3 | elapsed:    0.1s remaining:    0.0s
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3524
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7311
+   macro avg       1.00      1.00      1.00      7311
+weighted avg       1.00      1.00      1.00      7311
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 9 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       392
+           2       1.00      1.00      1.00       420
+
+    accuracy                           1.00       812
+   macro avg       1.00      1.00      1.00       812
+weighted avg       1.00      1.00      1.00       812
+
+[Parallel(n_jobs=1)]: Done   4 out of   4 | elapsed:    0.1s remaining:    0.0s
+***** FOLD 10 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3524
+           2       1.00      1.00      1.00      3788
+
+    accuracy                           1.00      7312
+   macro avg       1.00      1.00      1.00      7312
+weighted avg       1.00      1.00      1.00      7312
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 11 *****
+[Parallel(n_jobs=1)]: Done   5 out of   5 | elapsed:    0.1s remaining:    0.0s
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       392
+           2       1.00      1.00      1.00       420
+
+    accuracy                           1.00       812
+   macro avg       1.00      1.00      1.00       812
+weighted avg       1.00      1.00      1.00       812
+
+***** FOLD 12 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3524
+           2       1.00      1.00      1.00      3788
+
+    accuracy                           1.00      7312
+   macro avg       1.00      1.00      1.00      7312
+weighted avg       1.00      1.00      1.00      7312
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 13 *****
+[Parallel(n_jobs=1)]: Done   6 out of   6 | elapsed:    0.1s remaining:    0.0s
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       391
+           2       1.00      1.00      1.00       421
+
+    accuracy                           1.00       812
+   macro avg       1.00      1.00      1.00       812
+weighted avg       1.00      1.00      1.00       812
+
+***** FOLD 14 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3525
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7312
+   macro avg       1.00      1.00      1.00      7312
+weighted avg       1.00      1.00      1.00      7312
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 15 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       391
+           2       1.00      1.00      1.00       421
+
+    accuracy                           1.00       812
+   macro avg       1.00      1.00      1.00       812
+weighted avg       1.00      1.00      1.00       812
+
+***** FOLD 16 *****
+[Parallel(n_jobs=1)]: Done   7 out of   7 | elapsed:    0.2s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   8 out of   8 | elapsed:    0.2s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   9 out of   9 | elapsed:    0.2s remaining:    0.0s
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3525
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7312
+   macro avg       1.00      1.00      1.00      7312
+weighted avg       1.00      1.00      1.00      7312
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 17 *****
+              precision    recall  f1-score   support
+
+           1       0.94      1.00      0.97       391
+           2       1.00      0.94      0.97       421
+
+    accuracy                           0.97       812
+   macro avg       0.97      0.97      0.97       812
+weighted avg       0.97      0.97      0.97       812
+
+***** FOLD 18 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3525
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7312
+   macro avg       1.00      1.00      1.00      7312
+weighted avg       1.00      1.00      1.00      7312
+
+[CV] END  accuracy: (train=1.000, test=0.970) precision: (train=1.000, test=0.942) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+[CV] START .....................................................................
+***** FOLD 19 *****
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00       391
+           2       1.00      1.00      1.00       421
+
+    accuracy                           1.00       812
+   macro avg       1.00      1.00      1.00       812
+weighted avg       1.00      1.00      1.00       812
+
+***** FOLD 20 *****
+[Parallel(n_jobs=1)]: Done  10 out of  10 | elapsed:    0.2s finished
+              precision    recall  f1-score   support
+
+           1       1.00      1.00      1.00      3525
+           2       1.00      1.00      1.00      3787
+
+    accuracy                           1.00      7312
+   macro avg       1.00      1.00      1.00      7312
+weighted avg       1.00      1.00      1.00      7312
+
+[CV] END  accuracy: (train=1.000, test=1.000) precision: (train=1.000, test=1.000) printClassificationReport: (train=0.000, test=0.000) total time=   0.0s
+
+Fold: 1  | accuracy: 0.6851168511685117 | precision: 1.0
+Fold: 2  | accuracy: 1.0 | precision: 1.0
+Fold: 3  | accuracy: 1.0 | precision: 1.0
+Fold: 4  | accuracy: 1.0 | precision: 1.0
+Fold: 5  | accuracy: 1.0 | precision: 1.0
+Fold: 6  | accuracy: 1.0 | precision: 1.0
+Fold: 7  | accuracy: 1.0 | precision: 1.0
+Fold: 8  | accuracy: 1.0 | precision: 1.0
+Fold: 9  | accuracy: 0.9704433497536946 | precision: 0.9421686746987952
+Fold: 10  | accuracy: 1.0 | precision: 1.0
+
+Average Accuracy: 0.9655560200922206 	| Accuracy Standard Deviation: 0.09389415076187682
+Average Precision: 0.9942168674698795 	| Precision Standard Deviation: 0.01734939759036145
+
+Process finished with exit code 0
