@@ -1,9 +1,9 @@
 ## ignore .idea directory
 
-.idea
-.vscode
-cmake-build-debug
-build
+.idea/
+.vscode/
+cmake-build-debug/
+build/
 
 
 
