@@ -283,8 +283,8 @@ namespace OpenGLForm
 			for (int y = 0; y < graph4.data.classsize; y++)
 			{
 
-				graph4.data.graphwidth.push_back(worldWidth / (graph4.data.classsize + 1)); // Width size for each graph
-				graph4.data.graphheight.push_back(worldHeight / (2)); // Height size for each graph
+				graph4.data.plotWidth.push_back(worldWidth / (graph4.data.classsize + 1)); // Width size for each graph
+				graph4.data.plotHeight.push_back(worldHeight / (2)); // Height size for each graph
 				graph4.data.nonOrthoY2.push_back(1);
 				graph4.data.nonOrthoX1.push_back(-1);
 				graph4.data.nonOrthoY1.push_back(-1);
@@ -575,8 +575,8 @@ namespace OpenGLForm
 						if (colliding && displayData == false && reverseDataAxis == 0)
 						{
 							graph4.dragging = true;
-							graph4.data.xgraphcoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
-							graph4.data.ygraphcoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;
+							graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
+							graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;
 						}
 
 						
@@ -612,7 +612,7 @@ namespace OpenGLForm
 				//if (drawingDragged)
 				//{
 				if (graphType == 1) { // S-CPC
-					//graph1.data.ygraphcoordinates[lineClicked] = worldMouseY;
+					//graph1.data.yPlotCoordinates[lineClicked] = worldMouseY;
 				}
 				else if (graphType == 2) { // C-CPC
 					// NOTHING YET
@@ -621,8 +621,8 @@ namespace OpenGLForm
 				else if (graphType == 4) { // C-SPC
 					// DRAGGING
 					if (graph4.dragging) {
-						graph4.data.xgraphcoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
-						graph4.data.ygraphcoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;
+						graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
+						graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;
 					}
 				}
 
@@ -749,9 +749,9 @@ System::String^ OpenGLForm::COpenGL3::logLineCoords(System::String^ func)
 {
 	System::String^ log;
 	log = gcnew System::String("");
-	for (int i = 0; i < graph4.data.graphwidth.size(); i++)
+	for (int i = 0; i < graph4.data.plotWidth.size(); i++)
 	{
-		log = log + graph4.data.xgraphcoordinates[i] + " " + graph4.data.graphwidth[i] + " ";
+		log = log + graph4.data.xPlotCoordinates[i] + " " + graph4.data.plotWidth[i] + " ";
 
 	}	
 
@@ -889,8 +889,8 @@ void OpenGLForm::COpenGL3::displaySelectedData()
 	float rectClickedX, rectClickedY; 
 	int rectIndex;
 	
-	rectClickedX = (worldMouseX - (graph4.data.xgraphcoordinates[graph4.graphClicked] - graph4.data.graphwidth[graph4.graphClicked] / 2)) / graph4.data.graphwidth[graph4.graphClicked];
-	rectClickedY = 1 - (worldMouseY - (graph4.data.ygraphcoordinates[graph4.graphClicked] - graph4.data.graphheight[graph4.graphClicked] / 2)) / graph4.data.graphheight[graph4.graphClicked];
+	rectClickedX = (worldMouseX - (graph4.data.xPlotCoordinates[graph4.graphClicked] - graph4.data.plotWidth[graph4.graphClicked] / 2)) / graph4.data.plotWidth[graph4.graphClicked];
+	rectClickedY = 1 - (worldMouseY - (graph4.data.yPlotCoordinates[graph4.graphClicked] - graph4.data.plotHeight[graph4.graphClicked] / 2)) / graph4.data.plotHeight[graph4.graphClicked];
 
 	for (int p = 0; p < graph4.dataParsed.parsedData.size(); p++)
 	{

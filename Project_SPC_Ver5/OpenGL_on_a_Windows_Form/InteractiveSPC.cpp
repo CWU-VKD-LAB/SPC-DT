@@ -27,12 +27,12 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 	newFile.sortGraphNotBasedOnParser(data);
 
 	data.classsize = int(data.xdata[0].size());
-	for (int y1 = 0; y1 < data.graphwidth.size(); y1++)
+	for (int y1 = 0; y1 < data.plotWidth.size(); y1++)
 	{
 
 		{
-			data.graphwidth[y1] = worldW / (data.classsize * 2.5);
-			data.graphheight[y1] = worldH / 2.0;
+			data.plotWidth[y1] = worldW / (data.classsize * 2.5);
+			data.plotHeight[y1] = worldH / 2.0;
 		}
 
 	}
@@ -73,48 +73,53 @@ void InteractiveSPC::fillGraphLocations()
 		depthList.push_back(root->getAllNodesAtDepth(i));
 	}
 
-	// For every depth, compute
+	// update plot widths
+	for (int plotNum = 0; plotNum < data.plotWidth.size(); plotNum++) {
+		data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
+	}
+
+
+	// For every depth, compute plot coordinates
 	for (int currentDepth = 0; currentDepth < treeDepth; currentDepth++) {
 		int currentSpan = depthSpanList[currentDepth];
 		// get all nodes at given depth
 		std::vector<Node*> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
-		int plotWidth = data.graphwidth[currentDepth];
-		double plotHeight = data.graphheight[0] / (nodesAtCurrentDepth.size() + 1); // need to figure this out
+		int plotWidth = data.plotWidth[currentDepth];
+		double plotHeight = data.plotHeight[0] / (nodesAtCurrentDepth.size() + 1); // need to figure this out
 		std::cout << currentSpan << plotWidth << &nodesAtCurrentDepth << plotHeight;
 
 		float plotX1 = (plotWidth * (currentDepth + 1) + currentDepth * 10) - plotWidth / 2;
 		float plotX2 = plotX1 + plotWidth;
 
-		double screenHeight = data.graphheight[0] * 2;
+		double screenHeight = data.plotHeight[0] * 2;
 		double plotHeightAtThisDepth = screenHeight / (nodesAtCurrentDepth.size() + 1);
 		
 		double plotHeightGap = 0;
 		if (nodesAtCurrentDepth.size() > 1) {
-			plotHeightGap = 50;
+			plotHeightGap = 20;
 		}
 		
-
-		double plotVerticalSeparation = 50;
         // iterate through each node at this depth
 		for (int nodeIndex = 0; nodeIndex < nodesAtCurrentDepth.size(); nodeIndex++) {
 			Node* currentNode = root;
 			// data.graphheight[]
-            
-			data.xgraphcoordinates.push_back(plotWidth * (currentDepth + 1) + currentDepth * 10);
-			data.ygraphcoordinates.push_back((nodeIndex + 1) * plotHeightAtThisDepth);
+			int plotNum = nodesAtCurrentDepth[nodeIndex]->plotNum;
+			data.xPlotCoordinates.push_back(plotWidth * (currentDepth + 1) + currentDepth * 10);
+			data.yPlotCoordinates.push_back((nodeIndex + 1) * plotHeightAtThisDepth);
 
-			data.x1CoordGraph.push_back(plotX1);
-			data.x2CoordGraph.push_back(plotX2);
-			data.y1CoordGraph.push_back(data.ygraphcoordinates[nodeIndex] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
-			data.y2CoordGraph.push_back(data.ygraphcoordinates[nodeIndex] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+			data.x1CoordPlot.push_back(plotX1);
+			data.x2CoordPlot.push_back(plotX2);
+			data.y1CoordPlot.push_back(data.yPlotCoordinates[nodeIndex] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
+			data.y2CoordPlot.push_back(data.yPlotCoordinates[nodeIndex] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+			data.plotHeight[plotNum] = plotHeightAtThisDepth - plotHeightGap;
 		}
 		std::cout << "debug";
-		std::cout << &data.xgraphcoordinates << &data.ygraphcoordinates;
-		std::cout << &data.x1CoordGraph << &data.x2CoordGraph << &data.y1CoordGraph << &data.y2CoordGraph;
+		std::cout << &data.xPlotCoordinates << &data.yPlotCoordinates;
+		std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
 	}
 
 
-	std::cout << &data.x1CoordGraph << &data.x2CoordGraph << &data.y1CoordGraph << &data.y2CoordGraph;
+	std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
 
 
 
@@ -122,24 +127,33 @@ void InteractiveSPC::fillGraphLocations()
 		// for (int i = 1; i <= data.classsize; i++)
 		// {
 
-		// 	//data.xgraphcoordinates.push_back(data.graphwidth[currentDepth - 1] * currentDepth + currentDepth * 0.08 * data.graphwidth[data.graphwidth.size() - 1]);			
-		// 	data.xgraphcoordinates.push_back(data.graphwidth[i - 1] * i + i * 10);
-		// 	data.ygraphcoordinates.push_back(data.graphheight[i - 1]);
+		// 	//data.xPlotCoordinates.push_back(data.graphwidth[currentDepth - 1] * currentDepth + currentDepth * 0.08 * data.graphwidth[data.graphwidth.size() - 1]);			
+		// 	data.xPlotCoordinates.push_back(data.graphwidth[i - 1] * i + i * 10);
+		// 	data.yPlotCoordinates.push_back(data.graphheight[i - 1]);
 
 		// 	//set coordinates to draw rectangles
-		// 	data.x1CoordGraph.push_back(data.xgraphcoordinates[i - 1] - data.graphwidth[i - 1] / 2);
-		// 	data.x2CoordGraph.push_back(data.xgraphcoordinates[i - 1] + data.graphwidth[i - 1] / 2);
-		// 	data.y1CoordGraph.push_back(data.ygraphcoordinates[i - 1] - data.graphheight[i - 1] / 2);
-		// 	data.y2CoordGraph.push_back(data.ygraphcoordinates[i - 1] + data.graphheight[i - 1] / 2);
+		// 	data.x1CoordGraph.push_back(data.xPlotCoordinates[i - 1] - data.graphwidth[i - 1] / 2);
+		// 	data.x2CoordGraph.push_back(data.xPlotCoordinates[i - 1] + data.graphwidth[i - 1] / 2);
+		// 	data.y1CoordGraph.push_back(data.yPlotCoordinates[i - 1] - data.graphheight[i - 1] / 2);
+		// 	data.y2CoordGraph.push_back(data.yPlotCoordinates[i - 1] + data.graphheight[i - 1] / 2);
 
 		// }
 
-		// data.xclasses.push_back(data.xgraphcoordinates);
-		// data.yclasses.push_back(data.ygraphcoordinates);
+		// data.xclasses.push_back(data.xPlotCoordinates);
+		// data.yclasses.push_back(data.yPlotCoordinates);
 	//}
 }
 
 /* Draws data sets. */
+void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int plotNum) {
+
+}
+
+
+
+
+
+
 
 std::set<int> backgroundClassSet; // Debug
 std::set<int> pointClassSet; // Debug
@@ -150,16 +164,16 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		if (j != 0) return;
 	}
 	
-	float xratio = data.graphwidth[j] / data.xmax; // Normalize data to the graph size
-	float yratio = data.graphheight[j] / data.ymax;	
-	x1 -= (data.graphwidth[j] / 2);
-	x2 -= (data.graphwidth[j + 1] / 2);
-	y1 += (data.graphheight[j] / 2);
-	y2 += (data.graphheight[j + 1] / 2);
-	float x1Coord = data.graphwidth[j] * data.xdata[i][j];
-	float x2Coord = (x2 - x1) + data.graphwidth[j + 1] * data.xdata[i][j + 1];
-	float y1Coord = -data.graphheight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
-	float y2Coord = (y2 - y1) - data.graphheight[j+1] * data.ydata[i][j + 1];
+	float xratio = data.plotWidth[j] / data.xmax; // Normalize data to the graph size
+	float yratio = data.plotHeight[j] / data.ymax;	
+	x1 -= (data.plotWidth[j] / 2);
+	x2 -= (data.plotWidth[j + 1] / 2);
+	y1 += (data.plotHeight[j] / 2);
+	y2 += (data.plotHeight[j + 1] / 2);
+	float x1Coord = data.plotWidth[j] * data.xdata[i][j];
+	float x2Coord = (x2 - x1) + data.plotWidth[j + 1] * data.xdata[i][j + 1];
+	float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
+	float y2Coord = (y2 - y1) - data.plotHeight[j+1] * data.ydata[i][j + 1];
 	float x1CoordTrans = x1Coord + (x1 + data.pan_x);
 	float x2CoordTrans = x2Coord + (x1 + data.pan_x);
 	float y1CoordTrans = y1Coord + (y1 + data.pan_y);
@@ -354,7 +368,7 @@ void InteractiveSPC::display() {
 	/* Draws a graph for each dimension */
 	for (int i = 0; i < data.classsize; i++)
 	{
-		data.drawGraph(data.xgraphcoordinates[i], data.ygraphcoordinates[i], data.graphwidth[i], data.graphheight[i], i);
+		data.drawPlot(data.xPlotCoordinates[i], data.yPlotCoordinates[i], data.plotWidth[i], data.plotHeight[i], i);
 	}
 
 	//comment to see only coordinates
@@ -416,10 +430,10 @@ void InteractiveSPC::display() {
 
 			int plot = dataParsed.parsedData[p][4];
 
-			const GLfloat x1 = data.xgraphcoordinates[plot] - data.graphwidth[plot] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[plot];
-			const GLfloat y1 = data.ygraphcoordinates[plot] + data.graphheight[plot] / 2 - dataParsed.parsedData[p][1] * data.graphheight[plot];
-			const GLfloat x2 = data.xgraphcoordinates[plot] - data.graphwidth[plot] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[plot];
-			const GLfloat y2 = data.ygraphcoordinates[plot] + data.graphheight[plot] / 2 - dataParsed.parsedData[p][3] * data.graphheight[plot];
+			const GLfloat x1 = data.xPlotCoordinates[plot] - data.plotWidth[plot] / 2 + dataParsed.parsedData[p][0] * data.plotWidth[plot];
+			const GLfloat y1 = data.yPlotCoordinates[plot] + data.plotHeight[plot] / 2 - dataParsed.parsedData[p][1] * data.plotHeight[plot];
+			const GLfloat x2 = data.xPlotCoordinates[plot] - data.plotWidth[plot] / 2 + dataParsed.parsedData[p][2] * data.plotWidth[plot];
+			const GLfloat y2 = data.yPlotCoordinates[plot] + data.plotHeight[plot] / 2 - dataParsed.parsedData[p][3] * data.plotHeight[plot];
 
 			glRectf(x1, y1, x2, y2);
 
@@ -567,8 +581,9 @@ void InteractiveSPC::display() {
 			{
 				if (data.classNum[i] != (data.classToDisplayOnTop ))
 				{
-					drawData(data.xgraphcoordinates[j], data.ygraphcoordinates[j],
-						data.xgraphcoordinates[j + 1], data.ygraphcoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
+					// gove current point and next point to draw function
+					drawData(data.xPlotCoordinates[j], data.yPlotCoordinates[j],
+						data.xPlotCoordinates[j + 1], data.yPlotCoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
 				}
 
 
@@ -583,8 +598,8 @@ void InteractiveSPC::display() {
 			{
 				if (data.classNum[i] == (data.classToDisplayOnTop) )
 				{
-					drawData(data.xgraphcoordinates[j], data.ygraphcoordinates[j],
-						data.xgraphcoordinates[j + 1], data.ygraphcoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
+					drawData(data.xPlotCoordinates[j], data.yPlotCoordinates[j],
+						data.xPlotCoordinates[j + 1], data.yPlotCoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
 				}
 
 			}
@@ -597,8 +612,8 @@ void InteractiveSPC::display() {
 
 			for (int j = 0; j < data.classsize; j++)
 			{
-				drawData(data.xgraphcoordinates[data.classsize -1-j], data.ygraphcoordinates[j],
-					data.xgraphcoordinates[j+1], data.ygraphcoordinates[j+1], i, j);
+				drawData(data.xPlotCoordinates[data.classsize -1-j], data.yPlotCoordinates[j],
+					data.xPlotCoordinates[j+1], data.yPlotCoordinates[j+1], i, j);
 			}
 		}
 	}
@@ -816,12 +831,12 @@ void InteractiveSPC::calculateDataTerminationPoints() {
 	for (int i = 0; i < data.dataTerminationIndex.size(); i++) {
 		int classnum = data.classNum[i] - 1;
 		for (int j = 0; j < data.dataTerminationIndex[i]; i++) {
-			float px = data.xgraphcoordinates[j];
-			float py = data.ygraphcoordinates[j];
-			px -= (data.graphwidth[j] / 2);
-			py += (data.graphheight[j] / 2);
-			float x1Coord = data.graphwidth[j] * data.xdata[i][j];
-			float y1Coord = -data.graphheight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
+			float px = data.xPlotCoordinates[j];
+			float py = data.yPlotCoordinates[j];
+			px -= (data.plotWidth[j] / 2);
+			py += (data.plotHeight[j] / 2);
+			float x1Coord = data.plotWidth[j] * data.xdata[i][j];
+			float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
 			float x1CoordTrans = x1Coord + (px + data.pan_x);
 			float y1CoordTrans = y1Coord + (py + data.pan_y);
 
@@ -861,10 +876,10 @@ float InteractiveSPC::findClickedGraph(double x, double y)
 	{
 		//for (int i1 = 0; i1 < data.graphwidth.size(); i1++)
 		//{
-			if (data.xgraphcoordinates[i] + data.pan_x - (data.graphwidth[i] / 2) <= x &&
-				data.xgraphcoordinates[i] + data.pan_x + (data.graphwidth[i] / 2) >= x &&
-				data.ygraphcoordinates[i] + data.pan_y - (data.graphheight[i] / 2) <= y &&
-				data.ygraphcoordinates[i] + data.pan_y + (data.graphheight[i] / 2) >= y)
+			if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&
+				data.xPlotCoordinates[i] + data.pan_x + (data.plotWidth[i] / 2) >= x &&
+				data.yPlotCoordinates[i] + data.pan_y - (data.plotHeight[i] / 2) <= y &&
+				data.yPlotCoordinates[i] + data.pan_y + (data.plotHeight[i] / 2) >= y)
 			{
 
 				return i;
@@ -881,13 +896,13 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
 	for (int i = 0; i < data.classsize; i++)
 	{
 
-			if (x <= (data.ygraphcoordinates[i] - 150) && x>= (data.ygraphcoordinates[i]-500))
+			if (x <= (data.yPlotCoordinates[i] - 150) && x>= (data.yPlotCoordinates[i]-500))
 			{
 				return 0;
 			}
 
-			else if (data.xgraphcoordinates[i] - 25 <= x &&
-				data.xgraphcoordinates[i] + 25 >= x)
+			else if (data.xPlotCoordinates[i] - 25 <= x &&
+				data.xPlotCoordinates[i] + 25 >= x)
 			{
 				return 1;
 			}
@@ -901,10 +916,10 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
     int resultClass = -1;
 	for (int p = 0; p < dataParsed.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
         int classNumber = dataParsed.parsedData[p][5];
-		const GLfloat x1 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.graphwidth[dataParsed.parsedData[p][4]];
-		const GLfloat y1 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.graphheight[dataParsed.parsedData[p][4]];
-		const GLfloat x2 = data.xgraphcoordinates[dataParsed.parsedData[p][4]] - data.graphwidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.graphwidth[dataParsed.parsedData[p][4]];
-		const GLfloat y2 = data.ygraphcoordinates[dataParsed.parsedData[p][4]] + data.graphheight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.graphheight[dataParsed.parsedData[p][4]];
+		const GLfloat x1 = data.xPlotCoordinates[dataParsed.parsedData[p][4]] - data.plotWidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.plotWidth[dataParsed.parsedData[p][4]];
+		const GLfloat y1 = data.yPlotCoordinates[dataParsed.parsedData[p][4]] + data.plotHeight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.plotHeight[dataParsed.parsedData[p][4]];
+		const GLfloat x2 = data.xPlotCoordinates[dataParsed.parsedData[p][4]] - data.plotWidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.plotWidth[dataParsed.parsedData[p][4]];
+		const GLfloat y2 = data.yPlotCoordinates[dataParsed.parsedData[p][4]] + data.plotHeight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.plotHeight[dataParsed.parsedData[p][4]];
         if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
             resultClass = classNumber;
         } // Check to see if these need to be rearranged.
@@ -1022,10 +1037,10 @@ int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentData
 
 	for (int i = 0; i < dataParsed.parsedData.size(); i++) {
 		if (i == currentDataIndex) continue;
-		GLfloat testRectx1 = data.xgraphcoordinates[dataParsed.parsedData[i][4]] - data.graphwidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][0] * data.graphwidth[dataParsed.parsedData[i][4]];
-		GLfloat testRecty1 = data.ygraphcoordinates[dataParsed.parsedData[i][4]] + data.graphheight[dataParsed.parsedData[i][4]] / 2 - dataParsed.parsedData[i][1] * data.graphheight[dataParsed.parsedData[i][4]];
-		GLfloat testRectx2 = data.xgraphcoordinates[dataParsed.parsedData[i][4]] - data.graphwidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][2] * data.graphwidth[dataParsed.parsedData[i][4]];
-		GLfloat testRecty2 = data.ygraphcoordinates[dataParsed.parsedData[i][4]] + data.graphheight[dataParsed.parsedData[i][4]] / 2 - dataParsed.parsedData[i][3] * data.graphheight[dataParsed.parsedData[i][4]];
+		GLfloat testRectx1 = data.xPlotCoordinates[dataParsed.parsedData[i][4]] - data.plotWidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][0] * data.plotWidth[dataParsed.parsedData[i][4]];
+		GLfloat testRecty1 = data.yPlotCoordinates[dataParsed.parsedData[i][4]] + data.plotHeight[dataParsed.parsedData[i][4]] / 2 - dataParsed.parsedData[i][1] * data.plotHeight[dataParsed.parsedData[i][4]];
+		GLfloat testRectx2 = data.xPlotCoordinates[dataParsed.parsedData[i][4]] - data.plotWidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][2] * data.plotWidth[dataParsed.parsedData[i][4]];
+		GLfloat testRecty2 = data.yPlotCoordinates[dataParsed.parsedData[i][4]] + data.plotHeight[dataParsed.parsedData[i][4]] / 2 - dataParsed.parsedData[i][3] * data.plotHeight[dataParsed.parsedData[i][4]];
 
 		if (isPointWithinRect(px, py, testRectx1, testRecty1, testRectx2, testRecty2)) {
 			dataIndex = i;

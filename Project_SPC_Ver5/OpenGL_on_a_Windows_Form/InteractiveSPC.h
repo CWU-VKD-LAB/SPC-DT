@@ -31,7 +31,7 @@ public:
 
 
 	void drawData(float x1, float  y1, float  x2, float  y2, int i, int j);
-
+	void drawData(float x1, float  y1, float  x2, float  y2, int plotNum);
 
 	void display();
 

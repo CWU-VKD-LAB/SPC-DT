@@ -286,11 +286,11 @@ public:
 	double ymax;
 
 	/// <summary>	Width size for each graph. </summary>
-	//double graphwidth;
-	std::vector<double> graphwidth; 
+	//double plotWidth;
+	std::vector<double> plotWidth; 
 	/// <summary>	Height size for each graph. </summary>
-	//double graphheight;
-	std::vector<double> graphheight;
+	//double plotHeight;
+	std::vector<double> plotHeight;
 	//for storing orthogonal information for X and Y axes for each graph 
 	std::vector<double> nonOrthoX1;
 	std::vector<double> nonOrthoY1;
@@ -313,11 +313,11 @@ public:
 
 	/// <summary>	Holds different dimensions of x data. </summary>
 	std::vector<std::vector<float> > xdata;
-	std::vector<double> x1CoordGraph, x2CoordGraph, y1CoordGraph, y2CoordGraph;
+	std::vector<double> x1CoordPlot, x2CoordPlot, y1CoordPlot, y2CoordPlot;
 	std::vector<float> dataTransparency;
 	std::vector<float> classTransparencies;
 	bool hdDisplay; //to display high dimension data
-	int numOfGraphsPerRowHdDisplay;
+	int numOfPlotsPerRowHdDisplay;
 	std::vector< std::vector<float>> originalXData;
 	std::vector< std::vector<float>> originalYData;
 	/// <summary>	Holds different dimensions of y data. </summary>
@@ -340,15 +340,15 @@ public:
 	// These hold the ORIGINAL x & y coordinates for each graph position.
 	// Since we're using ClassData, this might get replaced
 	/// <summary>	The originalxgraphcoordinates. </summary>
-	std::vector<float> originalxgraphcoordinates;
-	/// <summary>	The originalygraphcoordinates. </summary>
-	std::vector<float> originalygraphcoordinates;
+	std::vector<float> originalXPlotCoordinates;
+	/// <summary>	The originalYPlotCoordinates. </summary>
+	std::vector<float> originalYPlotCoordinates;
 
 	/// <summary>	These hold x &amp; y coordinates for each graph position. </summary>
-	std::vector<float> xgraphcoordinates;
+	std::vector<float> xPlotCoordinates;
 	bool fOpen;
-	/// <summary>	The ygraphcoordinates. </summary>
-	std::vector<float> ygraphcoordinates;
+	/// <summary>	The yPlotCoordinates. </summary>
+	std::vector<float> yPlotCoordinates;
 
 
 	// for zooming and panning ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -405,10 +405,10 @@ public:
 		initialYclasses.clear();
 		xclasses.clear();
 		yclasses.clear();
-		originalxgraphcoordinates.clear();
-		originalygraphcoordinates.clear();
-		xgraphcoordinates.clear();
-		ygraphcoordinates.clear();
+		originalXPlotCoordinates.clear();
+		originalYPlotCoordinates.clear();
+		xPlotCoordinates.clear();
+		yPlotCoordinates.clear();
 		classNum.clear();
 
 
@@ -425,12 +425,12 @@ public:
 	/// <param name="y">	The y coordinate. </param>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void drawGraph(float x, float y, float graphW, float graphH, int i) 
+	void drawPlot(float x, float y, float plotW, float plotH, int i) 
 	{
 
 			glPushMatrix(); // Makes a new layer
 			glTranslatef(x + pan_x, y + pan_y, 0.0f);	
-			glScalef((graphW / 2), (graphH / 2), 0.0f);
+			glScalef((plotW / 2), (plotH / 2), 0.0f);
 			//glRotatef(45, 1, 1, 1);
 			glBegin(GL_LINE_STRIP);
 			glColor3ub(0, 0, 0); // Line color
@@ -444,24 +444,24 @@ public:
 			//	for (int p = 0; p < parsedData.size(); p++)
 			//	{
 			//		glColor4ub(255, 0, 0, 1);
-			//		glRectf(xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]],
-			//			    ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]],
-			//			    xgraphcoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]],
-			//			    ygraphcoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]]);
+			//		glRectf(xPlotCoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]],
+			//			    yPlotCoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]],
+			//			    xPlotCoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]],
+			//			    yPlotCoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]]);
 			//	}
 			//	glColor4ub(255, 0, 0, 1);
-			//	glRectf(xgraphcoordinates[0] - graphwidth[0] / 2, ygraphcoordinates[0] + graphheight[0] / 2,
-			//		xgraphcoordinates[0] - graphwidth[0] / 2 + 0.255 * graphwidth[0], ygraphcoordinates[0] - graphheight[0] / 2);
-			//	/*glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2, data.ygraphcoordinates[1] + data.graphheight[1] / 2,
-			//		data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
+			//	glRectf(xPlotCoordinates[0] - graphwidth[0] / 2, yPlotCoordinates[0] + graphheight[0] / 2,
+			//		xPlotCoordinates[0] - graphwidth[0] / 2 + 0.255 * graphwidth[0], yPlotCoordinates[0] - graphheight[0] / 2);
+			//	/*glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2, data.yPlotCoordinates[1] + data.graphheight[1] / 2,
+			//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
 			//	glColor4ub(0, 255, 0, 1);
-			//	glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.ygraphcoordinates[1] + data.graphheight[1] / 2,
-			//		data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
-			//	glRectf(data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 0 * data.graphwidth[1], data.ygraphcoordinates[1] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1],
-			//		data.xgraphcoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.ygraphcoordinates[0] + data.graphheight[1] / 2 - 1 * data.graphheight[1]);
+			//	glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.yPlotCoordinates[1] + data.graphheight[1] / 2,
+			//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
+			//	glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0 * data.graphwidth[1], data.yPlotCoordinates[1] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1],
+			//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 1 * data.graphheight[1]);
 			//	glColor4ub(169, 169, 169, 6);
-			//	glRectf(data.xgraphcoordinates[0] - data.graphwidth[0] / 2 + 0.255 * data.graphwidth[0], data.ygraphcoordinates[0] + data.graphheight[0] / 2 - 0 * data.graphheight[1],
-			//		data.xgraphcoordinates[0] - data.graphwidth[0] / 2 + 1 * data.graphwidth[0], data.ygraphcoordinates[0] + data.graphheight[0] / 2 - 1 * data.graphheight[1]);*/
+			//	glRectf(data.xPlotCoordinates[0] - data.graphwidth[0] / 2 + 0.255 * data.graphwidth[0], data.yPlotCoordinates[0] + data.graphheight[0] / 2 - 0 * data.graphheight[1],
+			//		data.xPlotCoordinates[0] - data.graphwidth[0] / 2 + 1 * data.graphwidth[0], data.yPlotCoordinates[0] + data.graphheight[0] / 2 - 1 * data.graphheight[1]);*/
 			//}
 	}
 
@@ -550,12 +550,12 @@ public:
 		for (int i = 0; i < dataTerminationIndex.size(); i++) {
 			int classnum = classNum[i] - 1;
 			for (int j = 0; j < dataTerminationIndex[i]; j++) {
-				float px = xgraphcoordinates[j];
-				float py = ygraphcoordinates[j];
-				px -= (graphwidth[j] / 2);
-				py += (graphheight[j] / 2);
-				float x1Coord = graphwidth[j] * xdata[i][j];
-				float y1Coord = -graphheight[j] * ydata[i][j]; //height of graph is constant = 328.5
+				float px = xPlotCoordinates[j];
+				float py = yPlotCoordinates[j];
+				px -= (plotWidth[j] / 2);
+				py += (plotHeight[j] / 2);
+				float x1Coord = plotWidth[j] * xdata[i][j];
+				float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
 				float x1CoordTrans = x1Coord + (px + pan_x);
 				float y1CoordTrans = y1Coord + (py + pan_y);
 
@@ -622,12 +622,12 @@ public:
 	void calculateTerminationPoint(int i) {
 		int classnum = classNum[i] - 1;
 		for (int j = 0; j < dataTerminationIndex[i]; j++) {
-			float px = xgraphcoordinates[j];
-			float py = ygraphcoordinates[j];
-			px -= (graphwidth[j] / 2);
-			py += (graphheight[j] / 2);
-			float x1Coord = graphwidth[j] * xdata[i][j];
-			float y1Coord = -graphheight[j] * ydata[i][j]; //height of graph is constant = 328.5
+			float px = xPlotCoordinates[j];
+			float py = yPlotCoordinates[j];
+			px -= (plotWidth[j] / 2);
+			py += (plotHeight[j] / 2);
+			float x1Coord = plotWidth[j] * xdata[i][j];
+			float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
 			float x1CoordTrans = x1Coord + (px + pan_x);
 			float y1CoordTrans = y1Coord + (py + pan_y);
 
@@ -653,13 +653,13 @@ public:
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 		// TODO
 		int resultClass;
-		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which plot we are looking at?
 			int classNumber = parsedData[p][5];
 			int plot = parsedData[p][4];
-			GLfloat x1 = xgraphcoordinates[plot] - graphwidth[plot] / 2 + parsedData[p][0] * graphwidth[plot];
-			GLfloat y1 = ygraphcoordinates[plot] + graphheight[plot] / 2 - parsedData[p][1] * graphheight[plot];
-			GLfloat x2 = xgraphcoordinates[plot] - graphwidth[plot] / 2 + parsedData[p][2] * graphwidth[plot];
-			GLfloat y2 = ygraphcoordinates[plot] + graphheight[plot] / 2 - parsedData[p][3] * graphheight[plot];
+			GLfloat x1 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][0] * plotWidth[plot];
+			GLfloat y1 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][1] * plotHeight[plot];
+			GLfloat x2 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][2] * plotWidth[plot];
+			GLfloat y2 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][3] * plotHeight[plot];
 			if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
 				resultClass = classNumber;
 			} // Check to see if these need to be rearranged.
