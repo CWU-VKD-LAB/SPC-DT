@@ -50,6 +50,7 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 	std::vector<float> temp;
 	std::vector<float> coordinatesPlotnumAndClassnum;
 	std::vector<std::string> attributePair;
+	std::vector<int> destinationVector;
 	int destination;
 
 	myParserFile.open(dataParsed.parserFileName);											// Open the file
@@ -73,36 +74,67 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 	// step through each row of data
 	for (int i = 0; i < data.strparsedData.size(); i++)
 	{
-		// Get coordinate data
-		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][0]));
-		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][1]));
-		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][2]));
-		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][3]));
-
-		// get plotnum and classnum
-		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][4]));
-		coordinatesPlotnumAndClassnum.push_back(stof(data.strparsedData[i][5]));
-
-		// Get attribute pair names and strip commas 
+		float x1 = stof(data.strparsedData[i][0]);
+		float y1 = stof(data.strparsedData[i][1]);
+		float x2 = stof(data.strparsedData[i][2]);
+		float y2 = stof(data.strparsedData[i][3]);
+		int plotNum = stoi(data.strparsedData[i][4]); // doesnt need to be float, but we're putting it in a vector with other floats
+		int classNum = stoi(data.strparsedData[i][5]); // doesnt need to be float, but we're putting it in a vector with other floats
 		string attr1 = data.strparsedData[i][6];
 		string attr2 = data.strparsedData[i][7];
+        // if current parser element contains a destination, update destination map
+		if (data.strparsedData[i].size() == 9) {
+			int destination = stoi(data.strparsedData[i][8]);
+			data.plotDestinationMap[plotNum][classNum] = destination;
+			/*if (data.plotDestinationMap.find(plotNum) == data.plotDestinationMap.end()) {
+                data.plotDestinationMap[plotNum][classNum] = destination;
+            }
+            else {
+                data.plotDestinationMap[plotNum].insertnew std::map<int, int>();
+                data.plotDestinationMap[plotNum][classNum] = destination;
+            }*/
+		}
+		
+		// Add coords, plotnum, classnum
+		coordinatesPlotnumAndClassnum.push_back(x1);
+		coordinatesPlotnumAndClassnum.push_back(y1);
+		coordinatesPlotnumAndClassnum.push_back(x2);
+		coordinatesPlotnumAndClassnum.push_back(y2);
+		coordinatesPlotnumAndClassnum.push_back(plotNum);
+		coordinatesPlotnumAndClassnum.push_back(classNum);
+
+		// Get attribute pair names and strip commas 
 		attr1.erase(std::remove(attr1.begin(), attr1.end(), ','), attr1.end());
 		attr2.erase(std::remove(attr2.begin(), attr2.end(), ','), attr2.end());
-		attributePair.push_back(attr1);
-		attributePair.push_back(attr2);
 
-		if (i < data.strparsedData.size() - 1) {
-			data.plotDestinationList.push_back(i + 1);
+		// if dataparsedAttributePairs does not contain attribute pair
+		bool dataDotparsedAttributePairsContainsCurrentPair = false;
+		for (int i = 0; i < data.parsedAttributePairs.size(); i++) {
+			if (attr1 == data.parsedAttributePairs[i][0] &&
+				attr2 == data.parsedAttributePairs[i][1] &&
+				std::to_string(plotNum) == data.parsedAttributePairs[i][2])
+			{
+				dataDotparsedAttributePairsContainsCurrentPair = true;
+				break;
+			}
 		}
 
-		// If row is a continue element, get its destination
-		if (data.strparsedData[i].size() > 8) {
-			destination = stoi(data.strparsedData[i][8]);
-			coordinatesPlotnumAndClassnum.push_back(destination);
-			//data.plotDestinationList.push_back(destination);
+		if (!dataDotparsedAttributePairsContainsCurrentPair) {
+			attributePair.push_back(attr1);
+			attributePair.push_back(attr2);
+			attributePair.push_back(std::to_string(plotNum));
+			data.parsedAttributePairs.push_back(attributePair);
 		}
 
-
+		//if (i < data.strparsedData.size() - 1) {
+		//	data.plotDestinationList.push_back(i + 1);
+		//}
+		//// If row is a continue element, get its destination
+		//if (data.strparsedData[i].size() > 8) {
+		//	destination = stoi(data.strparsedData[i][8]);
+		//	coordinatesPlotnumAndClassnum.push_back(destination);
+		//	//data.plotDestinationList.push_back(destination);
+		//}
 		//std::vector<string> attributePair;
 		//for (int j = 0; j < data.strparsedData[i].size(); j++)
 		//{
@@ -122,23 +154,21 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		//	//temp.push_back(stof(dataParsed.strparsedData[i][j]));
 		//}
 
-
 		data.parsedData.push_back(coordinatesPlotnumAndClassnum);
 		dataParsed.parsedData.push_back(coordinatesPlotnumAndClassnum);
 
-        // TODO: Try to remember what this does
-		bool dataParsedContainsAttributePair = false;
-		for (int i = 0; i < data.parsedAttributePairs.size(); i++) {
-			if (attributePair[0] == data.parsedAttributePairs[i][0] && attributePair[1] == data.parsedAttributePairs[i][1]) {
-				dataParsedContainsAttributePair = true;
-			}
-		}
-
-        // When would this be true?
-		if (!dataParsedContainsAttributePair) {
-			data.parsedAttributePairs.push_back(attributePair);
-			dataParsed.parsedAttributePairs.push_back(attributePair);
-		}
+        //      // TODO: Try to remember what this does
+		//bool dataParsedObjectContainsAttributePair = false;
+		//for (int i = 0; i < data.parsedAttributePairs.size(); i++) {
+		//	if (attributePair[0] == data.parsedAttributePairs[i][0] && attributePair[1] == data.parsedAttributePairs[i][1]) {
+		//		dataParsedObjectContainsAttributePair = true;
+		//	}
+		//}
+  //      // When would this be true?
+		//if (!dataParsedObjectContainsAttributePair) {
+		//	data.parsedAttributePairs.push_back(attributePair);
+		//	dataParsed.parsedAttributePairs.push_back(attributePair);
+		//}
 
 		std::cout << "debug";
 		coordinatesPlotnumAndClassnum.clear();

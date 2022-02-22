@@ -56,6 +56,9 @@ public:
 	/// *** USED FOR DETERMINING LINE TERMINATION MODE
 	bool isLineTerminationMode = false; // TODO: DEBUG TRUE. in the end it will be set to false and controlled by a button
 	bool isColorTerminationMode = false;
+
+	/// *** USED TO DETERMINE IF INCOMING PARSER BRANCHES
+	bool doesParserBranch = false;
 	
 	/// *** USED FOR DETERMINING MISCLASSIFICATION HIGHLIGHTING MODE
 	bool isHighlightMisclassficationsMode = false;

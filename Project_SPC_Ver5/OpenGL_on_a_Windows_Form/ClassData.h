@@ -204,7 +204,8 @@ public:
 	std::vector<std::vector<float> > classColor;
 	std::vector<float>  classTransparency;
 	int classToDisplayOnTop;
-	Node* root;
+	bool doesDecisionTreeBranch = false;
+	Node* rootNode;
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
@@ -299,7 +300,8 @@ public:
 	std::vector<std::vector<float>> parsedData;
 	std::vector<std::vector<std::string>> strparsedData;
 	std::vector<std::vector<std::string>> parsedAttributePairs;
-	std::vector<int> plotDestinationList;
+	//std::vector<int> plotDestinationList;
+	std::map<int, std::map<int, int> > plotDestinationMap; // maps plotnum to a map of classnum -> destinationplot 
 	double temprx2;
 	double temprectAndCoordy2;
 	//bool seeLabels;
@@ -601,16 +603,19 @@ public:
 			}
 		}
 
-		root = nodeMap[0]; // TODO: investigate why this is necessary
+		rootNode = nodeMap[0]; // TODO: investigate why this is necessary
 		
-		root->computeSubtreeDepth();
-		root->computeSubTreeMaxSpan();
+		rootNode->computeSubtreeDepth();
+		rootNode->computeSubTreeMaxSpan();
 
-		int rootDepth = root->subtreeDepth;
-		int rootSpan = root->subtreeSpan;
+		int rootDepth = rootNode->subtreeDepth;
+		int rootSpan = rootNode->subtreeSpan;
+
+		if (rootSpan > 1) {
+			doesDecisionTreeBranch = true;
+		}
 
 		std::cout << "debug treespan" << rootSpan;
-
 		std::cout << "debug treedepth" << rootDepth;
 	}
 

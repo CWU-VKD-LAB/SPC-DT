@@ -39,7 +39,7 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 						// Width size for each graph
 											// Height size for each graph
 
-
+	doesParserBranch = data.doesDecisionTreeBranch;
 	fillGraphLocations(); // Creates starting graph positions, and fills example data for now.
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ void InteractiveSPC::fillGraphLocations()
 	//{
 
 	int numPlots = data.classsize;
-	Node* root = data.root;
+	Node* root = data.rootNode;
 	int treeDepth = root->subtreeDepth;
 
 	// Compute spans for each depth
@@ -184,7 +184,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		drawVertex2 = false;
 	}
 
-	if (isRectangleMode) {
+	if (isRectangleMode) { // TODO : need to adapt for branches
 		if (doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
 			// draw point within rectangle based on how many classes there are
 			// TODO: later could add a selection based on class
