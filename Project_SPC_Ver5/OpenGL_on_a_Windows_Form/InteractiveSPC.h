@@ -18,20 +18,21 @@ public:
 	FileHandling newFile;
 	float backgroundTransparency = 100; // Default value
 	float backgroundClassColorCoefficient = 1.0; // Default value
-
+	std::vector<int> plotDrawOrder;
 
 	InteractiveSPC() {};
 
 
 	InteractiveSPC(ClassData&, parseData&, double, double);
 
-	void fillGraphLocations();
+	void fillPlotLocations();
 
 	/* Drawing data sets. */
 
+	std::vector<int> pointsToRender;
 
 	void drawData(float x1, float  y1, float  x2, float  y2, int i, int j);
-	void drawData(float x1, float  y1, float  x2, float  y2, int plotNum);
+	int drawData(float x1, float  y1, int recordNum, int plotNum);
 
 	void display();
 
@@ -40,6 +41,8 @@ public:
 
 	// *** USED FOR DRAWING LINE COLORS
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
+	int findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum);
+	int findPlotNumOfPoint(GLfloat px, GLfloat py);
 	bool shouldPointTerminate(GLfloat px, GLfloat py);
 
 	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
@@ -74,6 +77,8 @@ public:
 	/// <summary>	Holds what graphs being clicked. </summary>
 	int graphClicked = -1;
 	int coordinatesClicked = -1; //Wagle
+
+	void updatePlotLocation(double mouseX, double mouseY, int plotNum);
 
 	/* This method takes the passed mouse click coordinates and finds the graph clicked on. */
 	float findClickedGraph(double x, double y);

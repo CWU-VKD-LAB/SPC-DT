@@ -214,7 +214,9 @@ namespace OpenGLForm
 			//return numberOfClasses;
 		}
 
-
+		std::vector<int> getContinueClassList() {
+			return graph4.data.continueElements;
+		}
 
 
 
@@ -257,7 +259,7 @@ namespace OpenGLForm
 		}
 
 
-		void setFileName(ClassData file) {
+		void setFileName(ClassData &file) {
 			// clearAllGraphData(); // why do we clear here?
 
 
@@ -278,12 +280,12 @@ namespace OpenGLForm
 			graph4.data = data;
 			graph4.dataParsed = dataParsed;
 		
-			graph4.data.classsize = int(data.xdata[0].size());
+			graph4.data.numPlots = int(data.xdata[0].size());
 
-			for (int y = 0; y < graph4.data.classsize; y++)
+			for (int y = 0; y < graph4.data.numPlots; y++)
 			{
 
-				graph4.data.plotWidth.push_back(worldWidth / (graph4.data.classsize + 1)); // Width size for each graph
+				graph4.data.plotWidth.push_back(worldWidth / (graph4.data.numPlots + 1)); // Width size for each graph
 				graph4.data.plotHeight.push_back(worldHeight / (2)); // Height size for each graph
 				graph4.data.nonOrthoY2.push_back(1);
 				graph4.data.nonOrthoX1.push_back(-1);
@@ -293,8 +295,9 @@ namespace OpenGLForm
 			}
 	
 			graph4.data.computeDecisionTreeBranches();
-			graph4.fillGraphLocations(); // Creates starting graph positions, and fills example data for now.
+			graph4.fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
 			graph4.data.setClassColors();
+			graph4.data.setContinueClassColors();
 
 			//for (int j = 0; j < 3; j++)
 			//{
@@ -322,9 +325,9 @@ namespace OpenGLForm
 			graph4.data.parsedData = dataParsed.parsedData;
 		}
 
-		void calculateDataTerminationPoints() {
+		void seedDataTerminationPoints() {
 			graph4.data.computeDecisionTreeBranches();
-			//graph4.data.calculateTerminationPoints();
+			graph4.data.seedDataTerminationPoints();
 		}
 
 
@@ -575,8 +578,9 @@ namespace OpenGLForm
 						if (colliding && displayData == false && reverseDataAxis == 0)
 						{
 							graph4.dragging = true;
-							graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
-							graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;
+							graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.graphClicked);
+							/*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
+							graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
 						}
 
 						
@@ -621,8 +625,9 @@ namespace OpenGLForm
 				else if (graphType == 4) { // C-SPC
 					// DRAGGING
 					if (graph4.dragging) {
-						graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
-						graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;
+						graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.graphClicked);
+						/*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
+						graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
 					}
 				}
 
@@ -657,10 +662,9 @@ namespace OpenGLForm
 				}
 				//check if the mouse click was on a graph and detect whcih 
 				if (graph4.dragging) {
-
+					graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.graphClicked);
 					graph4.dragging = false;
 					graph4.graphClicked = -1;
-
 				}
 
 
@@ -741,7 +745,7 @@ public:
 int OpenGLForm::COpenGL3::getNumberOfGraphs()
 {
 	
-	return graph4.data.classsize;
+	return graph4.data.numPlots;
 }
 
 

@@ -989,7 +989,7 @@ private: System::Windows::Forms::CheckBox^ pointColorMode;
 		//	dataParsed. data.parsedData;
 		//}
 
-		OpenGL3->calculateDataTerminationPoints();
+		OpenGL3->seedDataTerminationPoints();
 
 		loadInteractiveSPC();
 	}
@@ -1175,7 +1175,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	if (fileopened) {
 		OpenGL3->setFileName(data);
 		//OpenGL3->setParserFileName(dataParsed);
-		OpenGL3->calculateDataTerminationPoints();
+		OpenGL3->seedDataTerminationPoints();
 
 		// clear the list to prevent duplicates on update
 		this->comboBox1->Items->Clear();
@@ -1186,9 +1186,15 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 		this->classTransparencySelection->Items->Add("All");
 
 		data.numOfClasses = OpenGL3->getClassSize();
+		data.continueElements = OpenGL3->getContinueClassList();
 		for (int i = 1; i <= data.numOfClasses; i++) {
 			this->comboBox1->Items->Add(i); // set the combobox for "Class combobox" to the data in item1 
 			this->classTransparencySelection->Items->Add(i);
+		}
+
+		for (int i = 0; i < data.continueElements.size(); i++) {
+			this->comboBox1->Items->Add(data.continueElements[i]);
+			this->classTransparencySelection->Items->Add(data.continueElements[i]);
 		}
 
 		
@@ -1447,7 +1453,7 @@ private: System::Void clearRectangleButton_Click(System::Object^ sender, System:
 	// Clear rectangle
 	OpenGL3->drawingRectangleEnabled = false;
 	OpenGL3->setDrawingRectangleState(false);
-	OpenGL3->calculateDataTerminationPoints();
+	OpenGL3->seedDataTerminationPoints();
 }
 
 	int classSelectionForTransparency = -1;

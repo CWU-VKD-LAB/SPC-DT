@@ -8,11 +8,12 @@
 #include "FileHandling.h"
 #include <map>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 FileHandling::FileHandling() {}
 
 // Input: Contents of input.csv -- Opens the file and reads the values into matrix values
-
 
 void FileHandling::openFile(ClassData &data)
 {
@@ -50,6 +51,7 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 	std::vector<float> temp;
 	std::vector<float> coordinatesPlotnumAndClassnum;
 	std::vector<std::string> attributePair;
+	std::map<int, std::vector<std::string>> attributePairSorter; // weird way to sort things, but it'll work
 	std::vector<int> destinationVector;
 	int destination;
 
@@ -80,6 +82,11 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		float y2 = stof(data.strparsedData[i][3]);
 		int plotNum = stoi(data.strparsedData[i][4]); // doesnt need to be float, but we're putting it in a vector with other floats
 		int classNum = stoi(data.strparsedData[i][5]); // doesnt need to be float, but we're putting it in a vector with other floats
+		if (classNum < 0) {
+			if (!std::count(data.continueElements.begin(), data.continueElements.end(), classNum)) {
+				data.continueElements.push_back(classNum);
+			}
+		}
 		string attr1 = data.strparsedData[i][6];
 		string attr2 = data.strparsedData[i][7];
         // if current parser element contains a destination, update destination map
@@ -123,7 +130,7 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 			attributePair.push_back(attr1);
 			attributePair.push_back(attr2);
 			attributePair.push_back(std::to_string(plotNum));
-			data.parsedAttributePairs.push_back(attributePair);
+			attributePairSorter[plotNum] = attributePair;
 		}
 
 		//if (i < data.strparsedData.size() - 1) {
@@ -174,7 +181,13 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		coordinatesPlotnumAndClassnum.clear();
 		attributePair.clear();
 	}
-	std::cout << &data.parsedData;
+
+	// very odd way to sort, but hey it works
+	for (int i = 0; i < attributePairSorter.size(); i++) {
+		data.parsedAttributePairs.push_back(attributePairSorter[i]);
+	}
+
+	std::cout << "debug" << &data.parsedData;
 	myParserFile.close();
 	std::cout << "debug2";
 }
@@ -188,6 +201,10 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 	float yCoord = 0;
 
 	data.getLabelsFromParser();
+
+	for (int i = 0; i < data.values[0].size(); i++) {
+		data.attributeNameToDataIndex[data.values[0][i]] = i;
+	}
 
 	// step through each row of data, except for first which is attribute labels
 	for (int i = 1; i < data.values.size(); i++) {
@@ -230,6 +247,32 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 			size = attributeValueMap.size();
 			std::cout << "debug" << size;
 
+			// init min/max attribute map
+			if (data.attributeMinMax.find(attr1) == data.attributeMinMax.end()) {
+				data.attributeMinMax[attr1].push_back(xCoord);
+				data.attributeMinMax[attr1].push_back(xCoord);
+			}
+			if (data.attributeMinMax.find(attr2) == data.attributeMinMax.end()) {
+				data.attributeMinMax[attr2].push_back(yCoord);
+				data.attributeMinMax[attr2].push_back(yCoord);
+			}
+
+			if (xCoord > data.attributeMinMax[attr1][1]) {
+				data.attributeMinMax[attr1][1] = xCoord;
+			}
+
+			if(xCoord < data.attributeMinMax[attr1][0]) {
+				data.attributeMinMax[attr1][0] = xCoord;
+			}
+
+			if (yCoord > data.attributeMinMax[attr2][1]) {
+				data.attributeMinMax[attr2][1] = yCoord;
+			}
+
+			if (yCoord < data.attributeMinMax[attr2][0]) {
+				data.attributeMinMax[attr2][0] = yCoord;
+			}
+
 			if (xCoord == 0 || yCoord == 0) {
 				std::cout << "debug";
 			}
@@ -251,7 +294,7 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 		data.ydata.push_back(ydatatemp);
 		data.originalYData.push_back(ydatatemp);
 
-		data.dataTerminationIndex.push_back(xdatatemp.size());
+		//data.dataTerminationIndex.push_back(xdatatemp.size()); // why was i doing this?
 
 		xdatatemp.clear();                                              // Clear for the next plot line
 		ydatatemp.clear();
@@ -321,7 +364,7 @@ void FileHandling::sortGraphNotBasedOnParser(ClassData &data)
 		data.ydata.push_back(ydatatemp);
 		data.originalYData.push_back(ydatatemp);
 
-		data.dataTerminationIndex.push_back(xdatatemp.size());
+		//data.dataTerminationIndex.push_back(xdatatemp.size()); // no don't do this 
 
 		xdatatemp.clear();                                              // Clear for the next plot line
 		ydatatemp.clear();
@@ -330,105 +373,132 @@ void FileHandling::sortGraphNotBasedOnParser(ClassData &data)
 
 void FileHandling::normalizeData(ClassData &data)
 {
-	// Y Normalization
-	std::vector<float> minYcol;
-	std::vector<float> maxYcol;
-	std::vector<float> temp;
+	//// Y Normalization
+	//std::vector<float> minYcol;
+	//std::vector<float> maxYcol;
+	//std::vector<float> temp;
 
-	std::vector<std::vector<float> > convertedValues; // NEW
+	//std::vector<std::vector<float> > convertedValues; // NEW
 
 
-	float min = 0;
-	float max = 0;
+	//float min = 0;
+	//float max = 0;
 
-	for (int j = 0; j < data.ydata[0].size(); j++) {                                               // Gets the min and max of every column
-		min = data.ydata[0][j];
-		for (int i = 0; i < data.ydata.size(); i++) {
-			
-			if (data.ydata[i][j] > max) {
-				max = data.ydata[i][j];
+	//for (int j = 0; j < data.ydata[0].size(); j++) {                                               // Gets the min and max of every column
+	//	min = data.ydata[0][j];
+	//	for (int i = 0; i < data.ydata.size(); i++) {
+	//		
+	//		if (data.ydata[i][j] > max) {
+	//			max = data.ydata[i][j];
+	//		}
+	//		if (data.ydata[i][j] < min) {
+	//			min = data.ydata[i][j];
+	//		}
+	//	}
+	//	if (min == max)   // This is used when entire column is of same values, the normalized value is 0.5 (chosen arbitrarily)
+	//		min = 0;
+	//	minYcol.push_back(min);
+	//	maxYcol.push_back(max);
+	//	max = 0;
+	//
+	//}
+
+
+	// get min/max for each column
+	std::vector<float> maxPerCol;
+	std::vector<float> minPerCol;
+	for (int i = 0; i < data.values[0].size(); i++) {
+		maxPerCol.push_back(INT_MIN);
+		minPerCol.push_back(INT_MAX);
+		for (int j = 1; j < data.values.size(); j++) {
+			float val = stof(data.values[j][i]);
+			if (val > maxPerCol[i]) {
+				maxPerCol[i] = val;
 			}
-			if (data.ydata[i][j] < min) {
-				min = data.ydata[i][j];
+			if (val < minPerCol[i]) {
+				minPerCol[i] = val;
 			}
 		}
-		if (min == max)   // This is used when entire column is of same values, the normalized value is 0.5 (chosen arbitrarily)
-			min = 0;
-		minYcol.push_back(min);
-		maxYcol.push_back(max);
-		max = 0;
-	
 	}
 
 
-
-	for (int i = 0; i < data.ydata.size(); i++) {                                                  // Normalize the data from 0 - 1
-		for (int j = 0; j < data.ydata[0].size(); j++) {
-			float original = data.ydata[i][j];
-			float currentMin = minYcol[j];
-			float currentMax = maxYcol[j];
-			float converted = (original - currentMin) / (currentMax - currentMin);
-
-			temp.push_back(converted);
+	for (int i = 1; i < data.values.size(); i++) {
+		std::vector<std::string> row = data.values[i];
+		std::vector<float> normalizedRow;
+		for (int j = 0; j < row.size(); j++) {
+			float val = stof(row[j]);
+			normalizedRow.push_back(val / maxPerCol[j]);
 		}
-		convertedValues.push_back(temp);
-		temp.clear();
-	}
-	data.ydata.clear();
-	data.ydata = convertedValues;																	// Fill ydata coordinates with normalized data  
-	data.originalYData = convertedValues;
-
-	convertedValues.clear();
-	//data.xmax = data.ydata[0].size();																// Change xMax and yMax to normalized data
-	data.ymax = 1;
-
-	// X Normalization after this point
-	std::vector<float> minXcol;
-	std::vector<float> maxXcol;
-	temp.clear();
-
-	convertedValues.clear();
-
-
-	min = 0;
-	max = 0;
-
-	for (int j = 0; j < data.xdata[0].size(); j++) {                                               // Gets the min and max of every column
-		min = data.xdata[0][j];
-		for (int i = 0; i < data.xdata.size(); i++) {
-			if (data.xdata[i][j] > max) {
-				max = data.xdata[i][j];
-			}
-			if (data.xdata[i][j] < min) {
-				min = data.xdata[i][j];
-			}
-		}
-		if (min == max)   //This is used when entire column is of same values, the normalized value is 0.5 (chosen arbitrarily)
-			min =0;
-		minXcol.push_back(min);
-		maxXcol.push_back(max);
-		max = 0;
+		data.normalizedValues.push_back(normalizedRow);
 	}
 
+	//for (int i = 0; i < data.ydata.size(); i++) {                                                  // Normalize the data from 0 - 1
+	//	for (int j = 0; j < data.ydata[0].size(); j++) {
+	//		float original = data.ydata[i][j];
+	//		float currentMin = minYcol[j];
+	//		float currentMax = maxYcol[j];
+	//		float converted = (original - currentMin) / (currentMax - currentMin);
 
-	for (int i = 0; i < data.xdata.size(); i++) {                                                  // Normalize the data from 0 - 1
-		for (int j = 0; j < data.xdata[0].size(); j++) {
-			float original = data.xdata[i][j];
-			float currentMin = minXcol[j];
-			float currentMax = maxXcol[j];
-			float converted = (original - currentMin) / (currentMax - currentMin);
+	//		temp.push_back(converted);
+	//	}
+	//	convertedValues.push_back(temp);
+	//	temp.clear();
+	//}
+	//data.ydata.clear();
+	//data.ydata = convertedValues;																	// Fill ydata coordinates with normalized data  
+	//data.originalYData = convertedValues;
 
-			temp.push_back(converted);
-		}
-		convertedValues.push_back(temp);
-		temp.clear();
-	}
-	data.xdata.clear();
-	data.xdata = convertedValues;																	// Fill ydata coordinates with normalized data  
-	data.originalXData = convertedValues;
-	convertedValues.clear();
-	//data.xmax = data.ydata[0].size();																// Change xMax and yMax to normalized data
-	data.xmax = 1;
+	//convertedValues.clear();
+	////data.xmax = data.ydata[0].size();																// Change xMax and yMax to normalized data
+	//data.ymax = 1;
+
+	//// X Normalization after this point
+	//std::vector<float> minXcol;
+	//std::vector<float> maxXcol;
+	//temp.clear();
+
+	//convertedValues.clear();
+
+
+	//min = 0;
+	//max = 0;
+
+	//for (int j = 0; j < data.xdata[0].size(); j++) {                                               // Gets the min and max of every column
+	//	min = data.xdata[0][j];
+	//	for (int i = 0; i < data.xdata.size(); i++) {
+	//		if (data.xdata[i][j] > max) {
+	//			max = data.xdata[i][j];
+	//		}
+	//		if (data.xdata[i][j] < min) {
+	//			min = data.xdata[i][j];
+	//		}
+	//	}
+	//	if (min == max)   //This is used when entire column is of same values, the normalized value is 0.5 (chosen arbitrarily)
+	//		min =0;
+	//	minXcol.push_back(min);
+	//	maxXcol.push_back(max);
+	//	max = 0;
+	//}
+
+
+	//for (int i = 0; i < data.xdata.size(); i++) {                                                  // Normalize the data from 0 - 1
+	//	for (int j = 0; j < data.xdata[0].size(); j++) {
+	//		float original = data.xdata[i][j];
+	//		float currentMin = minXcol[j];
+	//		float currentMax = maxXcol[j];
+	//		float converted = (original - currentMin) / (currentMax - currentMin);
+
+	//		temp.push_back(converted);
+	//	}
+	//	convertedValues.push_back(temp);
+	//	temp.clear();
+	//}
+	//data.xdata.clear();
+	//data.xdata = convertedValues;																	// Fill ydata coordinates with normalized data  
+	//data.originalXData = convertedValues;
+	//convertedValues.clear();
+	////data.xmax = data.ydata[0].size();																// Change xMax and yMax to normalized data
+	//data.xmax = 1;
 	
 }
 

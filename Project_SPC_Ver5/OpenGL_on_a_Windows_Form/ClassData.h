@@ -202,10 +202,17 @@ class ClassData // copy class before changing
 {
 public: 
 	std::vector<std::vector<float> > classColor;
+	std::map<int, std::vector<float> > continueClassColor;
 	std::vector<float>  classTransparency;
+	std::vector<int> pointsToRender;
 	int classToDisplayOnTop;
 	bool doesDecisionTreeBranch = false;
+	int numPlots;
 	Node* rootNode;
+	std::map<std::string, int> attributeNameToDataIndex;
+	std::vector<int> plotOrder;
+	std::map<std::string, std::vector<float>> attributeMinMax;
+	std::vector<std::vector<float>> normalizedValues;
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
@@ -217,9 +224,29 @@ public:
 			classTransparency.push_back(255);
 		}
 	}
+
+	void setContinueClassColors() {
+		int i = 0;
+		for (auto const& entry : continueElements) {
+			continueClassColor[entry].clear();
+			continueClassColor[entry].push_back((i + 1) * 50 + 1);
+			continueClassColor[entry].push_back((i + 1) * 50 + 1);
+			continueClassColor[entry].push_back((i + 1) * 50 + 1);
+			i++;
+		}
+	}
+
 	void setClassColor(float R, float G, float B, int classnum) {
 		//if(!classColor[classnum - 1].empty())
 		{
+			if (classnum < 0) {
+				continueClassColor[classnum].clear();
+				continueClassColor[classnum].push_back(R);
+				continueClassColor[classnum].push_back(G);
+				continueClassColor[classnum].push_back(B);
+				return;
+			}
+
 			classColor[classnum-1].clear();
 			classColor[classnum - 1].push_back(R);
 			classColor[classnum - 1].push_back(G);
@@ -259,6 +286,9 @@ public:
 	/// <summary>	Number of classes. </summary>
 	int numOfClasses = 0;
 
+	/// <summary> vector of continue zones
+	std::vector<int> continueElements;
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>
 	/// 	Holds class size, it is fixed at 4 for now, but should be changed when reading actual
@@ -266,7 +296,7 @@ public:
 	/// </summary>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	int classsize;
+	//int numPlots;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>
@@ -375,7 +405,7 @@ public:
 
 	void resetSomeVars() {
 		numOfClasses = 0;
-		classsize = 0;
+		numPlots = 0;
 		xmax = 0;
 		ymax = 0;
 		classColor.clear();
@@ -427,7 +457,7 @@ public:
 
 	void drawPlot(float x, float y, float plotW, float plotH, int i) 
 	{
-
+			
 			glPushMatrix(); // Makes a new layer
 			glTranslatef(x + pan_x, y + pan_y, 0.0f);	
 			glScalef((plotW / 2), (plotH / 2), 0.0f);
@@ -439,6 +469,42 @@ public:
 			glVertex2f(nonOrthoX2[i], nonOrthoY2[i]); //defines X axis, change the second element to change angle	
 			glEnd();
 			glPopMatrix(); // Removes the layer
+
+			/*float labelsDistanceFromPlot = 10;
+			float xLabelLocation = labelsDistanceFromPlot + 10;*/
+			float lineSeparation = 12;
+			float xLabelVeritcalOffset = 10;
+			float yLabelVerticalOffset = xLabelVeritcalOffset + lineSeparation;
+			std::string xLabelStr = "x:" + parsedAttributePairs[i][0] + " ";
+			std::string yLabelStr = "y:" + parsedAttributePairs[i][1] + " ";
+			std::string labelsStr = xLabelStr + yLabelStr;
+			char* xLabelArr = &xLabelStr[0];
+			char* yLabelArr = &yLabelStr[0];
+			/*float plotHeight = nonOrthoY2[i] - nonOrthoY1[i];
+			float plotWidth = nonOrthoX2[i] - nonOrthoX1[i];*/
+			float plotWidth = x2CoordPlot[i] - x1CoordPlot[i];
+			float plotHeight = y2CoordPlot[i] - y1CoordPlot[i];
+			drawBitmapText(xLabelArr, x1CoordPlot[i] + (plotWidth / 2), y2CoordPlot[i] + xLabelVeritcalOffset);
+			drawBitmapText(yLabelArr, x1CoordPlot[i] + (plotWidth / 2), y2CoordPlot[i] + yLabelVerticalOffset);
+			
+			// draw axes ranges
+            std::string attr1 = parsedAttributePairs[i][0];
+            std::string attr2 = parsedAttributePairs[i][1];
+			std::string xLowRange = std::to_string((int)attributeMinMax[attr1][0]);
+            std::string xHighRange = std::to_string((int)attributeMinMax[attr1][1]);
+            std::string yLowRange = std::to_string((int)attributeMinMax[attr2][0]);
+            std::string yHighRange = std::to_string((int)attributeMinMax[attr2][1]);
+
+            drawBitmapText(&xLowRange[0], x1CoordPlot[i], y2CoordPlot[i] + 1.5 * lineSeparation);
+            drawBitmapText(&xHighRange[0], x2CoordPlot[i] - xHighRange.length() / 2, y2CoordPlot[i] + 1.5 * lineSeparation);
+            drawBitmapText(&yLowRange[0], x1CoordPlot[i] - 1.5 * lineSeparation, y2CoordPlot[i]);
+            drawBitmapText(&yHighRange[0], x1CoordPlot[i] - 1.5 * lineSeparation, y1CoordPlot[i] + yHighRange.length() / 2);
+
+			// debug draw plot num
+			std::string plot = "plotNum:" + std::to_string(i);
+			char* plotAsArr = &plot[0];
+			float plotIdOffset = yLabelVerticalOffset + lineSeparation;
+			drawBitmapText(plotAsArr, x1CoordPlot[i] + (plotWidth / 2), y2CoordPlot[i] + plotIdOffset);
 			//if (!fOpen)
 			//{
 			//	for (int p = 0; p < parsedData.size(); p++)
@@ -531,10 +597,12 @@ public:
 		drawBitmapText(ylabels.c_str(), .05*worldWidth, .05*worldHeight);
 	}
 
-	void calculateTerminationPoints() {
+	void seedDataTerminationPoints() {
+		dataTerminationIndex.push_back(numPlots);
+
+		// OLD CODE, NO LONGER RELAVENT
 		//int currentPlot = 0;
 		//while (currentPlot < dataTerminationIndex[currentPlot]) {
-
 		//	int backgroundClass = -1;
 		//	if (backgroundClass >= 0) {
 		//		currentPlot += 1;
@@ -543,35 +611,31 @@ public:
 		//		
 		//	}
 		//}
+		//for (int i = 0; i < dataTerminationIndex.size(); i++) {
+		//	int classnum = classNum[i] - 1;
+		//	for (int j = 0; j < dataTerminationIndex[i]; j++) {
+		//		float px = xPlotCoordinates[j];
+		//		float py = yPlotCoordinates[j];
+		//		px -= (plotWidth[j] / 2);
+		//		py += (plotHeight[j] / 2);
+		//		float x1Coord = plotWidth[j] * xdata[i][j];
+		//		float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
+		//		float x1CoordTrans = x1Coord + (px + pan_x);
+		//		float y1CoordTrans = y1Coord + (py + pan_y);
 
+		//		int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
 
+		//		if (backgroundClass >= 0) {
+		//			std::cout << "debug";
+		//			if (backgroundClass == classnum) {
+		//				dataTerminationIndex[i] = j;
+		//			}
+		//		}
+		//		else {
 
-
-		for (int i = 0; i < dataTerminationIndex.size(); i++) {
-			int classnum = classNum[i] - 1;
-			for (int j = 0; j < dataTerminationIndex[i]; j++) {
-				float px = xPlotCoordinates[j];
-				float py = yPlotCoordinates[j];
-				px -= (plotWidth[j] / 2);
-				py += (plotHeight[j] / 2);
-				float x1Coord = plotWidth[j] * xdata[i][j];
-				float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
-				float x1CoordTrans = x1Coord + (px + pan_x);
-				float y1CoordTrans = y1Coord + (py + pan_y);
-
-				int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
-
-				if (backgroundClass >= 0) {
-					std::cout << "debug";
-					if (backgroundClass == classnum) {
-						dataTerminationIndex[i] = j;
-					}
-				}
-				else {
-
-				}
-			}
-		}
+		//		}
+		//	}
+		//}
 	}
 
 
@@ -602,6 +666,8 @@ public:
 				nodeMap[plotNum]->addDestination(nodeMap[dest]);
 			}
 		}
+
+		numPlots = nodeMap.size();
 
 		rootNode = nodeMap[0]; // TODO: investigate why this is necessary
 		

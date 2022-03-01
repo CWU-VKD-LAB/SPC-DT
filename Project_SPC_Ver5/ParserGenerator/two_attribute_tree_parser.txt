@@ -1,3 +1,0 @@
-0, 0, 1, 0.25, 0, 0, clump, ucellsize
-0, 0.25, 0.65, 1, 0, 1, clump, ucellsize
-0.65, 0.25, 1, 1, 0, 1, clump, ucellsize

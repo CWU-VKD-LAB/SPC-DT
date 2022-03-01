@@ -26,12 +26,12 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 	//newFile.openParserFile(dataParsed, data);
 	newFile.sortGraphNotBasedOnParser(data);
 
-	data.classsize = int(data.xdata[0].size());
+	data.numPlots = int(data.xdata[0].size());
 	for (int y1 = 0; y1 < data.plotWidth.size(); y1++)
 	{
 
 		{
-			data.plotWidth[y1] = worldW / (data.classsize * 2.5);
+			data.plotWidth[y1] = worldW / (data.numPlots * 2.5);
 			data.plotHeight[y1] = worldH / 2.0;
 		}
 
@@ -40,7 +40,7 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
 											// Height size for each graph
 
 	doesParserBranch = data.doesDecisionTreeBranch;
-	fillGraphLocations(); // Creates starting graph positions, and fills example data for now.
+	fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -55,13 +55,26 @@ void InteractiveSPC::setBackgroundColorLightness(float lightnessCoeff) {
 	this->backgroundClassColorCoefficient = lightnessCoeff;
 }
 
+void InteractiveSPC::updatePlotLocation(double mouseX, double mouseY, int plotNum) {
+	data.xPlotCoordinates[plotNum] = mouseX - data.pan_x;
+	data.yPlotCoordinates[plotNum] = mouseY - data.pan_y;
+	
+	// update references to plot x1,y1 and x2,y2
+	float plotWidth = data.x2CoordPlot[plotNum] - data.x1CoordPlot[plotNum];
+	float plotHeight = data.y2CoordPlot[plotNum] - data.y1CoordPlot[plotNum];
+	data.x1CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] - plotWidth / 2;
+	data.y1CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] - plotHeight / 2;
+	data.x2CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] + plotWidth / 2;
+	data.y2CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] + plotHeight / 2;
+}
+
 // Filling Graph Locations
-void InteractiveSPC::fillGraphLocations()
+void InteractiveSPC::fillPlotLocations()
 {
 	//for (int k = 1; k <= data.xdata.size(); k++)
 	//{
 
-	int numPlots = data.classsize;
+	int numPlots = data.numPlots;
 	Node* root = data.rootNode;
 	int treeDepth = root->subtreeDepth;
 
@@ -78,12 +91,23 @@ void InteractiveSPC::fillGraphLocations()
 		data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
 	}
 
+	for (int i = 0; i < numPlots; i++) {
+		data.xPlotCoordinates.push_back(0);
+		data.yPlotCoordinates.push_back(0);
+		data.x1CoordPlot.push_back(0);
+		data.y1CoordPlot.push_back(0);
+		data.x2CoordPlot.push_back(0);
+		data.y2CoordPlot.push_back(0);
+	}
 
 	// For every depth, compute plot coordinates
 	for (int currentDepth = 0; currentDepth < treeDepth; currentDepth++) {
 		int currentSpan = depthSpanList[currentDepth];
 		// get all nodes at given depth
 		std::vector<Node*> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
+		for (int i = 0; i < nodesAtCurrentDepth.size(); i++) {
+			plotDrawOrder.push_back(nodesAtCurrentDepth[i]->plotNum);
+		}
 		int plotWidth = data.plotWidth[currentDepth];
 		double plotHeight = data.plotHeight[0] / (nodesAtCurrentDepth.size() + 1); // need to figure this out
 		std::cout << currentSpan << plotWidth << &nodesAtCurrentDepth << plotHeight;
@@ -104,13 +128,13 @@ void InteractiveSPC::fillGraphLocations()
 			Node* currentNode = root;
 			// data.graphheight[]
 			int plotNum = nodesAtCurrentDepth[nodeIndex]->plotNum;
-			data.xPlotCoordinates.push_back(plotWidth * (currentDepth + 1) + currentDepth * 10);
-			data.yPlotCoordinates.push_back((nodeIndex + 1) * plotHeightAtThisDepth);
+			data.xPlotCoordinates[plotNum] = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+			data.yPlotCoordinates[plotNum] = ((nodeIndex + 1) * plotHeightAtThisDepth);
 
-			data.x1CoordPlot.push_back(plotX1);
-			data.x2CoordPlot.push_back(plotX2);
-			data.y1CoordPlot.push_back(data.yPlotCoordinates[nodeIndex] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
-			data.y2CoordPlot.push_back(data.yPlotCoordinates[nodeIndex] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+			data.x1CoordPlot[plotNum] = (plotX1);
+			data.x2CoordPlot[plotNum] = (plotX2);
+			data.y1CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
+			data.y2CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
 			data.plotHeight[plotNum] = plotHeightAtThisDepth - plotHeightGap;
 		}
 		std::cout << "debug";
@@ -145,8 +169,189 @@ void InteractiveSPC::fillGraphLocations()
 }
 
 /* Draws data sets. */
-void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int plotNum) {
+std::set<int> debugSet;
+int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
+	// Don't draw data past its termination point
+	/*if (isLineTerminationMode && plotNum > data.dataTerminationIndex[recordNum] - 1) {
+		if (plotNum != 0) return;
+	}*/
 
+	// debug
+	if (plotNum == 8) {
+		std::cout << "debug" <<  &plotNum;
+	}
+
+	int recordClass = data.classNum[recordNum] - 1;
+
+	float plt1X1 = data.x1CoordPlot[plotNum];
+	float plt1Y1 = data.y1CoordPlot[plotNum];
+	float plt1X2 = data.x2CoordPlot[plotNum];
+	float plt1Y2 = data.y2CoordPlot[plotNum];
+
+	float plotHeight = data.plotHeight[plotNum];
+	float plotWidth = data.plotWidth[plotNum];
+    x1 = plt1X1 + plotWidth * x1 + data.pan_x;
+    y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
+	// debug
+	//glColor3ub(255, 0, 0);
+	//glBegin(GL_POINTS);
+	//glVertex2f(plt1X1, plt1Y1);
+	//glColor3ub(0, 0, 255);
+	//glVertex2f(plt1X2, plt1Y2);
+	//glEnd();
+	//end debug
+    // old code
+	// x1 = plt1X1 + (plt1X2 - plt1X1) * x1 + data.pan_x;
+	// y1 = plt1Y2 - (plt1Y2 - plt1Y1) * y1 + data.pan_y;
+
+
+
+	// TODO
+	// we need to get the next point in line for point(x1,y1)
+	int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
+
+	if (debugSet.find(point1BackgroundClass) == debugSet.end()) {
+		debugSet.insert(point1BackgroundClass);
+	}
+
+	int pointWasCorrectlyClassified = false;
+
+	GLubyte classTransparency = data.classTransparencies[recordClass];
+	
+	// determine if we should be highlighting misclassified points
+	if (isHighlightMisclassficationsMode && (point1BackgroundClass >= 0 && point1BackgroundClass != recordClass)) {
+		glColor4ub(255, 0, 0, classTransparency);
+		glPointSize(8.0);
+		glBegin(GL_POINTS);
+		glVertex2f(x1, y1);
+		glEnd();
+		glPointSize(4.0);
+	}
+	else {
+		// draw regular point
+		// draw point one
+		glPointSize(4.0);
+		glColor4ub(0, 0, 0, classTransparency);
+
+		// debug
+		GLubyte r = data.classColor[recordClass][0];
+		GLubyte g = data.classColor[recordClass][1];
+		GLubyte b = data.classColor[recordClass][2];
+		glColor4ub(r, g, b, classTransparency);
+		// endDebug
+
+		//debug
+		/*std::vector<float> color;
+		if (point1BackgroundClass >= 0) {
+			color = data.classColor[point1BackgroundClass];
+		}
+		else {
+			color = data.continueClassColor[point1BackgroundClass];
+		}
+		glColor4ub(color[0], color[1], color[2], classTransparency);*/
+		// end debug
+
+		glBegin(GL_POINTS);
+		glVertex2f(x1, y1);
+		glEnd();
+		// end point one draw
+	}
+
+	if (point1BackgroundClass >= 0) {
+		if (point1BackgroundClass == recordClass) {
+			// point correctly classified
+			pointWasCorrectlyClassified = true;
+			//if (isLineTerminationMode) {
+			//	return;
+			//}
+			//else {
+			//	// if not line termination mode, continue to render down the tree. If not, do nothing
+			//	// again, how would we know which path to take?
+			//	return; // return for now. TODO
+			//}
+		}
+		else {
+			// point incorrectly classified
+			// either way, continue drawing
+			// oh wait how would this work? 
+			// if we're using decision tree, we don't know what the next tree should be unless we land on a continue zone
+
+			// idea: option that says : "trace misclassifications" which has a drop down for which misclassification to view.
+			//		then the user can select one and it will render the point on each plot.
+			//		i.e. : render selected record on all paths through tree to leaves, while highlighting the incorrectly classified zones
+			// for now return
+		}
+		//data.dataTerminationIndex[recordNum] = plotNum;
+		return -1;
+	}
+	else if (point1BackgroundClass == INT_MIN) {
+		// if there is no zone behind us, I don't think we're even supposed to draw the point but we'll see.
+		//data.dataTerminationIndex[recordNum] = plotNum;
+		return -1;
+	}
+	// continue drawing based on what's in the continue zone's destination param
+	
+	// get next point
+	// we have: record number, next plot number, record class. get point from record with attributes present in next plot
+	int nextPlotNum = data.plotDestinationMap[plotNum][point1BackgroundClass];
+	std::vector<std::string> destinationPlotAttributes = data.parsedAttributePairs[nextPlotNum];
+	int destAttr1Index = data.attributeNameToDataIndex[destinationPlotAttributes[0]];
+	int destAttr2Index = data.attributeNameToDataIndex[destinationPlotAttributes[1]];
+	float x2 = data.normalizedValues[recordNum][destAttr1Index];
+	float y2 = data.normalizedValues[recordNum][destAttr2Index];
+
+	float plt2X1 = data.x1CoordPlot[nextPlotNum];
+	float plt2Y1 = data.y1CoordPlot[nextPlotNum];
+	float plt2X2 = data.x2CoordPlot[nextPlotNum];
+	float plt2Y2 = data.y2CoordPlot[nextPlotNum];
+
+	plotHeight = data.plotHeight[nextPlotNum];
+	plotWidth = data.plotWidth[nextPlotNum];
+
+    x2 = plt2X1 + plotWidth * x2 + data.pan_x;
+    y2 = plt2Y2 - plotHeight * y2 + data.pan_y;
+	// x2 = plt2X1 + (plt2X2 - plt2X1) * x2 + data.pan_x;
+	// y2 = plt2Y2 - (plt2Y2 - plt2Y1) * y2 + data.pan_y;
+
+	// set line color
+	glColor4ub(128, 128, 128, classTransparency);
+	int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
+	if (true) {
+		// debug
+		GLubyte r = data.classColor[recordClass][0];
+		GLubyte g = data.classColor[recordClass][1];
+		GLubyte b = data.classColor[recordClass][2];
+		GLubyte a = classTransparency;
+		glColor4ub(r, g, b, a);
+	}
+	else if (point2BackgroundClass >= 0) {
+		GLubyte r = data.classColor[point2BackgroundClass][0];
+		GLubyte g = data.classColor[point2BackgroundClass][1];
+		GLubyte b = data.classColor[point2BackgroundClass][2];
+		GLubyte a = classTransparency;
+		glColor4ub(r, g, b, a);
+	}
+	
+	// draw line from point 1 to point 2
+	glBegin(GL_LINES);
+	glVertex2f(x1, y1);
+	glVertex2f(x2, y2);
+	glEnd();
+
+	// only draw line, not the point. point will be covered when point2 becomes point1 on future iterations
+
+	// debug
+	if (point1BackgroundClass == INT_MIN || point1BackgroundClass >= 0) {
+		std::cout << "yay we can stop drawing if we've got line mode on!";
+	}
+	else if (point1BackgroundClass < 0) {
+		std::cout << "debug less than zerp" << point1BackgroundClass;
+	}
+	else {
+		std::cout << "hmmm this shouldnt be hit ever...";
+	}
+
+	return nextPlotNum;
 }
 
 
@@ -164,6 +369,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 		if (j != 0) return;
 	}
 	
+	// this is all for getting plot coordinates
 	float xratio = data.plotWidth[j] / data.xmax; // Normalize data to the graph size
 	float yratio = data.plotHeight[j] / data.ymax;	
 	x1 -= (data.plotWidth[j] / 2);
@@ -171,14 +377,13 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	y1 += (data.plotHeight[j] / 2);
 	y2 += (data.plotHeight[j + 1] / 2);
 	float x1Coord = data.plotWidth[j] * data.xdata[i][j];
-	float x2Coord = (x2 - x1) + data.plotWidth[j + 1] * data.xdata[i][j + 1];
-	float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; //height of graph is constant = 328.5
-	float y2Coord = (y2 - y1) - data.plotHeight[j+1] * data.ydata[i][j + 1];
+	float x2Coord = (x2 - x1) + data.plotWidth[j + 1] * data.xdata[i][j + 1]; // this is where actual data gathered
+	float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; //height of plot is constant = 328.5
+	float y2Coord = (y2 - y1) - data.plotHeight[j+1] * data.ydata[i][j + 1]; // this is where actual data is gathered
 	float x1CoordTrans = x1Coord + (x1 + data.pan_x);
 	float x2CoordTrans = x2Coord + (x1 + data.pan_x);
 	float y1CoordTrans = y1Coord + (y1 + data.pan_y);
 	float y2CoordTrans = y2Coord + (y1 + data.pan_y);
-
 
 	int classnum = data.classNum[i] - 1;
 	pointClassSet.insert(classnum);
@@ -296,7 +501,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 				glVertex2f(middleX, middleY);
 			}
 		}
-		if(drawVertex2 && data.classsize!=1)
+		if(drawVertex2 && data.numPlots!=1)
 			glVertex2f(x2Coord, y2Coord); // ending vertex
 		glEnd();
 	}
@@ -332,7 +537,7 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 	glPointSize(4);
 	glBegin(GL_POINTS);
 	//glVertex2f((x2 - x1) + xratio * data.xdata[currentDepth][nodeIndex + 1], (y2 - y1) - yratio * data.ydata[currentDepth][nodeIndex + 1]);                         // ending vertex
-	if (drawVertex2 && data.classsize != 1)
+	if (drawVertex2 && data.numPlots != 1)
 		//glColor4ub(0, 0, 255, 255); // debug
 		glVertex2f(x2Coord, y2Coord);	
 	glEnd();
@@ -352,7 +557,6 @@ void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int
 
 
 void InteractiveSPC::display() {
-
 	glClearColor(255 / 255.0f, 255 / 255.0f, 254 / 255.0f, 0.0f);			//194, 206, 218. VisCanvas background color.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -365,11 +569,20 @@ void InteractiveSPC::display() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();														// Reset the model-view matrix
 
-	/* Draws a graph for each dimension */
-	for (int i = 0; i < data.classsize; i++)
+	/* Draws a plot for each dimension */
+	// ahhh but we want to draw in the order that appears in the tree! Not just in order
+	for (int i = 0; i < plotDrawOrder.size(); i++) {
+		int plotToDraw = plotDrawOrder[i];
+		data.drawPlot(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], data.plotWidth[plotToDraw], data.plotHeight[plotToDraw], plotToDraw);
+		updatePlotLocation(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], plotToDraw);
+	}
+
+
+	/*for (int i = 0; i < data.numPlots; i++)
 	{
 		data.drawPlot(data.xPlotCoordinates[i], data.yPlotCoordinates[i], data.plotWidth[i], data.plotHeight[i], i);
-	}
+		updatePlotLocation(data.xPlotCoordinates[i], data.yPlotCoordinates[i], i);
+	}*/
 
 	//comment to see only coordinates
 	glLoadIdentity();													// Reset the model-view matrix
@@ -411,39 +624,58 @@ void InteractiveSPC::display() {
 			}*/
 
 			// TODO: handle multiple decision classes
+			std::vector<float> hsl;
 			if (classNumber < 0) {
-				GLubyte defaultBackground[3] = { 169, 169, 169 };
-				int index = abs(classNumber) % 3;
-				defaultBackground[index] = (GLubyte)((double)defaultBackground[index] * .4);
-				glColor4ub(defaultBackground[0], defaultBackground[1], defaultBackground[2], backgroundTransparency);
-			} else 
+				hsl = RGBtoHSL(data.continueClassColor[classNumber]);
+			}
+			else 
 			{
 				// we need to adjust the lightness of the background color
-				std::vector<float> hsl = RGBtoHSL(data.classColor[classNumber]);
-
-				hsl[2] = hsl[2] * backgroundClassColorCoefficient;
-
-				std::vector<GLubyte> rgb = HSLtoRGB(hsl);
-
-				glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparency);
+				hsl = RGBtoHSL(data.classColor[classNumber]);
 			}
+			// we need to adjust the lightness of the background color
+
+			hsl[2] = hsl[2] * backgroundClassColorCoefficient;
+
+			std::vector<GLubyte> rgb = HSLtoRGB(hsl);
+
+			glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparency);
 
 			int plot = dataParsed.parsedData[p][4];
 
-			const GLfloat x1 = data.xPlotCoordinates[plot] - data.plotWidth[plot] / 2 + dataParsed.parsedData[p][0] * data.plotWidth[plot];
-			const GLfloat y1 = data.yPlotCoordinates[plot] + data.plotHeight[plot] / 2 - dataParsed.parsedData[p][1] * data.plotHeight[plot];
-			const GLfloat x2 = data.xPlotCoordinates[plot] - data.plotWidth[plot] / 2 + dataParsed.parsedData[p][2] * data.plotWidth[plot];
-			const GLfloat y2 = data.yPlotCoordinates[plot] + data.plotHeight[plot] / 2 - dataParsed.parsedData[p][3] * data.plotHeight[plot];
+			// point(xc, yc) denotes center of plot
+			// x1,y1 should be upper left visually
+			// x2,y2 should be lower right visually
+			// coord x1 = xc - (half the plot width) + (fraction of the plotWidth that the current rect x1 is at)
+			// coord x2 = xc + (half the plot width) + (fraction of the plotWidth that the current rect x2 is at)
+			// coord y1 = yc - (half the plot width <will be visually lower part of graph>)  - (fraction of plot height that rect y1 should be at) 
+			// coord y2 = yc + (half the plot width <will be visually lower part of graph>)  - (fraction of plot height that rect y1 should be at)
+
+            const GLfloat x1 = data.x1CoordPlot[plot] + dataParsed.parsedData[p][0] * data.plotWidth[plot];
+            const GLfloat y2 = data.y2CoordPlot[plot] - dataParsed.parsedData[p][1] * data.plotHeight[plot];
+            const GLfloat x2 = data.x1CoordPlot[plot] + dataParsed.parsedData[p][2] * data.plotWidth[plot];
+            const GLfloat y1 = data.y2CoordPlot[plot] - dataParsed.parsedData[p][3] * data.plotHeight[plot];
+
+			// const GLfloat x1 = data.xPlotCoordinates[plot] - (data.plotWidth[plot] / 2) + (dataParsed.parsedData[p][0] * data.plotWidth[plot]);
+			// const GLfloat y1 = data.yPlotCoordinates[plot] - (data.plotHeight[plot] / 2) + (dataParsed.parsedData[p][1] * data.plotHeight[plot]);
+			// const GLfloat x2 = data.xPlotCoordinates[plot] - (data.plotWidth[plot] / 2) + (dataParsed.parsedData[p][2] * data.plotWidth[plot]);
+			// const GLfloat y2 = data.yPlotCoordinates[plot] - (data.plotHeight[plot] / 2) + (dataParsed.parsedData[p][3] * data.plotHeight[plot]);
+
+			// debug
+			if (plot == 0) {
+				std::cout << "test test debug debug :)";
+			}
+
 
 			glRectf(x1, y1, x2, y2);
 
 			// We need to draw a dotted line from x1, y1 to x1, y2 and another one from x1, y1, to x2, y1
 			// Due to potential incompatibilities with dictating line width, we can use thin polygones as a workaround
-			GLfloat lineThickness = 3.0f;
+			/*GLfloat lineThickness = 3.0f;
 			GLfloat dashSpace = 10.0f;
 			GLfloat currentColor[4];
 			glGetFloatv(GL_CURRENT_COLOR, currentColor);
-			glColor4f(currentColor[0], currentColor[1], currentColor[2], 1.0f);
+			glColor4f(currentColor[0], currentColor[1], currentColor[2], 1.0f);*/
 
 			//// Left dashed line, from top left
 			//bool drawLeftColor = true;
@@ -569,57 +801,145 @@ void InteractiveSPC::display() {
 		drawRectangle();
 	}
 
+	// TODO: We need to shake up the draw order!!!! Draw relative to pairs, not columns!!!!!
+	// for every point, we need to draw it. What constitutes a point? 
+	// Well that's in the attribute pairs map which is in the data class
+	for (int recordNum = 0; recordNum < data.normalizedValues.size(); recordNum++) {
+		int plotToDrawNext = 0;
+		while (plotToDrawNext != -1) {
+			int plotNum = plotToDrawNext;
+			std::vector<std::string> attributePairAndPlotNum = data.parsedAttributePairs[plotNum];
+			std::string attr1 = attributePairAndPlotNum[0];
+			std::string attr2 = attributePairAndPlotNum[1];
+
+			if (attr1 == attr2) {
+				std::cout << "debug";
+			}
+
+			int attr1Index = data.attributeNameToDataIndex[attr1];
+			int attr2Index = data.attributeNameToDataIndex[attr2];
+
+			/*float x = data.xdata[recordNum][attr1Index];
+			float y = data.ydata[recordNum][attr2Index];*/
+			float x = data.normalizedValues[recordNum][attr1Index];
+			float y = data.normalizedValues[recordNum][attr2Index];
+
+			//if (attr1Index == attr2Index) {
+			//	// this means that the two attributes are the same so we are on a single attribute plot
+			//	y = x;
+			//}
+
+			plotToDrawNext = drawData(x, y, recordNum, plotNum);
+		}
+
+		//for (int i = 0; i < plotDrawOrder.size(); i++) {
+		//	int plotNum = plotDrawOrder[i];
+		//	if (plotNum > data.dataTerminationIndex[recordNum]) {
+		//		break; // hmm problem. plots arent really ordered in a way that's meaningful to the decision tree
+		//		// well, technically they are??? So then why arent we rendering the last point
+		//	}
+		//	std::vector<std::string> attributePairAndPlotNum = data.parsedAttributePairs[plotNum];
+		//	std::string attr1 = attributePairAndPlotNum[0];
+		//	std::string attr2 = attributePairAndPlotNum[1];
+		//	int attr1Index = data.attributeNameToDataIndex[attr1];
+		//	int attr2Index = data.attributeNameToDataIndex[attr2];
+
+		//	float x = data.xdata[recordNum][attr1Index];
+		//	float y = data.ydata[recordNum][attr2Index];
+
+		//	int plotToDrawNext = drawData(x, y, recordNum, plotNum);
+		//}
+		//for (int plotNum = 0; plotNum < data.parsedAttributePairs.size(); plotNum++) {
+		//	if (plotNum > data.dataTerminationIndex[recordNum]) {
+		//		continue; // hmm problem. plots arent really ordered in a way that's meaningful to the decision tree
+		//		// well, technically they are??? So then why arent we rendering the last point
+		//	}
+		//	std::vector<std::string> attributePairAndPlotNum = data.parsedAttributePairs[plotNum];
+		//	std::string attr1 = attributePairAndPlotNum[0];
+		//	std::string attr2 = attributePairAndPlotNum[1];
+		//	int attr1Index = data.attributeNameToDataIndex[attr1];
+		//	int attr2Index = data.attributeNameToDataIndex[attr2];
+
+		//	float x = data.xdata[recordNum][attr1Index];
+		//	float y = data.ydata[recordNum][attr2Index];
+
+		//	drawData(x, y, recordNum, plotNum);
+		//}
+	}
+
+
+	//for (int recordNum = 0; recordNum < data.xdata.size(); recordNum++) {
+	//	for (int plotNum = 0; plotNum < data.parsedAttributePairs.size(); plotNum++) {
+	//		std::vector<std::string> attributePairAndPlotNum = data.parsedAttributePairs[plotNum];
+	//		std::string attr1 = attributePairAndPlotNum[0];
+	//		std::string attr2 = attributePairAndPlotNum[1];
+	//		int attr1Index = data.attributeNameToDataIndex[attr1];
+	//		int attr2Index = data.attributeNameToDataIndex[attr2];
+
+	//		float x = data.xdata[recordNum][attr1Index];
+	//		float y = data.ydata[recordNum][attr2Index];
+
+	//		drawData(x, y, recordNum, plotNum);
+	//	}
+	//}
+
+	//data.drawLabels();
+
+	return;
+
+	// OLD CODE FOR OLD DRAWING METHOD. WILL PROBABLY MAKE TOGGLEABLE
+	// TODO
 
 	/* Plots the data. Outer loop for each dimension. Inner loop for data across each graph.  */
-	if (data.classsize > 1)
-	{
-		int g;
-		for (int i = 0; i < data.xdata.size(); i++) 
-		{
-			g =  1;
-			for (int j = 0; j < data.classsize - 1; j++)
-			{
-				if (data.classNum[i] != (data.classToDisplayOnTop ))
-				{
-					// gove current point and next point to draw function
-					drawData(data.xPlotCoordinates[j], data.yPlotCoordinates[j],
-						data.xPlotCoordinates[j + 1], data.yPlotCoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
-				}
+	//if (data.numPlots > 1)
+	//{
+	//	int g;
+	//	for (int i = 0; i < data.xdata.size(); i++) 
+	//	{
+	//		g =  1;
+	//		for (int j = 0; j < data.numPlots - 1; j++)
+	//		{
+	//			if (data.classNum[i] != (data.classToDisplayOnTop ))
+	//			{
+	//				// gove current point and next point to draw function
+	//				drawData(data.xPlotCoordinates[j], data.yPlotCoordinates[j],
+	//					data.xPlotCoordinates[j + 1], data.yPlotCoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
+	//			}
 
 
-			}
+	//		}
 
-		}
+	//	}
 
-		for (int i = 0; i < data.xdata.size(); i++)
-		{
-			g = 1;
-			for (int j = 0; j < data.classsize - 1; j++)
-			{
-				if (data.classNum[i] == (data.classToDisplayOnTop) )
-				{
-					drawData(data.xPlotCoordinates[j], data.yPlotCoordinates[j],
-						data.xPlotCoordinates[j + 1], data.yPlotCoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
-				}
+	//	for (int i = 0; i < data.xdata.size(); i++)
+	//	{
+	//		g = 1;
+	//		for (int j = 0; j < data.numPlots - 1; j++)
+	//		{
+	//			if (data.classNum[i] == (data.classToDisplayOnTop) )
+	//			{
+	//				drawData(data.xPlotCoordinates[j], data.yPlotCoordinates[j],
+	//					data.xPlotCoordinates[j + 1], data.yPlotCoordinates[j + 1], i, j); //((1 + currentDepth) % data.xdata.size());
+	//			}
 
-			}
+	//		}
 
-		}
-	}
-	else
-	{
-		for (int i = 0; i < data.xdata.size(); i++) {
+	//	}
+	//}
+	//else
+	//{
+	//	for (int i = 0; i < data.xdata.size(); i++) {
 
-			for (int j = 0; j < data.classsize; j++)
-			{
-				drawData(data.xPlotCoordinates[data.classsize -1-j], data.yPlotCoordinates[j],
-					data.xPlotCoordinates[j+1], data.yPlotCoordinates[j+1], i, j);
-			}
-		}
-	}
+	//		for (int j = 0; j < data.numPlots; j++)
+	//		{
+	//			drawData(data.xPlotCoordinates[data.numPlots -1-j], data.yPlotCoordinates[j],
+	//				data.xPlotCoordinates[j+1], data.yPlotCoordinates[j+1], i, j);
+	//		}
+	//	}
+	//}
 
 
-	data.drawLabels();
+	//data.drawLabels();
 	
 }
 
@@ -872,7 +1192,7 @@ void InteractiveSPC::calculateDataTerminationPoints() {
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y) 
 {
-	for (int i = 0; i < data.classsize; i++) 
+	for (int i = 0; i < data.numPlots; i++) 
 	{
 		//for (int i1 = 0; i1 < data.graphwidth.size(); i1++)
 		//{
@@ -893,7 +1213,7 @@ float InteractiveSPC::findClickedGraph(double x, double y)
 
 int InteractiveSPC::findClickedCoordinate(double x, double y)
 {
-	for (int i = 0; i < data.classsize; i++)
+	for (int i = 0; i < data.numPlots; i++)
 	{
 
 			if (x <= (data.yPlotCoordinates[i] - 150) && x>= (data.yPlotCoordinates[i]-500))
@@ -913,24 +1233,138 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
 
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 	// TODO
-    int resultClass = -1;
-	for (int p = 0; p < dataParsed.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
-        int classNumber = dataParsed.parsedData[p][5];
-		const GLfloat x1 = data.xPlotCoordinates[dataParsed.parsedData[p][4]] - data.plotWidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.plotWidth[dataParsed.parsedData[p][4]];
-		const GLfloat y1 = data.yPlotCoordinates[dataParsed.parsedData[p][4]] + data.plotHeight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.plotHeight[dataParsed.parsedData[p][4]];
-		const GLfloat x2 = data.xPlotCoordinates[dataParsed.parsedData[p][4]] - data.plotWidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.plotWidth[dataParsed.parsedData[p][4]];
-		const GLfloat y2 = data.yPlotCoordinates[dataParsed.parsedData[p][4]] + data.plotHeight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.plotHeight[dataParsed.parsedData[p][4]];
-        if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
-            resultClass = classNumber;
-        } // Check to see if these need to be rearranged.
-		std::cout << "debug" << x1 << x2 << y1 << y2;
+	// get plot num
+	int plotNum = findPlotNumOfPoint(px,py);
+	// check all rects inside plotnum
+	for (int parsedIndex = 0; parsedIndex < dataParsed.parsedData.size(); parsedIndex++) {
+		std::vector<float> parserData = dataParsed.parsedData[parsedIndex];
+		if (parserData[4] != plotNum) continue;
+		const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
+		const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
+		const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
+		const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
+		if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+			return parserData[5];
+		}
+	}
+	return INT_MIN;
+
+ //   int resultClass = -1;
+	//for (int p = 0; p < dataParsed.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+ //       int classNumber = dataParsed.parsedData[p][5];
+	//	const GLfloat x1 = data.xPlotCoordinates[dataParsed.parsedData[p][4]] - data.plotWidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][0] * data.plotWidth[dataParsed.parsedData[p][4]];
+	//	const GLfloat y1 = data.yPlotCoordinates[dataParsed.parsedData[p][4]] + data.plotHeight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][1] * data.plotHeight[dataParsed.parsedData[p][4]];
+	//	const GLfloat x2 = data.xPlotCoordinates[dataParsed.parsedData[p][4]] - data.plotWidth[dataParsed.parsedData[p][4]] / 2 + dataParsed.parsedData[p][2] * data.plotWidth[dataParsed.parsedData[p][4]];
+	//	const GLfloat y2 = data.yPlotCoordinates[dataParsed.parsedData[p][4]] + data.plotHeight[dataParsed.parsedData[p][4]] / 2 - dataParsed.parsedData[p][3] * data.plotHeight[dataParsed.parsedData[p][4]];
+ //       if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+ //           resultClass = classNumber;
+	//		break;
+ //       } // Check to see if these need to be rearranged.
+	//	std::cout << "debug" << x1 << x2 << y1 << y2;
+	//}
+
+	//if (resultClass != -1) {
+	//	std::cout << "debug";
+	//}
+
+ //   return resultClass;
+}
+
+int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum) {
+	// TODO
+	// get plot num
+	//int plotNum = findPlotNumOfPoint(px, py);
+	// check all rects inside plotnum
+	std::vector<float> lastEvaluatedDebug;
+	std::vector<std::vector<float> > evaluListDebug;
+	for (int parsedIndex = 0; parsedIndex < dataParsed.parsedData.size(); parsedIndex++) {
+		std::vector<float> parserData = dataParsed.parsedData[parsedIndex];
+		if ((int)parserData[4] != plotNum) {
+			std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
+			continue;
+		}
+		lastEvaluatedDebug.clear();
+		// TODO: There's probably a MUCH easier way to do this
+		const float zoneX1 = parserData[0]; // / data.xmax;
+		const float zoneY1 = parserData[1]; // / data.ymax;
+		const float zoneX2 = parserData[2]; // / data.xmax;
+		const float zoneY2 = parserData[3]; // / data.ymax;
+
+		const float pltX1 = data.x1CoordPlot[plotNum];
+		const float pltY1 = data.y1CoordPlot[plotNum];
+		const float pltX2 = data.x2CoordPlot[plotNum];
+		const float pltY2 = data.y2CoordPlot[plotNum];
+
+		const GLfloat zoneToCheckX1 = pltX1 + (pltX2 - pltX1) * zoneX1 + data.pan_x;
+		const GLfloat zoneToCheckY1 = pltY2 - (pltY2 - pltY1) * zoneY1 + data.pan_y;
+		const GLfloat zoneToCheckX2 = pltX1 + (pltX2 - pltX1) * zoneX2 + data.pan_x;
+		const GLfloat zoneToCheckY2 = pltY2 - (pltY2 - pltY1) * zoneY2 + data.pan_y;
+
+		// debug
+		glBegin(GL_POINTS);
+		glColor4ub(255, 0, 0, 255);
+		glVertex2f(zoneToCheckX1, zoneToCheckY1);
+		glColor4ub(0, 255, 0, 255);
+		glVertex2f(zoneToCheckX2, zoneToCheckY2);
+		glEnd();
+		// end debug
+
+
+
+		lastEvaluatedDebug.push_back(px);
+		lastEvaluatedDebug.push_back(py);
+		lastEvaluatedDebug.push_back(parserData[4]);
+		lastEvaluatedDebug.push_back(plotNum);
+		lastEvaluatedDebug.push_back(zoneX1);
+		lastEvaluatedDebug.push_back(zoneY1);
+		lastEvaluatedDebug.push_back(zoneX2);
+		lastEvaluatedDebug.push_back(zoneY2);
+		lastEvaluatedDebug.push_back(pltX1);
+		lastEvaluatedDebug.push_back(pltY1);
+		lastEvaluatedDebug.push_back(pltX2);
+		lastEvaluatedDebug.push_back(pltY2);
+		lastEvaluatedDebug.push_back(zoneToCheckX1);
+		lastEvaluatedDebug.push_back(zoneToCheckY1);
+		lastEvaluatedDebug.push_back(zoneToCheckX2);
+		lastEvaluatedDebug.push_back(zoneToCheckY2);
+
+		bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
+		if (withinRect) {
+			lastEvaluatedDebug.push_back(1);
+		}
+		else {
+			lastEvaluatedDebug.push_back(0);
+		}
+
+		evaluListDebug.push_back(lastEvaluatedDebug);
+
+		if (withinRect) {
+			return parserData[5];
+		}
 	}
 
-	if (resultClass != -1) {
-		std::cout << "debug";
+	// there's a bug here somewhere but im not sure where :'(
+	std::cout << "debug: " << &lastEvaluatedDebug << &evaluListDebug;
+	return INT_MIN;
+}
+
+
+
+int InteractiveSPC::findPlotNumOfPoint(GLfloat px, GLfloat py) {
+	for (int i = 0; i < data.numPlots; i++) {
+		float x1 = data.x1CoordPlot[i];
+		float y1 = data.y1CoordPlot[i];
+		float x2 = data.x2CoordPlot[i];
+		float y2 = data.y2CoordPlot[i];
+
+		if (px >= x1 && px <= x2) {
+			if (py >= y1 && py <= y2) {
+				return i;
+			}
+		}
 	}
 
-    return resultClass;
+	return -1;
 }
 
 void InteractiveSPC::drawCircle(int x, int y)
@@ -1023,18 +1457,18 @@ std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor) {
 }
 
 bool InteractiveSPC::isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
-	bool result = false;
 	if (px <= x2 && px >= x1) {
 		if (py <= y1 && py >= y2) {
-			result = true;
+			return true;
 		}
 	}
-	return result;
+	return false;
 }
 
 int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex) {
 	int dataIndex = -100;
 
+	// check for termination classes
 	for (int i = 0; i < dataParsed.parsedData.size(); i++) {
 		if (i == currentDataIndex) continue;
 		GLfloat testRectx1 = data.xPlotCoordinates[dataParsed.parsedData[i][4]] - data.plotWidth[dataParsed.parsedData[i][4]] / 2 + dataParsed.parsedData[i][0] * data.plotWidth[dataParsed.parsedData[i][4]];
@@ -1048,7 +1482,13 @@ int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentData
 		}
 	}
 
-	if (dataIndex == -100) {
+	// check for continue classes
+
+
+
+
+
+	if (dataIndex < 0) {
 		return -200;
 	}
 	else {

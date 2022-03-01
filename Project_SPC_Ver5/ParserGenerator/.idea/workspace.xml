@@ -5,119 +5,52 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" beforeDir="false" afterPath="$PROJECT_DIR$/../.vs/OpenGL_on_a_Windows_Form/v16/Browse.VC.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NormalizeDatasetBeforeGeneratingTree.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iris.data" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/iris.names" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mediumTreeParser.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/.NETFramework,Version=v4.0.AssemblyAttributes.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/AssemblyInfo.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/FileHandling.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/InteractiveSPC.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/CL.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.lastbuildstate" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.lastbuildstate" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/OpenGL_on_a_Windows_Form.write.1u.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/link.read.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_o.D4E3AB88.tlog/rc.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe.recipe" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.exe.recipe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.log" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.pch" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.pch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/OpenGL_on_a_Windows_Form.vcxproj.GenerateResource.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/stdafx.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Release/vc142.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Release/OpenGL_on_a_Windows_Form.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../breast_cancer - Copy, single value.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../breast_cancer - Copy, single value.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/icon.png-487276ed1e3a0c39cad0279d744ee560.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/icon.png-487276ed1e3a0c39cad0279d744ee560.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/loading_splash.png-3a3648a33f0b98251c2cfb73d0c123ab.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/loading_splash.png-3a3648a33f0b98251c2cfb73d0c123ab.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_highlight.png-00414b8e76468f81b02bd39dd5860a8f.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_highlight.png-00414b8e76468f81b02bd39dd5860a8f.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_highlight_old.png-0ff9fd5c4df4239ab47ef9519cbff5c3.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_highlight_old.png-0ff9fd5c4df4239ab47ef9519cbff5c3.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_mask.bmp-d658895c8d00968fe5623655f0a72e9d.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_mask.bmp-d658895c8d00968fe5623655f0a72e9d.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_normal.png-4eb3415c6dfed31974742a5b4fffb931.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_normal.png-4eb3415c6dfed31974742a5b4fffb931.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_normal_old.png-1749036f90a3c14262b9292184d6538a.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/node_normal_old.png-1749036f90a3c14262b9292184d6538a.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node.png-7027bb542e3caad8cebf83c0c1eb2cb4.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node.png-7027bb542e3caad8cebf83c0c1eb2cb4.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node_highlight.png-fa327757b3fcd2ef36fce08482e9e606.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node_highlight.png-fa327757b3fcd2ef36fce08482e9e606.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node_mask.bmp-593ddeb735c5048caff61f302546ba02.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node_mask.bmp-593ddeb735c5048caff61f302546ba02.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node_mask.png-f591efc7516609bb6a527e3a303c046e.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/range_node_mask.png-f591efc7516609bb6a527e3a303c046e.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/test_data.csv-baa848862356498806f7cee38902b6ea.md5" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.import/test_data.csv-baa848862356498806f7cee38902b6ea.md5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.mono/assemblies/Debug/GodotSharp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.mono/assemblies/Debug/GodotSharp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.mono/assemblies/Debug/GodotSharpEditor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.mono/assemblies/Debug/GodotSharpEditor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.mono/assemblies/Debug/api_hash_cache.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/.mono/assemblies/Debug/api_hash_cache.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/default_env.tres" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/default_env.tres" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/export_presets.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/export_presets.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/hud-font.tres" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/hud-font.tres" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/node-font.tres" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/node-font.tres" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/ui-font.tres" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/ui-font.tres" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/ui-title.tres" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/font/ui-title.tres" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/icon.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/icon.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/Camera2D.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/Camera2D.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/ChildLine.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/ChildLine.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/MainScene.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/MainScene.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/MainScene.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/MainScene.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/NodeCircle.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/NodeCircle.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/RangeNode.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/RangeNode.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/RangeNode.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/RangeNode.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/SampleSpline.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/SampleSpline.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/SampleSpline.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/SampleSpline.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/TreeNode.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/TreeNode.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/TreeNode.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/TreeNode.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/DataManager.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/DataManager.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/DataManager.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/DataManager.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/UICanvas.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/UICanvas.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/UICanvas.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/global/UICanvas.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AttribContainer.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AttribContainer.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AttribContainer.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AttribContainer.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AutoColorSampleDIalog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AutoColorSampleDIalog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AutoSampleColorDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/AutoSampleColorDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/ConfusionMatrixDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/ConfusionMatrixDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/ConfusionMatrixDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/ConfusionMatrixDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/CsvDelimDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/CsvDelimDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/CsvDelimDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/CsvDelimDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/EnterSampleDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/EnterSampleDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/EnterSampleDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/EnterSampleDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterListItem.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterListItem.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterListItem.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterListItem.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterSamplesDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterSamplesDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterSamplesDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/FilterSamplesDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/LoadCSVDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/LoadCSVDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/LoadCSVDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/LoadCSVDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/MsgBoxDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/MsgBoxDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/MsgBoxDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/MsgBoxDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NewFilterDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NewFilterDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NewFilterDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NewFilterDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NodePopup.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NodePopup.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NodePopup.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/NodePopup.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/RandomSampleColorDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/RandomSampleColorDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/RandomSampleColorDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/RandomSampleColorDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleEditorDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleEditorDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleEditorDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleEditorDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleListItem.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleListItem.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleListItem.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SampleListItem.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SelectTargetAttribDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SelectTargetAttribDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SelectTargetAttribDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SelectTargetAttribDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SetColorDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SetColorDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SetColorDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/SetColorDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/TreeScalingDialog.gd" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/TreeScalingDialog.gd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/TreeScalingDialog.tscn" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/scene/gui/TreeScalingDialog.tscn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/loading_splash.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/loading_splash.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_highlight.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_highlight.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_highlight_old.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_highlight_old.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_mask.bmp.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_mask.bmp.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_normal.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_normal.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_normal_old.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/node_normal_old.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/range_node.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/range_node.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/range_node_highlight.png.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/range_node_highlight.png.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/range_node_mask.bmp.import" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/texture/range_node_mask.bmp.import" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/theme/theme_gray.tres" beforeDir="false" afterPath="$PROJECT_DIR$/../../godot-bended-attributes/src/godot-ba-project/theme/theme_gray.tres" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/default.tdm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generatedParser -- copy.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generatedParser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mediumTreeTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/medium_tree_2_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/medium_tree_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/one_attribute_tree_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/parser.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/parserbyHand.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_file.tdm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_output_C45_copy_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_settings.tdm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_tree_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/three_attribute_tree_one_duplicate_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/three_attribute_tree_two_duplicates_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/two_attribute_tree_2_parser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/two_attribute_tree_parser.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -147,7 +80,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/NormalizeDatasetBeforeGeneratingTree.py" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -157,7 +90,29 @@
   <component name="PyCoverageOptionsProvider">
     <option name="myUseBundledCoveragePy" value="true" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.NormalizeDatasetBeforeGeneratingTree">
+    <configuration name="NormalizeDatasetBeforeGeneratingTree" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="ParserGenerator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Alex Worland\AppData\Local\Programs\Python\Python39\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NormalizeDatasetBeforeGeneratingTree.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="tanagra_to_parser" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ParserGenerator" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -165,9 +120,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="/usr/bin/python3" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -180,6 +135,10 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.tanagra_to_parser" />
+      <item itemvalue="Python.NormalizeDatasetBeforeGeneratingTree" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.tanagra_to_parser" />
@@ -216,6 +175,7 @@
       <workItem from="1643903889569" duration="2041000" />
       <workItem from="1643930438885" duration="5602000" />
       <workItem from="1644289856714" duration="1000" />
+      <workItem from="1646168997357" duration="2333000" />
     </task>
     <servers />
   </component>
@@ -241,7 +201,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>809</line>
+          <line>572</line>
           <option name="timeStamp" value="248" />
         </line-breakpoint>
       </breakpoints>
@@ -253,6 +213,7 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ParserGenerator$NormalizeDatasetBeforeGeneratingTree.coverage" NAME="NormalizeDatasetBeforeGeneratingTree Coverage Results" MODIFIED="1646171314055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1643936148009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -904,7 +904,7 @@ if __name__ == '__main__':
     Main function
     """
     # test mode
-    isTestingMode = True
+    isTestingMode = False
     if isTestingMode:
         filesToTest = [
             "./TestTanagraOutputs/two_attribute_tree.txt",
