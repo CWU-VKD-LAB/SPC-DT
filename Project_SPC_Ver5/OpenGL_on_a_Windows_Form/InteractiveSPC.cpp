@@ -232,12 +232,20 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 		// draw point one
 		glPointSize(4.0);
 		glColor4ub(0, 0, 0, classTransparency);
+		if (point1BackgroundClass >= 0) {
+			GLubyte r = data.classColor[recordClass][0];
+			GLubyte g = data.classColor[recordClass][1];
+			GLubyte b = data.classColor[recordClass][2];
+			GLubyte a = classTransparency;
+			glColor4ub(r, g, b, a);
+		}
+
 
 		// debug
-		GLubyte r = data.classColor[recordClass][0];
+		/*GLubyte r = data.classColor[recordClass][0];
 		GLubyte g = data.classColor[recordClass][1];
 		GLubyte b = data.classColor[recordClass][2];
-		glColor4ub(r, g, b, classTransparency);
+		glColor4ub(r, g, b, classTransparency);*/
 		// endDebug
 
 		//debug
@@ -316,22 +324,14 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	// set line color
 	glColor4ub(128, 128, 128, classTransparency);
 	int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
-	if (true) {
-		// debug
+	if (point2BackgroundClass >= 0) {
 		GLubyte r = data.classColor[recordClass][0];
 		GLubyte g = data.classColor[recordClass][1];
 		GLubyte b = data.classColor[recordClass][2];
 		GLubyte a = classTransparency;
 		glColor4ub(r, g, b, a);
 	}
-	else if (point2BackgroundClass >= 0) {
-		GLubyte r = data.classColor[point2BackgroundClass][0];
-		GLubyte g = data.classColor[point2BackgroundClass][1];
-		GLubyte b = data.classColor[point2BackgroundClass][2];
-		GLubyte a = classTransparency;
-		glColor4ub(r, g, b, a);
-	}
-	
+
 	// draw line from point 1 to point 2
 	glBegin(GL_LINES);
 	glVertex2f(x1, y1);
@@ -1277,12 +1277,15 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 	// check all rects inside plotnum
 	std::vector<float> lastEvaluatedDebug;
 	std::vector<std::vector<float> > evaluListDebug;
+	std::vector<std::vector<float>> parserDataDebug;
+	std::vector<std::vector<float>> zoneCheckingDebug;
 	for (int parsedIndex = 0; parsedIndex < dataParsed.parsedData.size(); parsedIndex++) {
 		std::vector<float> parserData = dataParsed.parsedData[parsedIndex];
 		if ((int)parserData[4] != plotNum) {
 			std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
 			continue;
 		}
+		parserDataDebug.push_back(parserData);
 		lastEvaluatedDebug.clear();
 		// TODO: There's probably a MUCH easier way to do this
 		const float zoneX1 = parserData[0]; // / data.xmax;
@@ -1295,18 +1298,28 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 		const float pltX2 = data.x2CoordPlot[plotNum];
 		const float pltY2 = data.y2CoordPlot[plotNum];
 
-		const GLfloat zoneToCheckX1 = pltX1 + (pltX2 - pltX1) * zoneX1 + data.pan_x;
-		const GLfloat zoneToCheckY1 = pltY2 - (pltY2 - pltY1) * zoneY1 + data.pan_y;
-		const GLfloat zoneToCheckX2 = pltX1 + (pltX2 - pltX1) * zoneX2 + data.pan_x;
-		const GLfloat zoneToCheckY2 = pltY2 - (pltY2 - pltY1) * zoneY2 + data.pan_y;
+		const float plotWidth = data.plotWidth[plotNum];
+		const float plotHeight = data.plotHeight[plotNum];
+
+		const GLfloat zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+		const GLfloat zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+		const GLfloat zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+		const GLfloat zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+
+		std::vector<float> zoneChecking;
+		zoneChecking.push_back(zoneToCheckX1);
+		zoneChecking.push_back(zoneToCheckY1);
+		zoneChecking.push_back(zoneToCheckX2);
+		zoneChecking.push_back(zoneToCheckY2);
+		zoneCheckingDebug.push_back(zoneChecking);
 
 		// debug
-		glBegin(GL_POINTS);
-		glColor4ub(255, 0, 0, 255);
-		glVertex2f(zoneToCheckX1, zoneToCheckY1);
-		glColor4ub(0, 255, 0, 255);
-		glVertex2f(zoneToCheckX2, zoneToCheckY2);
-		glEnd();
+		//glBegin(GL_POINTS);
+		//glColor4ub(255, 0, 0, 255);
+		//glVertex2f(zoneToCheckX1, zoneToCheckY1);
+		//glColor4ub(0, 255, 0, 255);
+		//glVertex2f(zoneToCheckX2, zoneToCheckY2);
+		//glEnd();
 		// end debug
 
 
@@ -1343,6 +1356,9 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 		}
 	}
 
+	if (plotNum == 8) {
+		std::cout << "debug";
+	}
 	// there's a bug here somewhere but im not sure where :'(
 	std::cout << "debug: " << &lastEvaluatedDebug << &evaluListDebug;
 	return INT_MIN;
