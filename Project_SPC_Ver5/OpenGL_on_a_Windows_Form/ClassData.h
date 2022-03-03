@@ -213,6 +213,8 @@ public:
 	std::vector<int> plotOrder;
 	std::map<std::string, std::vector<float>> attributeMinMax;
 	std::vector<std::vector<float>> normalizedValues;
+	std::set<int> plotsWithXInverted;
+	std::set<int> plotsWithYInverted;
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
@@ -455,7 +457,7 @@ public:
 	/// <param name="y">	The y coordinate. </param>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void drawPlot(float x, float y, float plotW, float plotH, int i) 
+	void drawPlot(float x, float y, float plotW, float plotH, int plotNum) 
 	{
 			
 			glPushMatrix(); // Makes a new layer
@@ -464,9 +466,9 @@ public:
 			//glRotatef(45, 1, 1, 1);
 			glBegin(GL_LINE_STRIP);
 			glColor3ub(0, 0, 0); // Line color
-			glVertex2f(nonOrthoX1[i], nonOrthoY1[i]); //defines Y axis -1 for 90 degrees, change the first element to change angle	
+			glVertex2f(nonOrthoX1[plotNum], nonOrthoY1[plotNum]); //defines Y axis -1 for 90 degrees, change the first element to change angle	
 			glVertex2f(-1, 1);
-			glVertex2f(nonOrthoX2[i], nonOrthoY2[i]); //defines X axis, change the second element to change angle	
+			glVertex2f(nonOrthoX2[plotNum], nonOrthoY2[plotNum]); //defines X axis, change the second element to change angle	
 			glEnd();
 			glPopMatrix(); // Removes the layer
 
@@ -475,36 +477,52 @@ public:
 			float lineSeparation = 12;
 			float xLabelVeritcalOffset = 10;
 			float yLabelVerticalOffset = xLabelVeritcalOffset + lineSeparation;
-			std::string xLabelStr = "x:" + parsedAttributePairs[i][0] + " ";
-			std::string yLabelStr = "y:" + parsedAttributePairs[i][1] + " ";
+			std::string xLabelStr = "x:" + parsedAttributePairs[plotNum][0] + " ";
+			std::string yLabelStr = "y:" + parsedAttributePairs[plotNum][1] + " ";
 			std::string labelsStr = xLabelStr + yLabelStr;
 			char* xLabelArr = &xLabelStr[0];
 			char* yLabelArr = &yLabelStr[0];
 			/*float plotHeight = nonOrthoY2[i] - nonOrthoY1[i];
 			float plotWidth = nonOrthoX2[i] - nonOrthoX1[i];*/
-			float plotWidth = x2CoordPlot[i] - x1CoordPlot[i];
-			float plotHeight = y2CoordPlot[i] - y1CoordPlot[i];
-			drawBitmapText(xLabelArr, x1CoordPlot[i] + (plotWidth / 2), y2CoordPlot[i] + xLabelVeritcalOffset);
-			drawBitmapText(yLabelArr, x1CoordPlot[i] + (plotWidth / 2), y2CoordPlot[i] + yLabelVerticalOffset);
+			float plotWidth = x2CoordPlot[plotNum] - x1CoordPlot[plotNum];
+			float plotHeight = y2CoordPlot[plotNum] - y1CoordPlot[plotNum];
+			drawBitmapText(xLabelArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + xLabelVeritcalOffset);
+			drawBitmapText(yLabelArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + yLabelVerticalOffset);
 			
 			// draw axes ranges
-            std::string attr1 = parsedAttributePairs[i][0];
-            std::string attr2 = parsedAttributePairs[i][1];
-			std::string xLowRange = std::to_string((int)attributeMinMax[attr1][0]);
+            std::string attr1 = parsedAttributePairs[plotNum][0];
+            std::string attr2 = parsedAttributePairs[plotNum][1];
+			//std::string xLowRange = std::to_string((int)attributeMinMax[attr1][0]);
+			std::string xLowRange = "0";
             std::string xHighRange = std::to_string((int)attributeMinMax[attr1][1]);
-            std::string yLowRange = std::to_string((int)attributeMinMax[attr2][0]);
+            //std::string yLowRange = std::to_string((int)attributeMinMax[attr2][0]);
+			std::string yLowRange = "0";
             std::string yHighRange = std::to_string((int)attributeMinMax[attr2][1]);
 
-            drawBitmapText(&xLowRange[0], x1CoordPlot[i], y2CoordPlot[i] + 1.5 * lineSeparation);
-            drawBitmapText(&xHighRange[0], x2CoordPlot[i] - xHighRange.length() / 2, y2CoordPlot[i] + 1.5 * lineSeparation);
-            drawBitmapText(&yLowRange[0], x1CoordPlot[i] - 1.5 * lineSeparation, y2CoordPlot[i]);
-            drawBitmapText(&yHighRange[0], x1CoordPlot[i] - 1.5 * lineSeparation, y1CoordPlot[i] + yHighRange.length() / 2);
+
+			// TODO: needs some work
+			if (plotsWithXInverted.find(plotNum) != plotsWithXInverted.end()) {
+				std::string tmp = xLowRange;
+				xLowRange = xHighRange;
+				xHighRange = tmp;
+			}
+
+			if (plotsWithYInverted.find(plotNum) != plotsWithYInverted.end()) {
+				std::string tmp = yLowRange;
+				yLowRange = yHighRange;
+				yHighRange = tmp;
+			}
+
+            drawBitmapText(&xLowRange[0], x1CoordPlot[plotNum], y2CoordPlot[plotNum] + 1.5 * lineSeparation);
+            drawBitmapText(&xHighRange[0], x2CoordPlot[plotNum] - xHighRange.length() / 2, y2CoordPlot[plotNum] + 1.5 * lineSeparation);
+            drawBitmapText(&yLowRange[0], x1CoordPlot[plotNum] - 1.5 * lineSeparation, y2CoordPlot[plotNum]);
+            drawBitmapText(&yHighRange[0], x1CoordPlot[plotNum] - 1.5 * lineSeparation, y1CoordPlot[plotNum] + yHighRange.length() / 2);
 
 			// debug draw plot num
-			std::string plot = "plotNum:" + std::to_string(i);
-			char* plotAsArr = &plot[0];
-			float plotIdOffset = yLabelVerticalOffset + lineSeparation;
-			drawBitmapText(plotAsArr, x1CoordPlot[i] + (plotWidth / 2), y2CoordPlot[i] + plotIdOffset);
+			//std::string plot = "plotNum:" + std::to_string(plotNum);
+			//char* plotAsArr = &plot[0];
+			//float plotIdOffset = yLabelVerticalOffset + lineSeparation;
+			//drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + plotIdOffset);
 			//if (!fOpen)
 			//{
 			//	for (int p = 0; p < parsedData.size(); p++)

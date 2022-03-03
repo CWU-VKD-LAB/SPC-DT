@@ -221,6 +221,26 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	// we need to get the next point in line for point(x1,y1)
 	int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
 
+	if (isRectangleMode) {
+		GLfloat highX = max(rectX1, rectX2);
+		GLfloat lowX = min(rectX1, rectX2);
+		GLfloat highY = max(rectY1, rectY2);
+		GLfloat lowY = min(rectY1, rectY2);
+		if (isPointWithinRect(x1, y1, lowX, highY, highX, lowY)) {
+			//if (point1BackgroundClass >= 0) {
+				// compute new location
+			GLfloat deltaX = abs(rectX2 - rectX1);
+			GLfloat deltaY = abs(rectY2 - rectY1);
+			GLfloat newX = lowX + deltaX / 2;
+			GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
+			x1 = newX;
+			y1 = newY;
+			//}
+		}
+	}
+
+
+
 	// debug
 	//glPointSize(6.0);
 	//if (point1BackgroundClass >= 0) {
@@ -237,10 +257,6 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	//glEnd();
 	//glPointSize(4.0);
 	// end debug
-
-	if (debugSet.find(point1BackgroundClass) == debugSet.end()) {
-		debugSet.insert(point1BackgroundClass);
-	}
 
 	int pointWasCorrectlyClassified = false;
 
@@ -365,6 +381,22 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	// set line color
 	glColor4ub(128, 128, 128, classTransparency);
 	int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
+
+	if (isRectangleMode) {
+		GLfloat highX = max(rectX1, rectX2);
+		GLfloat lowX = min(rectX1, rectX2);
+		GLfloat highY = max(rectY1, rectY2);
+		GLfloat lowY = min(rectY1, rectY2);
+		if (isPointWithinRect(x2, y2, lowX, highY, highX, lowY)) {
+			// compute new location
+			GLfloat deltaX = abs(rectX2 - rectX1);
+			GLfloat deltaY = abs(rectY2 - rectY1);
+			GLfloat newX = lowX + deltaX / 2;
+			GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
+			x2 = newX;
+			y2 = newY;
+		}
+	}
 
 	if (point2BackgroundClass >= 0) {
 		GLubyte r = data.classColor[recordClass][0];

@@ -617,10 +617,24 @@ namespace OpenGLForm
 							else {
 								xAxisInvert->erase(plotNumClicked);
 							}
+							xAxisInvert = &graph4.data.plotsWithXInverted;
+							if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end()) {
+								xAxisInvert->insert(plotNumClicked);
+							}
+							else {
+								xAxisInvert->erase(plotNumClicked);
+							}
 						}
 
 						if (isYAxisInvertMode) {
 							std::set<int>* yAxisInvert = &graph4.plotsWithYAxisInverted;
+							if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end()) {
+								yAxisInvert->insert(plotNumClicked);
+							}
+							else {
+								yAxisInvert->erase(plotNumClicked);
+							}
+							yAxisInvert = &graph4.data.plotsWithYInverted;
 							if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end()) {
 								yAxisInvert->insert(plotNumClicked);
 							}

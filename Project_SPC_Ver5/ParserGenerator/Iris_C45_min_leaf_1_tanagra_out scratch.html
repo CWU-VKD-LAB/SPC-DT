@@ -1,0 +1,188 @@
+<HTML>
+
+<HEAD>
+    <style type="text/css">
+        .BodyStyle {
+            color: black;
+            font-family: Trebuchet MS;
+            font-size: 12px
+        }
+    </style>
+</HEAD>
+
+<BODY class="BodyStyle">
+    <FONT FACE="Trebuchet MS" SIZE=1>
+        <table width="100%">
+            <tr>
+                <th bgcolor="#00CC99">Supervised Learning 2 (C4.5)</th>
+            </tr>
+        </table><A NAME="Parameters">
+            <table width="100%">
+                <tr>
+                    <th bgcolor="#0099CC">Parameters</th>
+                </tr>
+            </table>
+        </A>
+        <P>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#E0E0E0">
+                <TH colspan=2>Decision tree (C4.5) parameters</TH>
+            </TR>
+            <TR BGCOLOR="#EFEFEF">
+                <TD>Min size of leaves</TD>
+                <TD align=right>1</TD>
+            </TR>
+            <TR BGCOLOR="#EFEFEF">
+                <TD>Confidence-level for pessimistic</TD>
+                <TD align=right>0.25</TD>
+            </TR>
+        </table>
+        <HR><A NAME="Summary">
+            <table width="100%">
+                <tr>
+                    <th bgcolor="#0099CC">Results</th>
+                </tr>
+            </table>
+        </A>
+        <P>
+        <P>
+        <H2>Classifier performances</H2>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#60CAB3">
+                <TH>Error rate</TH>
+                <TD align=center>0.0000</TD>
+            </TR>
+            <TR BGCOLOR="#E0E0E0">
+                <TH>Values prediction</TH>
+                <TH>Confusion matrix</TH>
+            </TR>
+            <TR BGCOLOR="#EFEFEF">
+                <TD valign=top>
+                    <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+                        <TR BGCOLOR="#789ADA">
+                            <TH>Value</TH>
+                            <TH>Recall</TH>
+                            <TH>1-Precision</TH>
+                        </TR>
+                        <TR BGCOLOR="#ACCAF0">
+                            <TH>Iris-setosa</TH>
+                            <TD align=right>1.0000</TD>
+                            <TD align=right>0.0000</TD>
+                        </TR>
+                        <TR BGCOLOR="#ACCAF0">
+                            <TH>Iris-versicolor</TH>
+                            <TD align=right>1.0000</TD>
+                            <TD align=right>0.0000</TD>
+                        </TR>
+                        <TR BGCOLOR="#ACCAF0">
+                            <TH>Iris-virginica</TH>
+                            <TD align=right>1.0000</TD>
+                            <TD align=right>0.0000</TD>
+                        </TR>
+                    </table>
+                </TD>
+                <TD>
+                    <P>
+                    <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+                        <TR BGCOLOR="#789ADA">
+                            <TH></TH>
+                            <TH width=60>Iris-setosa</TH>
+                            <TH width=60>Iris-versicolor</TH>
+                            <TH width=60>Iris-virginica</TH>
+                            <TH width=60 BGCOLOR="#60CAB3">Sum</TH>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#789ADA">Iris-setosa</TH>
+                            <TD BGCOLOR="#ACCAF0" align=right>50</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>0</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>0</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>50</TD>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#789ADA">Iris-versicolor</TH>
+                            <TD BGCOLOR="#ACCAF0" align=right>0</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>50</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>0</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>50</TD>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#789ADA">Iris-virginica</TH>
+                            <TD BGCOLOR="#ACCAF0" align=right>0</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>0</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>50</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>50</TD>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#60CAB3">Sum</TH>
+                            <TD BGCOLOR="#9FDFD1" align=right>50</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>50</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>50</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>150</TD>
+                        </TR>
+                    </table>
+                </TD>
+            </TR>
+        </table>
+        <HR>
+        <P>
+        <H2>Classifier characteristics</H2>
+        <h3>Data description</h3>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#EFEFEF">
+                <th>Target attribute</th>
+                <td>class (3 values)</td>
+            </tr>
+            <TR BGCOLOR="#EFEFEF">
+                <th># descriptors</th>
+                <td>4</td>
+            </tr>
+        </table>
+        <H3>Tree description</H3>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#ACCAF0">
+                <TD>Number of nodes</TD>
+                <TD align=right width=60>17</TD>
+            </TR>
+            <TR BGCOLOR="#ACCAF0">
+                <TD>Number of leaves</TD>
+                <TD align=right width=60>9</TD>
+            </TR>
+        </table>
+        <P>
+        <H3>Decision tree</H3>
+        <UL>
+            <LI>petal-length < 2.4500 then class=<b>Iris-setosa</b> (100.00 % of 50 examples)
+            <LI>petal-length >= 2.4500
+                <UL>
+                    <LI>petal-width < 1.7500
+                        <UL>
+                            <LI>sepal-length < 7.1000
+                                <UL>
+                                    <LI>petal-length < 4.9500
+                                        <UL>
+                                            <LI>petal-width < 1.6500 then class=<b>Iris-versicolor</b> (100.00 % of 47 examples)
+                                            <LI>petal-width >= 1.6500 then class = <b>Iris-virginica</b> (100.00 % of 1 examples)
+                                        </UL>
+                                    <LI>petal-length >= 4.9500
+                                        <UL>
+                                            <LI>petal-width < 1.5500 then class=<b>Iris-virginica</b> (100.00 % of 3 examples)
+                                            <LI>petal-width >= 1.5500 then class = <b>Iris-versicolor</b> (100.00 % of 2 examples)
+                                        </UL>
+                                </UL>
+                            <LI>sepal-length >= 7.1000 then class = <b>Iris-virginica</b> (100.00 % of 1 examples)
+                        </UL>
+                    <LI>petal-width >= 1.7500
+                        <UL>
+                            <LI>petal-length < 4.8500
+                                <UL>
+                                    <LI>sepal-length < 5.9500 then class=<b>Iris-versicolor</b> (100.00 % of 1 examples)
+                                    <LI>sepal-length >= 5.9500 then class = <b>Iris-virginica</b> (100.00 % of 2 examples)
+                                </UL>
+                            <LI>petal-length >= 4.8500 then class = <b>Iris-virginica</b> (100.00 % of 43 examples)
+                        </UL>
+                </UL>
+        </UL>
+            <HR>Computation time : 16 ms.<BR>Created at 3/3/2022 10:39:27 AM
+</body>
+
+</html>

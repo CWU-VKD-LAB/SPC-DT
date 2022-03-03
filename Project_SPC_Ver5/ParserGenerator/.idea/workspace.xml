@@ -5,40 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NormalizeDatasetBeforeGeneratingTree.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iris.data" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/iris.names" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mediumTreeParser.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IrisData.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IrisData.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/debug.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/irisParser.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/default.tdm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generatedParser -- copy.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generatedParser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mediumTreeTest.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/medium_tree_2_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/medium_tree_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/one_attribute_tree_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/parser.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/parserbyHand.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_file.tdm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_output_C45_copy_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_settings.tdm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_tree_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/three_attribute_tree_one_duplicate_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/three_attribute_tree_two_duplicates_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/two_attribute_tree_2_parser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/two_attribute_tree_parser.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +55,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/NormalizeDatasetBeforeGeneratingTree.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -90,7 +65,7 @@
   <component name="PyCoverageOptionsProvider">
     <option name="myUseBundledCoveragePy" value="true" />
   </component>
-  <component name="RunManager" selected="Python.NormalizeDatasetBeforeGeneratingTree">
+  <component name="RunManager" selected="Python.tanagra_to_parser Iris">
     <configuration name="NormalizeDatasetBeforeGeneratingTree" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ParserGenerator" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -113,7 +88,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="tanagra_to_parser" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="tanagra_to_parser BreastCancer" type="PythonConfigurationType" factoryName="Python">
       <module name="ParserGenerator" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -127,7 +102,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
-      <option name="PARAMETERS" value="" />
+      <option name="PARAMETERS" value="./TestTanagraOutputs/medium_tree.txt debug.txt breast.xlsx" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tanagra_to_parser Iris" type="PythonConfigurationType" factoryName="Python">
+      <module name="ParserGenerator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/opt/homebrew/bin/python3.9" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
+      <option name="PARAMETERS" value="Iris_C45_min_leaf_1_tanagra_out.html irisParser.txt IrisData.xlsx" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -136,12 +133,13 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.tanagra_to_parser" />
+      <item itemvalue="Python.tanagra_to_parser BreastCancer" />
+      <item itemvalue="Python.tanagra_to_parser Iris" />
       <item itemvalue="Python.NormalizeDatasetBeforeGeneratingTree" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.tanagra_to_parser" />
+        <item itemvalue="Python.tanagra_to_parser BreastCancer" />
       </list>
     </recent_temporary>
   </component>
@@ -176,6 +174,9 @@
       <workItem from="1643930438885" duration="5602000" />
       <workItem from="1644289856714" duration="1000" />
       <workItem from="1646168997357" duration="2333000" />
+      <workItem from="1646326080482" duration="192000" />
+      <workItem from="1646326770883" duration="3593000" />
+      <workItem from="1646331711051" duration="2279000" />
     </task>
     <servers />
   </component>
@@ -201,8 +202,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>572</line>
-          <option name="timeStamp" value="248" />
+          <line>983</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>984</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>743</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file:///opt/homebrew/lib/python3.9/site-packages/tana2tree/tana2tree.py</url>
+          <line>118</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file:///opt/homebrew/lib/python3.9/site-packages/tana2tree/tana2tree.py</url>
+          <line>242</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -213,7 +234,8 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Iris.coverage" NAME="tanagra_to_parser Iris Coverage Results" MODIFIED="1646333244366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$NormalizeDatasetBeforeGeneratingTree.coverage" NAME="NormalizeDatasetBeforeGeneratingTree Coverage Results" MODIFIED="1646171314055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1643936148009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1646332335884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
