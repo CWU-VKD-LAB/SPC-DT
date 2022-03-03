@@ -83,6 +83,9 @@ namespace OpenGLForm
 		int graphType = -1;
 		bool displayData; 
 		
+		bool attributeSwapMode = false;
+		bool isXAxisInvertMode = false;
+		bool isYAxisInvertMode = false;
 
 		/// <summary>	The original wh. </summary>
 		int originalWH;
@@ -201,6 +204,12 @@ namespace OpenGLForm
 		// Set draw rectangle state
 		void setDrawingRectangleState(bool state) {
 			graph4.isRectangleMode = state;
+		}
+
+		// toggle attribute flip mode
+		void toggleSwapAttributeAxesMode() {
+			attributeSwapMode = !attributeSwapMode;
+			graph4.swapAttributeAxesMode = !graph4.swapAttributeAxesMode;
 		}
 
 		int getClassSize() {
@@ -564,7 +573,7 @@ namespace OpenGLForm
 					drawingRectangleVertex1 = !drawingRectangleVertex1;
 					break;
 				}
-
+				
 				if (graphType == 1) { // S-CPC
 					//No graph dragging
 				}
@@ -573,12 +582,58 @@ namespace OpenGLForm
 				else if (graphType == 4) { // SPC
 
 					{
-						graph4.graphClicked = graph4.findClickedGraph(worldMouseX, worldMouseY);
-						bool colliding = (graph4.graphClicked != -1);
+						graph4.plotNumClicked = graph4.findClickedGraph(worldMouseX, worldMouseY);
+						int plotNumClicked = graph4.plotNumClicked;
+						ClassData* dataPtr = &graph4.data;
+						if (attributeSwapMode && plotNumClicked >= 0 && plotNumClicked < graph4.data.numPlots) {
+							if (graph4.swappedPlots.find(plotNumClicked) != graph4.swappedPlots.end()) {
+								graph4.swappedPlots.insert(plotNumClicked);
+							}
+							else {
+								graph4.swappedPlots.erase(plotNumClicked);
+							}
+							
+							std::string tmp = graph4.data.parsedAttributePairs[plotNumClicked][0];
+							dataPtr->parsedAttributePairs[plotNumClicked][0] = graph4.data.parsedAttributePairs[plotNumClicked][1];
+							dataPtr->parsedAttributePairs[plotNumClicked][1] = tmp;
+							for (int i = 0; i < dataPtr->parsedData.size(); i++) {
+								if (dataPtr->parsedData[i][4] == plotNumClicked) {
+									float tmp = dataPtr->parsedData[i][0];
+									dataPtr->parsedData[i][0] = dataPtr->parsedData[i][1];
+									dataPtr->parsedData[i][1] = tmp;
+									tmp = dataPtr->parsedData[i][2];
+									dataPtr->parsedData[i][2] = dataPtr->parsedData[i][3];
+									dataPtr->parsedData[i][3] = tmp;
+								}
+							}
+							graph4.dataParsed.parsedData = dataPtr->parsedData;
+						}
+
+						if (isXAxisInvertMode) {
+							std::set<int>* xAxisInvert = &graph4.plotsWithXAxisInverted;
+							if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end()) {
+								xAxisInvert->insert(plotNumClicked);
+							}
+							else {
+								xAxisInvert->erase(plotNumClicked);
+							}
+						}
+
+						if (isYAxisInvertMode) {
+							std::set<int>* yAxisInvert = &graph4.plotsWithYAxisInverted;
+							if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end()) {
+								yAxisInvert->insert(plotNumClicked);
+							}
+							else {
+								yAxisInvert->erase(plotNumClicked);
+							}
+						}
+
+						bool colliding = (graph4.plotNumClicked != -1);
 						if (colliding && displayData == false && reverseDataAxis == 0)
 						{
 							graph4.dragging = true;
-							graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.graphClicked);
+							graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
 							/*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
 							graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
 						}
@@ -625,7 +680,7 @@ namespace OpenGLForm
 				else if (graphType == 4) { // C-SPC
 					// DRAGGING
 					if (graph4.dragging) {
-						graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.graphClicked);
+						graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
 						/*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
 						graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
 					}
@@ -662,9 +717,9 @@ namespace OpenGLForm
 				}
 				//check if the mouse click was on a graph and detect whcih 
 				if (graph4.dragging) {
-					graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.graphClicked);
+					graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
 					graph4.dragging = false;
-					graph4.graphClicked = -1;
+					graph4.plotNumClicked = -1;
 				}
 
 
@@ -893,12 +948,12 @@ void OpenGLForm::COpenGL3::displaySelectedData()
 	float rectClickedX, rectClickedY; 
 	int rectIndex;
 	
-	rectClickedX = (worldMouseX - (graph4.data.xPlotCoordinates[graph4.graphClicked] - graph4.data.plotWidth[graph4.graphClicked] / 2)) / graph4.data.plotWidth[graph4.graphClicked];
-	rectClickedY = 1 - (worldMouseY - (graph4.data.yPlotCoordinates[graph4.graphClicked] - graph4.data.plotHeight[graph4.graphClicked] / 2)) / graph4.data.plotHeight[graph4.graphClicked];
+	rectClickedX = (worldMouseX - (graph4.data.xPlotCoordinates[graph4.plotNumClicked] - graph4.data.plotWidth[graph4.plotNumClicked] / 2)) / graph4.data.plotWidth[graph4.plotNumClicked];
+	rectClickedY = 1 - (worldMouseY - (graph4.data.yPlotCoordinates[graph4.plotNumClicked] - graph4.data.plotHeight[graph4.plotNumClicked] / 2)) / graph4.data.plotHeight[graph4.plotNumClicked];
 
 	for (int p = 0; p < graph4.dataParsed.parsedData.size(); p++)
 	{
-		if ((graph4.dataParsed.parsedData[p][4] == graph4.graphClicked) &&
+		if ((graph4.dataParsed.parsedData[p][4] == graph4.plotNumClicked) &&
 		   (rectClickedX >= graph4.dataParsed.parsedData[p][0] && rectClickedX <= graph4.dataParsed.parsedData[p][2]
 		   && rectClickedY >= graph4.dataParsed.parsedData[p][1] && rectClickedY <= graph4.dataParsed.parsedData[p][3]))
 		{
@@ -910,10 +965,10 @@ void OpenGLForm::COpenGL3::displaySelectedData()
 
 	for (int i = 0; i < graph4.data.xdata.size(); i++)
 	{
-		if (graph4.data.xdata[i][graph4.graphClicked] < graph4.dataParsed.parsedData[rectIndex][0]||
-			graph4.data.xdata[i][graph4.graphClicked] > graph4.dataParsed.parsedData[rectIndex][2] ||
-			graph4.data.ydata[i][graph4.graphClicked] < graph4.dataParsed.parsedData[rectIndex][1] ||
-			graph4.data.ydata[i][graph4.graphClicked] > graph4.dataParsed.parsedData[rectIndex][3] )
+		if (graph4.data.xdata[i][graph4.plotNumClicked] < graph4.dataParsed.parsedData[rectIndex][0]||
+			graph4.data.xdata[i][graph4.plotNumClicked] > graph4.dataParsed.parsedData[rectIndex][2] ||
+			graph4.data.ydata[i][graph4.plotNumClicked] < graph4.dataParsed.parsedData[rectIndex][1] ||
+			graph4.data.ydata[i][graph4.plotNumClicked] > graph4.dataParsed.parsedData[rectIndex][3] )
 		
 		{
 		    graph4.data.dataTransparency[i] = 0.1; 
@@ -928,11 +983,11 @@ void OpenGLForm::COpenGL3::setReverseDataX()
 
 	for (int k = 0; k < graph4.data.xdata.size(); k++)
 	{
-		graph4.data.xdata[k][graph4.graphClicked] = 1 - graph4.data.xdata[k][graph4.graphClicked];
+		graph4.data.xdata[k][graph4.plotNumClicked] = 1 - graph4.data.xdata[k][graph4.plotNumClicked];
 	}
 	for (int i = 0; i < graph4.dataParsed.parsedData.size(); i++)
 	{
-		if (graph4.graphClicked == (int)graph4.dataParsed.parsedData[i][4])
+		if (graph4.plotNumClicked == (int)graph4.dataParsed.parsedData[i][4])
 		{
 			graph4.dataParsed.parsedData[i][0] = 1 - graph4.dataParsed.parsedData[i][0];
 			graph4.dataParsed.parsedData[i][2] = 1 - graph4.dataParsed.parsedData[i][2];
@@ -946,11 +1001,11 @@ void OpenGLForm::COpenGL3::setReverseDataY()
 {
 	for (int k = 0; k < graph4.data.ydata.size(); k++)
 	{
-		graph4.data.ydata[k][graph4.graphClicked] = 1 - graph4.data.ydata[k][graph4.graphClicked];
+		graph4.data.ydata[k][graph4.plotNumClicked] = 1 - graph4.data.ydata[k][graph4.plotNumClicked];
 	}
 	for (int i = 0; i < graph4.dataParsed.parsedData.size(); i++)
 	{
-		if (graph4.graphClicked == (int)graph4.dataParsed.parsedData[i][4])
+		if (graph4.plotNumClicked == (int)graph4.dataParsed.parsedData[i][4])
 		{
 			graph4.dataParsed.parsedData[i][1] = 1 - graph4.dataParsed.parsedData[i][1];
 			graph4.dataParsed.parsedData[i][3] = 1 - graph4.dataParsed.parsedData[i][3];

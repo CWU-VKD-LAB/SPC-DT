@@ -60,6 +60,12 @@ public:
 	bool isLineTerminationMode = false; // TODO: DEBUG TRUE. in the end it will be set to false and controlled by a button
 	bool isColorTerminationMode = false;
 
+	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
+	bool swapAttributeAxesMode = false;
+	std::set<int> swappedPlots;
+	std::set<int> plotsWithXAxisInverted;
+	std::set<int> plotsWithYAxisInverted;
+
 	/// *** USED TO DETERMINE IF INCOMING PARSER BRANCHES
 	bool doesParserBranch = false;
 	
@@ -75,7 +81,7 @@ public:
 	/// <summary>	If the mouse is clicked, held and dragging. </summary>
 	bool dragging = false;
 	/// <summary>	Holds what graphs being clicked. </summary>
-	int graphClicked = -1;
+	int plotNumClicked = -1;
 	int coordinatesClicked = -1; //Wagle
 
 	void updatePlotLocation(double mouseX, double mouseY, int plotNum);

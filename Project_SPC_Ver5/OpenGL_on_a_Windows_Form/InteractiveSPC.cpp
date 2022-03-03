@@ -190,8 +190,21 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 
 	float plotHeight = data.plotHeight[plotNum];
 	float plotWidth = data.plotWidth[plotNum];
-    x1 = plt1X1 + plotWidth * x1 + data.pan_x;
-    y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
+
+	// Get x point
+	if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+		x1 = plt1X2 - plotWidth * x1 + data.pan_x;
+	}
+	else {
+		x1 = plt1X1 + plotWidth * x1 + data.pan_x;
+	}
+	if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+		y1 = plt1Y1 + plotHeight * y1 + data.pan_y;
+	}
+	else {
+		y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
+	}
+	
 	// debug
 	//glColor3ub(255, 0, 0);
 	//glBegin(GL_POINTS);
@@ -204,11 +217,26 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	// x1 = plt1X1 + (plt1X2 - plt1X1) * x1 + data.pan_x;
 	// y1 = plt1Y2 - (plt1Y2 - plt1Y1) * y1 + data.pan_y;
 
-
-
 	// TODO
 	// we need to get the next point in line for point(x1,y1)
 	int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
+
+	// debug
+	//glPointSize(6.0);
+	//if (point1BackgroundClass >= 0) {
+	//	glColor3f(data.classColor[point1BackgroundClass][0], data.classColor[point1BackgroundClass][1], data.classColor[point1BackgroundClass][2]);
+	//}
+	//else if (point1BackgroundClass != INT_MIN){
+	//	glColor3ub(data.continueClassColor[point1BackgroundClass][0], data.continueClassColor[point1BackgroundClass][1], data.continueClassColor[point1BackgroundClass][2]);
+	//}
+	//else {
+	//	glColor3ub(255, 0, 0);
+	//}
+	//glBegin(GL_POINTS);
+	//glVertex2f(x1, y1);
+	//glEnd();
+	//glPointSize(4.0);
+	// end debug
 
 	if (debugSet.find(point1BackgroundClass) == debugSet.end()) {
 		debugSet.insert(point1BackgroundClass);
@@ -316,14 +344,28 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	plotHeight = data.plotHeight[nextPlotNum];
 	plotWidth = data.plotWidth[nextPlotNum];
 
-    x2 = plt2X1 + plotWidth * x2 + data.pan_x;
-    y2 = plt2Y2 - plotHeight * y2 + data.pan_y;
+
+	if (plotsWithXAxisInverted.find(nextPlotNum) != plotsWithXAxisInverted.end()) {
+		x2 = plt2X2 - plotWidth * x2 + data.pan_x;
+	}
+	else {
+		x2 = plt2X1 + plotWidth * x2 + data.pan_x;
+	}
+
+	if (plotsWithYAxisInverted.find(nextPlotNum) != plotsWithYAxisInverted.end()) {
+		y2 = plt2Y1 + plotHeight * y2 + data.pan_y;
+	}
+	else {
+		y2 = plt2Y2 - plotHeight * y2 + data.pan_y;
+	}
+    
 	// x2 = plt2X1 + (plt2X2 - plt2X1) * x2 + data.pan_x;
 	// y2 = plt2Y2 - (plt2Y2 - plt2Y1) * y2 + data.pan_y;
 
 	// set line color
 	glColor4ub(128, 128, 128, classTransparency);
 	int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
+
 	if (point2BackgroundClass >= 0) {
 		GLubyte r = data.classColor[recordClass][0];
 		GLubyte g = data.classColor[recordClass][1];
@@ -628,7 +670,7 @@ void InteractiveSPC::display() {
 			if (classNumber < 0) {
 				hsl = RGBtoHSL(data.continueClassColor[classNumber]);
 			}
-			else 
+			else
 			{
 				// we need to adjust the lightness of the background color
 				hsl = RGBtoHSL(data.classColor[classNumber]);
@@ -650,16 +692,32 @@ void InteractiveSPC::display() {
 			// coord x2 = xc + (half the plot width) + (fraction of the plotWidth that the current rect x2 is at)
 			// coord y1 = yc - (half the plot width <will be visually lower part of graph>)  - (fraction of plot height that rect y1 should be at) 
 			// coord y2 = yc + (half the plot width <will be visually lower part of graph>)  - (fraction of plot height that rect y1 should be at)
+			GLfloat y1 = 0;
+			GLfloat x2 = 0;
+			GLfloat y2 = 0;
+			GLfloat x1 = 0;
 
-            const GLfloat x1 = data.x1CoordPlot[plot] + dataParsed.parsedData[p][0] * data.plotWidth[plot];
-            const GLfloat y2 = data.y2CoordPlot[plot] - dataParsed.parsedData[p][1] * data.plotHeight[plot];
-            const GLfloat x2 = data.x1CoordPlot[plot] + dataParsed.parsedData[p][2] * data.plotWidth[plot];
-            const GLfloat y1 = data.y2CoordPlot[plot] - dataParsed.parsedData[p][3] * data.plotHeight[plot];
+			// get plot coords
 
-			// const GLfloat x1 = data.xPlotCoordinates[plot] - (data.plotWidth[plot] / 2) + (dataParsed.parsedData[p][0] * data.plotWidth[plot]);
-			// const GLfloat y1 = data.yPlotCoordinates[plot] - (data.plotHeight[plot] / 2) + (dataParsed.parsedData[p][1] * data.plotHeight[plot]);
-			// const GLfloat x2 = data.xPlotCoordinates[plot] - (data.plotWidth[plot] / 2) + (dataParsed.parsedData[p][2] * data.plotWidth[plot]);
-			// const GLfloat y2 = data.yPlotCoordinates[plot] - (data.plotHeight[plot] / 2) + (dataParsed.parsedData[p][3] * data.plotHeight[plot]);
+			// calculate x components
+			if (plotsWithXAxisInverted.find(plot) != plotsWithXAxisInverted.end()) {
+				x1 = data.x2CoordPlot[plot] - dataParsed.parsedData[p][0] * data.plotWidth[plot];
+				x2 = data.x2CoordPlot[plot] - dataParsed.parsedData[p][2] * data.plotWidth[plot];
+			}
+			else {
+				x1 = data.x1CoordPlot[plot] + dataParsed.parsedData[p][0] * data.plotWidth[plot];
+				x2 = data.x1CoordPlot[plot] + dataParsed.parsedData[p][2] * data.plotWidth[plot];
+			}
+			
+			// calculate y components
+			if (plotsWithYAxisInverted.find(plot) != plotsWithYAxisInverted.end()) {
+				y2 = data.y1CoordPlot[plot] + dataParsed.parsedData[p][1] * data.plotHeight[plot];
+				y1 = data.y1CoordPlot[plot] + dataParsed.parsedData[p][3] * data.plotHeight[plot];
+			}
+			else {
+				y2 = data.y2CoordPlot[plot] - dataParsed.parsedData[p][1] * data.plotHeight[plot];
+				y1 = data.y2CoordPlot[plot] - dataParsed.parsedData[p][3] * data.plotHeight[plot];
+			}
 
 			// debug
 			if (plot == 0) {
@@ -668,6 +726,7 @@ void InteractiveSPC::display() {
 
 
 			glRectf(x1, y1, x2, y2);
+
 
 			// We need to draw a dotted line from x1, y1 to x1, y2 and another one from x1, y1, to x2, y1
 			// Due to potential incompatibilities with dictating line width, we can use thin polygones as a workaround
@@ -1275,23 +1334,20 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 	// get plot num
 	//int plotNum = findPlotNumOfPoint(px, py);
 	// check all rects inside plotnum
-	std::vector<float> lastEvaluatedDebug;
-	std::vector<std::vector<float> > evaluListDebug;
-	std::vector<std::vector<float>> parserDataDebug;
-	std::vector<std::vector<float>> zoneCheckingDebug;
 	for (int parsedIndex = 0; parsedIndex < dataParsed.parsedData.size(); parsedIndex++) {
 		std::vector<float> parserData = dataParsed.parsedData[parsedIndex];
 		if ((int)parserData[4] != plotNum) {
 			std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
 			continue;
 		}
-		parserDataDebug.push_back(parserData);
-		lastEvaluatedDebug.clear();
 		// TODO: There's probably a MUCH easier way to do this
-		const float zoneX1 = parserData[0]; // / data.xmax;
-		const float zoneY1 = parserData[1]; // / data.ymax;
-		const float zoneX2 = parserData[2]; // / data.xmax;
-		const float zoneY2 = parserData[3]; // / data.ymax;
+		// need to accomodate various swappings
+		// X/Y swap swaps parser data itself, so we need not do anything here
+		// but the x and y invert buttons DONT alter data, so we need to make up for that here
+		const float zoneX1 = parserData[0]; 
+		const float zoneY1 = parserData[1]; 
+		const float zoneX2 = parserData[2]; 
+		const float zoneY2 = parserData[3]; 
 
 		const float pltX1 = data.x1CoordPlot[plotNum];
 		const float pltY1 = data.y1CoordPlot[plotNum];
@@ -1301,17 +1357,33 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 		const float plotWidth = data.plotWidth[plotNum];
 		const float plotHeight = data.plotHeight[plotNum];
 
-		const GLfloat zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-		const GLfloat zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-		const GLfloat zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-		const GLfloat zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+		GLfloat zoneToCheckX1;
+		GLfloat zoneToCheckX2;
+		GLfloat zoneToCheckY1;
+		GLfloat zoneToCheckY2;
 
-		std::vector<float> zoneChecking;
-		zoneChecking.push_back(zoneToCheckX1);
-		zoneChecking.push_back(zoneToCheckY1);
-		zoneChecking.push_back(zoneToCheckX2);
-		zoneChecking.push_back(zoneToCheckY2);
-		zoneCheckingDebug.push_back(zoneChecking);
+		// old
+		//zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+		//zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+		//zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+		//zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+
+		if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+			zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+			zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+		}
+		else {
+			zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+			zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+		}
+		if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+			zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+			zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+		}
+		else {
+			zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+			zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+		}
 
 		// debug
 		//glBegin(GL_POINTS);
@@ -1322,45 +1394,13 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 		//glEnd();
 		// end debug
 
-
-
-		lastEvaluatedDebug.push_back(px);
-		lastEvaluatedDebug.push_back(py);
-		lastEvaluatedDebug.push_back(parserData[4]);
-		lastEvaluatedDebug.push_back(plotNum);
-		lastEvaluatedDebug.push_back(zoneX1);
-		lastEvaluatedDebug.push_back(zoneY1);
-		lastEvaluatedDebug.push_back(zoneX2);
-		lastEvaluatedDebug.push_back(zoneY2);
-		lastEvaluatedDebug.push_back(pltX1);
-		lastEvaluatedDebug.push_back(pltY1);
-		lastEvaluatedDebug.push_back(pltX2);
-		lastEvaluatedDebug.push_back(pltY2);
-		lastEvaluatedDebug.push_back(zoneToCheckX1);
-		lastEvaluatedDebug.push_back(zoneToCheckY1);
-		lastEvaluatedDebug.push_back(zoneToCheckX2);
-		lastEvaluatedDebug.push_back(zoneToCheckY2);
-
 		bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
-		if (withinRect) {
-			lastEvaluatedDebug.push_back(1);
-		}
-		else {
-			lastEvaluatedDebug.push_back(0);
-		}
-
-		evaluListDebug.push_back(lastEvaluatedDebug);
 
 		if (withinRect) {
 			return parserData[5];
 		}
 	}
 
-	if (plotNum == 8) {
-		std::cout << "debug";
-	}
-	// there's a bug here somewhere but im not sure where :'(
-	std::cout << "debug: " << &lastEvaluatedDebug << &evaluListDebug;
 	return INT_MIN;
 }
 
