@@ -159,7 +159,7 @@ namespace OpenGLForm
 
 		// CHANGE BACKGROUND COLOR
 		void setClassColor(float R, float G, float B, int classnumber) {
-			if (classnumber > 0 && classnumber <= data.numOfClasses) {
+			if (classnumber >= 0 && classnumber <= data.numOfClasses) {
 			
 				graph4.data.setClassColor(R, G, B, classnumber);
 			
@@ -196,6 +196,11 @@ namespace OpenGLForm
 			graph4.isPointColorMode = state;
 		}
 
+		// Set line color mode
+		void setLineColorMode(bool state) {
+			graph4.isLineColorMode = state;
+		}
+
 		// Set line termination color mode state
 		void setColorTerminationMode(bool state) {
 			graph4.isColorTerminationMode = state;
@@ -204,6 +209,16 @@ namespace OpenGLForm
 		// Set draw rectangle state
 		void setDrawingRectangleState(bool state) {
 			graph4.isRectangleMode = state;
+			if (!state) {
+				graph4.rectX1List.clear();
+				graph4.rectX2List.clear();
+				graph4.rectY1List.clear();
+				graph4.rectY2List.clear();
+			}
+		}
+
+		void drawRectanglesOnGray() {
+			graph4.drawRectanglesOnGray();
 		}
 
 		// toggle attribute flip mode
@@ -563,11 +578,15 @@ namespace OpenGLForm
 						drawingRectangleX2 = worldMouseX;
 						drawingRectangleY2 = worldMouseY;
 						drawingRectangleEnabled = !drawingRectangleEnabled;
-						graph4.rectX1 = drawingRectangleX1;
+						graph4.rectX1List.push_back((GLfloat)drawingRectangleX1);
+						graph4.rectY1List.push_back((GLfloat)drawingRectangleY1);
+						graph4.rectX2List.push_back((GLfloat)drawingRectangleX2);
+						graph4.rectY2List.push_back((GLfloat)drawingRectangleY2);
+						/*graph4.rectX1 = drawingRectangleX1;
 						graph4.rectY1 = drawingRectangleY1;
 						graph4.rectX2 = drawingRectangleX2;
 						graph4.rectY2 = drawingRectangleY2;
-						drawingRectangleEnabled = false;
+						drawingRectangleEnabled = false;*/
 						setDrawingRectangleState(true);
 					}
 					drawingRectangleVertex1 = !drawingRectangleVertex1;

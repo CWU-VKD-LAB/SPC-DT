@@ -201,7 +201,7 @@ private:
 class ClassData // copy class before changing
 {
 public: 
-	std::vector<std::vector<float> > classColor;
+	std::map<int, std::vector<float>> classColor;
 	std::map<int, std::vector<float> > continueClassColor;
 	std::vector<float>  classTransparency;
 	std::vector<int> pointsToRender;
@@ -218,7 +218,7 @@ public:
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
-			classColor.push_back({});
+			//classColor.push_back({});
 			//0, (data.classNum[i] * 50) + 1, 100
 			classColor[i].push_back(0);
 			classColor[i].push_back((i + 1) * 50 + 1);
@@ -489,15 +489,18 @@ public:
 			drawBitmapText(xLabelArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + xLabelVeritcalOffset);
 			drawBitmapText(yLabelArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + yLabelVerticalOffset);
 			
+
+			int precision = 4;
+
 			// draw axes ranges
             std::string attr1 = parsedAttributePairs[plotNum][0];
             std::string attr2 = parsedAttributePairs[plotNum][1];
 			//std::string xLowRange = std::to_string((int)attributeMinMax[attr1][0]);
-			std::string xLowRange = "0";
-            std::string xHighRange = std::to_string((int)attributeMinMax[attr1][1]);
+			std::string xLowRange = std::to_string(attributeMinMax[attr1][0]).substr(0, precision);
+            std::string xHighRange = std::to_string(attributeMinMax[attr1][1]).substr(0, precision);
             //std::string yLowRange = std::to_string((int)attributeMinMax[attr2][0]);
-			std::string yLowRange = "0";
-            std::string yHighRange = std::to_string((int)attributeMinMax[attr2][1]);
+			std::string yLowRange = std::to_string(attributeMinMax[attr2][0]).substr(0, precision);
+            std::string yHighRange = std::to_string(attributeMinMax[attr2][1]).substr(0, precision);
 
 
 			// TODO: needs some work
@@ -513,16 +516,20 @@ public:
 				yHighRange = tmp;
 			}
 
+			if (attr1 == attr2) {
+				std::cout << "debug";
+			}
+
             drawBitmapText(&xLowRange[0], x1CoordPlot[plotNum], y2CoordPlot[plotNum] + 1.5 * lineSeparation);
             drawBitmapText(&xHighRange[0], x2CoordPlot[plotNum] - xHighRange.length() / 2, y2CoordPlot[plotNum] + 1.5 * lineSeparation);
-            drawBitmapText(&yLowRange[0], x1CoordPlot[plotNum] - 1.5 * lineSeparation, y2CoordPlot[plotNum]);
-            drawBitmapText(&yHighRange[0], x1CoordPlot[plotNum] - 1.5 * lineSeparation, y1CoordPlot[plotNum] + yHighRange.length() / 2);
+            drawBitmapText(&yLowRange[0], x1CoordPlot[plotNum] - ((float)precision / 1.5f) * lineSeparation, y2CoordPlot[plotNum]);
+            drawBitmapText(&yHighRange[0], x1CoordPlot[plotNum] - ((float)precision / 1.5f) * lineSeparation, y1CoordPlot[plotNum] + yHighRange.length() / 2);
 
 			// debug draw plot num
-			//std::string plot = "plotNum:" + std::to_string(plotNum);
-			//char* plotAsArr = &plot[0];
-			//float plotIdOffset = yLabelVerticalOffset + lineSeparation;
-			//drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + plotIdOffset);
+			std::string plot = "plotId:" + std::to_string(plotNum);
+			char* plotAsArr = &plot[0];
+			float plotIdOffset = yLabelVerticalOffset + lineSeparation;
+			drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + plotIdOffset);
 			//if (!fOpen)
 			//{
 			//	for (int p = 0; p < parsedData.size(); p++)

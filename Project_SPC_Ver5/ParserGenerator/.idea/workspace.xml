@@ -5,16 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Ionosphere_ID3_tanagra_out.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/IonosphereData.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Ionosphere_C45_tanagra_out - Copy.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Ionosphere_C45_tanagra_out.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/IrisData.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Iris_ID3_medium_size_tanagra_out.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Iris_C45_tanagra_out - Copy.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Iris_C45_tanagra_out.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Iris_ID3_medium_size_tanagra_out copy.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WBCD_C45_tanagra_out.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WDBC.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WDBC.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/breastParser.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/breastParserUpdated.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ionParser.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ionParserUpdated.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/irisParserUpdated.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wbcdParser.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/FileHandling.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IonosphereData.txt" beforeDir="false" afterPath="$PROJECT_DIR$/IonosphereData.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IonosphereData.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/IonosphereData.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ionosphere_ID3_tagangra_out.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Iris_C45_min_leaf_1_tanagra_out.html" beforeDir="false" afterPath="$PROJECT_DIR$/Iris_C45_min_leaf_1_tanagra_out.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WDBC.xls" beforeDir="false" afterPath="$PROJECT_DIR$/WDBC.xls" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/irisParser.txt" beforeDir="false" afterPath="$PROJECT_DIR$/irisParser.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
     </list>
@@ -40,6 +59,11 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/venv/Lib/site-packages/tana2tree/tree.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/irisParser.txt" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -68,7 +92,12 @@
   <component name="PyCoverageOptionsProvider">
     <option name="myUseBundledCoveragePy" value="true" />
   </component>
-  <component name="RunManager" selected="Python.tanagra_to_parser Iris">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.tanagra_to_parser Wine">
     <configuration name="NormalizeDatasetBeforeGeneratingTree" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ParserGenerator" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -76,9 +105,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Alex Worland\AppData\Local\Programs\Python\Python39\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -105,7 +134,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
-      <option name="PARAMETERS" value="./TestTanagraOutputs/medium_tree.txt debug.txt breast.xlsx" />
+      <option name="PARAMETERS" value="./TestTanagraOutputs/medium_tree.txt breastParserUpdated.txt breast.xlsx" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tanagra_to_parser Ionosphere" type="PythonConfigurationType" factoryName="Python">
+      <module name="ParserGenerator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
+      <option name="PARAMETERS" value="Ionosphere_C45_tanagra_out.txt ionParserUpdated.txt IonosphereData.xlsx" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -120,6 +171,28 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
+      <option name="SDK_HOME" value="C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
+      <option name="PARAMETERS" value="Iris_C45_tanagra_out.txt irisParserUpdated.txt IrisData.xlsx" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tanagra_to_parser WDBC" type="PythonConfigurationType" factoryName="Python">
+      <module name="ParserGenerator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="/opt/homebrew/bin/python3.9" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
@@ -127,7 +200,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
-      <option name="PARAMETERS" value="Iris_ID3_medium_size_tanagra_out.txt irisParser.txt IrisData.xlsx" />
+      <option name="PARAMETERS" value="WBCD_C45_tanagra_out.txt wbcdParser.txt WDBC.xls" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tanagra_to_parser Wine" type="PythonConfigurationType" factoryName="Python">
+      <module name="ParserGenerator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
+      <option name="PARAMETERS" value="Wine_C45_tanagra_out.txt wineParser.txt WineData.xlsx" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -159,8 +254,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.tanagra_to_parser BreastCancer" />
+      <item itemvalue="Python.tanagra_to_parser Wine" />
       <item itemvalue="Python.tanagra_to_parser Iris" />
+      <item itemvalue="Python.tanagra_to_parser Ionosphere" />
       <item itemvalue="Python.tanagra_to_parser" />
+      <item itemvalue="Python.tanagra_to_parser WDBC" />
       <item itemvalue="Python.NormalizeDatasetBeforeGeneratingTree" />
     </list>
     <recent_temporary>
@@ -205,6 +303,9 @@
       <workItem from="1646331711051" duration="3060000" />
       <workItem from="1646334993503" duration="22000" />
       <workItem from="1646339545962" duration="1855000" />
+      <workItem from="1646539247131" duration="8302000" />
+      <workItem from="1646670017543" duration="6175000" />
+      <workItem from="1646928172127" duration="7381000" />
     </task>
     <servers />
   </component>
@@ -221,6 +322,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -233,17 +335,47 @@
           <line>242</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>677</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>682</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>757</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>1052</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
+          <line>1061</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="classes" />
+        <watch expression="maxMap['mean texture']" />
       </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Iris.coverage" NAME="tanagra_to_parser Iris Coverage Results" MODIFIED="1646340208033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Iris.coverage" NAME="tanagra_to_parser Iris Coverage Results" MODIFIED="1646930830662" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$NormalizeDatasetBeforeGeneratingTree.coverage" NAME="NormalizeDatasetBeforeGeneratingTree Coverage Results" MODIFIED="1646171314055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer.coverage" NAME="tanagra_to_parser BreastCancer Coverage Results" MODIFIED="1646932226281" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_WBCD.coverage" NAME="tanagra_to_parser WDBC Coverage Results" MODIFIED="1646548502762" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1646339692678" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Ionosphere.coverage" NAME="tanagra_to_parser Ionosphere Coverage Results" MODIFIED="1646937591846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Wine.coverage" NAME="tanagra_to_parser Wine Coverage Results" MODIFIED="1646946344363" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

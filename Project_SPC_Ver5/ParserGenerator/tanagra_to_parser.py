@@ -4,6 +4,7 @@ import functools
 import tana2tree as t2t
 import pandas as pd
 import openpyxl
+import xlrd
 
 
 # Generates a list of all decision paths
@@ -106,12 +107,12 @@ class ParserElement:
         return self.orig_labels[self.x_attribute]
 
     def getOrigYLabel(self):
-        return self.orig_labels[self.x_attribute]
+        return self.orig_labels[self.y_attribute]
 
     def toString(self):
         return str(self.x1) + ", " + str(self.y1) + ", " + str(self.x2) + ", " + str(self.y2) + ", " + \
-               str(self.graphNum) + ", " + str(self.classNum) + ", " + self.orig_labels[self.x_attribute] + ", " + \
-               self.orig_labels[self.y_attribute]
+               str(self.graphNum) + ", " + str(self.classNum) + ", " + self.orig_labels[self.x_attribute].replace(" ", "-") + ", " + \
+               self.orig_labels[self.y_attribute].replace(" ", "-")
 
 
 class ContinueElement(ParserElement):
@@ -240,7 +241,8 @@ def generateAllDecisionElements(path_list, pairMap, node_map, plotIdMap, orig_la
 
     decisionElements = []
     for path in path_list:
-
+        if len(decisionElements) == 5:
+            print()
         # init variables that we will need to construct parser
         classNode = path[len(path) - 1]
         parentNode = path[len(path) - 2]
@@ -287,24 +289,30 @@ def generateAllDecisionElements(path_list, pairMap, node_map, plotIdMap, orig_la
         if isParentNodeXAxis:
             if '<' in classNode.parent_op:
                 # parserElement.x2 = parentNode.value / 10  # todo
-                parserElement.x2 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                # parserElement.x2 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                parserElement.x2 = normalize(parentNode.value, parserElement.getOrigXLabel(), minMap, maxMap)
             else:
                 # parserElement.x1 = parentNode.value / 10  # todo
-                parserElement.x1 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                # parserElement.x1 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                parserElement.x1 = normalize(parentNode.value, parserElement.getOrigXLabel(), minMap, maxMap)
         else:
             if '<' in classNode.parent_op:
                 # parserElement.y2 = parentNode.value / 10  # todo
-                parserElement.y2 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                tmp = maxMap[parserElement.getOrigYLabel()]
+                # parserElement.y2 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                parserElement.y2 = normalize(parentNode.value, parserElement.getOrigYLabel(), minMap, maxMap)
             else:
                 # parserElement.y1 = parentNode.value / 10  # todo
-                parserElement.y1 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                # parserElement.y1 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                parserElement.y1 = normalize(parentNode.value, parserElement.getOrigYLabel(), minMap, maxMap)
             if '<' in parentNode.parent_op:
                 # parserElement.x2 = parentNodePairedNode.value / 10  # todo
-                parserElement.x2 = parentNodePairedNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                # parserElement.x2 = parentNodePairedNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                parserElement.x2 = normalize(parentNodePairedNode.value, parserElement.getOrigXLabel(), minMap, maxMap)
             else:
                 # parserElement.x1 = parentNodePairedNode.value / 10  # todo
-                parserElement.x1 = parentNodePairedNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
-
+                # parserElement.x1 = parentNodePairedNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                parserElement.x1 = normalize(parentNodePairedNode.value, parserElement.getOrigXLabel(), minMap, maxMap)
         parserElement = adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMap)
         decisionElements.append(parserElement)
     return decisionElements
@@ -332,12 +340,15 @@ def generateSingleAttributeParserElements(parentNode, classNode, classes, orig_l
     if '<' in classNode.parent_op:
         parserElement.x1 = 0
         parserElement.y1 = 0
-        parserElement.x2 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
-        parserElement.y2 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+        # parserElement.x2 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+        parserElement.x2 = normalize(parentNode.value, parserElement.getOrigXLabel(), minMap, maxMap)
+        # parserElement.y2 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+        parserElement.y2 = normalize(parentNode.value, parserElement.getOrigYLabel(), minMap, maxMap)
         singleAttributeParserElements.append(parserElement)
     elif '>' in classNode.parent_op:  # todo: problem here somewhere
         parserElement.x1 = 0
-        parserElement.y1 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+        # parserElement.y1 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+        parserElement.y1 = normalize(parentNode.value, parserElement.getOrigYLabel(), minMap, maxMap)
         parserElement.x2 = 1
         parserElement.y2 = 1
 
@@ -346,10 +357,12 @@ def generateSingleAttributeParserElements(parentNode, classNode, classes, orig_l
         parserElement2.y_attribute = parentNode.attr
         parserElement2.classNum = classes[classNode.attr]
         parserElement2.graphNum = getPlotId(parentNode.attr, parentNode.attr, plotIdMap)
-        parserElement2.x1 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+        # parserElement2.x1 = parentNode.value / maxMap[parserElement.getOrigXLabel()]  # todo
+        parserElement2.x1 = normalize(parentNode.value, parserElement2.getOrigXLabel(), minMap, maxMap)
         parserElement2.y1 = 0
         parserElement2.x2 = 1
-        parserElement2.y2 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+        # parserElement2.y2 = parentNode.value / maxMap[parserElement.getOrigYLabel()]  # todo
+        parserElement2.y2 = normalize(parentNode.value, parserElement2.getOrigYLabel(), minMap, maxMap)
         singleAttributeParserElements.append(parserElement)
         singleAttributeParserElements.append(parserElement2)
 
@@ -376,22 +389,29 @@ def adjustSingleAttributeParserElementBounds(parserElement, path, orig_labels, p
         node1 = path[i + 1]
         if orig_labels[node2.attr] == orig_labels[parentNode.attr]:  # if node2 and the parent node are the same
             if parserElement.x1 == 0 and parserElement.y1 == 0:  # parserElement is a less than element
-                parserElement.y1 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                # parserElement.y1 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                parserElement.y1 = normalize(node2.value, parserElement.getOrigYLabel(), minMap, maxMap)
                 newParserEl = parserElement.copy()
-                newParserEl.x1 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                # newParserEl.x1 = node2.value / maxMap[newParserEl.getOrigXLabel()]  # todo
+                newParserEl.x1 = normalize(node2.value, parserElement.getOrigXLabel(), minMap, maxMap)
                 newParserEl.y1 = 0
-                newParserEl.y2 = node2.value / maxMap[parserElement.getOrigYLabel()] # todo
+                # newParserEl.y2 = node2.value / maxMap[newParserEl.getOrigYLabel()] # todo
+                newParserEl.y2 = normalize(node2.value, parserElement.getOrigYLabel(), minMap, maxMap)
                 returnParserElements.append(newParserEl)
                 break
             # if the classNode and node1 are on opposite sides of the same parent attribute
             if '<' in classNode.parent_op and '<' not in node1.parent_op or '>' in classNode.parent_op and '>' not in node1.parent_op:
                 if '<' in node1.parent_op and '<' not in classNode.parent_op:
-                    parserElement.x2 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
-                    parserElement.y2 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                    # parserElement.x2 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                    parserElement.x2 = normalize(node2.value, parserElement.getOrigXLabel(), minMap, maxMap)
+                    # parserElement.y2 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                    parserElement.y2 = normalize(node2.value, parserElement.getOrigYLabel(), minMap, maxMap)
                     break
                 elif '>' in node1.parent_op and '<' not in classNode.parent_op:
-                    parserElement.x1 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
-                    parserElement.y1 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                    # parserElement.x1 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                    parserElement.x1 = normalize(node2.value, parserElement.getOrigXLabel(), minMap, maxMap)
+                    # parserElement.y1 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                    parserElement.y1 = normalize(node2.value, parserElement.getOrigYLabel(), minMap, maxMap)
                     break
 
     # if the node that is paired to itself is the root node, combine it with the root node
@@ -474,10 +494,12 @@ def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMa
             # If parent and node2 have the same attribute name
             if orig_labels[node2.attr] == orig_labels[parent.attr]:
                 if '<' in node1.parent_op and '<' not in child.parent_op:
-                    parserElement.x2 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                    # parserElement.x2 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                    parserElement.x2 = normalize(node2.value, parserElement.getOrigXLabel(), minMap, maxMap)
                     break
                 elif '>' in node1.parent_op and '>' not in child.parent_op:
-                    parserElement.x1 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                    # parserElement.x1 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                    parserElement.x1 = normalize(node2.value, parserElement.getOrigXLabel(), minMap, maxMap)
                     break
         return parserElement
 
@@ -488,10 +510,12 @@ def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMa
         # If parent and node2 have the same attribute name
         if orig_labels[node2.attr] == orig_labels[parent.attr]:
             if '<' in node1.parent_op and '<' not in child.parent_op:
-                parserElement.y2 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                # parserElement.y2 = node2.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                parserElement.y2 = normalize(node2.value, parserElement.getOrigYLabel(), minMap, maxMap)
                 break
             elif '>' in node1.parent_op and '>' not in child.parent_op:
-                parserElement.y1 = node1.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                # parserElement.y1 = node1.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                parserElement.y1 = normalize(node1.value, parserElement.getOrigYLabel(), minMap, maxMap)
                 break
 
     # do the previous step with the other attribute in the pair
@@ -502,10 +526,12 @@ def adjustParserElementBounds(parserElement, path, orig_labels, node_map, pairMa
         node1 = path[i + 1]
         if orig_labels[node2.attr] == orig_labels[parent.attr]:
             if '<' in node1.parent_op and '<' not in child.parent_op:
-                parserElement.x2 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                # parserElement.x2 = node2.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                parserElement.x2 = normalize(node2.value, parserElement.getOrigXLabel(), minMap, maxMap)
                 break
             elif '>' in node1.parent_op and '>' not in child.parent_op:
-                parserElement.x1 = node1.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                # parserElement.x1 = node1.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                parserElement.x1 = normalize(node1.value, parserElement.getOrigXLabel(), minMap, maxMap)
                 break
     return parserElement
 
@@ -530,10 +556,12 @@ def adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map
                 node5 = path[j]
                 if orig_labels[node5.attr] == orig_labels[node1.attr]:
                     if '>' in node3.parent_op and '>' not in node4.parent_op:
-                        parserElement.x1 = node5.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                        # parserElement.x1 = node5.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                        parserElement.x1 = normalize(node5.value, parserElement.getOrigXLabel(), minMap, maxMap)
                         break
                     elif '<' in node3.parent_op and '<' not in node4.parent_op:
-                        parserElement.x2 = node5.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                        # parserElement.x2 = node5.value / maxMap[parserElement.getOrigXLabel()]  # todo
+                        parserElement.x2 = normalize(node5.value, parserElement.getOrigXLabel(), minMap, maxMap)
                         break
 
     # check y attribute
@@ -545,10 +573,12 @@ def adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map
                 node5 = path[j]
                 if orig_labels[node5.attr] == orig_labels[node2.attr]:
                     if '>' in node3.parent_op and '<' not in node4.parent_op:
-                        parserElement.y1 = node5.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                        # parserElement.y1 = node5.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                        parserElement.y1 = normalize(node5.value, parserElement.getOrigYLabel(), minMap, maxMap)
                         break
                     elif '>' in node3.parent_op and '>' not in node4.parent_op:
-                        parserElement.y2 = node5.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                        # parserElement.y2 = node5.value / maxMap[parserElement.getOrigYLabel()]  # todo
+                        parserElement.y2 = normalize(node5.value, parserElement.getOrigYLabel(), minMap, maxMap)
                         break
     return parserElement
 
@@ -598,22 +628,28 @@ def generateAllContinueElements(path_list, pairMap, plotIdMap, orig_labels, node
 
                 if isNode1AttrX:
                     if "<" in node2.parent_op:
-                        parserElement.x2 = node1.value / maxMap[parserElement.getOrigXLabel()]  # TODO: parameterize
+                        # parserElement.x2 = node1.value /  maxMap[parserElement.getOrigXLabel()]  # TODO: parameterize
+                        parserElement.x2 = normalize(node1.value, parserElement.getOrigXLabel(), minMap, maxMap)
                     elif ">" in node2.parent_op:
-                        parserElement.x1 = node1.value / maxMap[parserElement.getOrigXLabel()]
+                        # parserElement.x1 = node1.value / maxMap[parserElement.getOrigXLabel()]
+                        parserElement.x1 = normalize(node1.value, parserElement.getOrigXLabel(), minMap, maxMap)
                 else:
                     if "<" in node2.parent_op:
-                        parserElement.y2 = node1.value / maxMap[parserElement.getOrigYLabel()]  # TODO: parameterize
+                        # parserElement.y2 = node1.value / maxMap[parserElement.getOrigYLabel()]  # TODO: parameterize
+                        parserElement.y2 = normalize(node1.value, parserElement.getOrigYLabel(), minMap, maxMap)
                     elif ">" in node2.parent_op:
-                        parserElement.y1 = node1.value / maxMap[parserElement.getOrigYLabel()]
+                        # parserElement.y1 = node1.value / maxMap[parserElement.getOrigYLabel()]
+                        parserElement.y1 = normalize(node1.value, parserElement.getOrigYLabel(), minMap, maxMap)
                     # special case, we need to include X of node1 pair as well
                     if i > 0:
                         # root -> ... -> node3 -> node1 -> node2 -> .. -> classNode
                         node3 = path[i - 1]
                         if "<" in node1.parent_op:
-                            parserElement.x2 = node3.value / maxMap[parserElement.getOrigXLabel()]
+                            # parserElement.x2 = node3.value / maxMap[parserElement.getOrigXLabel()]
+                            parserElement.x2 = normalize(node3.value, parserElement.getOrigXLabel(), minMap, maxMap)
                         elif ">" in node1.parent_op:
-                            parserElement.x1 = node3.value / maxMap[parserElement.getOrigXLabel()]
+                            # parserElement.x1 = node3.value / maxMap[parserElement.getOrigXLabel()]
+                            parserElement.x1 = normalize(node3.value, parserElement.getOrigXLabel(), minMap, maxMap)
                         else:
                             print("debug")  # todo
                 graphNum = getPlotId(node1.attr, node1PairedAttr, plotIdMap)
@@ -638,7 +674,13 @@ def generateAllContinueElements(path_list, pairMap, plotIdMap, orig_labels, node
                 destinationGraphId = getPlotId(destinationPair[0], destinationPair[1], plotIdMap)
                 parserElement.destinationPlotId = destinationGraphId
 
+                if parserElement.x1 > 1 or parserElement.y1 > 1 or parserElement.x2 > 1 or parserElement.y2 > 1:
+                    print("debug")
+
                 parserElement = adjustContinueParserElementBounds(parserElement, path, orig_labels, node_map)
+
+                if parserElement.x1 > 1 or parserElement.y1 > 1 or parserElement.x2 > 1 or parserElement.y2 > 1:
+                    print("debug")
 
                 if parserElement.toString() not in seen_decisions:
                     continueElements.append(parserElement)
@@ -710,6 +752,22 @@ def replaceAttributeNames(node_list, orig_labels):
         node.attr = orig_labels[node.attr]
     return node_list
 
+def normalize(value, attr, minMap, maxMap):
+    result = (value - minMap[attr]) / (maxMap[attr] - minMap[attr])
+    if result > 1:
+        print("debug")
+    return result
+
+# debug
+class Node:
+    def __init__(self, attr):
+        self.attr = attr
+        self.l_branch = None
+        self.op = None
+        self.parent_op = '>='
+        self.r_branch = None
+        self.value = None
+
 
 def generateParser(input_file, output_file, minMap, maxMap, classList):
     """
@@ -724,8 +782,17 @@ def generateParser(input_file, output_file, minMap, maxMap, classList):
 
     tree = t2t.Tanagra_Parser()
     tree.parse(input_file)  # todo : parameterize
+    node_list_before = tree.traverse()
+    # debug for iris
+    # node = tree.get_node("sw")
+    # addNode = t2t.t.Tree_Node(node[0].attr, ">=", "Iris-versicolor_1", None, None)
+    # node[0].r_branch = addNode
+    # end debug
     # tree.print_tree()
     node_list = tree.traverse()
+
+
+
 
     # TODO: Determine number of classes
     for node in node_list:
@@ -772,6 +839,22 @@ def generateParser(input_file, output_file, minMap, maxMap, classList):
 
     for el in decisionElements:
         parserElements.append(el)
+
+    # ensure that plot nums are sequential
+    seenPlotIds = []
+    for el in parserElements:
+        plotId = el.graphNum
+        if plotId not in seenPlotIds:
+            seenPlotIds.append(plotId)
+    plotMap = dict()
+    for i in range(len(seenPlotIds)):
+        plotMap[seenPlotIds[i]] = i
+    for el in parserElements:
+        el.graphNum = plotMap[el.graphNum]
+        if hasattr(el, "destinationPlotId"):
+            el.destinationPlotId = plotMap[el.destinationPlotId]
+
+    print(plotMap)
 
     writeParser(parserElements, output_file)
     stringToReturn = ""

@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 FileHandling::FileHandling() {}
 
@@ -238,6 +239,11 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 			std::string attr1 = data.parsedAttributePairs[j][0];
 			std::string attr2 = data.parsedAttributePairs[j][1];
 
+			if (attr1 == "sepal-length" || attr2 == "sepal-length") {
+				std::cout << "debug";
+			}
+
+
 			size = attributeValueMap.size();
 			std::cout << "debug" << size;
 
@@ -271,10 +277,6 @@ void FileHandling::sortGraphBasedOnParser(ClassData& data) {
 
 			if (yCoord < data.attributeMinMax[attr2][0]) {
 				data.attributeMinMax[attr2][0] = yCoord;
-			}
-
-			if (xCoord == 0 || yCoord == 0) {
-				std::cout << "debug";
 			}
 
 			if (xCoord > data.xmax) {
@@ -407,7 +409,7 @@ void FileHandling::normalizeData(ClassData &data)
 	// get min/max for each column
 	std::vector<float> maxPerCol;
 	std::vector<float> minPerCol;
-	for (int i = 0; i < data.values[0].size(); i++) {
+	for (int i = 0; i < data.values[0].size() - 1; i++) {
 		maxPerCol.push_back(INT_MIN);
 		minPerCol.push_back(INT_MAX);
 		for (int j = 1; j < data.values.size(); j++) {
@@ -423,12 +425,30 @@ void FileHandling::normalizeData(ClassData &data)
 
 
 	for (int i = 1; i < data.values.size(); i++) {
+		if (i == 99) {
+			std::cout << "debug!!!";
+		}
 		std::vector<std::string> row = data.values[i];
 		std::vector<float> normalizedRow;
-		for (int j = 0; j < row.size(); j++) {
+		for (int j = 0; j < row.size() - 1; j++) {
 			float val = stof(row[j]);
-			normalizedRow.push_back(val / maxPerCol[j]);
+			if (maxPerCol[j] - minPerCol[j] == 0) {
+				normalizedRow.push_back(0);
+			}
+			else {
+				float min = minPerCol[j];
+				float max = maxPerCol[j];
+				normalizedRow.push_back((val - min) / (max - min));
+			}
 		}
+
+		normalizedRow.push_back(stof(row[row.size() - 1]));
+
+		// check
+		if (stof(row[2]) > 2.45 && normalizedRow[2] < 0.355) {
+			std::cout << "debug!";
+		}
+
 		data.normalizedValues.push_back(normalizedRow);
 	}
 

@@ -46,7 +46,10 @@ public:
 	bool shouldPointTerminate(GLfloat px, GLfloat py);
 
 	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
-
+	std::vector<GLfloat> rectX1List;
+	std::vector<GLfloat> rectY1List;
+	std::vector<GLfloat> rectX2List;
+	std::vector<GLfloat> rectY2List;
 	GLfloat rectX1;
 	GLfloat rectY1;
 	GLfloat rectX2;
@@ -75,6 +78,9 @@ public:
 	/// *** USED FOR DETERMINING POINT COLORING MODE
 	bool isPointColorMode = false;
 
+	///*** USED FOR DETERMINING LINE COLORING MODE
+	bool isLineColorMode = false;
+
 	// *** STUFF BELOW THIS IS FOR DRAGGING GRAPHS *** //////////////////////////////////////////
 
 	/* DRAGGING GRAPH STUFF */
@@ -92,6 +98,7 @@ public:
 	void drawCircle(int x, int y);
 	void drawRectangle();
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
+	void drawRectanglesOnGray();
 	void setBackgroundTransparency(float alpha);
 	void setBackgroundColorLightness(float lightness);
 	std::vector<float> RGBtoHSL(std::vector<float> classColor);

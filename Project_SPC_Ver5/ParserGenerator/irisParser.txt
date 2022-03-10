@@ -1,2 +1,9 @@
-0.35507246376811596, 0, 1, 0.25362318840579706, 0, 1, petal-length, petal-width
+0.35507246376811596, 0, 1, 0.7, 0, -1, petal-length, petal-width, 1
+0.35507246376811596, 0.7, 1, 1, 0, -2, petal-length, petal-width, 2
+0.25362318840579706, 0, 0.717391304347826, 0.5795454545454545, 1, 1, petal-length, sepal-width
+0.25362318840579706, 0.5795454545454545, 0.717391304347826, 1, 1, 1, petal-length, sepal-width
+0.717391304347826, 0, 1, 1, 1, 2, petal-length, sepal-width
+0, 0, 0.7531645569620253, 0.7531645569620253, 2, 2, sepal-length, sepal-length
+0, 0.7531645569620253, 1, 1, 2, 2, sepal-length, sepal-length
+0.7531645569620253, 0, 1, 0.7531645569620253, 2, 2, sepal-length, sepal-length
 0, 0, 0.35507246376811596, 1, 0, 0, petal-length, petal-width

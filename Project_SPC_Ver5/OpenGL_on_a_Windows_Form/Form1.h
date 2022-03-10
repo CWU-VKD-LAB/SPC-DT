@@ -194,6 +194,10 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
 private: System::Windows::Forms::CheckBox^ highlightMisclassificationsCheckbox;
 private: System::Windows::Forms::CheckBox^ pointColorMode;
 private: System::Windows::Forms::Button^ SwapAttributesButton;
+private: System::Windows::Forms::CheckBox^ lineColorCheckbox;
+private: System::Windows::Forms::Button^ button9;
+
+
 
 
 
@@ -245,6 +249,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->graph4 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->SwapAttributesButton = (gcnew System::Windows::Forms::Button());
 			this->clearRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->drawRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
@@ -273,6 +278,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->lineColorCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->pointColorMode = (gcnew System::Windows::Forms::CheckBox());
 			this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
@@ -286,7 +292,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->SwapAttributesButton = (gcnew System::Windows::Forms::Button());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -322,6 +328,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			// panel1
 			// 
 			this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel1->Controls->Add(this->button9);
 			this->panel1->Controls->Add(this->SwapAttributesButton);
 			this->panel1->Controls->Add(this->clearRectangleButton);
 			this->panel1->Controls->Add(this->drawRectangleButton);
@@ -341,6 +348,17 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->panel1->Size = System::Drawing::Size(200, 775);
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
+			// 
+			// SwapAttributesButton
+			// 
+			this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->SwapAttributesButton->Location = System::Drawing::Point(12, 648);
+			this->SwapAttributesButton->Name = L"SwapAttributesButton";
+			this->SwapAttributesButton->Size = System::Drawing::Size(173, 41);
+			this->SwapAttributesButton->TabIndex = 33;
+			this->SwapAttributesButton->Text = L"Swap X/Y";
+			this->SwapAttributesButton->UseVisualStyleBackColor = true;
+			this->SwapAttributesButton->Click += gcnew System::EventHandler(this, &Form1::SwapAttributesButton_Click);
 			// 
 			// clearRectangleButton
 			// 
@@ -367,22 +385,22 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			// button7
 			// 
 			this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button7->Location = System::Drawing::Point(102, 522);
+			this->button7->Location = System::Drawing::Point(99, 577);
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(80, 62);
 			this->button7->TabIndex = 30;
-			this->button7->Text = L"Reverse Y";
+			this->button7->Text = L"Invert Y";
 			this->button7->UseVisualStyleBackColor = true;
 			this->button7->Click += gcnew System::EventHandler(this, &Form1::button7_Click_1);
 			// 
 			// button8
 			// 
 			this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button8->Location = System::Drawing::Point(12, 522);
+			this->button8->Location = System::Drawing::Point(12, 577);
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(81, 62);
 			this->button8->TabIndex = 29;
-			this->button8->Text = L"Reverse X";
+			this->button8->Text = L"Invert X";
 			this->button8->UseVisualStyleBackColor = true;
 			this->button8->Click += gcnew System::EventHandler(this, &Form1::button8_Click_1);
 			// 
@@ -393,7 +411,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->checkedListBox4->CheckOnClick = true;
 			this->checkedListBox4->ForeColor = System::Drawing::SystemColors::WindowText;
 			this->checkedListBox4->FormattingEnabled = true;
-			this->checkedListBox4->Location = System::Drawing::Point(133, 688);
+			this->checkedListBox4->Location = System::Drawing::Point(133, 710);
 			this->checkedListBox4->Name = L"checkedListBox4";
 			this->checkedListBox4->Size = System::Drawing::Size(59, 2);
 			this->checkedListBox4->TabIndex = 28;
@@ -404,7 +422,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			// 
 			this->label9->AutoSize = true;
 			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->label9->Location = System::Drawing::Point(12, 687);
+			this->label9->Location = System::Drawing::Point(12, 709);
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(89, 16);
 			this->label9->TabIndex = 27;
@@ -634,6 +652,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel2->Controls->Add(this->lineColorCheckbox);
 			this->panel2->Controls->Add(this->pointColorMode);
 			this->panel2->Controls->Add(this->highlightMisclassificationsCheckbox);
 			this->panel2->Controls->Add(this->lineTerminationModeCheckbox);
@@ -648,6 +667,17 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(209, 748);
 			this->panel2->TabIndex = 13;
+			// 
+			// lineColorCheckbox
+			// 
+			this->lineColorCheckbox->AutoSize = true;
+			this->lineColorCheckbox->Location = System::Drawing::Point(6, 367);
+			this->lineColorCheckbox->Name = L"lineColorCheckbox";
+			this->lineColorCheckbox->Size = System::Drawing::Size(103, 17);
+			this->lineColorCheckbox->TabIndex = 20;
+			this->lineColorCheckbox->Text = L"Line Color Mode";
+			this->lineColorCheckbox->UseVisualStyleBackColor = true;
+			this->lineColorCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineColorCheckbox_CheckedChanged);
 			// 
 			// pointColorMode
 			// 
@@ -795,16 +825,16 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Class Transparency";
 			// 
-			// SwapAttributesButton
+			// button9
 			// 
-			this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->SwapAttributesButton->Location = System::Drawing::Point(12, 600);
-			this->SwapAttributesButton->Name = L"SwapAttributesButton";
-			this->SwapAttributesButton->Size = System::Drawing::Size(173, 61);
-			this->SwapAttributesButton->TabIndex = 33;
-			this->SwapAttributesButton->Text = L"Swap X/Y";
-			this->SwapAttributesButton->UseVisualStyleBackColor = true;
-			this->SwapAttributesButton->Click += gcnew System::EventHandler(this, &Form1::SwapAttributesButton_Click);
+			this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->button9->Location = System::Drawing::Point(12, 515);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(173, 41);
+			this->button9->TabIndex = 34;
+			this->button9->Text = L"Draw Rects On Gray";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &Form1::button9_Click_1);
 			// 
 			// Form1
 			// 
@@ -1477,10 +1507,23 @@ private: System::Void backgroundTransparencySlider_Scroll(System::Object^ sender
 private: System::Void trackBar2_Scroll_1(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->setBackgroundColorLightness(backgroundColorLightnessSlider->Value / 100.0);
 }
+	   bool rectButtonToggled = false;
 private: System::Void drawRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ str = "To draw a rectangle, click once for the first corner, then click again for the opposite corner.";
-	MessageBox::Show(str);
-	OpenGL3->drawingRectangleEnabled = true;
+	rectButtonToggled = !rectButtonToggled;
+	if (rectButtonToggled) {
+		drawRectangleButton->Text = drawRectangleButton->Text + " (BUTTON ACTIVE) ";
+	}
+	else {
+		drawRectangleButton->Text = drawRectangleButton->Text->Substring(0, drawRectangleButton->Text->Length - 17);
+	}
+	if (rectButtonToggled) {
+		String^ str = "To draw a rectangle, click once for the first corner, then click again for the opposite corner.";
+		MessageBox::Show(str);
+		OpenGL3->drawingRectangleEnabled = true;
+	}
+	else {
+		OpenGL3->drawingRectangleEnabled = false;
+	}
 }
 private: System::Void clearRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
 	// Clear rectangle
@@ -1516,6 +1559,12 @@ private: System::Void SwapAttributesButton_Click(System::Object^ sender, System:
 		SwapAttributesButton->Text = SwapAttributesButton->Text->Substring(0, SwapAttributesButton->Text->Length - 17);
 	}
 	swapButtonToggled = !swapButtonToggled;
+}
+private: System::Void lineColorCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setLineColorMode(lineColorCheckbox->Checked);
+}
+private: System::Void button9_Click_1(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->drawRectanglesOnGray();
 }
 };
 }

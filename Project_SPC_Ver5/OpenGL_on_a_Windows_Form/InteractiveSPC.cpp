@@ -168,6 +168,71 @@ void InteractiveSPC::fillPlotLocations()
 	//}
 }
 
+/* Draws rectangles in rectangle mode around all continue zones*/
+void InteractiveSPC::drawRectanglesOnGray() {
+	// iterate through each plot
+	for (int plotNum = 0; plotNum < data.numPlots; plotNum++) {
+		// find each zone within the plot that is not a termination zone
+		for (int parsedIndex = 0; parsedIndex < dataParsed.parsedData.size(); parsedIndex++) { // TODO: if dataParsed.parsedData was a map this would be WAY faster...
+			std::vector<float> parserData = dataParsed.parsedData[parsedIndex];
+			if ((int)parserData[4] != plotNum || parserData[parserData.size() - 1] >= 0) {
+				continue;
+			}
+			// TODO: There's probably a MUCH easier way to do this
+			// need to accomodate various swappings
+			// X/Y swap swaps parser data itself, so we need not do anything here
+			// but the x and y invert buttons DONT alter data, so we need to make up for that here
+			const float zoneX1 = parserData[0];
+			const float zoneY1 = parserData[1];
+			const float zoneX2 = parserData[2];
+			const float zoneY2 = parserData[3];
+
+			const float pltX1 = data.x1CoordPlot[plotNum];
+			const float pltY1 = data.y1CoordPlot[plotNum];
+			const float pltX2 = data.x2CoordPlot[plotNum];
+			const float pltY2 = data.y2CoordPlot[plotNum];
+
+			const float plotWidth = data.plotWidth[plotNum];
+			const float plotHeight = data.plotHeight[plotNum];
+
+			GLfloat zoneToDrawX1;
+			GLfloat zoneToDrawX2;
+			GLfloat zoneToDrawY1;
+			GLfloat zoneToDrawY2;
+
+			// old
+			//zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+			//zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+			//zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+			//zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+
+			if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+				zoneToDrawX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+				zoneToDrawX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+			}
+			else {
+				zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+				zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+			}
+			if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+				zoneToDrawY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+				zoneToDrawY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+			}
+			else {
+				zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+				zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+			}
+			
+			rectX1List.push_back(zoneToDrawX1);
+			rectX2List.push_back(zoneToDrawX2);
+			rectY1List.push_back(zoneToDrawY1);
+			rectY2List.push_back(zoneToDrawY2);
+		}
+	}
+
+	isRectangleMode = true;
+}
+
 /* Draws data sets. */
 std::set<int> debugSet;
 int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
@@ -176,12 +241,12 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 		if (plotNum != 0) return;
 	}*/
 
-	// debug
-	if (plotNum == 8) {
-		std::cout << "debug" <<  &plotNum;
-	}
 
 	int recordClass = data.classNum[recordNum] - 1;
+
+	if (plotNum == 0 && recordClass == 0) {
+		std::cout << "debug";
+	}
 
 	float plt1X1 = data.x1CoordPlot[plotNum];
 	float plt1Y1 = data.y1CoordPlot[plotNum];
@@ -221,21 +286,30 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	// we need to get the next point in line for point(x1,y1)
 	int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
 
+	if (plotNum == 0 && recordClass != 0 && point1BackgroundClass == 0) {
+		std::cout << "debug";
+	}
+
+	// Debug
+	int point1BackgroundClassDebug = findBackgroundClassOfPoint(x1, y1, plotNum);
+
 	if (isRectangleMode) {
-		GLfloat highX = max(rectX1, rectX2);
-		GLfloat lowX = min(rectX1, rectX2);
-		GLfloat highY = max(rectY1, rectY2);
-		GLfloat lowY = min(rectY1, rectY2);
-		if (isPointWithinRect(x1, y1, lowX, highY, highX, lowY)) {
-			//if (point1BackgroundClass >= 0) {
-				// compute new location
-			GLfloat deltaX = abs(rectX2 - rectX1);
-			GLfloat deltaY = abs(rectY2 - rectY1);
-			GLfloat newX = lowX + deltaX / 2;
-			GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
-			x1 = newX;
-			y1 = newY;
-			//}
+		for (int i = 0; i < rectX1List.size(); i++) {
+			GLfloat highX = max(rectX1List[i], rectX2List[i]);
+			GLfloat lowX = min(rectX1List[i], rectX2List[i]);
+			GLfloat highY = max(rectY1List[i], rectY2List[i]);
+			GLfloat lowY = min(rectY1List[i], rectY2List[i]);
+			if (isPointWithinRect(x1, y1, lowX, highY, highX, lowY)) {
+				//if (point1BackgroundClass >= 0) {
+					// compute new location
+				GLfloat deltaX = abs(rectX2List[i] - rectX1List[i]);
+				GLfloat deltaY = abs(rectY2List[i] - rectY1List[i]);
+				GLfloat newX = lowX + deltaX / 2;
+				GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
+				x1 = newX;
+				y1 = newY;
+				//}
+			}
 		}
 	}
 
@@ -271,17 +345,18 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 		glEnd();
 		glPointSize(4.0);
 	}
-	else {
 		// draw regular point
 		// draw point one
 		glPointSize(4.0);
 		glColor4ub(0, 0, 0, classTransparency);
-		if (point1BackgroundClass >= 0) {
-			GLubyte r = data.classColor[recordClass][0];
-			GLubyte g = data.classColor[recordClass][1];
-			GLubyte b = data.classColor[recordClass][2];
-			GLubyte a = classTransparency;
-			glColor4ub(r, g, b, a);
+		if (isPointColorMode) {
+			if (point1BackgroundClass >= 0) {
+				GLubyte r = data.classColor[recordClass][0];
+				GLubyte g = data.classColor[recordClass][1];
+				GLubyte b = data.classColor[recordClass][2];
+				GLubyte a = classTransparency;
+				glColor4ub(r, g, b, a);
+			}
 		}
 
 
@@ -307,7 +382,6 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 		glVertex2f(x1, y1);
 		glEnd();
 		// end point one draw
-	}
 
 	if (point1BackgroundClass >= 0) {
 		if (point1BackgroundClass == recordClass) {
@@ -383,22 +457,24 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
 
 	if (isRectangleMode) {
-		GLfloat highX = max(rectX1, rectX2);
-		GLfloat lowX = min(rectX1, rectX2);
-		GLfloat highY = max(rectY1, rectY2);
-		GLfloat lowY = min(rectY1, rectY2);
-		if (isPointWithinRect(x2, y2, lowX, highY, highX, lowY)) {
-			// compute new location
-			GLfloat deltaX = abs(rectX2 - rectX1);
-			GLfloat deltaY = abs(rectY2 - rectY1);
-			GLfloat newX = lowX + deltaX / 2;
-			GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
-			x2 = newX;
-			y2 = newY;
+		for (int i = 0; i < rectX1List.size(); i++) {
+			GLfloat highX = max(rectX1List[i], rectX2List[i]);
+			GLfloat lowX = min(rectX1List[i], rectX2List[i]);
+			GLfloat highY = max(rectY1List[i], rectY2List[i]);
+			GLfloat lowY = min(rectY1List[i], rectY2List[i]);
+			if (isPointWithinRect(x2, y2, lowX, highY, highX, lowY)) {
+				// compute new location
+				GLfloat deltaX = abs(rectX2List[i] - rectX1List[i]);
+				GLfloat deltaY = abs(rectY2List[i] - rectY1List[i]);
+				GLfloat newX = lowX + deltaX / 2;
+				GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
+				x2 = newX;
+				y2 = newY;
+			}
 		}
 	}
 
-	if (point2BackgroundClass >= 0) {
+	if (isLineColorMode && point2BackgroundClass >= 0) {
 		GLubyte r = data.classColor[recordClass][0];
 		GLubyte g = data.classColor[recordClass][1];
 		GLubyte b = data.classColor[recordClass][2];
@@ -430,202 +506,199 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 
 
 
-
-
-
-
-std::set<int> backgroundClassSet; // Debug
-std::set<int> pointClassSet; // Debug
-void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int j)
-{
-	// Don't draw data past its termination point
-	if (isLineTerminationMode && j > data.dataTerminationIndex[i] - 1) {
-		if (j != 0) return;
-	}
-	
-	// this is all for getting plot coordinates
-	float xratio = data.plotWidth[j] / data.xmax; // Normalize data to the graph size
-	float yratio = data.plotHeight[j] / data.ymax;	
-	x1 -= (data.plotWidth[j] / 2);
-	x2 -= (data.plotWidth[j + 1] / 2);
-	y1 += (data.plotHeight[j] / 2);
-	y2 += (data.plotHeight[j + 1] / 2);
-	float x1Coord = data.plotWidth[j] * data.xdata[i][j];
-	float x2Coord = (x2 - x1) + data.plotWidth[j + 1] * data.xdata[i][j + 1]; // this is where actual data gathered
-	float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; //height of plot is constant = 328.5
-	float y2Coord = (y2 - y1) - data.plotHeight[j+1] * data.ydata[i][j + 1]; // this is where actual data is gathered
-	float x1CoordTrans = x1Coord + (x1 + data.pan_x);
-	float x2CoordTrans = x2Coord + (x1 + data.pan_x);
-	float y1CoordTrans = y1Coord + (y1 + data.pan_y);
-	float y2CoordTrans = y2Coord + (y1 + data.pan_y);
-
-	int classnum = data.classNum[i] - 1;
-	pointClassSet.insert(classnum);
-
-	
-	// If in drawn rectangle mode, check if the points make a line that intersects the rectangle
-	GLfloat middleX;
-	GLfloat middleY;
-	GLfloat middleXTerminating;
-	GLfloat middleYTerminating;
-
-	bool drawMiddleVertex = false;
-	bool drawVertex1 = true;
-	bool drawVertex2 = true;
-
-	if (isLineTerminationMode && data.dataTerminationIndex[i] == 0) {
-		drawVertex2 = false;
-	}
-
-	if (isRectangleMode) { // TODO : need to adapt for branches
-		if (doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
-			// draw point within rectangle based on how many classes there are
-			// TODO: later could add a selection based on class
-			GLfloat deltaX = abs(rectX1 - rectX2);
-			GLfloat deltaY = abs(rectY1 - rectY2);
-			GLfloat highX = max(rectX1, rectX2);
-			GLfloat lowX = min(rectX1, rectX2);
-			GLfloat highY = max(rectY1, rectY2);
-			GLfloat lowY = min(rectY1, rectY2);
-
-			middleX = lowX + 2 * ((highX - lowX) / 3) - (x1 + data.pan_x);
-			middleY = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
-			middleXTerminating = lowX + ((highX - lowX) / 3) - (x1 + data.pan_x);
-			middleYTerminating = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
-
-			if (isPointWithinRect(x1CoordTrans, y1CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
-				drawVertex1 = false;
-			}
-			if (isPointWithinRect(x2CoordTrans, y2CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
-				drawVertex2 = false;
-			}
-
-			if (data.dataTerminationIndex[i] == j + 1) { // Need to check if we should be checking point 1 or point2
-				//x1Coord = middleXTerminating;
-				//y1Coord = middleYTerminating;
-				x2Coord = middleXTerminating;
-				y2Coord = middleYTerminating;
-			}
-
-			if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
-				// Do nothing for now
-			}
-
-			drawMiddleVertex = true;
-		}
-		else {
-			data.calculateTerminationPoint(i);
-		}
-	}
-
-	//debug
-	//glColor4ub(255, 0, 0, 255);
-	//glPointSize(8.0);
-	//glBegin(GL_POINTS);
-	//glVertex2f(x1CoordTrans, y1CoordTrans);
-	//glColor4ub(0, 0, 255, 255);
-	//glVertex2f(x2CoordTrans, y2CoordTrans);
-	//glPointSize(4.0);
-	//glEnd();
-	
-	int backgroundClassP1 = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
-	int backgroundClassP2 = findBackgroundClassOfPoint(x2CoordTrans, y2CoordTrans);
-	backgroundClassSet.insert(backgroundClassP1);
-
-	if (isHighlightMisclassficationsMode && (backgroundClassP1 != -1 && backgroundClassP1 != classnum)) {
-		glColor4ub(255, 0, 0, data.classTransparencies[classnum]);
-		glPointSize(8.0);
-		glBegin(GL_POINTS);
-		glVertex2f(x1CoordTrans, y1CoordTrans);
-		glEnd();
-		glPointSize(4.0);
-	}
-
-	glPushMatrix();	// Makes a new layer
-
-	glTranslatef(x1 + data.pan_x, y1 + data.pan_y, 0); // Translates starting position to draw
-
-	// If point terminates on the next point, color it
-	// COLORING FOR LINES
-	if (isPointColorMode || (isColorTerminationMode && data.dataTerminationIndex[i] != j + 1)) {
-		glColor4ub(128, 128, 128, data.classTransparencies[classnum]);
-	}
-	else {
-		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
-	}
-
-	if (data.showHideLinesVar)
-	{
-		glBegin(GL_LINE_STRIP); 
-		//data.classTransparency[1] = 70;
-		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[currentDepth]);
-		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
-		if (drawVertex1) {
-			glVertex2f(x1Coord, y1Coord);
-		}
-		if (drawMiddleVertex) {
-			if (drawVertex2) {
-				GLfloat currentColor[4];
-				glGetFloatv(GL_CURRENT_COLOR, currentColor);
-				glColor4ub(128, 128, 128, data.classTransparencies[classnum]);
-				glVertex2f(middleX, middleY);
-				glColor4ub(currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
-			}
-			else {
-				glVertex2f(middleX, middleY);
-			}
-		}
-		if(drawVertex2 && data.numPlots!=1)
-			glVertex2f(x2Coord, y2Coord); // ending vertex
-		glEnd();
-	}
-	
-	// POINT 1 COLOR
-	if (isPointColorMode && backgroundClassP1 != -1) {
-		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
-	}
-	else {
-		glColor4ub(0, 0, 0, data.classTransparencies[classnum]);
-	}
-	
-	glBegin(GL_POINTS);
-	
-	//glVertex2f(0 + xratio * data.xdata[currentDepth][nodeIndex], 0 - yratio * data.ydata[currentDepth][nodeIndex]);                                     // starting vertex
-	if (drawVertex1) {
-		glVertex2f(x1Coord, y1Coord);
-	}
-	if (drawMiddleVertex) {
-		//glColor4ub(0, 255, 0, 255); // debug
-		glVertex2f(middleX, middleY);
-	}
-	glEnd();
-
-	// POINT 2 COLOR
-	if (isPointColorMode && backgroundClassP2 != -1) {
-		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
-	}
-	else {
-		glColor4ub(0, 0, 0, data.classTransparencies[classnum]);
-	}
-
-	glPointSize(4);
-	glBegin(GL_POINTS);
-	//glVertex2f((x2 - x1) + xratio * data.xdata[currentDepth][nodeIndex + 1], (y2 - y1) - yratio * data.ydata[currentDepth][nodeIndex + 1]);                         // ending vertex
-	if (drawVertex2 && data.numPlots != 1)
-		//glColor4ub(0, 0, 255, 255); // debug
-		glVertex2f(x2Coord, y2Coord);	
-	glEnd();
-	if (j == 0)
-	{
-		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
-		if (drawVertex1) {
-			glVertex2f(x1Coord, y1Coord);
-		}
-	}
-
-	glPopMatrix();
-	
-}
+// NOT USED ANYMORE
+//std::set<int> backgroundClassSet; // Debug
+//std::set<int> pointClassSet; // Debug
+//void InteractiveSPC::drawData(float x1, float y1, float x2, float y2, int i, int j)
+//{
+//	// Don't draw data past its termination point
+//	if (isLineTerminationMode && j > data.dataTerminationIndex[i] - 1) {
+//		if (j != 0) return;
+//	}
+//	
+//	// this is all for getting plot coordinates
+//	float xratio = data.plotWidth[j] / data.xmax; // Normalize data to the graph size
+//	float yratio = data.plotHeight[j] / data.ymax;	
+//	x1 -= (data.plotWidth[j] / 2);
+//	x2 -= (data.plotWidth[j + 1] / 2);
+//	y1 += (data.plotHeight[j] / 2);
+//	y2 += (data.plotHeight[j + 1] / 2);
+//	float x1Coord = data.plotWidth[j] * data.xdata[i][j];
+//	float x2Coord = (x2 - x1) + data.plotWidth[j + 1] * data.xdata[i][j + 1]; // this is where actual data gathered
+//	float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; //height of plot is constant = 328.5
+//	float y2Coord = (y2 - y1) - data.plotHeight[j+1] * data.ydata[i][j + 1]; // this is where actual data is gathered
+//	float x1CoordTrans = x1Coord + (x1 + data.pan_x);
+//	float x2CoordTrans = x2Coord + (x1 + data.pan_x);
+//	float y1CoordTrans = y1Coord + (y1 + data.pan_y);
+//	float y2CoordTrans = y2Coord + (y1 + data.pan_y);
+//
+//	int classnum = data.classNum[i] - 1;
+//	pointClassSet.insert(classnum);
+//
+//	
+//	// If in drawn rectangle mode, check if the points make a line that intersects the rectangle
+//	GLfloat middleX;
+//	GLfloat middleY;
+//	GLfloat middleXTerminating;
+//	GLfloat middleYTerminating;
+//
+//	bool drawMiddleVertex = false;
+//	bool drawVertex1 = true;
+//	bool drawVertex2 = true;
+//
+//	if (isLineTerminationMode && data.dataTerminationIndex[i] == 0) {
+//		drawVertex2 = false;
+//	}
+//
+//	if (isRectangleMode) { // TODO : need to adapt for branches
+//		if (doPointsIntersectRectangle(x1CoordTrans, y1CoordTrans, x2CoordTrans, y2CoordTrans)) {
+//			// draw point within rectangle based on how many classes there are
+//			// TODO: later could add a selection based on class
+//			GLfloat deltaX = abs(rectX1 - rectX2);
+//			GLfloat deltaY = abs(rectY1 - rectY2);
+//			GLfloat highX = max(rectX1, rectX2);
+//			GLfloat lowX = min(rectX1, rectX2);
+//			GLfloat highY = max(rectY1, rectY2);
+//			GLfloat lowY = min(rectY1, rectY2);
+//
+//			middleX = lowX + 2 * ((highX - lowX) / 3) - (x1 + data.pan_x);
+//			middleY = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
+//			middleXTerminating = lowX + ((highX - lowX) / 3) - (x1 + data.pan_x);
+//			middleYTerminating = lowY + (((highY - lowY) / (data.numOfClasses + 2)) * (classnum + 1)) - (y1 + data.pan_y);
+//
+//			if (isPointWithinRect(x1CoordTrans, y1CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
+//				drawVertex1 = false;
+//			}
+//			if (isPointWithinRect(x2CoordTrans, y2CoordTrans, rectX1, rectY2, rectX2, rectY1)) {
+//				drawVertex2 = false;
+//			}
+//
+//			if (data.dataTerminationIndex[i] == j + 1) { // Need to check if we should be checking point 1 or point2
+//				//x1Coord = middleXTerminating;
+//				//y1Coord = middleYTerminating;
+//				x2Coord = middleXTerminating;
+//				y2Coord = middleYTerminating;
+//			}
+//
+//			if (findBackgroundClassOfPoint(x1Coord, y1Coord) != classnum) { // do something special if point class doesnt match background zone
+//				// Do nothing for now
+//			}
+//
+//			drawMiddleVertex = true;
+//		}
+//		else {
+//			data.calculateTerminationPoint(i);
+//		}
+//	}
+//
+//	//debug
+//	//glColor4ub(255, 0, 0, 255);
+//	//glPointSize(8.0);
+//	//glBegin(GL_POINTS);
+//	//glVertex2f(x1CoordTrans, y1CoordTrans);
+//	//glColor4ub(0, 0, 255, 255);
+//	//glVertex2f(x2CoordTrans, y2CoordTrans);
+//	//glPointSize(4.0);
+//	//glEnd();
+//	
+//	int backgroundClassP1 = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+//	int backgroundClassP2 = findBackgroundClassOfPoint(x2CoordTrans, y2CoordTrans);
+//	backgroundClassSet.insert(backgroundClassP1);
+//
+//	if (isHighlightMisclassficationsMode && (backgroundClassP1 != -1 && backgroundClassP1 != classnum)) {
+//		glColor4ub(255, 0, 0, data.classTransparencies[classnum]);
+//		glPointSize(8.0);
+//		glBegin(GL_POINTS);
+//		glVertex2f(x1CoordTrans, y1CoordTrans);
+//		glEnd();
+//		glPointSize(4.0);
+//	}
+//
+//	glPushMatrix();	// Makes a new layer
+//
+//	glTranslatef(x1 + data.pan_x, y1 + data.pan_y, 0); // Translates starting position to draw
+//
+//	// If point terminates on the next point, color it
+//	// COLORING FOR LINES
+//	if (isPointColorMode || (isColorTerminationMode && data.dataTerminationIndex[i] != j + 1)) {
+//		glColor4ub(128, 128, 128, data.classTransparencies[classnum]);
+//	}
+//	else {
+//		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+//	}
+//
+//	if (data.showHideLinesVar)
+//	{
+//		glBegin(GL_LINE_STRIP); 
+//		//data.classTransparency[1] = 70;
+//		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.dataTransparency[currentDepth]);
+//		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+//		if (drawVertex1) {
+//			glVertex2f(x1Coord, y1Coord);
+//		}
+//		if (drawMiddleVertex) {
+//			if (drawVertex2) {
+//				GLfloat currentColor[4];
+//				glGetFloatv(GL_CURRENT_COLOR, currentColor);
+//				glColor4ub(128, 128, 128, data.classTransparencies[classnum]);
+//				glVertex2f(middleX, middleY);
+//				glColor4ub(currentColor[0], currentColor[1], currentColor[2], currentColor[3]);
+//			}
+//			else {
+//				glVertex2f(middleX, middleY);
+//			}
+//		}
+//		if(drawVertex2 && data.numPlots!=1)
+//			glVertex2f(x2Coord, y2Coord); // ending vertex
+//		glEnd();
+//	}
+//	
+//	// POINT 1 COLOR
+//	if (isPointColorMode && backgroundClassP1 != -1) {
+//		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+//	}
+//	else {
+//		glColor4ub(0, 0, 0, data.classTransparencies[classnum]);
+//	}
+//	
+//	glBegin(GL_POINTS);
+//	
+//	//glVertex2f(0 + xratio * data.xdata[currentDepth][nodeIndex], 0 - yratio * data.ydata[currentDepth][nodeIndex]);                                     // starting vertex
+//	if (drawVertex1) {
+//		glVertex2f(x1Coord, y1Coord);
+//	}
+//	if (drawMiddleVertex) {
+//		//glColor4ub(0, 255, 0, 255); // debug
+//		glVertex2f(middleX, middleY);
+//	}
+//	glEnd();
+//
+//	// POINT 2 COLOR
+//	if (isPointColorMode && backgroundClassP2 != -1) {
+//		glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+//	}
+//	else {
+//		glColor4ub(0, 0, 0, data.classTransparencies[classnum]);
+//	}
+//
+//	glPointSize(4);
+//	glBegin(GL_POINTS);
+//	//glVertex2f((x2 - x1) + xratio * data.xdata[currentDepth][nodeIndex + 1], (y2 - y1) - yratio * data.ydata[currentDepth][nodeIndex + 1]);                         // ending vertex
+//	if (drawVertex2 && data.numPlots != 1)
+//		//glColor4ub(0, 0, 255, 255); // debug
+//		glVertex2f(x2Coord, y2Coord);	
+//	glEnd();
+//	if (j == 0)
+//	{
+//		//glColor4ub(data.classColor[classnum][0], data.classColor[classnum][1], data.classColor[classnum][2], data.classTransparencies[classnum]);
+//		if (drawVertex1) {
+//			glVertex2f(x1Coord, y1Coord);
+//		}
+//	}
+//
+//	glPopMatrix();
+//	
+//}
 
 /* DISPLAY */
 
@@ -895,6 +968,14 @@ void InteractiveSPC::display() {
 	// TODO: We need to shake up the draw order!!!! Draw relative to pairs, not columns!!!!!
 	// for every point, we need to draw it. What constitutes a point? 
 	// Well that's in the attribute pairs map which is in the data class
+	
+	//debug
+	//for (int i = 0; i < data.numPlots; i++) {
+	//	drawData(.355, 0.5, 0, i);
+	//}
+
+
+
 	for (int recordNum = 0; recordNum < data.normalizedValues.size(); recordNum++) {
 		int plotToDrawNext = 0;
 		while (plotToDrawNext != -1) {
@@ -1400,7 +1481,7 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 		//zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
 		//zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
-		if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+		if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
 			zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
 			zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
 		}
@@ -1408,7 +1489,7 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
 			zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
 			zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
 		}
-		if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+		if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
 			zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
 			zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
 		}
@@ -1495,7 +1576,9 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
 }
 
 void InteractiveSPC::drawRectangle() {
-	drawRectangle(rectX1, rectX2, rectY1, rectY2, 0.0f, 0.0f, 0.0f);
+	for (int i = 0; i < rectX1List.size(); i++) {
+		drawRectangle(rectX1List[i], rectX2List[i], rectY1List[i], rectY2List[i], 0.0f, 0.0f, 0.0f);
+	}
 }
 
 /* Display Utilities*/
@@ -1537,8 +1620,7 @@ std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor) {
 	if (saturation > 1.0f) {
 		saturation = 1.0;
 	}
-
-	hsl.push_back(hue);
+	hsl.push_back(hue % 360);
 	hsl.push_back(saturation);
 	hsl.push_back(lightness);
 	return hsl;
