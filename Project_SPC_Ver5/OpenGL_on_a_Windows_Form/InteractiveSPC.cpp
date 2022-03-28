@@ -9,7 +9,7 @@
 
 // Debug
 #include <set>
-
+#include <map>
 
 
 InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double worldW, double worldH)
@@ -235,16 +235,16 @@ void InteractiveSPC::drawRectanglesOnGray() {
 
 /* Draws data sets. */
 std::set<int> debugSet;
-int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
+int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 	// Don't draw data past its termination point
 	/*if (isLineTerminationMode && plotNum > data.dataTerminationIndex[recordNum] - 1) {
 		if (plotNum != 0) return;
 	}*/
 
 
-	int recordClass = data.classNum[recordNum] - 1;
+	int caseClass = data.classNum[caseNum] - 1;
 
-	if (plotNum == 0 && recordClass == 0) {
+	if (plotNum == 0 && caseClass == 0) {
 		std::cout << "debug";
 	}
 
@@ -286,7 +286,7 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	// we need to get the next point in line for point(x1,y1)
 	int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
 
-	if (plotNum == 0 && recordClass != 0 && point1BackgroundClass == 0) {
+	if (plotNum == 0 && caseClass != 0 && point1BackgroundClass == 0) {
 		std::cout << "debug";
 	}
 
@@ -305,7 +305,7 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 				GLfloat deltaX = abs(rectX2List[i] - rectX1List[i]);
 				GLfloat deltaY = abs(rectY2List[i] - rectY1List[i]);
 				GLfloat newX = lowX + deltaX / 2;
-				GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
+				GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
 				x1 = newX;
 				y1 = newY;
 				//}
@@ -334,57 +334,70 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 
 	int pointWasCorrectlyClassified = false;
 
-	GLubyte classTransparency = data.classTransparencies[recordClass];
+	GLubyte classTransparency = data.classTransparencies[caseClass];
 	
-	// determine if we should be highlighting misclassified points
-	if (isHighlightMisclassficationsMode && (point1BackgroundClass >= 0 && point1BackgroundClass != recordClass)) {
-		glColor4ub(255, 0, 0, classTransparency);
-		glPointSize(8.0);
-		glBegin(GL_POINTS);
-		glVertex2f(x1, y1);
-		glEnd();
-		glPointSize(4.0);
-	}
-		// draw regular point
-		// draw point one
-		glPointSize(4.0);
-		glColor4ub(0, 0, 0, classTransparency);
-		if (isPointColorMode) {
-			if (point1BackgroundClass >= 0) {
-				GLubyte r = data.classColor[recordClass][0];
-				GLubyte g = data.classColor[recordClass][1];
-				GLubyte b = data.classColor[recordClass][2];
-				GLubyte a = classTransparency;
-				glColor4ub(r, g, b, a);
+	if (point1BackgroundClass >= 0 && point1BackgroundClass != caseClass) {
+		if (data.misclassifiedCases.find(caseNum) == data.misclassifiedCases.end()) {
+			if (data.classMisclassifiedCaseCount.find(caseClass) != data.classMisclassifiedCaseCount.end()) {
+				data.classMisclassifiedCaseCount[caseClass]++;
 			}
+			else {
+				data.classMisclassifiedCaseCount[caseClass] = 1;
+			}
+			data.misclassifiedCases.insert(caseNum);
 		}
 
-
-		// debug
-		/*GLubyte r = data.classColor[recordClass][0];
-		GLubyte g = data.classColor[recordClass][1];
-		GLubyte b = data.classColor[recordClass][2];
-		glColor4ub(r, g, b, classTransparency);*/
-		// endDebug
-
-		//debug
-		/*std::vector<float> color;
-		if (point1BackgroundClass >= 0) {
-			color = data.classColor[point1BackgroundClass];
+		// determine if we should be highlighting misclassified points
+		if (isHighlightMisclassficationsMode) {
+			glColor4ub(255, 0, 0, classTransparency);
+			glPointSize(8.0);
+			glBegin(GL_POINTS);
+			glVertex2f(x1, y1);
+			glEnd();
+			glPointSize(4.0);
 		}
-		else {
-			color = data.continueClassColor[point1BackgroundClass];
-		}
-		glColor4ub(color[0], color[1], color[2], classTransparency);*/
-		// end debug
+	}
+	
+    // draw regular point
+    // draw point one
+    glPointSize(4.0);
+    glColor4ub(0, 0, 0, classTransparency);
+    if (isPointColorMode) {
+        if (point1BackgroundClass >= 0) {
+            GLubyte r = data.classColor[caseClass][0];
+            GLubyte g = data.classColor[caseClass][1];
+            GLubyte b = data.classColor[caseClass][2];
+            GLubyte a = classTransparency;
+            glColor4ub(r, g, b, a);
+        }
+    }
 
-		glBegin(GL_POINTS);
-		glVertex2f(x1, y1);
-		glEnd();
-		// end point one draw
+
+    // debug
+    /*GLubyte r = data.classColor[recordClass][0];
+    GLubyte g = data.classColor[recordClass][1];
+    GLubyte b = data.classColor[recordClass][2];
+    glColor4ub(r, g, b, classTransparency);*/
+    // endDebug
+
+    //debug
+    /*std::vector<float> color;
+    if (point1BackgroundClass >= 0) {
+        color = data.classColor[point1BackgroundClass];
+    }
+    else {
+        color = data.continueClassColor[point1BackgroundClass];
+    }
+    glColor4ub(color[0], color[1], color[2], classTransparency);*/
+    // end debug
+
+    glBegin(GL_POINTS);
+    glVertex2f(x1, y1);
+    glEnd();
+    // end point one draw
 
 	if (point1BackgroundClass >= 0) {
-		if (point1BackgroundClass == recordClass) {
+		if (point1BackgroundClass == caseClass) {
 			// point correctly classified
 			pointWasCorrectlyClassified = true;
 			//if (isLineTerminationMode) {
@@ -423,8 +436,8 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	std::vector<std::string> destinationPlotAttributes = data.parsedAttributePairs[nextPlotNum];
 	int destAttr1Index = data.attributeNameToDataIndex[destinationPlotAttributes[0]];
 	int destAttr2Index = data.attributeNameToDataIndex[destinationPlotAttributes[1]];
-	float x2 = data.normalizedValues[recordNum][destAttr1Index];
-	float y2 = data.normalizedValues[recordNum][destAttr2Index];
+	float x2 = data.normalizedValues[caseNum][destAttr1Index];
+	float y2 = data.normalizedValues[caseNum][destAttr2Index];
 
 	float plt2X1 = data.x1CoordPlot[nextPlotNum];
 	float plt2Y1 = data.y1CoordPlot[nextPlotNum];
@@ -467,7 +480,7 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 				GLfloat deltaX = abs(rectX2List[i] - rectX1List[i]);
 				GLfloat deltaY = abs(rectY2List[i] - rectY1List[i]);
 				GLfloat newX = lowX + deltaX / 2;
-				GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (recordClass + 1);
+				GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
 				x2 = newX;
 				y2 = newY;
 			}
@@ -475,9 +488,9 @@ int InteractiveSPC::drawData(float x1, float y1, int recordNum, int plotNum) {
 	}
 
 	if (isLineColorMode && point2BackgroundClass >= 0) {
-		GLubyte r = data.classColor[recordClass][0];
-		GLubyte g = data.classColor[recordClass][1];
-		GLubyte b = data.classColor[recordClass][2];
+		GLubyte r = data.classColor[caseClass][0];
+		GLubyte g = data.classColor[caseClass][1];
+		GLubyte b = data.classColor[caseClass][2];
 		GLubyte a = classTransparency;
 		glColor4ub(r, g, b, a);
 	}

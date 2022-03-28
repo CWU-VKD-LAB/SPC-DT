@@ -67,7 +67,7 @@ target = df.values[:, numAttributes - 1]
 # outputName = "./covtype_tree"
 
 # Split data into training and testing sets
-data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.2, stratify=target)
+data_train, data_test, target_train, target_test = train_test_split(data, target, test_size=0.2, stratify=target, random_state=42)
 
 # Create a decision tree classifier
 clf = tree.DecisionTreeClassifier()
@@ -140,7 +140,6 @@ print()
 # Print average and standard deviation of scores
 print("Average Accuracy:", scoreMap['test_accuracy'].mean(), "\t|", "Accuracy Standard Deviation:", scoreMap['test_accuracy'].std())
 print("Average Precision:", scoreMap['test_precision'].mean(), "\t|", "Precision Standard Deviation:", scoreMap['test_precision'].std())
-
 
 # Use graphviz to visualize the decision tree
 dot_data = tree.export_graphviz(clf, out_file=None,

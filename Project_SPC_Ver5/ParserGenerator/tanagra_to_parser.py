@@ -641,6 +641,7 @@ def generateAllContinueElements(path_list, pairMap, plotIdMap, orig_labels, node
                         # parserElement.y1 = node1.value / maxMap[parserElement.getOrigYLabel()]
                         parserElement.y1 = normalize(node1.value, parserElement.getOrigYLabel(), minMap, maxMap)
                     # special case, we need to include X of node1 pair as well
+                    # debug for wine data
                     if i > 0:
                         # root -> ... -> node3 -> node1 -> node2 -> .. -> classNode
                         node3 = path[i - 1]
@@ -790,9 +791,6 @@ def generateParser(input_file, output_file, minMap, maxMap, classList):
     # end debug
     # tree.print_tree()
     node_list = tree.traverse()
-
-
-
 
     # TODO: Determine number of classes
     for node in node_list:

@@ -74,7 +74,9 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		}
 
 	}
+
 	// step through each row of data
+	std::set<int> seenClasses;
 	for (int i = 0; i < data.strparsedData.size(); i++)
 	{
 		float x1 = stof(data.strparsedData[i][0]);
@@ -83,6 +85,10 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		float y2 = stof(data.strparsedData[i][3]);
 		int plotNum = stoi(data.strparsedData[i][4]); // doesnt need to be float, but we're putting it in a vector with other floats
 		int classNum = stoi(data.strparsedData[i][5]); // doesnt need to be float, but we're putting it in a vector with other floats
+		if (seenClasses.find(classNum) == seenClasses.end()) {
+			seenClasses.insert(classNum);
+			data.classes.push_back(classNum);
+		}
 		if (classNum < 0) {
 			if (!std::count(data.continueElements.begin(), data.continueElements.end(), classNum)) {
 				data.continueElements.push_back(classNum);
@@ -405,6 +411,24 @@ void FileHandling::normalizeData(ClassData &data)
 	//
 	//}
 
+	// determine if data classes are zero indexed
+	int minClass = INT_MAX;
+	int maxClass = INT_MIN;
+	for (int i = 1; i < data.values.size(); i++) {
+		int curClass = stoi(data.values[i][data.values[0].size() - 1]);
+		if (curClass > maxClass) {
+			maxClass = curClass;
+		}
+		if (curClass < minClass) {
+			minClass = curClass;
+		}
+	}
+	if (minClass == 0) {
+		data.isDatasetClassesZeroIndexed = true;
+	}
+	else {
+		data.minClassNum = minClass;
+	}
 
 	// get min/max for each column
 	std::vector<float> maxPerCol;

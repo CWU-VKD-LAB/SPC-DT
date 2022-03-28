@@ -196,6 +196,7 @@ private: System::Windows::Forms::CheckBox^ pointColorMode;
 private: System::Windows::Forms::Button^ SwapAttributesButton;
 private: System::Windows::Forms::CheckBox^ lineColorCheckbox;
 private: System::Windows::Forms::Button^ button9;
+private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 
 
 
@@ -249,6 +250,7 @@ private: System::Windows::Forms::Button^ button9;
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->graph4 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->SwapAttributesButton = (gcnew System::Windows::Forms::Button());
 			this->clearRectangleButton = (gcnew System::Windows::Forms::Button());
 			this->drawRectangleButton = (gcnew System::Windows::Forms::Button());
@@ -292,7 +294,7 @@ private: System::Windows::Forms::Button^ button9;
 			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->button9 = (gcnew System::Windows::Forms::Button());
+			this->showClassAccuraciesButton = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -328,6 +330,7 @@ private: System::Windows::Forms::Button^ button9;
 			// panel1
 			// 
 			this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel1->Controls->Add(this->showClassAccuraciesButton);
 			this->panel1->Controls->Add(this->button9);
 			this->panel1->Controls->Add(this->SwapAttributesButton);
 			this->panel1->Controls->Add(this->clearRectangleButton);
@@ -349,12 +352,23 @@ private: System::Windows::Forms::Button^ button9;
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
 			// 
+			// button9
+			// 
+			this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->button9->Location = System::Drawing::Point(12, 515);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(173, 41);
+			this->button9->TabIndex = 34;
+			this->button9->Text = L"Draw Rects On Gray";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &Form1::button9_Click_1);
+			// 
 			// SwapAttributesButton
 			// 
 			this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->SwapAttributesButton->Location = System::Drawing::Point(12, 648);
+			this->SwapAttributesButton->Location = System::Drawing::Point(12, 622);
 			this->SwapAttributesButton->Name = L"SwapAttributesButton";
-			this->SwapAttributesButton->Size = System::Drawing::Size(173, 41);
+			this->SwapAttributesButton->Size = System::Drawing::Size(173, 34);
 			this->SwapAttributesButton->TabIndex = 33;
 			this->SwapAttributesButton->Text = L"Swap X/Y";
 			this->SwapAttributesButton->UseVisualStyleBackColor = true;
@@ -387,7 +401,7 @@ private: System::Windows::Forms::Button^ button9;
 			this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
 			this->button7->Location = System::Drawing::Point(99, 577);
 			this->button7->Name = L"button7";
-			this->button7->Size = System::Drawing::Size(80, 62);
+			this->button7->Size = System::Drawing::Size(80, 39);
 			this->button7->TabIndex = 30;
 			this->button7->Text = L"Invert Y";
 			this->button7->UseVisualStyleBackColor = true;
@@ -398,7 +412,7 @@ private: System::Windows::Forms::Button^ button9;
 			this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
 			this->button8->Location = System::Drawing::Point(12, 577);
 			this->button8->Name = L"button8";
-			this->button8->Size = System::Drawing::Size(81, 62);
+			this->button8->Size = System::Drawing::Size(81, 39);
 			this->button8->TabIndex = 29;
 			this->button8->Text = L"Invert X";
 			this->button8->UseVisualStyleBackColor = true;
@@ -569,7 +583,7 @@ private: System::Windows::Forms::Button^ button9;
 			// statusStrip1
 			// 
 			this->statusStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
-			this->statusStrip1->Location = System::Drawing::Point(0, 778);
+			this->statusStrip1->Location = System::Drawing::Point(0, 763);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(1530, 22);
 			this->statusStrip1->TabIndex = 6;
@@ -671,7 +685,7 @@ private: System::Windows::Forms::Button^ button9;
 			// lineColorCheckbox
 			// 
 			this->lineColorCheckbox->AutoSize = true;
-			this->lineColorCheckbox->Location = System::Drawing::Point(6, 367);
+			this->lineColorCheckbox->Location = System::Drawing::Point(3, 367);
 			this->lineColorCheckbox->Name = L"lineColorCheckbox";
 			this->lineColorCheckbox->Size = System::Drawing::Size(103, 17);
 			this->lineColorCheckbox->TabIndex = 20;
@@ -825,21 +839,21 @@ private: System::Windows::Forms::Button^ button9;
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Class Transparency";
 			// 
-			// button9
+			// showClassAccuraciesButton
 			// 
-			this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button9->Location = System::Drawing::Point(12, 515);
-			this->button9->Name = L"button9";
-			this->button9->Size = System::Drawing::Size(173, 41);
-			this->button9->TabIndex = 34;
-			this->button9->Text = L"Draw Rects On Gray";
-			this->button9->UseVisualStyleBackColor = true;
-			this->button9->Click += gcnew System::EventHandler(this, &Form1::button9_Click_1);
+			this->showClassAccuraciesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 662);
+			this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
+			this->showClassAccuraciesButton->Size = System::Drawing::Size(173, 34);
+			this->showClassAccuraciesButton->TabIndex = 35;
+			this->showClassAccuraciesButton->Text = L"Show Class Accuracies";
+			this->showClassAccuraciesButton->UseVisualStyleBackColor = true;
+			this->showClassAccuraciesButton->Click += gcnew System::EventHandler(this, &Form1::showClassAccuraciesButton_Click);
 			// 
 			// Form1
 			// 
 			this->BackColor = System::Drawing::SystemColors::Control;
-			this->ClientSize = System::Drawing::Size(1530, 800);
+			this->ClientSize = System::Drawing::Size(1530, 785);
 			this->Controls->Add(this->panel2);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->statusStrip1);
@@ -1565,6 +1579,21 @@ private: System::Void lineColorCheckbox_CheckedChanged(System::Object^ sender, S
 }
 private: System::Void button9_Click_1(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->drawRectanglesOnGray();
+}
+private: System::Void showClassAccuraciesButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	std::vector<std::vector<float>> accuracies = OpenGL3->computeClassAccuracies();
+	String^ displayStr = "";
+	for (int i = 0; i < accuracies.size(); i++) {
+		std::vector<float> currentAccuracy = accuracies[i];
+		int curClass = (int)currentAccuracy[0];
+		float curAcc = currentAccuracy[1];
+		displayStr += curClass;
+		displayStr += ": ";
+		displayStr += curAcc;
+		displayStr += "\n";
+	}
+
+	MessageBox::Show(displayStr);
 }
 };
 }

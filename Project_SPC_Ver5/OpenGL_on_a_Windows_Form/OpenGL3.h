@@ -242,7 +242,10 @@ namespace OpenGLForm
 			return graph4.data.continueElements;
 		}
 
-
+		std::vector<std::vector<float>> computeClassAccuracies() {
+			graph4.data.computeClassAccuracies();
+			return graph4.data.getClassAccuracies();
+		}
 
 		/* RENDERING FOR DIFFERENT GRAPHS *//////////////////////////////////////////////////////////////////////////////////////
 

@@ -215,6 +215,65 @@ public:
 	std::vector<std::vector<float>> normalizedValues;
 	std::set<int> plotsWithXInverted;
 	std::set<int> plotsWithYInverted;
+    std::map<int, float> classAccuracy;
+    std::map<int, float> classPrecision;
+    std::map<int, int> classMisclassifiedCaseCount;
+	std::set<int> misclassifiedCases;
+	std::map<int, int> casesPerClass;
+	std::vector<int> classes;
+	bool isDatasetClassesZeroIndexed = false;
+	int minClassNum = 0;
+
+	void computeClassAccuracies() {
+		if (casesPerClass.size() == 0) {
+			computeNumCasesPerClass();
+		}
+		for (int i = 0; i < classes.size(); i++) {
+			int curClass = classes[i];
+			if (curClass < 0) continue;
+			if (casesPerClass[curClass] == 0) {
+				classAccuracy[curClass] = 0;
+			}
+			else {
+				classAccuracy[curClass] = ((float)casesPerClass[curClass] - (float)classMisclassifiedCaseCount[curClass]) / (float)casesPerClass[curClass];
+			}
+		}
+		std::cout << "debug compute accuracies";
+	}
+
+	std::vector<std::vector<float>> getClassAccuracies() {
+		if (casesPerClass.size() == 0) {
+			computeNumCasesPerClass();
+		}
+		if (classAccuracy.size() == 0) {
+			computeClassAccuracies();
+		}
+		// list will hold class accuracies: classAccuraciesAsList[i] = vector: [class, classAccuracy]
+		std::vector<std::vector<float>> classAccuraciesAsList;
+		for (int i = 0; i < classes.size(); i++) {
+			int curClass = classes[i];
+			float classAcc = classAccuracy[curClass];
+			std::vector<float> tmp;
+			tmp.push_back(curClass);
+			tmp.push_back(classAcc);
+			classAccuraciesAsList.push_back(tmp);
+		}
+		return classAccuraciesAsList;
+	}
+
+	void computeNumCasesPerClass() {
+		for (int i = 0; i < classNum.size(); i++) {
+			int curClass = classNum[i] - minClassNum;
+			// have to account for classes being non zero based
+			if (casesPerClass.find(curClass) != casesPerClass.end()) {
+				casesPerClass[curClass]++;
+			}
+			else {
+				casesPerClass[curClass] = 1;
+			}
+ 		}
+		std::cout << "debug";
+	}
 
 	void setClassColors() {
 		for (int i = 0; i < numOfClasses; i++) {
