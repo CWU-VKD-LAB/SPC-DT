@@ -218,7 +218,7 @@ public:
     std::map<int, float> classAccuracy;
     std::map<int, float> classPrecision;
     std::map<int, int> classMisclassifiedCaseCount;
-	std::set<int> misclassifiedCases;
+	std::map<int, std::map<int, std::vector<int>>> misclassifiedCases; // actual -> predicted -> casenum
 	std::map<int, int> casesPerClass;
 	std::vector<int> classes;
 	bool isDatasetClassesZeroIndexed = false;
@@ -239,6 +239,70 @@ public:
 			}
 		}
 		std::cout << "debug compute accuracies";
+	}
+
+	std::map<int, float> computeAccuracy() {
+		// Compute accuracy
+		std::map<int, float> accuracyMap;
+		std::vector<float> accuraciesByClass;
+		for (int i = 0; i < classes.size(); i++) {
+			int currentClass = classes[i];
+			if (currentClass < 0) continue;
+			float acc = ((float)casesPerClass[currentClass] - (float)classMisclassifiedCaseCount[currentClass]) / (float)casesPerClass[currentClass];
+			accuraciesByClass.push_back(acc);
+			accuracyMap[currentClass] = acc;
+		}
+
+		float sum = 0.0f;
+		for (int i = 0; i < accuraciesByClass.size(); i++) {
+			sum += accuraciesByClass[i];
+		}
+
+		float averageAccuracy = 0;
+		if (accuraciesByClass.size() != 0) {
+			averageAccuracy = sum / (float)accuraciesByClass.size();
+		}
+
+		accuracyMap[-1] = averageAccuracy;
+		return accuracyMap;
+	}
+
+	std::vector<std::vector<int>> computeConfusionMatrix() {
+		std::vector<std::vector<int>> confusionMatrix;
+
+		if (casesPerClass.size() == 0) {
+			computeNumCasesPerClass();
+		}
+		
+		std::vector<int> firstRowOfConfusionMatrix;
+		for (int i = 0; i < classes.size(); i++) {
+			if (classes[i] >= 0) {
+				firstRowOfConfusionMatrix.push_back(classes[i]);
+			}
+		}
+		confusionMatrix.push_back(firstRowOfConfusionMatrix);
+
+		for (int i = 0; i < classes.size(); i++) {
+			int currentClass = classes[i];
+			if (currentClass < 0) continue;
+			std::vector<int> confusionMatrixRow;
+			confusionMatrixRow.push_back(currentClass);
+			for (int j = 0; j < classes.size(); j++) {
+				int predictedClass = classes[j];
+
+				if (predictedClass < 0) continue;
+
+				if (predictedClass == currentClass) {
+					confusionMatrixRow.push_back(casesPerClass[currentClass] - classMisclassifiedCaseCount[currentClass]);
+					continue;
+				}
+				
+				confusionMatrixRow.push_back(misclassifiedCases[currentClass][predictedClass].size());
+			}
+			confusionMatrix.push_back(confusionMatrixRow);
+		}
+
+		return confusionMatrix;
 	}
 
 	std::vector<std::vector<float>> getClassAccuracies() {

@@ -197,6 +197,7 @@ private: System::Windows::Forms::Button^ SwapAttributesButton;
 private: System::Windows::Forms::CheckBox^ lineColorCheckbox;
 private: System::Windows::Forms::Button^ button9;
 private: System::Windows::Forms::Button^ showClassAccuraciesButton;
+private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 
 
 
@@ -250,6 +251,7 @@ private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->graph4 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->showClassAccuraciesButton = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->SwapAttributesButton = (gcnew System::Windows::Forms::Button());
 			this->clearRectangleButton = (gcnew System::Windows::Forms::Button());
@@ -294,7 +296,7 @@ private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->showClassAccuraciesButton = (gcnew System::Windows::Forms::Button());
+			this->mitigateOverlapCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -351,6 +353,17 @@ private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 			this->panel1->Size = System::Drawing::Size(200, 775);
 			this->panel1->TabIndex = 4;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
+			// 
+			// showClassAccuraciesButton
+			// 
+			this->showClassAccuraciesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+			this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 662);
+			this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
+			this->showClassAccuraciesButton->Size = System::Drawing::Size(173, 34);
+			this->showClassAccuraciesButton->TabIndex = 35;
+			this->showClassAccuraciesButton->Text = L"Show Class Accuracies";
+			this->showClassAccuraciesButton->UseVisualStyleBackColor = true;
+			this->showClassAccuraciesButton->Click += gcnew System::EventHandler(this, &Form1::showClassAccuraciesButton_Click);
 			// 
 			// button9
 			// 
@@ -666,6 +679,7 @@ private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel2->Controls->Add(this->mitigateOverlapCheckbox);
 			this->panel2->Controls->Add(this->lineColorCheckbox);
 			this->panel2->Controls->Add(this->pointColorMode);
 			this->panel2->Controls->Add(this->highlightMisclassificationsCheckbox);
@@ -839,16 +853,16 @@ private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Class Transparency";
 			// 
-			// showClassAccuraciesButton
+			// mitigateOverlapCheckbox
 			// 
-			this->showClassAccuraciesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 662);
-			this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
-			this->showClassAccuraciesButton->Size = System::Drawing::Size(173, 34);
-			this->showClassAccuraciesButton->TabIndex = 35;
-			this->showClassAccuraciesButton->Text = L"Show Class Accuracies";
-			this->showClassAccuraciesButton->UseVisualStyleBackColor = true;
-			this->showClassAccuraciesButton->Click += gcnew System::EventHandler(this, &Form1::showClassAccuraciesButton_Click);
+			this->mitigateOverlapCheckbox->AutoSize = true;
+			this->mitigateOverlapCheckbox->Location = System::Drawing::Point(3, 388);
+			this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
+			this->mitigateOverlapCheckbox->Size = System::Drawing::Size(103, 17);
+			this->mitigateOverlapCheckbox->TabIndex = 21;
+			this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap";
+			this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
+			this->mitigateOverlapCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::mitigateOverlapCheckbox_CheckedChanged);
 			// 
 			// Form1
 			// 
@@ -1581,19 +1595,54 @@ private: System::Void button9_Click_1(System::Object^ sender, System::EventArgs^
 	OpenGL3->drawRectanglesOnGray();
 }
 private: System::Void showClassAccuraciesButton_Click(System::Object^ sender, System::EventArgs^ e) {
-	std::vector<std::vector<float>> accuracies = OpenGL3->computeClassAccuracies();
-	String^ displayStr = "";
-	for (int i = 0; i < accuracies.size(); i++) {
-		std::vector<float> currentAccuracy = accuracies[i];
-		int curClass = (int)currentAccuracy[0];
-		float curAcc = currentAccuracy[1];
-		displayStr += curClass;
-		displayStr += ": ";
-		displayStr += curAcc;
-		displayStr += "\n";
+	std::vector<std::vector<int>> confusionMatrix = OpenGL3->computeConfusionMatrix();
+	String^ displayString = "Real\tPredicted Class\n";
+	displayString += "Class\t";
+	for (int i = 0; i < confusionMatrix[0].size(); i++) {
+		displayString += confusionMatrix[0][i];
+		if (i < (confusionMatrix[0].size() - 1)) {
+			displayString += "\t";
+		}
+	}
+	displayString += "\n";
+	for (int i = 1; i < confusionMatrix.size(); i++) {
+		std::vector<int> row = confusionMatrix[i];
+		for (int j = 0; j < row.size(); j++) {
+			displayString += row[j];
+			if (j != row.size() - 1) {
+				displayString += "\t";
+			}
+		}
+		displayString += "\n";
 	}
 
-	MessageBox::Show(displayStr);
+	std::map<int, float> accuracies = OpenGL3->computeAccuracy();
+	
+	for (auto i = accuracies.begin(); i != accuracies.end(); ++i) {
+		if (i->first == -1) continue; // skip average for now
+		displayString += "Class " + i->first + " Accuracy:\t" + i->second + "\n";
+	}
+
+	displayString += "Average Accuracy:\t" + accuracies[-1];
+
+	MessageBox::Show(displayString);
+
+	//std::vector<std::vector<float>> accuracies = OpenGL3->computeClassAccuracies();
+	//String^ displayStr = "";
+	//for (int i = 0; i < accuracies.size(); i++) {
+	//	std::vector<float> currentAccuracy = accuracies[i];
+	//	int curClass = (int)currentAccuracy[0];
+	//	float curAcc = currentAccuracy[1];
+	//	displayStr += curClass;
+	//	displayStr += ": ";
+	//	displayStr += curAcc;
+	//	displayStr += "\n";
+	//}
+
+	//MessageBox::Show(displayStr);
+}
+private: System::Void mitigateOverlapCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setOverlapMitigationMode(mitigateOverlapCheckbox->Checked);
 }
 };
 }

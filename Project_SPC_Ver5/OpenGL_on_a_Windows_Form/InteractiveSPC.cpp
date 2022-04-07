@@ -6,10 +6,9 @@
 
 #include "stdafx.h"
 #include "InteractiveSPC.h"
-
-// Debug
 #include <set>
 #include <map>
+#include <algorithm>
 
 
 InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double worldW, double worldH)
@@ -241,7 +240,6 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 		if (plotNum != 0) return;
 	}*/
 
-
 	int caseClass = data.classNum[caseNum] - 1;
 
 	if (plotNum == 0 && caseClass == 0) {
@@ -269,7 +267,9 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 	else {
 		y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
 	}
-	
+
+
+
 	// debug
 	//glColor3ub(255, 0, 0);
 	//glBegin(GL_POINTS);
@@ -285,6 +285,61 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 	// TODO
 	// we need to get the next point in line for point(x1,y1)
 	int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
+
+	// asses overlap
+	std::vector<int>* overlapList = &overlapMap[x1][y1][caseClass];
+	if (std::find(overlapList->begin(), overlapList->end(), caseNum) == overlapList->end()) {
+		overlapList->push_back(caseNum);
+	}
+
+	float shiftAmount = 0;
+	float classShiftAmount = 0;
+	const float shiftConstant = 10;
+	const float classShift = 10;
+
+	std::map<int, std::vector<int>> caseClassMap = overlapMap[x1][y1];
+	if (isOverlapMitigationMode && caseClassMap.size() > 1 && point1BackgroundClass >= 0) {
+		std::vector<int> overlappingCases;
+		// count how many cases there are that are overlapping
+		int nonNegClassCount = 0;
+		int totalCases = 0;
+		for (int i = 0; i < data.classes.size(); i++) {
+			int classNum = data.classes[i];
+			if (classNum < 0) continue;
+			nonNegClassCount++;
+			if (caseClassMap.find(classNum) != caseClassMap.end()) {
+				for (int j = 0; j < caseClassMap[classNum].size(); j++) {
+					overlappingCases.push_back(caseClassMap[classNum][j]);
+					totalCases++;
+				}
+			}
+		}
+
+		// determine which index position the current case is
+		auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
+		int index = -1;
+		if (caseIndexIterator != overlappingCases.end()) {
+			index = caseIndexIterator - overlappingCases.begin();
+		}
+		if (index == -1) {
+			std::cout << "something is wrong";
+		}
+
+		// shuffle function
+		// x1' = x1 + (index / totalCases) * b
+		// y1' = y1 + (index / totalCases) * b
+		//find num of non-negative classes
+		if (totalCases != 0) {
+			shiftAmount = ((float)index / (float)totalCases) * shiftConstant;;
+		}
+		if (nonNegClassCount != 0) {
+			classShiftAmount = (float)caseClass / (float)nonNegClassCount;
+		}
+		x1 += shiftAmount + classShiftAmount;
+		y1 += shiftAmount;
+
+		std::cout << "debug";
+	}
 
 	if (plotNum == 0 && caseClass != 0 && point1BackgroundClass == 0) {
 		std::cout << "debug";
@@ -337,14 +392,11 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 	GLubyte classTransparency = data.classTransparencies[caseClass];
 	
 	if (point1BackgroundClass >= 0 && point1BackgroundClass != caseClass) {
-		if (data.misclassifiedCases.find(caseNum) == data.misclassifiedCases.end()) {
-			if (data.classMisclassifiedCaseCount.find(caseClass) != data.classMisclassifiedCaseCount.end()) {
-				data.classMisclassifiedCaseCount[caseClass]++;
-			}
-			else {
-				data.classMisclassifiedCaseCount[caseClass] = 1;
-			}
-			data.misclassifiedCases.insert(caseNum);
+		// if we're in here, this is a misclassification
+		std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass];
+		if (std::find(misclassifiedClassList->begin(), misclassifiedClassList->end(), caseNum) == misclassifiedClassList->end()) {
+			misclassifiedClassList->push_back(caseNum);
+			data.classMisclassifiedCaseCount[caseClass]++;
 		}
 
 		// determine if we should be highlighting misclassified points
@@ -357,6 +409,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 			glPointSize(4.0);
 		}
 	}
+
 	
     // draw regular point
     // draw point one
@@ -468,6 +521,50 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum) {
 	// set line color
 	glColor4ub(128, 128, 128, classTransparency);
 	int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
+
+	overlapList = &overlapMap[x2][y2][caseClass];
+	if (isOverlapMitigationMode && caseClassMap.size() > 1 && point2BackgroundClass >= 0) {
+		std::vector<int> overlappingCases;
+		// count how many cases there are that are overlapping
+		int nonNegClassCount = 0;
+		int totalCases = 0;
+		for (int i = 0; i < data.classes.size(); i++) {
+			int classNum = data.classes[i];
+			if (classNum < 0) continue;
+			nonNegClassCount++;
+			if (caseClassMap.find(classNum) != caseClassMap.end()) {
+				for (int j = 0; j < caseClassMap[classNum].size(); j++) {
+					overlappingCases.push_back(caseClassMap[classNum][j]);
+					totalCases++;
+				}
+			}
+		}
+
+		// determine which index position the current case is
+		auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
+		int index = -1;
+		if (caseIndexIterator != overlappingCases.end()) {
+			index = caseIndexIterator - overlappingCases.begin();
+		}
+		if (index == -1) {
+			std::cout << "something is wrong";
+		}
+
+		// shuffle function
+		// x1' = x1 + (index / totalCases) * b
+		// y1' = y1 + (index / totalCases) * b
+		//find num of non-negative classes
+		if (totalCases != 0) {
+			shiftAmount = ((float)index / (float)totalCases) * shiftConstant;;
+		}
+		if (nonNegClassCount != 0) {
+			classShiftAmount = (float)caseClass / (float)nonNegClassCount;
+		}
+		x2 += shiftAmount + classShiftAmount;
+		y2 += shiftAmount;
+
+		std::cout << "debug";
+	}
 
 	if (isRectangleMode) {
 		for (int i = 0; i < rectX1List.size(); i++) {

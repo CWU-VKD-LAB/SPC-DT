@@ -5,35 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/AdjustedID3.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/NoAdjustments.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/NoAdjustmentsID3.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_parser.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_parser_C45.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_parser_ID3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_tanagra_out_C45.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/breast.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/breast.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/breast.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/Capture.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/SplitData/breast.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/SplitData/breast.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/SplitData/breast.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/SplitData/breast_split.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ParserGenerator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ParserGenerator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WineData.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WineData.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/WineData.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wine_C45_tanagra_out.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/breastParser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wineParser.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,9 +37,9 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/irisParser.txt" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/venv/Lib/site-packages/tana2tree/tree.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/irisParser.txt" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -83,7 +58,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/ResourcesForPaper/SplitData" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../../../../../websites" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -402,6 +377,7 @@
       <workItem from="1647273706236" duration="776000" />
       <workItem from="1647274513806" duration="6362000" />
       <workItem from="1647311502647" duration="227000" />
+      <workItem from="1649272924789" duration="9000" />
     </task>
     <servers />
   </component>
@@ -418,6 +394,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -442,12 +419,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>820</line>
+          <line>817</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>898</line>
+          <line>895</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
@@ -460,16 +437,16 @@
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Ionosphere.coverage" NAME="tanagra_to_parser Ionosphere Coverage Results" MODIFIED="1646937591846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Test_C45.coverage" NAME="tanagra_to_parser BreastCancer Test C45 Coverage Results" MODIFIED="1647277677768" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Test_ID3.coverage" NAME="tanagra_to_parser BreastCancer Test ID3 Coverage Results" MODIFIED="1647277857214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Train_C45.coverage" NAME="tanagra_to_parser BreastCancer Train C45 Coverage Results" MODIFIED="1647276994297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Iris.coverage" NAME="tanagra_to_parser Iris Coverage Results" MODIFIED="1646930830662" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer.coverage" NAME="tanagra_to_parser BreastCancer Coverage Results" MODIFIED="1646932226281" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Train_C45.coverage" NAME="tanagra_to_parser BreastCancer Train C45 Coverage Results" MODIFIED="1647276994297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Test_ID3.coverage" NAME="tanagra_to_parser BreastCancer Test ID3 Coverage Results" MODIFIED="1647277857214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Wine.coverage" NAME="tanagra_to_parser Wine Coverage Results" MODIFIED="1647288899098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Test_C45.coverage" NAME="tanagra_to_parser BreastCancer Test C45 Coverage Results" MODIFIED="1647277677768" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$NormalizeDatasetBeforeGeneratingTree.coverage" NAME="NormalizeDatasetBeforeGeneratingTree Coverage Results" MODIFIED="1646171314055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_WBCD.coverage" NAME="tanagra_to_parser WDBC Coverage Results" MODIFIED="1646548502762" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1646339692678" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Train.coverage" NAME="tanagra_to_parser BreastCancer Train Coverage Results" MODIFIED="1647276875862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Ionosphere.coverage" NAME="tanagra_to_parser Ionosphere Coverage Results" MODIFIED="1646937591846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser.coverage" NAME="tanagra_to_parser Coverage Results" MODIFIED="1646339692678" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Wine.coverage" NAME="tanagra_to_parser Wine Coverage Results" MODIFIED="1647288899098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -206,6 +206,11 @@ namespace OpenGLForm
 			graph4.isColorTerminationMode = state;
 		}
 
+		// Set overlap mitigation mode
+		void setOverlapMitigationMode(bool state) {
+			graph4.isOverlapMitigationMode = state;
+		}
+
 		// Set draw rectangle state
 		void setDrawingRectangleState(bool state) {
 			graph4.isRectangleMode = state;
@@ -245,6 +250,14 @@ namespace OpenGLForm
 		std::vector<std::vector<float>> computeClassAccuracies() {
 			graph4.data.computeClassAccuracies();
 			return graph4.data.getClassAccuracies();
+		}
+
+		std::vector<std::vector<int>> computeConfusionMatrix() {
+			return graph4.data.computeConfusionMatrix();
+		}
+
+		std::map<int, float> computeAccuracy() {
+			return graph4.data.computeAccuracy();
 		}
 
 		/* RENDERING FOR DIFFERENT GRAPHS *//////////////////////////////////////////////////////////////////////////////////////

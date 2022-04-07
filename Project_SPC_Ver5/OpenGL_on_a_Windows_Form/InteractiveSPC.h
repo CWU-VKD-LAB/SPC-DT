@@ -19,6 +19,7 @@ public:
 	float backgroundTransparency = 100; // Default value
 	float backgroundClassColorCoefficient = 1.0; // Default value
 	std::vector<int> plotDrawOrder;
+	std::map<float, std::map<float, std::map<int, std::vector<int>>>> overlapMap;
 
 	InteractiveSPC() {};
 
@@ -62,6 +63,9 @@ public:
 	/// *** USED FOR DETERMINING LINE TERMINATION MODE
 	bool isLineTerminationMode = false; // TODO: DEBUG TRUE. in the end it will be set to false and controlled by a button
 	bool isColorTerminationMode = false;
+
+	/// *** USED FOR OVERLAP MITIGATION MODE
+	bool isOverlapMitigationMode = false;
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
