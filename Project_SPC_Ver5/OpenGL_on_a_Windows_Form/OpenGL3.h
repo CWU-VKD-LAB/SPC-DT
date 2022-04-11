@@ -211,6 +211,10 @@ namespace OpenGLForm
 			graph4.isOverlapMitigationMode = state;
 		}
 
+		void setOverlapMitigationModeAll(bool state) {
+			graph4.isOverlapMitigationModeAll = state;
+		}
+
 		// Set draw rectangle state
 		void setDrawingRectangleState(bool state) {
 			graph4.isRectangleMode = state;
@@ -220,6 +224,10 @@ namespace OpenGLForm
 				graph4.rectY1List.clear();
 				graph4.rectY2List.clear();
 			}
+		}
+
+		void setBackgroundDensityColoringMode(bool state) {
+			graph4.isBackgroundDensityColoringMode = state;
 		}
 
 		void drawRectanglesOnGray() {
@@ -729,6 +737,7 @@ namespace OpenGLForm
 				else if (graphType == 4) { // C-SPC
 					// DRAGGING
 					if (graph4.dragging) {
+						graph4.overlapMap.clear();
 						graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
 						/*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
 						graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
@@ -766,6 +775,7 @@ namespace OpenGLForm
 				}
 				//check if the mouse click was on a graph and detect whcih 
 				if (graph4.dragging) {
+					graph4.overlapMap.clear();
 					graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
 					graph4.dragging = false;
 					graph4.plotNumClicked = -1;

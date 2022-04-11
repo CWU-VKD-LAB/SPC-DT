@@ -790,7 +790,25 @@ def generateParser(input_file, output_file, minMap, maxMap, classList):
     # node[0].r_branch = addNode
     # end debug
     # tree.print_tree()
+    # TODO: Why is tree.parse() not getting all nodes?
+        # TODO: Figured it out!! Separate attributes CANNOT begin with the same two letters
     node_list = tree.traverse()
+    tree.print_tree()
+
+    # debug for breast training
+    # node = tree.get_node("uc")
+    # new0 = t2t.t.Tree_Node(node[0].attr, ">=", "uc_1", "<", 4.5)
+    # new1 = t2t.t.Tree_Node(new0.attr, "<", "bn_1", "<", 3.5)
+    # new0.l_branch = new1
+    # new2 = t2t.t.Tree_Node(node[0].attr, ">=", "cl_2", "<", 6.5)
+    # new0.r_branch = new2
+    # new3 = t2t.t.Tree_Node(new1.attr, "<", "no_2", "<", 2.5)
+    # new1.l_branch = new3
+    # new4 = t2t.t.Tree_Node(new1.attr, ">=", "")
+
+
+
+
 
     # TODO: Determine number of classes
     for node in node_list:

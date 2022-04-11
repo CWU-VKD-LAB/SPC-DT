@@ -45,9 +45,9 @@ public:
 	}
 
 	int getSpanAtDepth(int depth) {
-        if (depth == 0) {
-            return 1;
-        }
+		if (depth == 0) {
+			return 1;
+		}
 
 		if (depth > subtreeDepth) {
 			return 0;
@@ -58,17 +58,17 @@ public:
 
 	std::vector<Node*> getAllNodesAtDepth(int depth) {
 		std::vector<Node*> nodes;
-        if (depth == 0) {
-            nodes.push_back(this);
-            return nodes;
-        }
-        
+		if (depth == 0) {
+			nodes.push_back(this);
+			return nodes;
+		}
+
 		if (depth > subtreeDepth) {
 			return nodes;
 		}
 
 		findAllNodesAtTargetDepth(nodes, depth);
-        
+
 		return nodes;
 	}
 
@@ -104,7 +104,7 @@ private:
 		int spanAtDepth = 0;
 		for (int i = 0; i < destinationList.size(); i++) {
 			spanAtDepth += destinationList[i]->getSpanAtDepth(targetDepth - 1);
-			
+
 		}
 
 		return spanAtDepth;
@@ -223,6 +223,11 @@ public:
 	std::vector<int> classes;
 	bool isDatasetClassesZeroIndexed = false;
 	int minClassNum = 0;
+    std::map<int, std::vector<int>> plotNumToTotalCases;
+    std::map<int, std::vector<int>> plotNumToMisclassifiedCases;
+    std::map<int, std::map<int, std::set<int>>> plotNumZoneTotalCases;
+    std::map<int, std::map<int, std::set<int>>> plotNumZoneTotalMisclassifiedCases;
+    int maxCasesPerPlotZone = 0;
 
 	void computeClassAccuracies() {
 		if (casesPerClass.size() == 0) {
@@ -245,12 +250,16 @@ public:
 		// Compute accuracy
 		std::map<int, float> accuracyMap;
 		std::vector<float> accuraciesByClass;
+		int totalCases = 0;
+		int totalMisclassifiedCases = 0;
 		for (int i = 0; i < classes.size(); i++) {
 			int currentClass = classes[i];
 			if (currentClass < 0) continue;
 			float acc = ((float)casesPerClass[currentClass] - (float)classMisclassifiedCaseCount[currentClass]) / (float)casesPerClass[currentClass];
 			accuraciesByClass.push_back(acc);
 			accuracyMap[currentClass] = acc;
+			totalCases += casesPerClass[currentClass];
+			totalMisclassifiedCases += classMisclassifiedCaseCount[currentClass];
 		}
 
 		float sum = 0.0f;
@@ -258,12 +267,13 @@ public:
 			sum += accuraciesByClass[i];
 		}
 
-		float averageAccuracy = 0;
-		if (accuraciesByClass.size() != 0) {
-			averageAccuracy = sum / (float)accuraciesByClass.size();
-		}
 
-		accuracyMap[-1] = averageAccuracy;
+		// TODO: REPLACE WITH TOTAL AVERAGE, WEIGHTED PRECISION
+		// total accuracy
+		int casesCorrectlyClassified = totalCases - totalMisclassifiedCases;
+		float totalAccuracy = (float)casesCorrectlyClassified / (float)totalCases;
+
+		accuracyMap[-1] = totalAccuracy;
 		return accuracyMap;
 	}
 
@@ -898,9 +908,6 @@ public:
 	}
 };
 
-
-
-
 class parseData // copy class before changing
 {
 public:
@@ -917,4 +924,3 @@ public:
 		//bool parserFileOpen = false;
 	};
 };
-

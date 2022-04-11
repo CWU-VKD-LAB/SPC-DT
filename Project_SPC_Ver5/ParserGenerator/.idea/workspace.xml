@@ -5,10 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_parser_ID3_updated.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_tanagra_out_ID3_updated.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/NoAdjustmentID3.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_parser_C45.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_parser_ID3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_tanagra_out_C45.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_tanagra_out_ID3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/breast.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/breast.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +47,6 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/venv/Lib/site-packages/tana2tree/tree.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/tanagra_to_parser.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/irisParser.txt" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -73,7 +82,7 @@
       <recent name="C:\Users\alexw\OneDrive - Central Washington University\CS DEGREE\Research Assistant\Git Repos\cs556_project\Project_SPC_Ver5\ParserGenerator" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tanagra_to_parser Iris">
+  <component name="RunManager" selected="Python.tanagra_to_parser BreastCancer Train ID3 Updated">
     <configuration name="NormalizeDatasetBeforeGeneratingTree" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="ParserGenerator" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,6 +164,28 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
       <option name="PARAMETERS" value="./ResourcesForPaper/BreastData/TrainingData/breast_train_tanagra_out_C45.txt ./ResourcesForPaper/BreastData/TrainingData/breast_train_parser_C45.txt breast.xlsx" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tanagra_to_parser BreastCancer Train ID3 Updated" type="PythonConfigurationType" factoryName="Python">
+      <module name="ParserGenerator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tanagra_to_parser.py" />
+      <option name="PARAMETERS" value="./ResourcesForPaper/BreastData/TrainingData/breast_train_tanagra_out_Id3_updated.txt ./ResourcesForPaper/BreastData/TrainingData/breast_train_parser_ID3_updated.txt breast.xlsx" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -319,6 +350,7 @@
     <list>
       <item itemvalue="Python.tanagra_to_parser BreastCancer" />
       <item itemvalue="Python.tanagra_to_parser BreastCancer Train ID3" />
+      <item itemvalue="Python.tanagra_to_parser BreastCancer Train ID3 Updated" />
       <item itemvalue="Python.tanagra_to_parser BreastCancer Train C45" />
       <item itemvalue="Python.tanagra_to_parser BreastCancer Test ID3" />
       <item itemvalue="Python.tanagra_to_parser BreastCancer Test C45" />
@@ -378,6 +410,8 @@
       <workItem from="1647274513806" duration="6362000" />
       <workItem from="1647311502647" duration="227000" />
       <workItem from="1649272924789" duration="9000" />
+      <workItem from="1649344512775" duration="4063000" />
+      <workItem from="1649354068038" duration="594000" />
     </task>
     <servers />
   </component>
@@ -407,32 +441,12 @@
           <line>242</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>718</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>723</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>817</line>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tanagra_to_parser.py</url>
-          <line>895</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="classes" />
-        <watch expression="maxMap['mean texture']" />
+        <watch expression="tree.root.r_branch" />
       </configuration>
     </watches-manager>
   </component>
@@ -441,6 +455,7 @@
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Test_ID3.coverage" NAME="tanagra_to_parser BreastCancer Test ID3 Coverage Results" MODIFIED="1647277857214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Train_C45.coverage" NAME="tanagra_to_parser BreastCancer Train C45 Coverage Results" MODIFIED="1647276994297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_Iris.coverage" NAME="tanagra_to_parser Iris Coverage Results" MODIFIED="1646930830662" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer_Train_ID3_Updated.coverage" NAME="tanagra_to_parser BreastCancer Train ID3 Updated Coverage Results" MODIFIED="1649348116211" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_BreastCancer.coverage" NAME="tanagra_to_parser BreastCancer Coverage Results" MODIFIED="1646932226281" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$NormalizeDatasetBeforeGeneratingTree.coverage" NAME="NormalizeDatasetBeforeGeneratingTree Coverage Results" MODIFIED="1646171314055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ParserGenerator$tanagra_to_parser_WBCD.coverage" NAME="tanagra_to_parser WDBC Coverage Results" MODIFIED="1646548502762" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

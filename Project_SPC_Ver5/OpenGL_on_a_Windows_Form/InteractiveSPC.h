@@ -43,6 +43,7 @@ public:
 	// *** USED FOR DRAWING LINE COLORS
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum);
+	int findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum);
 	int findPlotNumOfPoint(GLfloat px, GLfloat py);
 	bool shouldPointTerminate(GLfloat px, GLfloat py);
 
@@ -56,6 +57,7 @@ public:
 	GLfloat rectX2;
 	GLfloat rectY2;
 	bool isRectangleMode = false;
+	bool isBackgroundDensityColoringMode = false;
 	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);
 	bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	bool* getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2);
@@ -66,6 +68,7 @@ public:
 
 	/// *** USED FOR OVERLAP MITIGATION MODE
 	bool isOverlapMitigationMode = false;
+	bool isOverlapMitigationModeAll = false;
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;

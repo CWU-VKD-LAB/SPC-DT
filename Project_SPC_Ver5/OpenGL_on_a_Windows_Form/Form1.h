@@ -198,6 +198,9 @@ private: System::Windows::Forms::CheckBox^ lineColorCheckbox;
 private: System::Windows::Forms::Button^ button9;
 private: System::Windows::Forms::Button^ showClassAccuraciesButton;
 private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
+private: System::Windows::Forms::CheckBox^ backgroundDensityColorCheckbox;
+private: System::Windows::Forms::CheckBox^ mitigateAllOverlap;
+
 
 
 
@@ -282,6 +285,8 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->backgroundDensityColorCheckbox = (gcnew System::Windows::Forms::CheckBox());
+			this->mitigateOverlapCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->lineColorCheckbox = (gcnew System::Windows::Forms::CheckBox());
 			this->pointColorMode = (gcnew System::Windows::Forms::CheckBox());
 			this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
@@ -296,7 +301,7 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
 			this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
 			this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-			this->mitigateOverlapCheckbox = (gcnew System::Windows::Forms::CheckBox());
+			this->mitigateAllOverlap = (gcnew System::Windows::Forms::CheckBox());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->groupBox1->SuspendLayout();
@@ -361,7 +366,7 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
 			this->showClassAccuraciesButton->Size = System::Drawing::Size(173, 34);
 			this->showClassAccuraciesButton->TabIndex = 35;
-			this->showClassAccuraciesButton->Text = L"Show Class Accuracies";
+			this->showClassAccuraciesButton->Text = L"Confusion Matrix";
 			this->showClassAccuraciesButton->UseVisualStyleBackColor = true;
 			this->showClassAccuraciesButton->Click += gcnew System::EventHandler(this, &Form1::showClassAccuraciesButton_Click);
 			// 
@@ -526,9 +531,9 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			// button5
 			// 
 			this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-			this->button5->Location = System::Drawing::Point(9, 682);
+			this->button5->Location = System::Drawing::Point(9, 705);
 			this->button5->Name = L"button5";
-			this->button5->Size = System::Drawing::Size(191, 52);
+			this->button5->Size = System::Drawing::Size(191, 29);
 			this->button5->TabIndex = 10;
 			this->button5->Text = L"Show/Hide Lines";
 			this->button5->UseVisualStyleBackColor = true;
@@ -619,7 +624,7 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			// 
 			this->colorButton->Location = System::Drawing::Point(4, 49);
 			this->colorButton->Name = L"colorButton";
-			this->colorButton->Size = System::Drawing::Size(192, 45);
+			this->colorButton->Size = System::Drawing::Size(192, 31);
 			this->colorButton->TabIndex = 0;
 			this->colorButton->Text = L"Select Color";
 			this->colorButton->UseVisualStyleBackColor = true;
@@ -634,14 +639,14 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			this->tableLayoutPanel1->Controls->Add(this->label1, 0, 0);
 			this->tableLayoutPanel1->Controls->Add(this->colorButton, 0, 2);
 			this->tableLayoutPanel1->Controls->Add(this->comboBox1, 0, 1);
-			this->tableLayoutPanel1->Location = System::Drawing::Point(6, 572);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(9, 613);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 4;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(200, 104);
+			this->tableLayoutPanel1->Size = System::Drawing::Size(200, 86);
 			this->tableLayoutPanel1->TabIndex = 9;
 			this->tableLayoutPanel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::tableLayoutPanel1_Paint);
 			// 
@@ -679,6 +684,8 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			// panel2
 			// 
 			this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+			this->panel2->Controls->Add(this->mitigateAllOverlap);
+			this->panel2->Controls->Add(this->backgroundDensityColorCheckbox);
 			this->panel2->Controls->Add(this->mitigateOverlapCheckbox);
 			this->panel2->Controls->Add(this->lineColorCheckbox);
 			this->panel2->Controls->Add(this->pointColorMode);
@@ -695,6 +702,28 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(209, 748);
 			this->panel2->TabIndex = 13;
+			// 
+			// backgroundDensityColorCheckbox
+			// 
+			this->backgroundDensityColorCheckbox->AutoSize = true;
+			this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(3, 432);
+			this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
+			this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(163, 17);
+			this->backgroundDensityColorCheckbox->TabIndex = 22;
+			this->backgroundDensityColorCheckbox->Text = L"Background Density Coloring";
+			this->backgroundDensityColorCheckbox->UseVisualStyleBackColor = true;
+			this->backgroundDensityColorCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::backgroundDensityColorCheckbox_CheckedChanged);
+			// 
+			// mitigateOverlapCheckbox
+			// 
+			this->mitigateOverlapCheckbox->AutoSize = true;
+			this->mitigateOverlapCheckbox->Location = System::Drawing::Point(3, 388);
+			this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
+			this->mitigateOverlapCheckbox->Size = System::Drawing::Size(171, 17);
+			this->mitigateOverlapCheckbox->TabIndex = 21;
+			this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap (Misclassified)";
+			this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
+			this->mitigateOverlapCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::mitigateOverlapCheckbox_CheckedChanged);
 			// 
 			// lineColorCheckbox
 			// 
@@ -744,7 +773,7 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			// 
 			this->groupBox4->Controls->Add(this->backgroundColorLightnessSlider);
 			this->groupBox4->Controls->Add(this->backgroundLightness);
-			this->groupBox4->Location = System::Drawing::Point(9, 486);
+			this->groupBox4->Location = System::Drawing::Point(9, 530);
 			this->groupBox4->Name = L"groupBox4";
 			this->groupBox4->Size = System::Drawing::Size(200, 84);
 			this->groupBox4->TabIndex = 16;
@@ -777,7 +806,7 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			// 
 			this->groupBox3->Controls->Add(this->backgroundTransparencySlider);
 			this->groupBox3->Controls->Add(this->backgroundTransparencyLabel);
-			this->groupBox3->Location = System::Drawing::Point(6, 411);
+			this->groupBox3->Location = System::Drawing::Point(6, 455);
 			this->groupBox3->Name = L"groupBox3";
 			this->groupBox3->Size = System::Drawing::Size(200, 74);
 			this->groupBox3->TabIndex = 15;
@@ -853,16 +882,16 @@ private: System::Windows::Forms::CheckBox^ mitigateOverlapCheckbox;
 			this->transparencyLabel->TabIndex = 11;
 			this->transparencyLabel->Text = L"Class Transparency";
 			// 
-			// mitigateOverlapCheckbox
+			// mitigateAllOverlap
 			// 
-			this->mitigateOverlapCheckbox->AutoSize = true;
-			this->mitigateOverlapCheckbox->Location = System::Drawing::Point(3, 388);
-			this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
-			this->mitigateOverlapCheckbox->Size = System::Drawing::Size(103, 17);
-			this->mitigateOverlapCheckbox->TabIndex = 21;
-			this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap";
-			this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
-			this->mitigateOverlapCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::mitigateOverlapCheckbox_CheckedChanged);
+			this->mitigateAllOverlap->AutoSize = true;
+			this->mitigateAllOverlap->Location = System::Drawing::Point(3, 409);
+			this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
+			this->mitigateAllOverlap->Size = System::Drawing::Size(123, 17);
+			this->mitigateAllOverlap->TabIndex = 23;
+			this->mitigateAllOverlap->Text = L"Mitigate Overlap (All)";
+			this->mitigateAllOverlap->UseVisualStyleBackColor = true;
+			this->mitigateAllOverlap->CheckedChanged += gcnew System::EventHandler(this, &Form1::mitigateAllOverlap_CheckedChanged);
 			// 
 			// Form1
 			// 
@@ -1626,23 +1655,15 @@ private: System::Void showClassAccuraciesButton_Click(System::Object^ sender, Sy
 	displayString += "Average Accuracy:\t" + accuracies[-1];
 
 	MessageBox::Show(displayString);
-
-	//std::vector<std::vector<float>> accuracies = OpenGL3->computeClassAccuracies();
-	//String^ displayStr = "";
-	//for (int i = 0; i < accuracies.size(); i++) {
-	//	std::vector<float> currentAccuracy = accuracies[i];
-	//	int curClass = (int)currentAccuracy[0];
-	//	float curAcc = currentAccuracy[1];
-	//	displayStr += curClass;
-	//	displayStr += ": ";
-	//	displayStr += curAcc;
-	//	displayStr += "\n";
-	//}
-
-	//MessageBox::Show(displayStr);
 }
 private: System::Void mitigateOverlapCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	OpenGL3->setOverlapMitigationMode(mitigateOverlapCheckbox->Checked);
+}
+private: System::Void backgroundDensityColorCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setBackgroundDensityColoringMode(backgroundDensityColorCheckbox->Checked);
+}
+private: System::Void mitigateAllOverlap_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	OpenGL3->setOverlapMitigationModeAll(mitigateAllOverlap->Checked);
 }
 };
 }
