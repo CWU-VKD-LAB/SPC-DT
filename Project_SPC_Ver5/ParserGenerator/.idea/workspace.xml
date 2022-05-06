@@ -5,20 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3190eee9-9132-499a-94df-60917fcce82e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_parser_ID3_updated.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/breast_train_tanagra_out_ID3_updated.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/ClassData.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/Form1.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/InteractiveSPC.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenGL_on_a_Windows_Form/OpenGL3.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/NoAdjustmentID3.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_parser_C45.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_parser_ID3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_tanagra_out_C45.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TestData/breast_test_tanagra_out_ID3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/breast.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/breast.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tanagra_to_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tanagra_to_parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/BreastData/TrainingData/Thumbs.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ResourcesForPaper/Thumbs.db" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +58,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../../../../../websites" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/TestResnet" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -412,6 +403,7 @@
       <workItem from="1649272924789" duration="9000" />
       <workItem from="1649344512775" duration="4063000" />
       <workItem from="1649354068038" duration="594000" />
+      <workItem from="1649981476501" duration="42000" />
     </task>
     <servers />
   </component>

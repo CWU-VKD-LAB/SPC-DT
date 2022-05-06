@@ -70,6 +70,15 @@ public:
 	bool isOverlapMitigationMode = false;
 	bool isOverlapMitigationModeAll = false;
 
+    /// *** USED FOR ADJUSTING DECISION ZONE THRESHOLDS
+    bool isAdjustThresholdsMode = false;
+    void adjustThresholds(int plotId, int zoneId, bool isXAXis, float amount);
+    std::vector<std::vector<std::vector<float>>> thresholdEdgeSelectionZones;
+    std::map<std::vector<float>, int> edgeToParserElementIndex; // map: collection of edge points -> list [ zoneId, index for (x1, y1, x2, y2) ]
+    std::set<int> zoneIdThresholdEdgesRecorded;
+    std::vector<int> findClickedEdge(GLfloat px, GLfloat py);
+	std::vector<int> clickedEdge;
+
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
 	std::set<int> swappedPlots;
@@ -93,11 +102,18 @@ public:
 	/* DRAGGING GRAPH STUFF */
 	/// <summary>	If the mouse is clicked, held and dragging. </summary>
 	bool dragging = false;
+
+	/// <summary>	If the mouse is clicked and held on an edge, we are adjusting it
+	bool thresholdBeingAdjusted = false;
+
 	/// <summary>	Holds what graphs being clicked. </summary>
 	int plotNumClicked = -1;
+	int zoneIdClicked = -1;
 	int coordinatesClicked = -1; //Wagle
 
 	void updatePlotLocation(double mouseX, double mouseY, int plotNum);
+
+
 
 	/* This method takes the passed mouse click coordinates and finds the graph clicked on. */
 	float findClickedGraph(double x, double y);

@@ -1057,14 +1057,14 @@ if __name__ == '__main__':
             sys.argv[1] = file
             if len(sys.argv) < 3:
                 print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
-                      "<output_file>")
+                      "<output_file> <dataset>")
             else:
                 output = generateParser(sys.argv[1], sys.argv[2])
                 tests(file, output)
     else:
         if len(sys.argv) < 4:
             print("Please call this script with the following syntax: python tanagra_to_parser.py <input_file> "
-                  "<output_file>")
+                  "<output_file> <dataset>")
         else:
             data = pd.read_excel(sys.argv[3])
             className = data.columns[len(data.columns) - 1]

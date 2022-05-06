@@ -5,7 +5,7 @@
 ///-------------------------------------------------------------------------------------------------
 
 #include "stdafx.h"
- #include <Windows.h>
+#include <Windows.h>
 #include <GL/glu.h>
 #include "glut.h"
 #include <locale>         // std::locale, std::isalpha
@@ -17,7 +17,10 @@
 
 //currently setup for EACH INDIVIDUAL CLASS
 
-
+/**
+ * @brief Object to represent the node in the decision tree
+ * 
+ */
 struct Node {
 public:
 	std::vector<Node*> destinationList;
@@ -151,6 +154,10 @@ private:
 	}
 };
 
+/**
+ * @brief Object to represent the decision tree itself
+ * 
+ */
 struct Tree {
 	Tree(Node* root) {
 		this->root = root;
@@ -228,6 +235,7 @@ public:
     std::map<int, std::map<int, std::set<int>>> plotNumZoneTotalCases;
     std::map<int, std::map<int, std::set<int>>> plotNumZoneTotalMisclassifiedCases;
     int maxCasesPerPlotZone = 0;
+    std::set<int> zonesWithDarkBackgrounds;
 
 	void computeClassAccuracies() {
 		if (casesPerClass.size() == 0) {
@@ -462,9 +470,11 @@ public:
 	std::vector<double> nonOrthoX2;
 	std::vector<double> nonOrthoY2;
 
+    // parser data
 	std::vector<std::vector<float>> parsedData;
 	std::vector<std::vector<std::string>> strparsedData;
 	std::vector<std::vector<std::string>> parsedAttributePairs;
+
 	//std::vector<int> plotDestinationList;
 	std::map<int, std::map<int, int> > plotDestinationMap; // maps plotnum to a map of classnum -> destinationplot 
 	double temprx2;
@@ -473,6 +483,7 @@ public:
 	bool showHideLinesVar = true; 
 	bool drawAndRect = false;
 	bool drawOrRect = false;
+
 	std::string xlabels = "X-Axes: ";
 	std::string ylabels = "Y-Axes: ";
 
@@ -876,7 +887,7 @@ public:
 
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 		// TODO
-		int resultClass;
+		int resultClass = 0;
 		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which plot we are looking at?
 			int classNumber = parsedData[p][5];
 			int plot = parsedData[p][4];
@@ -906,6 +917,87 @@ public:
 		}
 		return result;
 	}
+
+	void adjustThresholds(float worldMouseX, float worldMouseY, int plotId, int zone, int edgeId, int direction) {
+		// catch errors
+		if (plotId < 0 || plotId > numPlots - 1) {
+			return;
+		}
+
+		// compute where mouse is in plot
+		float centerX = xPlotCoordinates[plotId];
+		float centerY = yPlotCoordinates[plotId];
+		float x1 = centerX - plotWidth[plotId] / 2;
+		float x2 = centerX + plotWidth[plotId] / 2;
+		float y1 = centerY - plotHeight[plotId] / 2;
+		float y2 = centerY + plotHeight[plotId] / 2;
+
+		// compute what percent of the plot the mouse is at
+		float mouseLocationOnPlotX;
+		float mouseLocationOnPlotY;
+		mouseLocationOnPlotX = (worldMouseX - x1) / (x2 - x1);
+		mouseLocationOnPlotY = (worldMouseY - y1) / (y2 - y1);
+
+		// adjust bounds (can't be more or less than (0.0, 1.0)
+		if (worldMouseX > max(x1, x2)) {
+			mouseLocationOnPlotX = 1;
+		}
+		else if (worldMouseX < min(x1, x2)) {
+			mouseLocationOnPlotX = 0;
+		}
+		if (worldMouseY > max(y1, y2)) {
+			mouseLocationOnPlotY = 1;
+		}
+		else if (worldMouseY < min(y1, y2)) {
+			mouseLocationOnPlotY = 0;
+		}
+
+		// compute shared edge(s)
+		// find all zones that are connected to this plot
+		std::vector<float>* selectedParserElement = &parsedData[zone];
+		std::vector<std::vector<float>*> plotIdParserElements;
+		for (int i = 0; i < parsedData.size(); i++) {
+			if (parsedData[i][4] == plotId && &parsedData[i] != selectedParserElement) {
+				plotIdParserElements.push_back(&parsedData[i]);
+			}
+		}
+
+		int indexToCheck = (direction + 2) % 4; // parser representation: x1, y1, x2, y2
+
+		// get all parser elements that share the selected edge
+		std::vector<std::vector<float>*> adjoiningEdges;
+		for (int i = 0; i < plotIdParserElements.size(); i++) {
+			float p1 = plotIdParserElements[i]->at(indexToCheck);
+			float p2 = selectedParserElement->at(direction);
+			if ( p1 == p2 ) {
+				adjoiningEdges.push_back(plotIdParserElements[i]);
+			}
+		}
+
+		if (direction % 2 == 1) {
+			parsedData[zone][direction] = mouseLocationOnPlotX;
+			for (int i = 0; i < adjoiningEdges.size(); i++) {
+				adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotX;
+			}
+		}
+		else {
+			parsedData[zone][direction] = mouseLocationOnPlotY;
+			for (int i = 0; i < adjoiningEdges.size(); i++) {
+				adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotY;
+			}
+		}
+		
+			
+		/*} else{
+			parsedData[zone][1] = mouseLocationOnPlotX;
+		}*/
+
+
+        std::cout << "debug";
+
+
+        // update the selected edge and their neighbors
+    }
 };
 
 class parseData // copy class before changing
