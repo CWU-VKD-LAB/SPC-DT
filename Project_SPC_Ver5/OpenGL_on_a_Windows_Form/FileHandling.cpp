@@ -58,19 +58,18 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 
 	myParserFile.open(dataParsed.parserFileName);											// Open the file
 
-	if (myParserFile.is_open()) {												/* Valid File: Begin reading data form the file */
-		vector<std::string> columns;
-
+	if (myParserFile.is_open()) {	
+		/* Valid File: Begin reading data form the file */
 		while (getline(myParserFile, line)) {									/* While the file has more data */
 			istringstream cell(line);
 			string distance;
+			vector<std::string> columns;
 			while (getline(cell, distance, ' ')) {
 				columns.push_back(distance);
 			}
 			data.strparsedData.push_back(columns);
-			dataParsed.strparsedData.push_back(columns);
+			//dataParsed.strparsedData.push_back(columns);
 			// Store data
-			columns.clear();
 		}
 
 	}

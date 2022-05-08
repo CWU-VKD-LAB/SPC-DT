@@ -262,6 +262,9 @@ public
 
     private:
         System::Windows::Forms::Button ^ adjustThresholdsButton;
+private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
+
+
 
     private:
         /// <summary>	Required designer variable. </summary>
@@ -284,6 +287,8 @@ public
             this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
             this->graph4 = (gcnew System::Windows::Forms::Button());
             this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->confusionMatrixTextBox = (gcnew System::Windows::Forms::TextBox());
+            this->adjustThresholdsButton = (gcnew System::Windows::Forms::Button());
             this->showClassAccuraciesButton = (gcnew System::Windows::Forms::Button());
             this->button9 = (gcnew System::Windows::Forms::Button());
             this->SwapAttributesButton = (gcnew System::Windows::Forms::Button());
@@ -332,30 +337,29 @@ public
             this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
             this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
             this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-            this->adjustThresholdsButton = (gcnew System::Windows::Forms::Button());
             this->panel1->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->trackBar1))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             this->groupBox1->SuspendLayout();
             this->tableLayoutPanel1->SuspendLayout();
             this->panel2->SuspendLayout();
             this->groupBox4->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->backgroundColorLightnessSlider))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundColorLightnessSlider))->BeginInit();
             this->groupBox3->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->backgroundTransparencySlider))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundTransparencySlider))->BeginInit();
             this->groupBox2->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->transparencySlider))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->transparencySlider))->BeginInit();
             this->SuspendLayout();
-            //
+            // 
             // timer1
-            //
+            // 
             this->timer1->Enabled = true;
             this->timer1->Interval = 10;
             this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
-            //
+            // 
             // graph4
-            //
+            // 
             this->graph4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                                                              static_cast<System::Byte>(0)));
+                static_cast<System::Byte>(0)));
             this->graph4->Location = System::Drawing::Point(9, 9);
             this->graph4->Margin = System::Windows::Forms::Padding(6);
             this->graph4->Name = L"graph4";
@@ -364,10 +368,11 @@ public
             this->graph4->Text = L"Reset Data";
             this->graph4->UseVisualStyleBackColor = true;
             this->graph4->Click += gcnew System::EventHandler(this, &Form1::graph4_Click);
-            //
+            // 
             // panel1
-            //
+            // 
             this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+            this->panel1->Controls->Add(this->confusionMatrixTextBox);
             this->panel1->Controls->Add(this->adjustThresholdsButton);
             this->panel1->Controls->Add(this->showClassAccuraciesButton);
             this->panel1->Controls->Add(this->button9);
@@ -390,86 +395,110 @@ public
             this->panel1->Size = System::Drawing::Size(200, 775);
             this->panel1->TabIndex = 4;
             this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
-            //
+            // 
+            // confusionMatrixTextBox
+            // 
+            this->confusionMatrixTextBox->AcceptsReturn = true;
+            this->confusionMatrixTextBox->Location = System::Drawing::Point(16, 282);
+            this->confusionMatrixTextBox->Multiline = true;
+            this->confusionMatrixTextBox->Name = L"confusionMatrixTextBox";
+            this->confusionMatrixTextBox->ReadOnly = true;
+            this->confusionMatrixTextBox->Size = System::Drawing::Size(169, 189);
+            this->confusionMatrixTextBox->TabIndex = 39;
+            this->confusionMatrixTextBox->Text = L"Press \"Confusion Matrix\"\r\nto Compute Confusion Matrix";
+            this->confusionMatrixTextBox->WordWrap = false;
+            this->confusionMatrixTextBox->TextChanged += gcnew System::EventHandler(this, &Form1::confusionMatrixTextBox_TextChanged);
+            // 
+            // adjustThresholdsButton
+            // 
+            this->adjustThresholdsButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->adjustThresholdsButton->Location = System::Drawing::Point(12, 202);
+            this->adjustThresholdsButton->Name = L"adjustThresholdsButton";
+            this->adjustThresholdsButton->Size = System::Drawing::Size(173, 29);
+            this->adjustThresholdsButton->TabIndex = 36;
+            this->adjustThresholdsButton->Text = L"Adjust Thresholds";
+            this->adjustThresholdsButton->UseVisualStyleBackColor = true;
+            this->adjustThresholdsButton->Click += gcnew System::EventHandler(this, &Form1::adjustThresholdsButton_Click);
+            // 
             // showClassAccuraciesButton
-            //
+            // 
             this->showClassAccuraciesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 662);
+            this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 241);
             this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
             this->showClassAccuraciesButton->Size = System::Drawing::Size(173, 34);
             this->showClassAccuraciesButton->TabIndex = 35;
             this->showClassAccuraciesButton->Text = L"Confusion Matrix";
             this->showClassAccuraciesButton->UseVisualStyleBackColor = true;
             this->showClassAccuraciesButton->Click += gcnew System::EventHandler(this, &Form1::showClassAccuraciesButton_Click);
-            //
+            // 
             // button9
-            //
+            // 
             this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button9->Location = System::Drawing::Point(12, 515);
+            this->button9->Location = System::Drawing::Point(12, 554);
             this->button9->Name = L"button9";
             this->button9->Size = System::Drawing::Size(173, 41);
             this->button9->TabIndex = 34;
             this->button9->Text = L"Draw Rects On Gray";
             this->button9->UseVisualStyleBackColor = true;
             this->button9->Click += gcnew System::EventHandler(this, &Form1::button9_Click_1);
-            //
+            // 
             // SwapAttributesButton
-            //
+            // 
             this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->SwapAttributesButton->Location = System::Drawing::Point(12, 622);
+            this->SwapAttributesButton->Location = System::Drawing::Point(12, 661);
             this->SwapAttributesButton->Name = L"SwapAttributesButton";
             this->SwapAttributesButton->Size = System::Drawing::Size(173, 34);
             this->SwapAttributesButton->TabIndex = 33;
             this->SwapAttributesButton->Text = L"Swap X/Y";
             this->SwapAttributesButton->UseVisualStyleBackColor = true;
             this->SwapAttributesButton->Click += gcnew System::EventHandler(this, &Form1::SwapAttributesButton_Click);
-            //
+            // 
             // clearRectangleButton
-            //
+            // 
             this->clearRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->clearRectangleButton->Location = System::Drawing::Point(103, 438);
+            this->clearRectangleButton->Location = System::Drawing::Point(103, 477);
             this->clearRectangleButton->Name = L"clearRectangleButton";
             this->clearRectangleButton->Size = System::Drawing::Size(85, 61);
             this->clearRectangleButton->TabIndex = 32;
             this->clearRectangleButton->Text = L"Clear Rectangle";
             this->clearRectangleButton->UseVisualStyleBackColor = true;
             this->clearRectangleButton->Click += gcnew System::EventHandler(this, &Form1::clearRectangleButton_Click);
-            //
+            // 
             // drawRectangleButton
-            //
+            // 
             this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->drawRectangleButton->Location = System::Drawing::Point(12, 438);
+            this->drawRectangleButton->Location = System::Drawing::Point(12, 477);
             this->drawRectangleButton->Name = L"drawRectangleButton";
             this->drawRectangleButton->Size = System::Drawing::Size(85, 61);
             this->drawRectangleButton->TabIndex = 31;
             this->drawRectangleButton->Text = L"Draw Rectangle";
             this->drawRectangleButton->UseVisualStyleBackColor = true;
             this->drawRectangleButton->Click += gcnew System::EventHandler(this, &Form1::drawRectangleButton_Click);
-            //
+            // 
             // button7
-            //
+            // 
             this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button7->Location = System::Drawing::Point(99, 577);
+            this->button7->Location = System::Drawing::Point(99, 616);
             this->button7->Name = L"button7";
             this->button7->Size = System::Drawing::Size(80, 39);
             this->button7->TabIndex = 30;
             this->button7->Text = L"Invert Y";
             this->button7->UseVisualStyleBackColor = true;
             this->button7->Click += gcnew System::EventHandler(this, &Form1::button7_Click_1);
-            //
+            // 
             // button8
-            //
+            // 
             this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button8->Location = System::Drawing::Point(12, 577);
+            this->button8->Location = System::Drawing::Point(12, 616);
             this->button8->Name = L"button8";
             this->button8->Size = System::Drawing::Size(81, 39);
             this->button8->TabIndex = 29;
             this->button8->Text = L"Invert X";
             this->button8->UseVisualStyleBackColor = true;
             this->button8->Click += gcnew System::EventHandler(this, &Form1::button8_Click_1);
-            //
+            // 
             // checkedListBox4
-            //
+            // 
             this->checkedListBox4->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->checkedListBox4->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
             this->checkedListBox4->CheckOnClick = true;
@@ -481,20 +510,20 @@ public
             this->checkedListBox4->TabIndex = 28;
             this->checkedListBox4->ThreeDCheckBoxes = true;
             this->checkedListBox4->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::checkedListBox4_SelectedIndexChanged);
-            //
+            // 
             // label9
-            //
+            // 
             this->label9->AutoSize = true;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->label9->Location = System::Drawing::Point(12, 709);
             this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(89, 16);
+            this->label9->Size = System::Drawing::Size(88, 16);
             this->label9->TabIndex = 27;
             this->label9->Text = L"Hide Classes";
             this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
-            //
+            // 
             // checkBox1
-            //
+            // 
             this->checkBox1->CheckAlign = System::Drawing::ContentAlignment::TopLeft;
             this->checkBox1->Location = System::Drawing::Point(16, 732);
             this->checkBox1->Name = L"checkBox1";
@@ -504,64 +533,64 @@ public
             this->checkBox1->TextAlign = System::Drawing::ContentAlignment::TopLeft;
             this->checkBox1->UseVisualStyleBackColor = true;
             this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox1_CheckedChanged_1);
-            //
+            // 
             // button6
-            //
+            // 
             this->button6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button6->Location = System::Drawing::Point(12, 238);
+            this->button6->Location = System::Drawing::Point(12, 127);
             this->button6->Name = L"button6";
-            this->button6->Size = System::Drawing::Size(173, 40);
+            this->button6->Size = System::Drawing::Size(173, 32);
             this->button6->TabIndex = 26;
             this->button6->Text = L"Show Testing Data";
             this->button6->UseVisualStyleBackColor = true;
             this->button6->Click += gcnew System::EventHandler(this, &Form1::button6_Click_1);
-            //
+            // 
             // button2
-            //
+            // 
             this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button2->Location = System::Drawing::Point(12, 182);
+            this->button2->Location = System::Drawing::Point(12, 90);
             this->button2->Name = L"button2";
-            this->button2->Size = System::Drawing::Size(173, 44);
+            this->button2->Size = System::Drawing::Size(173, 31);
             this->button2->TabIndex = 25;
             this->button2->Text = L"Show Training Data";
             this->button2->UseVisualStyleBackColor = true;
             this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click_1);
-            //
+            // 
             // button1
-            //
+            // 
             this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button1->Location = System::Drawing::Point(12, 97);
+            this->button1->Location = System::Drawing::Point(12, 50);
             this->button1->Name = L"button1";
-            this->button1->Size = System::Drawing::Size(173, 64);
+            this->button1->Size = System::Drawing::Size(173, 32);
             this->button1->TabIndex = 24;
             this->button1->Text = L"Upload Parser";
             this->button1->UseVisualStyleBackColor = true;
             this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click_1);
-            //
+            // 
             // button4
-            //
+            // 
             this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button4->Location = System::Drawing::Point(12, 12);
             this->button4->Name = L"button4";
-            this->button4->Size = System::Drawing::Size(173, 63);
+            this->button4->Size = System::Drawing::Size(173, 32);
             this->button4->TabIndex = 9;
             this->button4->Text = L"Upload Data";
             this->button4->UseVisualStyleBackColor = true;
             this->button4->Click += gcnew System::EventHandler(this, &Form1::button4_Click);
-            //
+            // 
             // button3
-            //
+            // 
             this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button3->Location = System::Drawing::Point(12, 284);
+            this->button3->Location = System::Drawing::Point(12, 165);
             this->button3->Name = L"button3";
-            this->button3->Size = System::Drawing::Size(173, 39);
+            this->button3->Size = System::Drawing::Size(173, 31);
             this->button3->TabIndex = 8;
             this->button3->Text = L"Move Graph";
             this->button3->UseVisualStyleBackColor = true;
             this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
-            //
+            // 
             // button5
-            //
+            // 
             this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button5->Location = System::Drawing::Point(9, 705);
             this->button5->Name = L"button5";
@@ -570,9 +599,9 @@ public
             this->button5->Text = L"Show/Hide Lines";
             this->button5->UseVisualStyleBackColor = true;
             this->button5->Click += gcnew System::EventHandler(this, &Form1::button5_Click);
-            //
+            // 
             // trackBar1
-            //
+            // 
             this->trackBar1->BackColor = System::Drawing::SystemColors::Control;
             this->trackBar1->LargeChange = 1;
             this->trackBar1->Location = System::Drawing::Point(4, 71);
@@ -580,67 +609,67 @@ public
             this->trackBar1->Size = System::Drawing::Size(185, 45);
             this->trackBar1->TabIndex = 9;
             this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
-            //
+            // 
             // ZoomingLabel
-            //
+            // 
             this->ZoomingLabel->AutoSize = true;
             this->ZoomingLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                                                                    static_cast<System::Byte>(0)));
+                static_cast<System::Byte>(0)));
             this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
             this->ZoomingLabel->Name = L"ZoomingLabel";
-            this->ZoomingLabel->Size = System::Drawing::Size(43, 16);
+            this->ZoomingLabel->Size = System::Drawing::Size(42, 16);
             this->ZoomingLabel->TabIndex = 11;
             this->ZoomingLabel->Text = L"Zoom";
-            //
+            // 
             // vScrollBar1
-            //
+            // 
             this->vScrollBar1->Location = System::Drawing::Point(152, 18);
             this->vScrollBar1->Minimum = -100;
             this->vScrollBar1->Name = L"vScrollBar1";
             this->vScrollBar1->Size = System::Drawing::Size(42, 50);
             this->vScrollBar1->TabIndex = 7;
             this->vScrollBar1->Scroll += gcnew System::Windows::Forms::ScrollEventHandler(this, &Form1::vScrollBar1_Scroll);
-            //
+            // 
             // hScrollBar1
-            //
+            // 
             this->hScrollBar1->Location = System::Drawing::Point(102, 16);
             this->hScrollBar1->Minimum = -100;
             this->hScrollBar1->Name = L"hScrollBar1";
             this->hScrollBar1->Size = System::Drawing::Size(50, 40);
             this->hScrollBar1->TabIndex = 8;
             this->hScrollBar1->Scroll += gcnew System::Windows::Forms::ScrollEventHandler(this, &Form1::hScrollBar1_Scroll);
-            //
+            // 
             // PannningLabel
-            //
+            // 
             this->PannningLabel->AutoSize = true;
             this->PannningLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                                                                     static_cast<System::Byte>(0)));
+                static_cast<System::Byte>(0)));
             this->PannningLabel->Location = System::Drawing::Point(6, 16);
             this->PannningLabel->Name = L"PannningLabel";
-            this->PannningLabel->Size = System::Drawing::Size(57, 16);
+            this->PannningLabel->Size = System::Drawing::Size(56, 16);
             this->PannningLabel->TabIndex = 10;
             this->PannningLabel->Text = L"Panning";
-            //
+            // 
             // menuStrip1
-            //
+            // 
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
             this->menuStrip1->Size = System::Drawing::Size(1530, 24);
             this->menuStrip1->TabIndex = 5;
             this->menuStrip1->Text = L"menuStrip1";
-            //
+            // 
             // statusStrip1
-            //
+            // 
             this->statusStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->statusStrip1->Location = System::Drawing::Point(0, 763);
             this->statusStrip1->Name = L"statusStrip1";
             this->statusStrip1->Size = System::Drawing::Size(1530, 22);
             this->statusStrip1->TabIndex = 6;
             this->statusStrip1->Text = L"statusStrip1";
-            //
+            // 
             // groupBox1
-            //
+            // 
             this->groupBox1->Controls->Add(this->trackBar1);
             this->groupBox1->Controls->Add(this->PannningLabel);
             this->groupBox1->Controls->Add(this->ZoomingLabel);
@@ -651,9 +680,9 @@ public
             this->groupBox1->Size = System::Drawing::Size(200, 111);
             this->groupBox1->TabIndex = 7;
             this->groupBox1->TabStop = false;
-            //
+            // 
             // colorButton
-            //
+            // 
             this->colorButton->Location = System::Drawing::Point(4, 49);
             this->colorButton->Name = L"colorButton";
             this->colorButton->Size = System::Drawing::Size(192, 31);
@@ -661,13 +690,13 @@ public
             this->colorButton->Text = L"Select Color";
             this->colorButton->UseVisualStyleBackColor = true;
             this->colorButton->Click += gcnew System::EventHandler(this, &Form1::colorButton_Click);
-            //
+            // 
             // tableLayoutPanel1
-            //
+            // 
             this->tableLayoutPanel1->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
             this->tableLayoutPanel1->ColumnCount = 1;
             this->tableLayoutPanel1->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                                                                                                  50)));
+                50)));
             this->tableLayoutPanel1->Controls->Add(this->label1, 0, 0);
             this->tableLayoutPanel1->Controls->Add(this->colorButton, 0, 2);
             this->tableLayoutPanel1->Controls->Add(this->comboBox1, 0, 1);
@@ -681,20 +710,20 @@ public
             this->tableLayoutPanel1->Size = System::Drawing::Size(200, 86);
             this->tableLayoutPanel1->TabIndex = 9;
             this->tableLayoutPanel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::tableLayoutPanel1_Paint);
-            //
+            // 
             // label1
-            //
+            // 
             this->label1->AutoSize = true;
             this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                                                              static_cast<System::Byte>(0)));
+                static_cast<System::Byte>(0)));
             this->label1->Location = System::Drawing::Point(4, 1);
             this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(127, 16);
+            this->label1->Size = System::Drawing::Size(126, 16);
             this->label1->TabIndex = 12;
             this->label1->Text = L"Change Class Color";
-            //
+            // 
             // comboBox1
-            //
+            // 
             this->comboBox1->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->comboBox1->Cursor = System::Windows::Forms::Cursors::Hand;
             this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
@@ -704,17 +733,17 @@ public
             this->comboBox1->Size = System::Drawing::Size(188, 21);
             this->comboBox1->TabIndex = 1;
             this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
-            //
+            // 
             // label2
-            //
+            // 
             this->label2->AutoSize = true;
             this->label2->Location = System::Drawing::Point(554, 8);
             this->label2->Name = L"label2";
             this->label2->Size = System::Drawing::Size(0, 13);
             this->label2->TabIndex = 11;
-            //
+            // 
             // panel2
-            //
+            // 
             this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->panel2->Controls->Add(this->mitigateAllOverlap);
             this->panel2->Controls->Add(this->backgroundDensityColorCheckbox);
@@ -734,9 +763,9 @@ public
             this->panel2->Name = L"panel2";
             this->panel2->Size = System::Drawing::Size(209, 748);
             this->panel2->TabIndex = 13;
-            //
+            // 
             // mitigateAllOverlap
-            //
+            // 
             this->mitigateAllOverlap->AutoSize = true;
             this->mitigateAllOverlap->Location = System::Drawing::Point(3, 409);
             this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
@@ -745,9 +774,9 @@ public
             this->mitigateAllOverlap->Text = L"Mitigate Overlap (All)";
             this->mitigateAllOverlap->UseVisualStyleBackColor = true;
             this->mitigateAllOverlap->CheckedChanged += gcnew System::EventHandler(this, &Form1::mitigateAllOverlap_CheckedChanged);
-            //
+            // 
             // backgroundDensityColorCheckbox
-            //
+            // 
             this->backgroundDensityColorCheckbox->AutoSize = true;
             this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(3, 432);
             this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
@@ -756,9 +785,9 @@ public
             this->backgroundDensityColorCheckbox->Text = L"Background Density Coloring";
             this->backgroundDensityColorCheckbox->UseVisualStyleBackColor = true;
             this->backgroundDensityColorCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::backgroundDensityColorCheckbox_CheckedChanged);
-            //
+            // 
             // mitigateOverlapCheckbox
-            //
+            // 
             this->mitigateOverlapCheckbox->AutoSize = true;
             this->mitigateOverlapCheckbox->Location = System::Drawing::Point(3, 388);
             this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
@@ -767,9 +796,9 @@ public
             this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap (Misclassified)";
             this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
             this->mitigateOverlapCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::mitigateOverlapCheckbox_CheckedChanged);
-            //
+            // 
             // lineColorCheckbox
-            //
+            // 
             this->lineColorCheckbox->AutoSize = true;
             this->lineColorCheckbox->Location = System::Drawing::Point(3, 367);
             this->lineColorCheckbox->Name = L"lineColorCheckbox";
@@ -778,9 +807,9 @@ public
             this->lineColorCheckbox->Text = L"Line Color Mode";
             this->lineColorCheckbox->UseVisualStyleBackColor = true;
             this->lineColorCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineColorCheckbox_CheckedChanged);
-            //
+            // 
             // pointColorMode
-            //
+            // 
             this->pointColorMode->AutoSize = true;
             this->pointColorMode->Location = System::Drawing::Point(3, 325);
             this->pointColorMode->Name = L"pointColorMode";
@@ -789,9 +818,9 @@ public
             this->pointColorMode->Text = L"Point Color Mode";
             this->pointColorMode->UseVisualStyleBackColor = true;
             this->pointColorMode->CheckedChanged += gcnew System::EventHandler(this, &Form1::pointColorMode_CheckedChanged);
-            //
+            // 
             // highlightMisclassificationsCheckbox
-            //
+            // 
             this->highlightMisclassificationsCheckbox->AutoSize = true;
             this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(3, 344);
             this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
@@ -800,9 +829,9 @@ public
             this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
             this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
             this->highlightMisclassificationsCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::highlightMisclassificationsCheckbox_CheckedChanged);
-            //
+            // 
             // lineTerminationModeCheckbox
-            //
+            // 
             this->lineTerminationModeCheckbox->AutoSize = true;
             this->lineTerminationModeCheckbox->Location = System::Drawing::Point(3, 307);
             this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
@@ -811,9 +840,9 @@ public
             this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
             this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
             this->lineTerminationModeCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineTerminationModeCheckbox_CheckedChanged);
-            //
+            // 
             // groupBox4
-            //
+            // 
             this->groupBox4->Controls->Add(this->backgroundColorLightnessSlider);
             this->groupBox4->Controls->Add(this->backgroundLightness);
             this->groupBox4->Location = System::Drawing::Point(9, 530);
@@ -821,9 +850,9 @@ public
             this->groupBox4->Size = System::Drawing::Size(200, 84);
             this->groupBox4->TabIndex = 16;
             this->groupBox4->TabStop = false;
-            //
+            // 
             // backgroundColorLightnessSlider
-            //
+            // 
             this->backgroundColorLightnessSlider->BackColor = System::Drawing::SystemColors::Control;
             this->backgroundColorLightnessSlider->LargeChange = 1;
             this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
@@ -833,20 +862,20 @@ public
             this->backgroundColorLightnessSlider->TabIndex = 10;
             this->backgroundColorLightnessSlider->Value = 2;
             this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
-            //
+            // 
             // backgroundLightness
-            //
+            // 
             this->backgroundLightness->AutoSize = true;
             this->backgroundLightness->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.5F, System::Drawing::FontStyle::Regular,
-                                                                           System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundLightness->Location = System::Drawing::Point(4, 16);
             this->backgroundLightness->Name = L"backgroundLightness";
             this->backgroundLightness->Size = System::Drawing::Size(161, 15);
             this->backgroundLightness->TabIndex = 11;
             this->backgroundLightness->Text = L"Background Color Lightness";
-            //
+            // 
             // groupBox3
-            //
+            // 
             this->groupBox3->Controls->Add(this->backgroundTransparencySlider);
             this->groupBox3->Controls->Add(this->backgroundTransparencyLabel);
             this->groupBox3->Location = System::Drawing::Point(6, 455);
@@ -854,9 +883,9 @@ public
             this->groupBox3->Size = System::Drawing::Size(200, 74);
             this->groupBox3->TabIndex = 15;
             this->groupBox3->TabStop = false;
-            //
+            // 
             // backgroundTransparencySlider
-            //
+            // 
             this->backgroundTransparencySlider->BackColor = System::Drawing::SystemColors::Control;
             this->backgroundTransparencySlider->LargeChange = 1;
             this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
@@ -866,21 +895,21 @@ public
             this->backgroundTransparencySlider->TabIndex = 10;
             this->backgroundTransparencySlider->Value = 100;
             this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
-            //
+            // 
             // backgroundTransparencyLabel
-            //
+            // 
             this->backgroundTransparencyLabel->AutoSize = true;
             this->backgroundTransparencyLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.5F, System::Drawing::FontStyle::Regular,
-                                                                                   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
             this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
             this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
             this->backgroundTransparencyLabel->TabIndex = 11;
             this->backgroundTransparencyLabel->Text = L"Background Transparency";
             this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
-            //
+            // 
             // groupBox2
-            //
+            // 
             this->groupBox2->Controls->Add(this->classTransparencySelection);
             this->groupBox2->Controls->Add(this->transparencySlider);
             this->groupBox2->Controls->Add(this->transparencyLabel);
@@ -889,9 +918,9 @@ public
             this->groupBox2->Size = System::Drawing::Size(200, 102);
             this->groupBox2->TabIndex = 14;
             this->groupBox2->TabStop = false;
-            //
+            // 
             // classTransparencySelection
-            //
+            // 
             this->classTransparencySelection->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->classTransparencySelection->Cursor = System::Windows::Forms::Cursors::Hand;
             this->classTransparencySelection->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
@@ -901,9 +930,9 @@ public
             this->classTransparencySelection->Size = System::Drawing::Size(188, 21);
             this->classTransparencySelection->TabIndex = 13;
             this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
-            //
+            // 
             // transparencySlider
-            //
+            // 
             this->transparencySlider->BackColor = System::Drawing::SystemColors::Control;
             this->transparencySlider->LargeChange = 1;
             this->transparencySlider->Location = System::Drawing::Point(6, 64);
@@ -913,31 +942,20 @@ public
             this->transparencySlider->TabIndex = 10;
             this->transparencySlider->Value = 255;
             this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
-            //
+            // 
             // transparencyLabel
-            //
+            // 
             this->transparencyLabel->AutoSize = true;
             this->transparencyLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                                                                         System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->transparencyLabel->Location = System::Drawing::Point(6, 18);
             this->transparencyLabel->Name = L"transparencyLabel";
-            this->transparencyLabel->Size = System::Drawing::Size(129, 16);
+            this->transparencyLabel->Size = System::Drawing::Size(128, 16);
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
-            //
-            // adjustThresholdsButton
-            //
-            this->adjustThresholdsButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->adjustThresholdsButton->Location = System::Drawing::Point(12, 334);
-            this->adjustThresholdsButton->Name = L"adjustThresholdsButton";
-            this->adjustThresholdsButton->Size = System::Drawing::Size(173, 35);
-            this->adjustThresholdsButton->TabIndex = 36;
-            this->adjustThresholdsButton->Text = L"Adjust Thresholds";
-            this->adjustThresholdsButton->UseVisualStyleBackColor = true;
-            this->adjustThresholdsButton->Click += gcnew System::EventHandler(this, &Form1::adjustThresholdsButton_Click);
-            //
+            // 
             // Form1
-            //
+            // 
             this->BackColor = System::Drawing::SystemColors::Control;
             this->ClientSize = System::Drawing::Size(1530, 785);
             this->Controls->Add(this->panel2);
@@ -953,7 +971,7 @@ public
             this->TransparencyKey = System::Drawing::Color::Maroon;
             this->panel1->ResumeLayout(false);
             this->panel1->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->trackBar1))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
             this->groupBox1->ResumeLayout(false);
             this->groupBox1->PerformLayout();
             this->tableLayoutPanel1->ResumeLayout(false);
@@ -962,15 +980,16 @@ public
             this->panel2->PerformLayout();
             this->groupBox4->ResumeLayout(false);
             this->groupBox4->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->backgroundColorLightnessSlider))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundColorLightnessSlider))->EndInit();
             this->groupBox3->ResumeLayout(false);
             this->groupBox3->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->backgroundTransparencySlider))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundTransparencySlider))->EndInit();
             this->groupBox2->ResumeLayout(false);
             this->groupBox2->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize ^>(this->transparencySlider))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->transparencySlider))->EndInit();
             this->ResumeLayout(false);
             this->PerformLayout();
+
         }
 #pragma endregion
 
@@ -1090,6 +1109,13 @@ public
             OpenGL3->setColorTerminationMode(false);
             OpenGL3->setHighlightMisclassficationsMode(false);
             OpenGL3->setLineTerminationMode(false);
+            OpenGL3->setAdjustThresholdsMode(false);
+            OpenGL3->setDrawingRectangleState(false);
+
+            for (int x = 0; x < checkedListBox4->Items->Count; x++)
+            {
+                checkedListBox4->SetItemChecked(x, false);
+            }
 
             for (int x = 0; x < checkedListBox4->Items->Count; x++)
             {
@@ -1099,8 +1125,39 @@ public
             if (fileopened)
             {
                 OpenGL3->clearAllGraphData();
-                OpenGL3->setFileName(data);
                 OpenGL3->setParserFileName(dataParsed);
+                data.parsedData = dataParsed.parsedData;
+                data.parsedAttributePairs = dataParsed.parsedAttributePairs;
+                data.strparsedData = dataParsed.strparsedData;
+                OpenGL3->setFileName(data);
+                // clear the list to prevent duplicates on update
+                this->comboBox1->Items->Clear();
+                this->comboBox1->Items->Clear();
+                this->classTransparencySelection->Items->Clear();
+                this->classTransparencySelection->Items->Clear();
+
+                this->classTransparencySelection->Items->Add("All");
+
+                data.numOfClasses = OpenGL3->getClassSize();
+                data.continueElements = OpenGL3->getContinueClassList();
+                for (int i = 1; i <= data.numOfClasses; i++)
+                {
+                    this->comboBox1->Items->Add(i); // set the combobox for "Class combobox" to the data in item1
+                    this->classTransparencySelection->Items->Add(i);
+                }
+
+                lineTerminationModeCheckbox->Checked = false;
+                pointColorMode->Checked = false;
+                highlightMisclassificationsCheckbox->Checked = false;
+                lineColorCheckbox->Checked = false;
+                mitigateOverlapCheckbox->Checked = false;
+                mitigateAllOverlap->Checked = false;
+                backgroundDensityColorCheckbox->Checked = false;
+
+                data.numOfClasses = OpenGL3->getClassSize();
+
+                data.numOfClasses = OpenGL3->getClassSize();
+
                 checkBox1->Checked = false;
             }
             // if (parsefileOpened)
@@ -1109,7 +1166,7 @@ public
             //	dataParsed. data.parsedData;
             // }
 
-            OpenGL3->seedDataTerminationPoints();
+            //OpenGL3->seedDataTerminationPoints();
 
             loadInteractiveSPC();
         }
@@ -1307,7 +1364,7 @@ public
             {
                 OpenGL3->setFileName(data);
                 // OpenGL3->setParserFileName(dataParsed);
-                OpenGL3->seedDataTerminationPoints();
+                //OpenGL3->seedDataTerminationPoints();
 
                 // clear the list to prevent duplicates on update
                 this->comboBox1->Items->Clear();
@@ -1745,7 +1802,7 @@ public
         System::Void showClassAccuraciesButton_Click(System::Object ^ sender, System::EventArgs ^ e)
         {
             std::vector<std::vector<int>> confusionMatrix = OpenGL3->computeConfusionMatrix();
-            String ^ displayString = "Real\tPredicted Class\n";
+            String ^ displayString = "Real\tPredicted Class\r\n";
             displayString += "Class\t";
             for (int i = 0; i < confusionMatrix[0].size(); i++)
             {
@@ -1755,7 +1812,7 @@ public
                     displayString += "\t";
                 }
             }
-            displayString += "\n";
+            displayString += "\r\n";
             for (int i = 1; i < confusionMatrix.size(); i++)
             {
                 std::vector<int> row = confusionMatrix[i];
@@ -1767,7 +1824,7 @@ public
                         displayString += "\t";
                     }
                 }
-                displayString += "\n";
+                displayString += "\r\n" + "\r\n";
             }
 
             std::map<int, float> accuracies = OpenGL3->computeAccuracy();
@@ -1776,12 +1833,14 @@ public
             {
                 if (i->first == -1)
                     continue; // skip average for now
-                displayString += "Class " + i->first + " Accuracy:\t" + i->second + "\n";
+                displayString += "Class " + i->first + " Accuracy:\t" + i->second + "\r\n";
             }
 
             displayString += "Total Accuracy:\t" + accuracies[-1];
 
-            MessageBox::Show(displayString);
+            confusionMatrixTextBox->Text = displayString;
+
+            //MessageBox::Show(displayString);
         }
 
     private:
@@ -1817,8 +1876,11 @@ public
             adjustThresholdsButtonToggle = !adjustThresholdsButtonToggle;
             OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
             OpenGL3->setAdjustThresholdsMode(adjustThresholdsButtonToggle);
+            OpenGL3->setConfusionMatrixTextBoxReference(confusionMatrixTextBox);
         }
-    };
+    private: System::Void confusionMatrixTextBox_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+    }
+};
 }
 
 int OpenGL_on_a_Windows_Form::Form1::loadInteractiveSPC()

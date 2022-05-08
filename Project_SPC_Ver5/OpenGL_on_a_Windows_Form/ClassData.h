@@ -35,6 +35,17 @@ public:
 	Node(int plotNum) {
 		this->plotNum = plotNum;
 	}
+	
+	~Node() {
+		if (&destinationList != nullptr) {
+			for (int i = 0; i < destinationList.size(); i++) {
+				destinationList[i]->~Node();
+				destinationList.shrink_to_fit();
+			}
+			destinationList.~vector();
+		}
+	}
+
 	void addDestination(Node* node) {
 		destinationList.push_back(node);
 	}
@@ -225,7 +236,7 @@ public:
     std::map<int, float> classAccuracy;
     std::map<int, float> classPrecision;
     std::map<int, int> classMisclassifiedCaseCount;
-	std::map<int, std::map<int, std::vector<int>>> misclassifiedCases; // actual -> predicted -> casenum
+	std::map<int, std::map<int, std::vector<int>>> misclassifiedCases; // {actual -> {predicted -> [casenum, ...]}}
 	std::map<int, int> casesPerClass;
 	std::vector<int> classes;
 	bool isDatasetClassesZeroIndexed = false;
@@ -554,7 +565,7 @@ public:
 		numPlots = 0;
 		xmax = 0;
 		ymax = 0;
-		classColor.clear();
+		//classColor.clear();
 		leftWidth = 0;
 		bottomHeight = 0;
 	}
@@ -571,6 +582,55 @@ public:
 		//fOpen = false;
 	};
 
+	void clearData() {
+		// Delete as necessary.
+		attributeMinMax.clear();
+		attributeNameToDataIndex.clear();
+		casesPerClass.clear();
+		classAccuracy.clear();
+		classMisclassifiedCaseCount.clear();
+		classNum.clear();
+		classPrecision.clear();
+		classes.clear();
+		initialXclasses.clear();
+		initialYclasses.clear();
+		misclassifiedCases.clear();
+		normalizedValues.clear();
+		numPlots = 0;
+		originalXPlotCoordinates.clear();
+		originalYPlotCoordinates.clear();
+		parsedAttributePairs.clear();
+		parsedData.clear();
+		plotDestinationMap.clear();
+		plotHeight.clear();
+		plotNumToMisclassifiedCases.clear();
+		plotNumToTotalCases.clear();
+		plotNumZoneTotalCases.clear();
+		plotWidth.clear();
+		plotsWithXInverted.clear();
+		plotsWithYInverted.clear();
+		if (rootNode != nullptr) {
+			rootNode->~Node();
+			delete rootNode;
+			rootNode = nullptr;
+		}
+		strparsedData.clear();
+		values.clear();
+		x1CoordPlot.clear();
+		x2CoordPlot.clear();
+		xPlotCoordinates.clear();
+		xclasses.clear();
+		xdata.clear();
+		xmax = 0;
+		y1CoordPlot.clear();
+		y2CoordPlot.clear();
+		yPlotCoordinates.clear();
+		yclasses.clear();
+		ydata.clear();
+		ymax = 0;
+		zonesWithDarkBackgrounds.clear();
+	}
+
 	~ClassData()
 	{
 		// Delete as necessary.
@@ -586,8 +646,19 @@ public:
 		xPlotCoordinates.clear();
 		yPlotCoordinates.clear();
 		classNum.clear();
-
-
+		parsedAttributePairs.clear();
+		parsedData.clear();
+		strparsedData.clear();
+		plotWidth.clear();
+		plotHeight.clear();
+		plotDestinationMap.clear();
+		plotNumToMisclassifiedCases.clear();
+		plotNumToTotalCases.clear();
+		plotNumZoneTotalCases.clear();
+		x1CoordPlot.clear();
+		x2CoordPlot.clear();
+		y1CoordPlot.clear();
+		y2CoordPlot.clear();
 	}
 
 	/* Input: Position of graph -- Creates a new empty graph */
@@ -933,12 +1004,14 @@ public:
 		float y2 = centerY + plotHeight[plotId] / 2;
 
 		// compute what percent of the plot the mouse is at
-		float mouseLocationOnPlotX;
-		float mouseLocationOnPlotY;
-		mouseLocationOnPlotX = (worldMouseX - x1) / (x2 - x1);
-		mouseLocationOnPlotY = (worldMouseY - y1) / (y2 - y1);
+        // check to make sure we can do division
+        if (x2 - x1 == 0 || y1 - y2 == 0) {
+            return;
+        }
+		float mouseLocationOnPlotX = (worldMouseX - x1) / (x2 - x1);
+		float mouseLocationOnPlotY = (worldMouseY - y2) / (y1 - y2);
 
-		// adjust bounds (can't be more or less than (0.0, 1.0)
+		// adjust bounds (can't be more or less than (0.0, 1.0))
 		if (worldMouseX > max(x1, x2)) {
 			mouseLocationOnPlotX = 1;
 		}
@@ -946,19 +1019,19 @@ public:
 			mouseLocationOnPlotX = 0;
 		}
 		if (worldMouseY > max(y1, y2)) {
-			mouseLocationOnPlotY = 1;
+			mouseLocationOnPlotY = 0;
 		}
 		else if (worldMouseY < min(y1, y2)) {
-			mouseLocationOnPlotY = 0;
+			mouseLocationOnPlotY = 1;
 		}
 
 		// compute shared edge(s)
 		// find all zones that are connected to this plot
 		std::vector<float>* selectedParserElement = &parsedData[zone];
-		std::vector<std::vector<float>*> plotIdParserElements;
+		std::vector<std::vector<float>*> parserElementsWithPlotID;
 		for (int i = 0; i < parsedData.size(); i++) {
 			if (parsedData[i][4] == plotId && &parsedData[i] != selectedParserElement) {
-				plotIdParserElements.push_back(&parsedData[i]);
+				parserElementsWithPlotID.push_back(&parsedData[i]);
 			}
 		}
 
@@ -966,40 +1039,47 @@ public:
 
 		// get all parser elements that share the selected edge
 		std::vector<std::vector<float>*> adjoiningEdges;
-		for (int i = 0; i < plotIdParserElements.size(); i++) {
-			float p1 = plotIdParserElements[i]->at(indexToCheck);
+		for (int i = 0; i < parserElementsWithPlotID.size(); i++) {
+			float p1 = parserElementsWithPlotID[i]->at(indexToCheck);
 			float p2 = selectedParserElement->at(direction);
-			if ( p1 == p2 ) {
-				adjoiningEdges.push_back(plotIdParserElements[i]);
-			}
+            float epsilon = 0.001; // needed for proper float comparison
+			if (abs(p1 - p2) < epsilon) {
+				adjoiningEdges.push_back(parserElementsWithPlotID[i]);
+			} 
 		}
 
-		if (direction % 2 == 1) {
-			parsedData[zone][direction] = mouseLocationOnPlotX;
-			for (int i = 0; i < adjoiningEdges.size(); i++) {
-				adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotX;
-			}
-		}
-		else {
-			parsedData[zone][direction] = mouseLocationOnPlotY;
-			for (int i = 0; i < adjoiningEdges.size(); i++) {
-				adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotY;
-			}
-		}
-		
-			
-		/*} else{
-			parsedData[zone][1] = mouseLocationOnPlotX;
-		}*/
+        //debug
+        if (std::find(adjoiningEdges.begin(), adjoiningEdges.end(), &parsedData[zone]) != adjoiningEdges.end()) {
+            std::cout << "debug";
+        }
 
+        // adjust parser elements
+        if (direction % 2 == 0) {
+            // x direction
+            parsedData[zone][direction] = mouseLocationOnPlotX;
+            for (int i = 0; i < adjoiningEdges.size(); i++) {
+                adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotX;
+            }
+        } else {
+            // y direction
+            parsedData[zone][direction] = mouseLocationOnPlotY;
+            for (int i = 0; i < adjoiningEdges.size(); i++) {
+                adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotY;
+            }
+        }
 
-        std::cout << "debug";
-
-
-        // update the selected edge and their neighbors
+		//plotNumZoneTotalCases.clear();
+		//plotNumZoneTotalMisclassifiedCases.clear();
+		//misclassifiedCases.clear();
+		//classMisclassifiedCaseCount.clear();
+		//casesPerClass.clear();
     }
 };
 
+/**
+ * @brief Not sure why this is here.
+ * 
+ */
 class parseData // copy class before changing
 {
 public:

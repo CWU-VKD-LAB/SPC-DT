@@ -72,7 +72,6 @@ public:
 
     /// *** USED FOR ADJUSTING DECISION ZONE THRESHOLDS
     bool isAdjustThresholdsMode = false;
-    void adjustThresholds(int plotId, int zoneId, bool isXAXis, float amount);
     std::vector<std::vector<std::vector<float>>> thresholdEdgeSelectionZones;
     std::map<std::vector<float>, int> edgeToParserElementIndex; // map: collection of edge points -> list [ zoneId, index for (x1, y1, x2, y2) ]
     std::set<int> zoneIdThresholdEdgesRecorded;

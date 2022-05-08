@@ -100,6 +100,9 @@ public
         // debug counter
         int DEBUG_COUNTER = 0;
 
+        // reference to the confusion matrix text box
+        System::Windows::Forms::TextBox^ confusionMatrixTextBox;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         ///
         ///
@@ -238,6 +241,11 @@ public
             graph4.zoneIdThresholdEdgesRecorded.clear();
         }
 
+        // reference to the confusion matrix text box
+        void setConfusionMatrixTextBoxReference(System::Windows::Forms::TextBox^ confusionMatrixTextBox) {
+            this->confusionMatrixTextBox = confusionMatrixTextBox;
+        }
+
         // Set draw rectangle state
         void setDrawingRectangleState(bool state)
         {
@@ -301,11 +309,58 @@ public
             return graph4.data.computeAccuracy();
         }
 
+        System::String^ buildConfusionMatrixString() 
+        {
+            std::vector<std::vector<int>> confusionMatrix = graph4.data.computeConfusionMatrix();
+            std::map<int, float> accuracies = computeAccuracy();
+
+            System::String^ displayString = "Real\tPredicted Class\r\n";
+            displayString += "Class\t";
+            for (int i = 0; i < confusionMatrix[0].size(); i++)
+            {
+                displayString += confusionMatrix[0][i];
+                if (i < (confusionMatrix[0].size() - 1))
+                {
+                    displayString += "\t";
+                }
+            }
+            displayString += "\r\n";
+            for (int i = 1; i < confusionMatrix.size(); i++)
+            {
+                std::vector<int> row = confusionMatrix[i];
+                for (int j = 0; j < row.size(); j++)
+                {
+                    displayString += row[j];
+                    if (j != row.size() - 1)
+                    {
+                        displayString += "\t";
+                    }
+                }
+                displayString += "\r\n" + "\r\n";
+            }
+
+            for (auto i = accuracies.begin(); i != accuracies.end(); ++i)
+            {
+                if (i->first == -1)
+                    continue; // skip average for now
+                displayString += "Class " + i->first + " Accuracy:\t" + i->second + "\r\n";
+            }
+
+            displayString += "Total Accuracy:\t" + accuracies[-1];
+
+            return displayString;
+        }
+
         /* RENDERING FOR DIFFERENT GRAPHS */ /////////////////////////////////////////////////////////////////////////////////////
 
         System::Void Render4(System::Void)
         {
             graph4.display();
+            if (confusionMatrixTextBox != nullptr) {
+                std::cout << "Debug1";
+                confusionMatrixTextBox->Text = buildConfusionMatrixString();
+                std::cout << "Debug2";
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,16 +375,18 @@ public
 
         void clearAllGraphData()
         {
-            data.~ClassData();
-            dataParsed.~parseData();
+            data.clearData();
+            graph4.data.clearData();
+            //data.~ClassData();
+            //dataParsed.~parseData();
 
-            graph4.data.~ClassData();
-            graph4.dataParsed.~parseData();
+            //graph4.data.~ClassData();
+            //graph4.dataParsed.~parseData();
 
-            data.resetSomeVars();
-
-            graph4.data.resetSomeVars();
+            //data.resetSomeVars();
+            //graph4.data.resetSomeVars();
         }
+
 
         void setFileName(ClassData &file)
         {
@@ -676,15 +733,22 @@ public
                                 std::cout << "debug!";
                             }
                             else if (graph4.clickedEdge.size() == 3) {
+                                // get edge information
                                 int zoneId = graph4.clickedEdge[0];
                                 int edgeId = graph4.clickedEdge[1];
                                 int direction = graph4.clickedEdge[2];
+
+                                // adjust threshold
                                 graph4.thresholdBeingAdjusted = true;
                                 dataPtr->adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, edgeId, direction);    
-                                DEBUG_COUNTER++;
+
+                                // recompute edges
                                 graph4.thresholdEdgeSelectionZones.clear();
                                 graph4.zoneIdThresholdEdgesRecorded.clear();
                             }
+                            // update confusion matrix
+                            confusionMatrixTextBox->Text = "Computing...";
+                            confusionMatrixTextBox->Text = buildConfusionMatrixString();
                         }
 
                         // adds plot clicked to list of plots with swapped axes
@@ -834,6 +898,7 @@ public
                         int edgeId = graph4.clickedEdge[1];
                         int direction = graph4.clickedEdge[2];
                         graph4.data.adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, edgeId, direction);
+                        confusionMatrixTextBox->Text = buildConfusionMatrixString();
                         graph4.thresholdEdgeSelectionZones.clear();
                         graph4.zoneIdThresholdEdgesRecorded.clear();
                     }

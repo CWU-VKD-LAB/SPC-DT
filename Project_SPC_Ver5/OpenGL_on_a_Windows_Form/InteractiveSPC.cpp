@@ -332,6 +332,12 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
             point1BackgroundZoneMisclassifiedCaseList->insert(caseNum);
         }
     }
+    else {
+        auto it = point1BackgroundZoneMisclassifiedCaseList->find(caseNum);
+        if ( it != point1BackgroundZoneMisclassifiedCaseList->end()) {
+            point1BackgroundZoneMisclassifiedCaseList->erase(it);
+        }
+    }
 
     if (point1BackgroundZoneTotalCaseList->size() > data.maxCasesPerPlotZone)
     {
@@ -383,7 +389,6 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         if (totalCases != 0)
         {
             shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-            ;
         }
         x1 += shiftAmount + classShiftAmount;
         y1 += shiftAmount;
@@ -490,26 +495,44 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     GLubyte classTransparency = data.classTransparencies[caseClass];
 
     // count misclassifications
-    if (point1BackgroundClass >= 0 && point1BackgroundClass != caseClass)
-    {
-        // if we're in here, this is a misclassification
-        std::vector<int> *misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass];
-        if (std::find(misclassifiedClassList->begin(), misclassifiedClassList->end(), caseNum) == misclassifiedClassList->end())
-        {
-            misclassifiedClassList->push_back(caseNum);
-            data.classMisclassifiedCaseCount[caseClass]++;
-        }
+    std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass]; // {actual -> {predicted -> [casenum, ...]}}
+    std::map<int, std::vector<int>> * predictedClasses = &data.misclassifiedCases[caseClass];
+    
 
-        // determine if we should be highlighting misclassified points
-        if (isHighlightMisclassficationsMode)
-        {
-            glColor4ub(255, 0, 0, classTransparency);
-            glPointSize(8.0);
-            glBegin(GL_POINTS);
-            glVertex2f(x1, y1);
-            glEnd();
-            glPointSize(4.0);
+    // remove casenum from whichever class it was in before
+    for (auto it : *predictedClasses) {
+        std::vector<int> * lst = &predictedClasses->at(it.first);
+        auto find = std::find(lst->begin(), lst->end(), caseNum);
+        if (find != lst->end() && it.first != point1BackgroundClass) {
+            lst->erase(find);
+            lst->shrink_to_fit();
+            data.classMisclassifiedCaseCount[caseClass]--;
+            break;
         }
+    }
+
+    // 
+    if (point1BackgroundClass >= 0) {
+        if (point1BackgroundClass != caseClass)
+        {
+            // if we're in here, this is a misclassification
+            if (std::find(misclassifiedClassList->begin(), misclassifiedClassList->end(), caseNum) == misclassifiedClassList->end())
+            {
+                misclassifiedClassList->push_back(caseNum);
+                data.classMisclassifiedCaseCount[caseClass]++;
+            }
+
+            // determine if we should be highlighting misclassified points
+            if (isHighlightMisclassficationsMode)
+            {
+                glColor4ub(255, 0, 0, classTransparency);
+                glPointSize(8.0);
+                glBegin(GL_POINTS);
+                glVertex2f(x1, y1);
+                glEnd();
+                glPointSize(4.0);
+            }
+        } 
     }
 
     // add white frame to points that are hard to see
@@ -686,7 +709,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         if (totalCases != 0)
         {
             shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-            ;
+            
         }
         x2 += shiftAmount + classShiftAmount;
         y2 += shiftAmount;
@@ -734,7 +757,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
             if (totalCases != 0)
             {
                 shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-                ;
+                
             }
             if (nonNegClassCount != 0)
             {
@@ -1165,6 +1188,7 @@ void InteractiveSPC::display()
                 zoneEdges.push_back(zoneTopEdge);
                 zoneEdges.push_back(zoneBottomEdge);
 
+                // assign ids to zone edges
                 edgeToParserElementIndex[zoneLeftEdge] = 0;
                 edgeToParserElementIndex[zoneBottomEdge] = 1;
                 edgeToParserElementIndex[zoneRightEdge] = 2;
@@ -1173,13 +1197,13 @@ void InteractiveSPC::display()
                 thresholdEdgeSelectionZones.push_back(zoneEdges);
             }
 
-             //debug draw threshold rectangles
-            for (auto thresholds : thresholdEdgeSelectionZones) {
-                for (auto zone : thresholds) {
-                    glRectf(zone[0], zone[1], zone[2], zone[3]);
-                }
-            }
-             //end debugs
+            //debug draw threshold rectangles
+            // for (auto thresholds : thresholdEdgeSelectionZones) {
+            //     for (auto zone : thresholds) {
+            //         glRectf(zone[0], zone[1], zone[2], zone[3]);
+            //     }
+            // }
+            //end debugs
 
             // check if plot has similar attributes
             //
@@ -1555,18 +1579,6 @@ bool InteractiveSPC::doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat 
     return result;
 }
 
-void InteractiveSPC::adjustThresholds(int plotId, int zoneId, bool isXAXis, float amount)
-{
-    if (isXAXis)
-    {
-        // thresholds[plotId][zoneId].x += amount;
-    }
-    else
-    {
-        // thresholds[plotId][zoneId].y += amount;
-    }
-}
-
 bool InteractiveSPC::shouldLineBeClipped(GLfloat startX, GLfloat startY, GLfloat endX, GLfloat endY, bool *startPointCode, bool *endPointCode)
 {
     GLfloat boundingBoxTop = max(rectY1, rectY2);
@@ -1766,6 +1778,10 @@ bool *InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rec
     return triviality;
 }
 
+/**
+ * @brief Not used anymore
+ * 
+ */
 void InteractiveSPC::calculateDataTerminationPoints()
 {
     for (int i = 0; i < data.dataTerminationIndex.size(); i++)
@@ -1788,25 +1804,10 @@ void InteractiveSPC::calculateDataTerminationPoints()
             {
                 if (backgroundClass != classnum)
                 { // do something special if point class doesnt match background zone
-                  // TODO
-                  // debug
-                  // glColor4ub(255, 0, 0, 255);
-                  // glPointSize(8.0);
-                  // glBegin(GL_POINTS);
-                  // glVertex2f(x1CoordTrans, y1CoordTrans);
-                  // glEnd();
-                  // glPointSize(4.0);
                 }
                 else
                 {
                     data.dataTerminationIndex[i] = j;
-                    // debug
-                    /*glColor4ub(0, 0, 255, 255);
-                    glPointSize(8.0);
-                    glBegin(GL_POINTS);
-                    glVertex2f(x1CoordTrans, y1CoordTrans);
-                    glEnd();
-                    glPointSize(4.0);*/
                 }
             }
         }
@@ -1818,8 +1819,6 @@ float InteractiveSPC::findClickedGraph(double x, double y)
 {
     for (int i = 0; i < data.numPlots; i++)
     {
-        // for (int i1 = 0; i1 < data.graphwidth.size(); i1++)
-        //{
         if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&
             data.xPlotCoordinates[i] + data.pan_x + (data.plotWidth[i] / 2) >= x &&
             data.yPlotCoordinates[i] + data.pan_y - (data.plotHeight[i] / 2) <= y &&
@@ -1828,9 +1827,6 @@ float InteractiveSPC::findClickedGraph(double x, double y)
 
             return i;
         }
-        //}
-
-        // original code
     }
     return -1;
 }
