@@ -1068,11 +1068,9 @@ public:
             }
         }
 
-		//plotNumZoneTotalCases.clear();
-		//plotNumZoneTotalMisclassifiedCases.clear();
-		//misclassifiedCases.clear();
-		//classMisclassifiedCaseCount.clear();
-		//casesPerClass.clear();
+		zonesWithDarkBackgrounds.clear();
+		plotNumZoneTotalCases.clear();
+		plotNumZoneTotalMisclassifiedCases.clear();
     }
 };
 

@@ -32,10 +32,13 @@ public:
 
 	std::vector<int> pointsToRender;
 
-	void drawData(float x1, float  y1, float  x2, float  y2, int i, int j);
+	// void drawData(float x1, float  y1, float  x2, float  y2, int i, int j);
 	int drawData(float x1, float  y1, int recordNum, int plotNum);
 
 	void display();
+
+    // utility functions
+    std::vector<int> getParserElementsWithPlotNum(int plotNum);
 
 	// Calculates termination nodes for each datapoint
 	void calculateDataTerminationPoints();
@@ -80,6 +83,7 @@ public:
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
+    void invertPlotNum(int plotNum, bool isXAxist);
 	std::set<int> swappedPlots;
 	std::set<int> plotsWithXAxisInverted;
 	std::set<int> plotsWithYAxisInverted;
@@ -112,7 +116,11 @@ public:
 
 	void updatePlotLocation(double mouseX, double mouseY, int plotNum);
 
-
+    /* This is for worst performing area */
+    int worstZoneNum = -1;;
+    float worstZoneNumDensity = INT32_MAX;
+	bool isHighlightWorstAreaMode = false;
+    void drawWorstZone();
 
 	/* This method takes the passed mouse click coordinates and finds the graph clicked on. */
 	float findClickedGraph(double x, double y);

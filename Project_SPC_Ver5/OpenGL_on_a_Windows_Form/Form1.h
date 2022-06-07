@@ -263,6 +263,7 @@ public
     private:
         System::Windows::Forms::Button ^ adjustThresholdsButton;
 private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
+private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
 
 
 
@@ -337,6 +338,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
             this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
             this->transparencyLabel = (gcnew System::Windows::Forms::Label());
+            this->identifyWorstAreaCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->panel1->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             this->groupBox1->SuspendLayout();
@@ -363,7 +365,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             this->graph4->Location = System::Drawing::Point(9, 9);
             this->graph4->Margin = System::Windows::Forms::Padding(6);
             this->graph4->Name = L"graph4";
-            this->graph4->Size = System::Drawing::Size(191, 70);
+            this->graph4->Size = System::Drawing::Size(191, 46);
             this->graph4->TabIndex = 3;
             this->graph4->Text = L"Reset Data";
             this->graph4->UseVisualStyleBackColor = true;
@@ -675,7 +677,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             this->groupBox1->Controls->Add(this->ZoomingLabel);
             this->groupBox1->Controls->Add(this->vScrollBar1);
             this->groupBox1->Controls->Add(this->hScrollBar1);
-            this->groupBox1->Location = System::Drawing::Point(6, 88);
+            this->groupBox1->Location = System::Drawing::Point(6, 58);
             this->groupBox1->Name = L"groupBox1";
             this->groupBox1->Size = System::Drawing::Size(200, 111);
             this->groupBox1->TabIndex = 7;
@@ -745,6 +747,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // panel2
             // 
             this->panel2->BackColor = System::Drawing::SystemColors::ButtonFace;
+            this->panel2->Controls->Add(this->identifyWorstAreaCheckbox);
             this->panel2->Controls->Add(this->mitigateAllOverlap);
             this->panel2->Controls->Add(this->backgroundDensityColorCheckbox);
             this->panel2->Controls->Add(this->mitigateOverlapCheckbox);
@@ -767,7 +770,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // mitigateAllOverlap
             // 
             this->mitigateAllOverlap->AutoSize = true;
-            this->mitigateAllOverlap->Location = System::Drawing::Point(3, 409);
+            this->mitigateAllOverlap->Location = System::Drawing::Point(9, 385);
             this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
             this->mitigateAllOverlap->Size = System::Drawing::Size(123, 17);
             this->mitigateAllOverlap->TabIndex = 23;
@@ -778,7 +781,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // backgroundDensityColorCheckbox
             // 
             this->backgroundDensityColorCheckbox->AutoSize = true;
-            this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(3, 432);
+            this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(9, 408);
             this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
             this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(163, 17);
             this->backgroundDensityColorCheckbox->TabIndex = 22;
@@ -789,7 +792,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // mitigateOverlapCheckbox
             // 
             this->mitigateOverlapCheckbox->AutoSize = true;
-            this->mitigateOverlapCheckbox->Location = System::Drawing::Point(3, 388);
+            this->mitigateOverlapCheckbox->Location = System::Drawing::Point(9, 364);
             this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
             this->mitigateOverlapCheckbox->Size = System::Drawing::Size(171, 17);
             this->mitigateOverlapCheckbox->TabIndex = 21;
@@ -800,7 +803,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // lineColorCheckbox
             // 
             this->lineColorCheckbox->AutoSize = true;
-            this->lineColorCheckbox->Location = System::Drawing::Point(3, 367);
+            this->lineColorCheckbox->Location = System::Drawing::Point(9, 343);
             this->lineColorCheckbox->Name = L"lineColorCheckbox";
             this->lineColorCheckbox->Size = System::Drawing::Size(103, 17);
             this->lineColorCheckbox->TabIndex = 20;
@@ -811,7 +814,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // pointColorMode
             // 
             this->pointColorMode->AutoSize = true;
-            this->pointColorMode->Location = System::Drawing::Point(3, 325);
+            this->pointColorMode->Location = System::Drawing::Point(9, 301);
             this->pointColorMode->Name = L"pointColorMode";
             this->pointColorMode->Size = System::Drawing::Size(107, 17);
             this->pointColorMode->TabIndex = 19;
@@ -822,7 +825,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // highlightMisclassificationsCheckbox
             // 
             this->highlightMisclassificationsCheckbox->AutoSize = true;
-            this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(3, 344);
+            this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(9, 320);
             this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
             this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
             this->highlightMisclassificationsCheckbox->TabIndex = 18;
@@ -833,7 +836,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             // lineTerminationModeCheckbox
             // 
             this->lineTerminationModeCheckbox->AutoSize = true;
-            this->lineTerminationModeCheckbox->Location = System::Drawing::Point(3, 307);
+            this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
             this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
             this->lineTerminationModeCheckbox->Size = System::Drawing::Size(134, 17);
             this->lineTerminationModeCheckbox->TabIndex = 17;
@@ -913,7 +916,7 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             this->groupBox2->Controls->Add(this->classTransparencySelection);
             this->groupBox2->Controls->Add(this->transparencySlider);
             this->groupBox2->Controls->Add(this->transparencyLabel);
-            this->groupBox2->Location = System::Drawing::Point(6, 205);
+            this->groupBox2->Location = System::Drawing::Point(5, 175);
             this->groupBox2->Name = L"groupBox2";
             this->groupBox2->Size = System::Drawing::Size(200, 102);
             this->groupBox2->TabIndex = 14;
@@ -953,6 +956,17 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
             this->transparencyLabel->Size = System::Drawing::Size(128, 16);
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
+            // 
+            // identifyWorstAreaCheckbox
+            // 
+            this->identifyWorstAreaCheckbox->AutoSize = true;
+            this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
+            this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
+            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(124, 17);
+            this->identifyWorstAreaCheckbox->TabIndex = 24;
+            this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
+            this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
+            this->identifyWorstAreaCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::identifyWorstAreaCheckbox_CheckedChanged);
             // 
             // Form1
             // 
@@ -1880,6 +1894,9 @@ private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
         }
     private: System::Void confusionMatrixTextBox_TextChanged(System::Object^ sender, System::EventArgs^ e) {
     }
+private: System::Void identifyWorstAreaCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+    OpenGL3->setHighlightWorstAreaMode(identifyWorstAreaCheckbox->Checked);
+}
 };
 }
 

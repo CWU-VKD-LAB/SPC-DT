@@ -241,6 +241,11 @@ public
             graph4.zoneIdThresholdEdgesRecorded.clear();
         }
 
+        // set the highlight worst area mode
+        void setHighlightWorstAreaMode(bool state) {
+            graph4.isHighlightWorstAreaMode = state;
+        }
+
         // reference to the confusion matrix text box
         void setConfusionMatrixTextBoxReference(System::Windows::Forms::TextBox^ confusionMatrixTextBox) {
             this->confusionMatrixTextBox = confusionMatrixTextBox;
@@ -261,6 +266,9 @@ public
 
         void setBackgroundDensityColoringMode(bool state)
         {
+            if (!state) {
+                graph4.data.zonesWithDarkBackgrounds.clear();
+            }
             graph4.isBackgroundDensityColoringMode = state;
         }
 
@@ -745,6 +753,8 @@ public
                                 // recompute edges
                                 graph4.thresholdEdgeSelectionZones.clear();
                                 graph4.zoneIdThresholdEdgesRecorded.clear();
+                                graph4.worstZoneNum = -1;
+                                graph4.worstZoneNumDensity = INT32_MAX;
                             }
                             // update confusion matrix
                             confusionMatrixTextBox->Text = "Computing...";
@@ -787,51 +797,55 @@ public
                         // adds clicked plot to list of plots with inverted X axes
                         if (isXAxisInvertMode)
                         {
-                            std::set<int> *xAxisInvert = &graph4.plotsWithXAxisInverted;
-                            if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
-                            {
-                                xAxisInvert->insert(plotNumClicked);
-                            }
-                            else
-                            {
-                                xAxisInvert->erase(plotNumClicked);
-                            }
-                            xAxisInvert = &graph4.data.plotsWithXInverted;
-                            if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
-                            {
-                                xAxisInvert->insert(plotNumClicked);
-                            }
-                            else
-                            {
-                                xAxisInvert->erase(plotNumClicked);
-                            }
-                            graph4.thresholdEdgeSelectionZones.clear();
-                            graph4.zoneIdThresholdEdgesRecorded.clear();
+                            graph4.invertPlotNum(plotNumClicked, true);
+
+                            // std::set<int> *xAxisInvert = &graph4.plotsWithXAxisInverted;
+                            // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
+                            // {
+                            //     xAxisInvert->insert(plotNumClicked);
+                            // }
+                            // else
+                            // {
+                            //     xAxisInvert->erase(plotNumClicked);
+                            // }
+                            // xAxisInvert = &graph4.data.plotsWithXInverted;
+                            // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
+                            // {
+                            //     xAxisInvert->insert(plotNumClicked);
+                            // }
+                            // else
+                            // {
+                            //     xAxisInvert->erase(plotNumClicked);
+                            // }
+                            // graph4.thresholdEdgeSelectionZones.clear();
+                            // graph4.zoneIdThresholdEdgesRecorded.clear();
                         }
 
                         // adds clicked plot to list of plots with inverted Y axes
                         if (isYAxisInvertMode)
                         {
-                            std::set<int> *yAxisInvert = &graph4.plotsWithYAxisInverted;
-                            if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
-                            {
-                                yAxisInvert->insert(plotNumClicked);
-                            }
-                            else
-                            {
-                                yAxisInvert->erase(plotNumClicked);
-                            }
-                            yAxisInvert = &graph4.data.plotsWithYInverted;
-                            if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
-                            {
-                                yAxisInvert->insert(plotNumClicked);
-                            }
-                            else
-                            {
-                                yAxisInvert->erase(plotNumClicked);
-                            }
-                            graph4.thresholdEdgeSelectionZones.clear();
-                            graph4.zoneIdThresholdEdgesRecorded.clear();
+                            graph4.invertPlotNum(plotNumClicked, false);
+
+                            // std::set<int> *yAxisInvert = &graph4.plotsWithYAxisInverted;
+                            // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
+                            // {
+                            //     yAxisInvert->insert(plotNumClicked);
+                            // }
+                            // else
+                            // {
+                            //     yAxisInvert->erase(plotNumClicked);
+                            // }
+                            // yAxisInvert = &graph4.data.plotsWithYInverted;
+                            // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
+                            // {
+                            //     yAxisInvert->insert(plotNumClicked);
+                            // }
+                            // else
+                            // {
+                            //     yAxisInvert->erase(plotNumClicked);
+                            // }
+                            // graph4.thresholdEdgeSelectionZones.clear();
+                            // graph4.zoneIdThresholdEdgesRecorded.clear();
                         }
 
                         bool colliding = (graph4.plotNumClicked != -1);
@@ -901,6 +915,8 @@ public
                         confusionMatrixTextBox->Text = buildConfusionMatrixString();
                         graph4.thresholdEdgeSelectionZones.clear();
                         graph4.zoneIdThresholdEdgesRecorded.clear();
+                        graph4.worstZoneNum = -1;
+                        graph4.worstZoneNumDensity = INT32_MAX;
                     }
                 }
 

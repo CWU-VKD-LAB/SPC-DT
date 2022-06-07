@@ -10,6 +10,19 @@
 #include <map>
 #include <algorithm>
 
+struct ConnectedZone {
+    int zoneNum;
+    int classNum;
+    std::vector<ConnectedZone*> connectedZones;
+    std::vector<float>* parserElement;
+    ConnectedZone();
+    ConnectedZone(int zoneNum, float classNum, std::vector<float>* parserElement) {
+        this->zoneNum = zoneNum;
+        this->classNum = (int)classNum;
+        this->parserElement = parserElement;
+    }
+};
+
 InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double worldW, double worldH)
 {
     this->data = given;
@@ -227,26 +240,26 @@ void InteractiveSPC::drawRectanglesOnGray()
             // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
             // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
-            if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-            {
-                zoneToDrawX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
-                zoneToDrawX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
-            }
-            else
-            {
-                zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-                zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-            }
-            if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-            {
-                zoneToDrawY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
-                zoneToDrawY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
-            }
-            else
-            {
-                zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-                zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-            }
+            // if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+            // {
+            //     zoneToDrawX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+            //     zoneToDrawX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+            // }
+            // else
+            // {
+            //     zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+            //     zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+            // }
+            // if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+            // {
+            //     zoneToDrawY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+            //     zoneToDrawY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+            // }
+            // else
+            // {
+            //     zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+            //     zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+            // }
 
             rectX1List.push_back(zoneToDrawX1);
             rectX2List.push_back(zoneToDrawX2);
@@ -259,7 +272,6 @@ void InteractiveSPC::drawRectanglesOnGray()
 }
 
 /* Draws data sets. */
-std::set<int> debugSet;
 int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 {
     // Don't draw data past its termination point
@@ -282,7 +294,8 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // Adjust if X axis is inverted
     if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
     {
-        x1 = plt1X2 - plotWidth * x1 + data.pan_x;
+        //x1 = plt1X2 - plotWidth * x1 + data.pan_x;
+        x1 = plt1X1 + plotWidth * (1 - x1) + data.pan_x;
     }
     else
     {
@@ -292,7 +305,9 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // Adjust if Y axis is inverted
     if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
     {
-        y1 = plt1Y1 + plotHeight * y1 + data.pan_y;
+        //y1 = plt1Y1 + plotHeight * y1 + data.pan_y;
+        y1 = plt1Y2 - plotHeight * (1 - y1) + data.pan_y;
+
     }
     else
     {
@@ -397,7 +412,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     {
         if (point1BackgroundClass >= 0)
         {
-            std::vector<int> overlappingCases;
+            std::vector<int> overlappingCases; 
             // count how many cases there are that are overlapping
             int nonNegClassCount = 0;
             int totalCases = 0;
@@ -436,7 +451,6 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
             if (totalCases != 0)
             {
                 shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-                ;
             }
             if (nonNegClassCount != 0)
             {
@@ -511,7 +525,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         }
     }
 
-    // 
+    // add casenum if misclassified
     if (point1BackgroundClass >= 0) {
         if (point1BackgroundClass != caseClass)
         {
@@ -641,7 +655,9 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     if (plotsWithXAxisInverted.find(nextPlotNum) != plotsWithXAxisInverted.end())
     {
-        x2 = plt2X2 - plotWidth * x2 + data.pan_x;
+        //x2 = plt2X2 - plotWidth * x2 + data.pan_x;
+        x2 = plt2X1 + plotWidth * (1 - x2) + data.pan_x;
+
     }
     else
     {
@@ -650,7 +666,9 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     if (plotsWithYAxisInverted.find(nextPlotNum) != plotsWithYAxisInverted.end())
     {
-        y2 = plt2Y1 + plotHeight * y2 + data.pan_y;
+        //y2 = plt2Y1 + plotHeight * y2 + data.pan_y;
+        y2 = plt2Y2 - plotHeight * (1 - y2) + data.pan_y;
+
     }
     else
     {
@@ -1073,33 +1091,8 @@ void InteractiveSPC::display()
         for (int p = 0; p < data.parsedData.size(); p++)
         {
             int classNumber = data.parsedData[p][5];
-            // Old background color assignment
-            /*if (data.parsedData[p][5] == 0)
-            {
-                glColor4ub(255, 0, 0, backgroundTransparency);
-            }
-            else if (data.parsedData[p][5] == 1)
-            {
-                glColor4ub(0, 255, 0, backgroundTransparency);
-            }
-            else if (data.parsedData[p][5] == 2)
-            {
-                glColor4ub(0, 0, 255, backgroundTransparency);
-            }
-            else if (data.parsedData[p][5] == -1)
-            {
-                glColor4ub(169, 169, 169, backgroundTransparency);
-            }*/
-
             int plot = data.parsedData[p][4];
 
-            // point(xc, yc) denotes center of plot
-            // x1,y1 should be upper left visually
-            // x2,y2 should be lower right visually
-            // coord x1 = xc - (half the plot width) + (fraction of the plotWidth that the current rect x1 is at)
-            // coord x2 = xc + (half the plot width) + (fraction of the plotWidth that the current rect x2 is at)
-            // coord y1 = yc - (half the plot width <will be visually lower part of graph>)  - (fraction of plot height that rect y1 should be at)
-            // coord y2 = yc + (half the plot width <will be visually lower part of graph>)  - (fraction of plot height that rect y1 should be at)
             GLfloat y1 = 0;
             GLfloat x2 = 0;
             GLfloat y2 = 0;
@@ -1107,29 +1100,29 @@ void InteractiveSPC::display()
 
             // get plot coords
 
-            // calculate x components
-            if (plotsWithXAxisInverted.find(plot) != plotsWithXAxisInverted.end())
-            {
-                x1 = data.x2CoordPlot[plot] - data.parsedData[p][0] * data.plotWidth[plot];
-                x2 = data.x2CoordPlot[plot] - data.parsedData[p][2] * data.plotWidth[plot];
-            }
-            else
-            {
+            // // calculate x components
+            // if (plotsWithXAxisInverted.find(plot) != plotsWithXAxisInverted.end())
+            // {
+            //     x1 = data.x2CoordPlot[plot] - data.parsedData[p][0] * data.plotWidth[plot];
+            //     x2 = data.x2CoordPlot[plot] - data.parsedData[p][2] * data.plotWidth[plot];
+            // }
+            // else
+            // {
                 x1 = data.x1CoordPlot[plot] + data.parsedData[p][0] * data.plotWidth[plot];
                 x2 = data.x1CoordPlot[plot] + data.parsedData[p][2] * data.plotWidth[plot];
-            }
+            // }
 
-            // calculate y components
-            if (plotsWithYAxisInverted.find(plot) != plotsWithYAxisInverted.end())
-            {
-                y2 = data.y1CoordPlot[plot] + data.parsedData[p][1] * data.plotHeight[plot];
-                y1 = data.y1CoordPlot[plot] + data.parsedData[p][3] * data.plotHeight[plot];
-            }
-            else
-            {
+            // // calculate y components
+            // if (plotsWithYAxisInverted.find(plot) != plotsWithYAxisInverted.end())
+            // {
+            //     y2 = data.y1CoordPlot[plot] + data.parsedData[p][1] * data.plotHeight[plot];
+            //     y1 = data.y1CoordPlot[plot] + data.parsedData[p][3] * data.plotHeight[plot];
+            // }
+            // else
+            // {
                 y2 = data.y2CoordPlot[plot] - data.parsedData[p][1] * data.plotHeight[plot];
                 y1 = data.y2CoordPlot[plot] - data.parsedData[p][3] * data.plotHeight[plot];
-            }
+            // }
 
             float maxX = max(x1, x2);
             float maxY = max(y1, y2);
@@ -1198,11 +1191,11 @@ void InteractiveSPC::display()
             }
 
             //debug draw threshold rectangles
-            // for (auto thresholds : thresholdEdgeSelectionZones) {
-            //     for (auto zone : thresholds) {
-            //         glRectf(zone[0], zone[1], zone[2], zone[3]);
-            //     }
-            // }
+             //for (auto thresholds : thresholdEdgeSelectionZones) {
+             //    for (auto zone : thresholds) {
+             //        glRectf(zone[0], zone[1], zone[2], zone[3]);
+             //    }
+             //}
             //end debugs
 
             // check if plot has similar attributes
@@ -1221,17 +1214,55 @@ void InteractiveSPC::display()
             {
                 if (isSingleAttributePlot)
                 {
-                    int singleAttributePlotSum = data.plotNumToTotalCases[plot].size();
+                    int singleAttributePlotSum = (float)data.plotNumZoneTotalCases[plot][zone].size();
+                    float zoneDensity = ((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone);
                     backgroundTransparencyCopy = min(((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone) * maxVal + backgroundTransparency, maxVal);
+                    // we need to sum up all the connected, similarly colored zones
+                    std::vector<std::vector<float>*> parserElementsWithPlotNum;
+                    for (int i = 0; i < data.strparsedData.size(); i++) {
+                        if (data.parsedData[i][4] == plot) {
+                            parserElementsWithPlotNum.push_back(&data.parsedData[i]);
+                        }
+                    }
+                    std::set<int> visitedZones;
+                    std::vector<ConnectedZone> connectedZones;
+                    for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+                        connectedZones.push_back(ConnectedZone(i, parserElementsWithPlotNum[i]->at(4), parserElementsWithPlotNum[i]));
+                    }
+                    for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+                        visitedZones.insert(i);
+                        ConnectedZone* currentZoneNode = &connectedZones[i];
+                        for (int j = 0; j < parserElementsWithPlotNum.size(); j++) {
+                            if (i == j) continue;
+                            if (parserElementsWithPlotNum[i][4] != parserElementsWithPlotNum[j][4]) continue;
+                            if ((parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][0] || parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][2]) &&
+                                (parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][1] || parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][3]) && 
+                                (visitedZones.find(j) == visitedZones.end())) {
+                                currentZoneNode->connectedZones.push_back(&connectedZones[j]);
+                            }
+                        }
+                    }
+                    std::cout << "debug";
                 }
                 else if (zoneClass >= 0 && data.maxCasesPerPlotZone != 0)
                 {
-                    backgroundTransparencyCopy = min(((float)data.plotNumZoneTotalCases[plot][zone].size() / (float)data.maxCasesPerPlotZone) * maxVal + backgroundTransparency, maxVal);
-                    if (backgroundLightnessSet.find(backgroundTransparencyCopy) == backgroundLightnessSet.end())
+                    float zoneDensity = ((float)data.plotNumZoneTotalCases[plot][zone].size() / (float)data.maxCasesPerPlotZone);
+                    backgroundTransparencyCopy = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
+                    data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
+                    if (zoneDensity != 0 && zoneDensity < worstZoneNumDensity)
                     {
-                        backgroundLightnessSet.insert(backgroundTransparencyCopy);
+                        worstZoneNumDensity = zoneDensity;
+                        worstZoneNum = zone;
                     }
+                    // if (backgroundLightnessSet.find(backgroundTransparencyCopy) == backgroundLightnessSet.end())
+                    // {
+                    //     backgroundLightnessSet.insert(backgroundTransparencyCopy);
+                    // }
                 }
+            }
+
+            if (isHighlightWorstAreaMode) {
+                drawWorstZone();
             }
 
             backgroundLightnessSet.insert(backgroundTransparencyCopy);
@@ -1241,6 +1272,11 @@ void InteractiveSPC::display()
                 if (data.zonesWithDarkBackgrounds.find(zone) == data.zonesWithDarkBackgrounds.end())
                 {
                     data.zonesWithDarkBackgrounds.insert(zone);
+                }
+            } else {
+                if (data.zonesWithDarkBackgrounds.find(zone) == data.zonesWithDarkBackgrounds.end())
+                {
+                    data.zonesWithDarkBackgrounds.erase(zone);
                 }
             }
 
@@ -1268,135 +1304,15 @@ void InteractiveSPC::display()
 
             // draw edge lines if adjust thresholds mode
             if (isAdjustThresholdsMode) {
-                glColor4ub(0, 0, 0, 0);
-                glRectf(x1, y1, x2, y2);
+                glColor4ub(0, 0, 0, 255);
+                glBegin(GL_LINE_LOOP);
+                glVertex2f(x1, y1);
+                glVertex2f(x2, y1);
+                glVertex2f(x2, y2);
+                glVertex2f(x1, y2);
+                glEnd();
                 glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparencyCopy);
             }
-
-            // We need to draw a dotted line from x1, y1 to x1, y2 and another one from x1, y1, to x2, y1
-            // Due to potential incompatibilities with dictating line width, we can use thin polygones as a workaround
-            /*GLfloat lineThickness = 3.0f;
-            GLfloat dashSpace = 10.0f;
-            GLfloat currentColor[4];
-            glGetFloatv(GL_CURRENT_COLOR, currentColor);
-            glColor4f(currentColor[0], currentColor[1], currentColor[2], 1.0f);*/
-
-            //// Left dashed line, from top left
-            // bool drawLeftColor = true;
-            // const GLfloat x1Backup = x1;
-
-            //// todo: built for single line plots
-            // for (GLfloat y = y1; y >= y2; y -= dashSpace) {
-            //	if (y < y2) {
-            //		y = y2;
-            //	}
-
-            //	// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
-            //	// this is going to be super inefficient
-            //	int pointClass = getClassNumFromPoint(x1, y, p);
-
-            //	// Check if of the same class
-            //	if (pointClass == -200 || pointClass == classNumber) { // todo: adjust. there could be 200 decision zones per plot
-            //		// don't draw if our test point is not a member of any background rectangle.
-            //		// this means that we are on the left or the right edge
-            //		// don't draw if the adaject class is the same as our current class
-            //		continue;
-            //	}
-
-            //	if (drawLeftColor) {
-            //		if (pointClass < 0) {
-            //			glColor4ub(0, 0, 0, 255);
-            //		}
-            //		else {
-            //			std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
-            //			std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
-            //			pointClassColorHSL[2] *= backgroundClassColorCoefficient;
-            //			std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
-            //			glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
-
-            //		}
-            //	}
-            //	else {
-            //		if (classNumber < 0) {
-            //			glColor4ub(0, 0, 0, 255);
-            //		}
-            //		else {
-            //			glColor3f(currentColor[0], currentColor[1], currentColor[2]);
-            //		}
-            //	}
-
-            //	drawLeftColor = !drawLeftColor;
-
-            //	glBegin(GL_POLYGON);
-            //	glVertex2f(x1 + lineThickness / 2, y);
-            //	glVertex2f(x1 - lineThickness / 2, y);
-            //	if (y - dashSpace <= y2) {
-            //		glVertex2f(x1 - lineThickness / 2, y2);
-            //		glVertex2f(x1 + lineThickness / 2, y2);
-            //	}
-            //	else {
-            //		glVertex2f(x1 - lineThickness / 2, y - dashSpace);
-            //		glVertex2f(x1 + lineThickness / 2, y - dashSpace);
-            //	}
-            //	glEnd();
-            //}
-
-            // bool drawTopColor = true;
-            //// Draw bottom line
-            //// todo: built for single line plots
-            // for (GLfloat x = x1; x <= x2; x += dashSpace) {
-            //	if (x > x2) {
-            //		x = x2;
-            //	}
-
-            //	// We need to sample points on either side of the line and only draw the dashed line if the two points are different colors
-            //	// this is going to be super inefficient
-            //	int pointClass = getClassNumFromPoint(x, y2, p);
-
-            //	// Check if of the same class
-            //	if (pointClass == -200 || pointClass == classNumber) {
-            //		// don't draw if our test point is not a member of any background rectangle.
-            //		// this means that we are on the left or the right edge
-            //		// don't draw if the adaject class is the same as our current class
-            //		continue;
-            //	}
-
-            //	if (drawTopColor) {
-            //		if (classNumber < 0) {
-            //			glColor4ub(0, 0, 0, 255);
-            //		} else {
-            //			glColor3f(currentColor[0], currentColor[1], currentColor[2]);
-            //		}
-            //	}
-            //	else {
-            //		if (pointClass < 0) {
-            //			glColor4ub(0, 0, 0, 255);
-            //		}
-            //		else {
-            //			std::vector<float> pointClassColor = { data.classColor[pointClass][0], data.classColor[pointClass][1], data.classColor[pointClass][2] };
-            //			std::vector<float> pointClassColorHSL = RGBtoHSL(pointClassColor);
-            //			pointClassColorHSL[2] *= backgroundClassColorCoefficient;
-            //			std::vector<GLubyte> pointClassColorRGBModified = HSLtoRGB(pointClassColorHSL);
-            //			glColor4ub(pointClassColorRGBModified[0], pointClassColorRGBModified[1], pointClassColorRGBModified[2], 255);
-            //		}
-            //	}
-
-            //	drawTopColor = !drawTopColor;
-
-            //	glBegin(GL_POLYGON);
-            //	glVertex2f(x, y2 + lineThickness / 2);
-            //	glVertex2f(x, y2 - lineThickness / 2);
-            //	if (x + dashSpace >= x2) {
-            //		glVertex2f(x2, y2 - lineThickness / 2);
-            //		glVertex2f(x2, y2 + lineThickness / 2);
-            //	}
-            //	else {
-            //		glVertex2f(x + dashSpace, y2 - lineThickness / 2);
-            //		glVertex2f(x + dashSpace, y2 + lineThickness / 2);
-            //	}
-
-            //	glEnd();
-            //}
         }
     }
 
@@ -1752,7 +1668,8 @@ int InteractiveSPC::isLineTrivial(bool *startPointTriviality, bool *endPointTriv
 
 bool *InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2)
 {
-    bool *triviality = new bool[]{false, false, false, false};
+    bool* triviality = new bool[4];
+    memset(triviality, 0, 4);
     GLfloat boundingBoxLeft = min(rectX1, rectX2);
     GLfloat boundingBoxTop = max(rectY1, rectY2);
     GLfloat boundingBoxRight = max(rectX1, rectX2);
@@ -1893,6 +1810,45 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
     //   return resultClass;
 }
 
+std::vector<int> InteractiveSPC::getParserElementsWithPlotNum(int plotNum) {
+    std::vector<int> elements;
+    for (int i = 0; i < data.parsedData.size(); i++) {
+        if (data.parsedData[i][4] == plotNum) {
+            elements.push_back(i);
+        }
+    }
+    return elements;
+}
+
+void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
+    std::vector<int> parserElementsWithPlotNum = getParserElementsWithPlotNum(plotNum);
+    if (isXAxis) {
+        if (plotsWithXAxisInverted.find(plotNum) == plotsWithXAxisInverted.end()) {
+            plotsWithXAxisInverted.insert(plotNum);
+        } else {
+            plotsWithXAxisInverted.erase(plotNum);
+        }
+        for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+            int index = parserElementsWithPlotNum[i];
+            data.parsedData[index][0] = 1 - data.parsedData[index][0];
+            data.parsedData[index][2] = 1 - data.parsedData[index][2];
+        }
+    } else {
+        if (plotsWithYAxisInverted.find(plotNum) == plotsWithYAxisInverted.end()) {
+            plotsWithYAxisInverted.insert(plotNum);
+        } else {
+            plotsWithYAxisInverted.erase(plotNum);
+        }
+        for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+            int index = parserElementsWithPlotNum[i];
+            data.parsedData[index][1] = 1 - data.parsedData[index][1];
+            data.parsedData[index][3] = 1 - data.parsedData[index][3];
+        }
+    }
+    thresholdEdgeSelectionZones.clear();
+    zoneIdThresholdEdgesRecorded.clear();
+}
+
 // zoneid is the same as the index in parserData
 int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
@@ -1936,26 +1892,26 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
         // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
         // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
-        if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-        {
-            zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
-            zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
-        }
-        else
-        {
+         //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+         //{
+         //    zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+         //    zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+         //}
+         //else
+         //{
             zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
             zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-        }
-        if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-        {
-            zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
-            zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
-        }
-        else
-        {
+         /*}
+         if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+         {*/
+            // zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+            // zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+         /*}
+         else
+         {*/
             zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
             zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-        }
+         //}
 
         // debug
         // glBegin(GL_POINTS);
@@ -1977,6 +1933,38 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
     return INT_MIN;
 }
 
+void InteractiveSPC::drawWorstZone() {
+    if (worstZoneNum < 0 || worstZoneNum >= data.parsedData.size()) {
+        return;
+    }
+    std::vector<float> parserData = data.parsedData[worstZoneNum];
+    const float parsedZoneX1 = parserData[0];
+    const float parsedZoneY1 = parserData[1];
+    const float parsedZoneX2 = parserData[2];
+    const float parsedZoneY2 = parserData[3];
+    const int plotNum = parserData[4];
+    const float plotX1 = data.x1CoordPlot[plotNum];
+    const float plotY1 = data.y1CoordPlot[plotNum];
+    const float plotX2 = data.x2CoordPlot[plotNum];
+    const float plotY2 = data.y2CoordPlot[plotNum];
+    const float zoneX1 = plotX1 + parsedZoneX1 * (plotX2 - plotX1);
+    const float zoneY1 = plotY2 - parsedZoneY1 * (plotY2 - plotY1);
+    const float zoneX2 = plotX1 + parsedZoneX2 * (plotX2 - plotX1);
+    const float zoneY2 = plotY2 - parsedZoneY2 * (plotY2 - plotY1);
+
+    int lineThickness = 3;
+    float lineOffset = (float)lineThickness * 0.5;
+    glLineWidth(lineThickness);
+    glColor4ub(255, 0, 0, 255);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(zoneX1 - lineOffset, zoneY1 - lineOffset);
+    glVertex2f(zoneX2 + lineOffset, zoneY1 - lineOffset);
+    glVertex2f(zoneX2 + lineOffset, zoneY2 + lineOffset);
+    glVertex2f(zoneX1 - lineOffset, zoneY2 + lineOffset);
+    glEnd();
+    glLineWidth(1);
+}
+
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
     // TODO
@@ -1988,13 +1976,11 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
         std::vector<float> parserData = data.parsedData[parsedIndex];
         if ((int)parserData[4] != plotNum)
         {
-            std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
             continue;
         }
         // TODO: There's probably a MUCH easier way to do this
         // need to accomodate various swappings
         // X/Y swap swaps parser data itself, so we need not do anything here
-        // but the x and y invert buttons DONT alter data, so we need to make up for that here
         const float zoneX1 = parserData[0];
         const float zoneY1 = parserData[1];
         const float zoneX2 = parserData[2];
@@ -2019,34 +2005,34 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
         // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
         // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
-        if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-        {
-            zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
-            zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
-        }
-        else
-        {
+         //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+         //{
+         //    zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+         //    zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+         //}
+         //else
+         //{
             zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
             zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-        }
-        if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-        {
-            zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
-            zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
-        }
-        else
-        {
-            zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+         //}
+         //if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+         //{
+         //    zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+         //    zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+         //}
+         //else
+         //{
             zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-        }
+            zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+         //}
 
         // debug
-        // glBegin(GL_POINTS);
-        // glColor4ub(255, 0, 0, 255);
-        // glVertex2f(zoneToCheckX1, zoneToCheckY1);
-        // glColor4ub(0, 255, 0, 255);
-        // glVertex2f(zoneToCheckX2, zoneToCheckY2);
-        // glEnd();
+         //glBegin(GL_POINTS);
+         //glColor4ub(255, 0, 0, 255);
+         //glVertex2f(zoneToCheckX1, zoneToCheckY1);
+         //glColor4ub(0, 255, 0, 255);
+         //glVertex2f(zoneToCheckX2, zoneToCheckY2);
+         //glEnd();
         // end debug
 
         bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
