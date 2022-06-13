@@ -1858,8 +1858,8 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
     // check all rects inside plotnum
     for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
     {
-        std::vector<float> parserData = data.parsedData[parsedIndex];
-        if ((int)parserData[4] != plotNum)
+        std::vector<float> * parserData = &data.parsedData[parsedIndex];
+        if ((int)parserData->at(4) != plotNum)
         {
             std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
             continue;
@@ -1868,10 +1868,10 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
         // need to accomodate various swappings
         // X/Y swap swaps parser data itself, so we need not do anything here
         // but the x and y invert buttons DONT alter data, so we need to make up for that here
-        const float zoneX1 = parserData[0];
-        const float zoneY1 = parserData[1];
-        const float zoneX2 = parserData[2];
-        const float zoneY2 = parserData[3];
+        const float zoneX1 = parserData->at(0);
+        const float zoneY1 = parserData->at(1);
+        const float zoneX2 = parserData->at(2);
+        const float zoneY2 = parserData->at(3);
 
         const float pltX1 = data.x1CoordPlot[plotNum];
         const float pltY1 = data.y1CoordPlot[plotNum];
@@ -1887,10 +1887,10 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
         GLfloat zoneToCheckY2;
 
         // old
-        // zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-        // zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-        // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-        // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+         zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+         zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+         zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+         zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
          //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
          //{
@@ -1899,8 +1899,8 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
          //}
          //else
          //{
-            zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-            zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+            //zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+            //zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
          /*}
          if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
          {*/
@@ -1909,8 +1909,8 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
          /*}
          else
          {*/
-            zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-            zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+            //zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+            //zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
          //}
 
         // debug
@@ -1922,7 +1922,23 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
         // glEnd();
         // end debug
 
-        bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
+        const float lowX = min(zoneToCheckX1, zoneToCheckX2);
+        const float highX = max(zoneToCheckX1, zoneToCheckX2);
+        const float lowY = min(zoneToCheckY1, zoneToCheckY2);
+        const float highY = max(zoneToCheckY1, zoneToCheckY2);
+
+        if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+        {
+            px = 1.0f - px;
+        }
+        if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+        {
+            py = 1.0f - py;
+        }
+
+        bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
+        // bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
+
 
         if (withinRect)
         {
@@ -2000,10 +2016,10 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
         GLfloat zoneToCheckY2;
 
         // old
-        // zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-        // zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-        // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-        // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+         zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+         zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+         zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+         zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
          //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
          //{
@@ -2012,8 +2028,8 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
          //}
          //else
          //{
-            zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-            zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+         //   zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+         //   zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
          //}
          //if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
          //{
@@ -2022,8 +2038,8 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
          //}
          //else
          //{
-            zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-            zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+         //   zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+         //   zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
          //}
 
         // debug
@@ -2035,7 +2051,22 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
          //glEnd();
         // end debug
 
-        bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
+        const float lowX = min(zoneToCheckX1, zoneToCheckX2);
+        const float highX = max(zoneToCheckX1, zoneToCheckX2);
+        const float lowY = min(zoneToCheckY1, zoneToCheckY2);
+        const float highY = max(zoneToCheckY1, zoneToCheckY2);
+
+        if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+            px = 1.0f - px;
+        }
+        if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+            py = 1.0f - py;
+        }
+
+        bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
+
+
+        //bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
 
         if (withinRect)
         {

@@ -764,7 +764,7 @@ public
                         // adds plot clicked to list of plots with swapped axes
                         if (attributeSwapMode && plotNumClicked >= 0 && plotNumClicked < graph4.data.numPlots)
                         {
-                            if (graph4.swappedPlots.find(plotNumClicked) != graph4.swappedPlots.end())
+                            if (graph4.swappedPlots.find(plotNumClicked) == graph4.swappedPlots.end())
                             {
                                 graph4.swappedPlots.insert(plotNumClicked);
                             }

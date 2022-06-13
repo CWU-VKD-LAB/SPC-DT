@@ -321,6 +321,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
             this->label2 = (gcnew System::Windows::Forms::Label());
             this->panel2 = (gcnew System::Windows::Forms::Panel());
+            this->identifyWorstAreaCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->mitigateAllOverlap = (gcnew System::Windows::Forms::CheckBox());
             this->backgroundDensityColorCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->mitigateOverlapCheckbox = (gcnew System::Windows::Forms::CheckBox());
@@ -338,7 +339,6 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
             this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
             this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-            this->identifyWorstAreaCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->panel1->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             this->groupBox1->SuspendLayout();
@@ -607,6 +607,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->trackBar1->BackColor = System::Drawing::SystemColors::Control;
             this->trackBar1->LargeChange = 1;
             this->trackBar1->Location = System::Drawing::Point(4, 71);
+            this->trackBar1->Minimum = -10;
             this->trackBar1->Name = L"trackBar1";
             this->trackBar1->Size = System::Drawing::Size(185, 45);
             this->trackBar1->TabIndex = 9;
@@ -657,16 +658,16 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
-            this->menuStrip1->Size = System::Drawing::Size(1530, 24);
+            this->menuStrip1->Size = System::Drawing::Size(1907, 24);
             this->menuStrip1->TabIndex = 5;
             this->menuStrip1->Text = L"menuStrip1";
             // 
             // statusStrip1
             // 
             this->statusStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
-            this->statusStrip1->Location = System::Drawing::Point(0, 763);
+            this->statusStrip1->Location = System::Drawing::Point(0, 956);
             this->statusStrip1->Name = L"statusStrip1";
-            this->statusStrip1->Size = System::Drawing::Size(1530, 22);
+            this->statusStrip1->Size = System::Drawing::Size(1907, 22);
             this->statusStrip1->TabIndex = 6;
             this->statusStrip1->Text = L"statusStrip1";
             // 
@@ -762,10 +763,21 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->panel2->Controls->Add(this->groupBox1);
             this->panel2->Controls->Add(this->button5);
             this->panel2->Controls->Add(this->graph4);
-            this->panel2->Location = System::Drawing::Point(1320, 27);
+            this->panel2->Location = System::Drawing::Point(1698, 27);
             this->panel2->Name = L"panel2";
             this->panel2->Size = System::Drawing::Size(209, 748);
             this->panel2->TabIndex = 13;
+            // 
+            // identifyWorstAreaCheckbox
+            // 
+            this->identifyWorstAreaCheckbox->AutoSize = true;
+            this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
+            this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
+            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(124, 17);
+            this->identifyWorstAreaCheckbox->TabIndex = 24;
+            this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
+            this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
+            this->identifyWorstAreaCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::identifyWorstAreaCheckbox_CheckedChanged);
             // 
             // mitigateAllOverlap
             // 
@@ -957,21 +969,10 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
             // 
-            // identifyWorstAreaCheckbox
-            // 
-            this->identifyWorstAreaCheckbox->AutoSize = true;
-            this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
-            this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
-            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(124, 17);
-            this->identifyWorstAreaCheckbox->TabIndex = 24;
-            this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
-            this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
-            this->identifyWorstAreaCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::identifyWorstAreaCheckbox_CheckedChanged);
-            // 
             // Form1
             // 
             this->BackColor = System::Drawing::SystemColors::Control;
-            this->ClientSize = System::Drawing::Size(1530, 785);
+            this->ClientSize = System::Drawing::Size(1907, 978);
             this->Controls->Add(this->panel2);
             this->Controls->Add(this->label2);
             this->Controls->Add(this->statusStrip1);

@@ -689,9 +689,9 @@ public:
 
 			/*float labelsDistanceFromPlot = 10;
 			float xLabelLocation = labelsDistanceFromPlot + 10;*/
-			float lineSeparation = 12;
-			float xLabelVeritcalOffset = 10;
-			float yLabelVerticalOffset = xLabelVeritcalOffset + lineSeparation;
+			float lineSeparation = 18;
+			float xLabelVerticalOffset = 17;
+			float yLabelVerticalOffset = xLabelVerticalOffset + lineSeparation;
 			std::string xLabelStr = "x:" + parsedAttributePairs[plotNum][0] + " ";
 			std::string yLabelStr = "y:" + parsedAttributePairs[plotNum][1] + " ";
 			std::string labelsStr = xLabelStr + yLabelStr;
@@ -701,8 +701,9 @@ public:
 			float plotWidth = nonOrthoX2[i] - nonOrthoX1[i];*/
 			float plotWidth = x2CoordPlot[plotNum] - x1CoordPlot[plotNum];
 			float plotHeight = y2CoordPlot[plotNum] - y1CoordPlot[plotNum];
-			drawBitmapText(xLabelArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + xLabelVeritcalOffset);
-			drawBitmapText(yLabelArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + yLabelVerticalOffset);
+			float fractionOfWidth = plotWidth / 3;
+			drawBitmapText(xLabelArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + xLabelVerticalOffset);
+			drawBitmapText(yLabelArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + yLabelVerticalOffset);
 			
 
 			int precision = 4;
@@ -744,7 +745,7 @@ public:
 			std::string plot = "plotId:" + std::to_string(plotNum);
 			char* plotAsArr = &plot[0];
 			float plotIdOffset = yLabelVerticalOffset + lineSeparation;
-			drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + (plotWidth / 2), y2CoordPlot[plotNum] + plotIdOffset);
+			drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + plotIdOffset);
 			//if (!fOpen)
 			//{
 			//	for (int p = 0; p < parsedData.size(); p++)
@@ -820,7 +821,8 @@ public:
 		{
 			if (i < strlen(string))
 			{
-				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c);
+				//glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c);
+				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
 			}
 			else
 			{
