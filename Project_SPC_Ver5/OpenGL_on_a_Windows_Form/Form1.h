@@ -264,6 +264,12 @@ public
         System::Windows::Forms::Button ^ adjustThresholdsButton;
 private: System::Windows::Forms::TextBox^ confusionMatrixTextBox;
 private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
+private: System::Windows::Forms::Button^ drawUserRectButton;
+private: System::Windows::Forms::Button^ changeUserRectColorButton;
+private: System::Windows::Forms::Button^ removeUserRectButton;
+
+
+
 
 
 
@@ -339,6 +345,9 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
             this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
             this->transparencyLabel = (gcnew System::Windows::Forms::Label());
+            this->drawUserRectButton = (gcnew System::Windows::Forms::Button());
+            this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
+            this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
             this->panel1->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             this->groupBox1->SuspendLayout();
@@ -374,6 +383,9 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             // panel1
             // 
             this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+            this->panel1->Controls->Add(this->removeUserRectButton);
+            this->panel1->Controls->Add(this->changeUserRectColorButton);
+            this->panel1->Controls->Add(this->drawUserRectButton);
             this->panel1->Controls->Add(this->confusionMatrixTextBox);
             this->panel1->Controls->Add(this->adjustThresholdsButton);
             this->panel1->Controls->Add(this->showClassAccuraciesButton);
@@ -394,7 +406,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->panel1->ForeColor = System::Drawing::SystemColors::ControlText;
             this->panel1->Location = System::Drawing::Point(0, 0);
             this->panel1->Name = L"panel1";
-            this->panel1->Size = System::Drawing::Size(200, 775);
+            this->panel1->Size = System::Drawing::Size(200, 953);
             this->panel1->TabIndex = 4;
             this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
             // 
@@ -438,7 +450,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button9->Location = System::Drawing::Point(12, 554);
             this->button9->Name = L"button9";
-            this->button9->Size = System::Drawing::Size(173, 41);
+            this->button9->Size = System::Drawing::Size(176, 41);
             this->button9->TabIndex = 34;
             this->button9->Text = L"Draw Rects On Gray";
             this->button9->UseVisualStyleBackColor = true;
@@ -447,7 +459,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             // SwapAttributesButton
             // 
             this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->SwapAttributesButton->Location = System::Drawing::Point(12, 661);
+            this->SwapAttributesButton->Location = System::Drawing::Point(16, 767);
             this->SwapAttributesButton->Name = L"SwapAttributesButton";
             this->SwapAttributesButton->Size = System::Drawing::Size(173, 34);
             this->SwapAttributesButton->TabIndex = 33;
@@ -480,7 +492,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             // button7
             // 
             this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button7->Location = System::Drawing::Point(99, 616);
+            this->button7->Location = System::Drawing::Point(103, 722);
             this->button7->Name = L"button7";
             this->button7->Size = System::Drawing::Size(80, 39);
             this->button7->TabIndex = 30;
@@ -491,7 +503,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             // button8
             // 
             this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button8->Location = System::Drawing::Point(12, 616);
+            this->button8->Location = System::Drawing::Point(16, 722);
             this->button8->Name = L"button8";
             this->button8->Size = System::Drawing::Size(81, 39);
             this->button8->TabIndex = 29;
@@ -506,7 +518,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->checkedListBox4->CheckOnClick = true;
             this->checkedListBox4->ForeColor = System::Drawing::SystemColors::WindowText;
             this->checkedListBox4->FormattingEnabled = true;
-            this->checkedListBox4->Location = System::Drawing::Point(133, 710);
+            this->checkedListBox4->Location = System::Drawing::Point(132, 824);
             this->checkedListBox4->Name = L"checkedListBox4";
             this->checkedListBox4->Size = System::Drawing::Size(59, 2);
             this->checkedListBox4->TabIndex = 28;
@@ -517,7 +529,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             // 
             this->label9->AutoSize = true;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->label9->Location = System::Drawing::Point(12, 709);
+            this->label9->Location = System::Drawing::Point(11, 823);
             this->label9->Name = L"label9";
             this->label9->Size = System::Drawing::Size(88, 16);
             this->label9->TabIndex = 27;
@@ -527,7 +539,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             // checkBox1
             // 
             this->checkBox1->CheckAlign = System::Drawing::ContentAlignment::TopLeft;
-            this->checkBox1->Location = System::Drawing::Point(16, 732);
+            this->checkBox1->Location = System::Drawing::Point(15, 846);
             this->checkBox1->Name = L"checkBox1";
             this->checkBox1->Size = System::Drawing::Size(173, 31);
             this->checkBox1->TabIndex = 14;
@@ -765,7 +777,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->panel2->Controls->Add(this->graph4);
             this->panel2->Location = System::Drawing::Point(1698, 27);
             this->panel2->Name = L"panel2";
-            this->panel2->Size = System::Drawing::Size(209, 748);
+            this->panel2->Size = System::Drawing::Size(209, 926);
             this->panel2->TabIndex = 13;
             // 
             // identifyWorstAreaCheckbox
@@ -969,6 +981,37 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
             // 
+            // drawUserRectButton
+            // 
+            this->drawUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->drawUserRectButton->Location = System::Drawing::Point(12, 602);
+            this->drawUserRectButton->Name = L"drawUserRectButton";
+            this->drawUserRectButton->Size = System::Drawing::Size(85, 63);
+            this->drawUserRectButton->TabIndex = 40;
+            this->drawUserRectButton->Text = L"Draw User Rect";
+            this->drawUserRectButton->UseVisualStyleBackColor = true;
+            this->drawUserRectButton->Click += gcnew System::EventHandler(this, &Form1::drawUserRectButton_Click);
+            // 
+            // changeUserRectColorButton
+            // 
+            this->changeUserRectColorButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->changeUserRectColorButton->Location = System::Drawing::Point(103, 602);
+            this->changeUserRectColorButton->Name = L"changeUserRectColorButton";
+            this->changeUserRectColorButton->Size = System::Drawing::Size(85, 63);
+            this->changeUserRectColorButton->TabIndex = 41;
+            this->changeUserRectColorButton->Text = L"Change User Rect Color";
+            this->changeUserRectColorButton->UseVisualStyleBackColor = true;
+            // 
+            // removeUserRectButton
+            // 
+            this->removeUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->removeUserRectButton->Location = System::Drawing::Point(12, 672);
+            this->removeUserRectButton->Name = L"removeUserRectButton";
+            this->removeUserRectButton->Size = System::Drawing::Size(176, 44);
+            this->removeUserRectButton->TabIndex = 42;
+            this->removeUserRectButton->Text = L"Remove User Rect";
+            this->removeUserRectButton->UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this->BackColor = System::Drawing::SystemColors::Control;
@@ -1126,6 +1169,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
             OpenGL3->setLineTerminationMode(false);
             OpenGL3->setAdjustThresholdsMode(false);
             OpenGL3->setDrawingRectangleState(false);
+            OpenGL3->setUserRectangleState(false);
 
             for (int x = 0; x < checkedListBox4->Items->Count; x++)
             {
@@ -1897,6 +1941,16 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
     }
 private: System::Void identifyWorstAreaCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
     OpenGL3->setHighlightWorstAreaMode(identifyWorstAreaCheckbox->Checked);
+}
+       bool drawUserRectToggle = false;
+private: System::Void drawUserRectButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    if (!drawUserRectToggle) {
+        OpenGL3->drawUserRectangleMode = true;
+    }
+    else {
+        OpenGL3->drawUserRectangleMode = false;
+    }
+    drawUserRectToggle = !drawUserRectToggle;
 }
 };
 }

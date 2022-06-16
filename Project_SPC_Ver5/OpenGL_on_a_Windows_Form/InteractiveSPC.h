@@ -8,11 +8,24 @@
 #include "FileHandling.h"
 #pragma once
 
+// structure representing a user rectangle
+struct UserRectangle {
+	int id;
+	GLfloat X1, X2, Y1, Y2;
+	GLfloat color[3];
+	UserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+		X1 = x1;
+		X2 = x2;
+		Y1 = y1;
+		Y2 = y2;
+		id = time(NULL);
+	}
+};
+
 class InteractiveSPC
 {
 
 public:
-	
 	ClassData data;
 	parseData dataParsed;
 	FileHandling newFile;
@@ -51,15 +64,18 @@ public:
 	bool shouldPointTerminate(GLfloat px, GLfloat py);
 
 	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
-	std::vector<GLfloat> rectX1List;
-	std::vector<GLfloat> rectY1List;
-	std::vector<GLfloat> rectX2List;
-	std::vector<GLfloat> rectY2List;
+	std::vector<GLfloat> condenseRectX1List;
+	std::vector<GLfloat> condenseRectY1List;
+	std::vector<GLfloat> condenseRectX2List;
+	std::vector<GLfloat> condenseRectY2List;
+    std::vector<UserRectangle> userRectangles;
+    std::vector<std::vector<GLubyte>> userRectColorList;
 	GLfloat rectX1;
 	GLfloat rectY1;
 	GLfloat rectX2;
 	GLfloat rectY2;
-	bool isRectangleMode = false;
+	bool isCondenseRectangleMode = false;
+	bool isUserRectangleMode = false;
 	bool isBackgroundDensityColoringMode = false;
 	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);
 	bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
@@ -126,7 +142,8 @@ public:
 	float findClickedGraph(double x, double y);
 	int findClickedCoordinate(double x, double y);
 	void drawCircle(int x, int y);
-	void drawRectangle();
+	void drawCondenseRectangles();
+	void drawUserRectangles();
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
 	void drawRectanglesOnGray();
 	void setBackgroundTransparency(float alpha);

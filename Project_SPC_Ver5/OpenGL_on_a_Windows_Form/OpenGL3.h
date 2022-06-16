@@ -73,6 +73,7 @@ public
         /// <summary>	Is made true via mouselistener when dragging the mouse. </summary>
         bool drawingDragged;
         bool drawingRectangleEnabled = false;
+        bool drawUserRectangleMode = false;
         bool drawingRectangleVertex1 = true;
         GLfloat drawingRectangleX1;
         GLfloat drawingRectangleY1;
@@ -254,14 +255,24 @@ public
         // Set draw rectangle state
         void setDrawingRectangleState(bool state)
         {
-            graph4.isRectangleMode = state;
+            graph4.isCondenseRectangleMode = state;
             if (!state)
             {
-                graph4.rectX1List.clear();
-                graph4.rectX2List.clear();
-                graph4.rectY1List.clear();
-                graph4.rectY2List.clear();
+                graph4.condenseRectX1List.clear();
+                graph4.condenseRectX2List.clear();
+                graph4.condenseRectY1List.clear();
+                graph4.condenseRectY2List.clear();
             }
+        }
+
+        void setUserRectangleState(bool state) {
+            graph4.isUserRectangleMode = state;
+            // if (!state) {
+            //     graph4.userRectX1List.clear();
+            //     graph4.userRectX2List.clear();
+            //     graph4.userRectY1List.clear();
+            //     graph4.userRectY2List.clear();
+            // }
         }
 
         void setBackgroundDensityColoringMode(bool state)
@@ -708,22 +719,54 @@ public
                             {
                                 drawingRectangleX1 = worldMouseX;
                                 drawingRectangleY1 = worldMouseY;
+                                glBegin(GL_POINTS);
+                                glColor3f(0, 0, 0);
+                                glPointSize(8);
+                                glVertex2f(drawingRectangleX1, drawingRectangleY1);
+                                glPointSize(4);
+                                glEnd();
                             }
                             else
                             {
                                 drawingRectangleX2 = worldMouseX;
                                 drawingRectangleY2 = worldMouseY;
                                 drawingRectangleEnabled = !drawingRectangleEnabled;
-                                graph4.rectX1List.push_back((GLfloat)drawingRectangleX1);
-                                graph4.rectY1List.push_back((GLfloat)drawingRectangleY1);
-                                graph4.rectX2List.push_back((GLfloat)drawingRectangleX2);
-                                graph4.rectY2List.push_back((GLfloat)drawingRectangleY2);
+                                graph4.condenseRectX1List.push_back((GLfloat)drawingRectangleX1);
+                                graph4.condenseRectY1List.push_back((GLfloat)drawingRectangleY1);
+                                graph4.condenseRectX2List.push_back((GLfloat)drawingRectangleX2);
+                                graph4.condenseRectY2List.push_back((GLfloat)drawingRectangleY2);
                                 /*graph4.rectX1 = drawingRectangleX1;
                                 graph4.rectY1 = drawingRectangleY1;
                                 graph4.rectX2 = drawingRectangleX2;
                                 graph4.rectY2 = drawingRectangleY2;
                                 drawingRectangleEnabled = false;*/
                                 setDrawingRectangleState(true);
+                            }
+                            drawingRectangleVertex1 = !drawingRectangleVertex1;
+                            break;
+                        }
+
+                        if (drawUserRectangleMode) {
+                            if (drawingRectangleVertex1) {
+                                drawingRectangleX1 = worldMouseX;
+                                drawingRectangleY1 = worldMouseY;
+                                glBegin(GL_POINTS);
+                                glColor3f(0, 0, 0);
+                                glPointSize(8);
+                                glVertex2f(drawingRectangleX1, drawingRectangleY1);
+                                glPointSize(4);
+                                glEnd();
+                            }
+                            else {
+                                drawingRectangleX2 = worldMouseX;
+                                drawingRectangleY2 = worldMouseY;
+                                drawUserRectangleMode = false;
+                                graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2));
+                                //graph4.userRectX1List.push_back((GLfloat)drawingRectangleX1);
+                                //graph4.userRectY1List.push_back((GLfloat)drawingRectangleY1);
+                                //graph4.userRectX2List.push_back((GLfloat)drawingRectangleX2);
+                                //graph4.userRectY2List.push_back((GLfloat)drawingRectangleY2);
+                                setUserRectangleState(true);
                             }
                             drawingRectangleVertex1 = !drawingRectangleVertex1;
                             break;

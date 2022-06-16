@@ -239,7 +239,6 @@ void InteractiveSPC::drawRectanglesOnGray()
             // zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
             // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
             // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-
             // if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
             // {
             //     zoneToDrawX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
@@ -261,14 +260,14 @@ void InteractiveSPC::drawRectanglesOnGray()
             //     zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
             // }
 
-            rectX1List.push_back(zoneToDrawX1);
-            rectX2List.push_back(zoneToDrawX2);
-            rectY1List.push_back(zoneToDrawY1);
-            rectY2List.push_back(zoneToDrawY2);
+            condenseRectX1List.push_back(zoneToDrawX1);
+            condenseRectX2List.push_back(zoneToDrawX2);
+            condenseRectY1List.push_back(zoneToDrawY1);
+            condenseRectY2List.push_back(zoneToDrawY2);
         }
     }
 
-    isRectangleMode = true;
+    isCondenseRectangleMode = true;
 }
 
 /* Draws data sets. */
@@ -464,20 +463,20 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }
 
     // condensation mode
-    if (isRectangleMode)
+    if (isCondenseRectangleMode)
     {
-        for (int i = 0; i < rectX1List.size(); i++)
+        for (int i = 0; i < condenseRectX1List.size(); i++)
         {
-            GLfloat highX = max(rectX1List[i], rectX2List[i]);
-            GLfloat lowX = min(rectX1List[i], rectX2List[i]);
-            GLfloat highY = max(rectY1List[i], rectY2List[i]);
-            GLfloat lowY = min(rectY1List[i], rectY2List[i]);
+            GLfloat highX = max(condenseRectX1List[i], condenseRectX2List[i]);
+            GLfloat lowX = min(condenseRectX1List[i], condenseRectX2List[i]);
+            GLfloat highY = max(condenseRectY1List[i], condenseRectY2List[i]);
+            GLfloat lowY = min(condenseRectY1List[i], condenseRectY2List[i]);
             if (isPointWithinRect(x1, y1, lowX, highY, highX, lowY))
             {
                 // if (point1BackgroundClass >= 0) {
                 //  compute new location
-                GLfloat deltaX = abs(rectX2List[i] - rectX1List[i]);
-                GLfloat deltaY = abs(rectY2List[i] - rectY1List[i]);
+                GLfloat deltaX = abs(condenseRectX2List[i] - condenseRectX1List[i]);
+                GLfloat deltaY = abs(condenseRectY2List[i] - condenseRectY1List[i]);
                 GLfloat newX = lowX + deltaX / 2;
                 GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
                 x1 = newX;
@@ -788,19 +787,19 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         }
     }
 
-    if (isRectangleMode)
+    if (isCondenseRectangleMode)
     {
-        for (int i = 0; i < rectX1List.size(); i++)
+        for (int i = 0; i < condenseRectX1List.size(); i++)
         {
-            GLfloat highX = max(rectX1List[i], rectX2List[i]);
-            GLfloat lowX = min(rectX1List[i], rectX2List[i]);
-            GLfloat highY = max(rectY1List[i], rectY2List[i]);
-            GLfloat lowY = min(rectY1List[i], rectY2List[i]);
+            GLfloat highX = max(condenseRectX1List[i], condenseRectX2List[i]);
+            GLfloat lowX = min(condenseRectX1List[i], condenseRectX2List[i]);
+            GLfloat highY = max(condenseRectY1List[i], condenseRectY2List[i]);
+            GLfloat lowY = min(condenseRectY1List[i], condenseRectY2List[i]);
             if (isPointWithinRect(x2, y2, lowX, highY, highX, lowY))
             {
                 // compute new location
-                GLfloat deltaX = abs(rectX2List[i] - rectX1List[i]);
-                GLfloat deltaY = abs(rectY2List[i] - rectY1List[i]);
+                GLfloat deltaX = abs(condenseRectX2List[i] - condenseRectX1List[i]);
+                GLfloat deltaY = abs(condenseRectY2List[i] - condenseRectY1List[i]);
                 GLfloat newX = lowX + deltaX / 2;
                 GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
                 x2 = newX;
@@ -1317,9 +1316,14 @@ void InteractiveSPC::display()
     }
 
     // Draws rectangle if rectangle mode is enabled
-    if (isRectangleMode)
+    if (isCondenseRectangleMode)
     {
-        drawRectangle();
+        drawCondenseRectangles();
+    }
+
+    // draws user defined rectangles
+    if (isUserRectangleMode) {
+        drawUserRectangles();
     }
 
     // TODO: We need to shake up the draw order!!!! Draw relative to pairs, not columns!!!!!
@@ -2134,11 +2138,17 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
     glEnd();
 }
 
-void InteractiveSPC::drawRectangle()
+void InteractiveSPC::drawCondenseRectangles()
 {
-    for (int i = 0; i < rectX1List.size(); i++)
+    for (int i = 0; i < condenseRectX1List.size(); i++)
     {
-        drawRectangle(rectX1List[i], rectX2List[i], rectY1List[i], rectY2List[i], 0.0f, 0.0f, 0.0f);
+        drawRectangle(condenseRectX1List[i], condenseRectX2List[i], condenseRectY1List[i], condenseRectY2List[i], 0.0f, 0.0f, 0.0f);
+    }
+}
+
+void InteractiveSPC::drawUserRectangles() {
+    for (int i = 0; i < userRectangles.size(); i++) {
+        drawRectangle(userRectangles[i].X1, userRectangles[i].X2, userRectangles[i].Y1, userRectangles[i].Y2, userRectangles[i].color[0], userRectangles[i].color[1], userRectangles[i].color[2]);
     }
 }
 
