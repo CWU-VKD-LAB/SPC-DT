@@ -1,4 +1,4 @@
-# cs556_project
+# SPC-DT
 
-A collection of programs from CS556 that were built by students.
+Visualizes decision trees using shifted paired coordinates.
 
