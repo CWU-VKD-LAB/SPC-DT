@@ -242,6 +242,12 @@ public
             graph4.zoneIdThresholdEdgesRecorded.clear();
         }
 
+        void setDrawUserRectangleMode(bool state) {
+            graph4.drawingUserRectangleVertex1 = state;
+            drawUserRectangleMode = state;
+            canDragPlots = !state;
+        }
+
         // set the highlight worst area mode
         void setHighlightWorstAreaMode(bool state) {
             graph4.isHighlightWorstAreaMode = state;
@@ -750,12 +756,9 @@ public
                             if (drawingRectangleVertex1) {
                                 drawingRectangleX1 = worldMouseX;
                                 drawingRectangleY1 = worldMouseY;
-                                glBegin(GL_POINTS);
-                                glColor3f(0, 0, 0);
-                                glPointSize(8);
-                                glVertex2f(drawingRectangleX1, drawingRectangleY1);
-                                glPointSize(4);
-                                glEnd();
+                                setDrawUserRectangleMode(true);
+                                graph4.userRectangleDrawGuideX = drawingRectangleX1;
+                                graph4.userRectangleDrawGuideY = drawingRectangleY1;
                             }
                             else {
                                 drawingRectangleX2 = worldMouseX;
@@ -767,6 +770,7 @@ public
                                 //graph4.userRectX2List.push_back((GLfloat)drawingRectangleX2);
                                 //graph4.userRectY2List.push_back((GLfloat)drawingRectangleY2);
                                 setUserRectangleState(true);
+                                setDrawUserRectangleMode(false);
                             }
                             drawingRectangleVertex1 = !drawingRectangleVertex1;
                             break;

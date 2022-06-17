@@ -1942,15 +1942,9 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
 private: System::Void identifyWorstAreaCheckbox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
     OpenGL3->setHighlightWorstAreaMode(identifyWorstAreaCheckbox->Checked);
 }
-       bool drawUserRectToggle = false;
+
 private: System::Void drawUserRectButton_Click(System::Object^ sender, System::EventArgs^ e) {
-    if (!drawUserRectToggle) {
-        OpenGL3->drawUserRectangleMode = true;
-    }
-    else {
-        OpenGL3->drawUserRectangleMode = false;
-    }
-    drawUserRectToggle = !drawUserRectToggle;
+    OpenGL3->setDrawUserRectangleMode(true);
 }
 };
 }

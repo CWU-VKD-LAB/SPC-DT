@@ -1330,6 +1330,15 @@ void InteractiveSPC::display()
         drawUserRectangles();
     }
 
+    if (drawingUserRectangleVertex1) {
+        glBegin(GL_POINTS);
+        glPointSize(10.0);
+        glColor3ub(0, 0, 0);
+        glVertex2f(userRectangleDrawGuideX, userRectangleDrawGuideY);
+        glPointSize(4.0);
+        glEnd();
+    }
+
     // TODO: We need to shake up the draw order!!!! Draw relative to pairs, not columns!!!!!
     // for every point, we need to draw it. What constitutes a point?
     // Well that's in the attribute pairs map which is in the data class

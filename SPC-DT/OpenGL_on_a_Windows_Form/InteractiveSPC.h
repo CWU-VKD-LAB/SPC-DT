@@ -77,6 +77,9 @@ public:
 	bool isCondenseRectangleMode = false;
 	bool isUserRectangleMode = false;
 	bool isBackgroundDensityColoringMode = false;
+	bool drawingUserRectangleVertex1 = false;
+	GLfloat userRectangleDrawGuideX;
+	GLfloat userRectangleDrawGuideY;
 	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);
 	bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	bool* getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2);
