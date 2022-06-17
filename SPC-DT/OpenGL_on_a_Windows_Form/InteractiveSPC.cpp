@@ -294,7 +294,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
     {
         //x1 = plt1X2 - plotWidth * x1 + data.pan_x;
-        x1 = plt1X1 + plotWidth * (1 - x1) + data.pan_x;
+        x1 = plt1X1 + plotWidth * (1.0f - x1) + data.pan_x;
     }
     else
     {
@@ -305,7 +305,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
     {
         //y1 = plt1Y1 + plotHeight * y1 + data.pan_y;
-        y1 = plt1Y2 - plotHeight * (1 - y1) + data.pan_y;
+        y1 = plt1Y2 - plotHeight * (1.0f - y1) + data.pan_y;
 
     }
     else
@@ -631,6 +631,10 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     {
         // if there is no zone behind us, I don't think we're even supposed to draw the point but we'll see.
         // data.dataTerminationIndex[recordNum] = plotNum;
+        /*glBegin(GL_POINTS);
+        glColor3ub(0, 0, 255);
+        glVertex2f(x1, y1);
+        glEnd();*/
         return -1;
     }
     // continue drawing based on what's in the continue zone's destination param
@@ -1335,7 +1339,7 @@ void InteractiveSPC::display()
     //	drawData(.355, 0.5, 0, i);
     // }
 
-    for (int recordNum = 0; recordNum < data.normalizedValues.size(); recordNum++)
+    for (int caseNum = 0; caseNum < data.normalizedValues.size(); caseNum++)
     {
         int plotToDrawNext = 0;
         while (plotToDrawNext != -1)
@@ -1350,15 +1354,15 @@ void InteractiveSPC::display()
 
             /*float x = data.xdata[recordNum][attr1Index];
             float y = data.ydata[recordNum][attr2Index];*/
-            float x = data.normalizedValues[recordNum][attr1Index];
-            float y = data.normalizedValues[recordNum][attr2Index];
+            float x = data.normalizedValues[caseNum][attr1Index];
+            float y = data.normalizedValues[caseNum][attr2Index];
 
             // if (attr1Index == attr2Index) {
             //	// this means that the two attributes are the same so we are on a single attribute plot
             //	y = x;
             // }
 
-            plotToDrawNext = drawData(x, y, recordNum, plotNum);
+            plotToDrawNext = drawData(x, y, caseNum, plotNum);
         }
 
         // for (int i = 0; i < plotDrawOrder.size(); i++) {
@@ -1771,49 +1775,6 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
     return -1;
 }
 
-int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
-{
-    // TODO
-    // get plot num
-    int plotNum = findPlotNumOfPoint(px, py);
-    // check all rects inside plotnum
-    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
-    {
-        std::vector<float> parserData = data.parsedData[parsedIndex];
-        if (parserData[4] != plotNum)
-            continue;
-        const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
-        const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
-        const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
-        const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
-        if (isPointWithinRect(px, py, x1, y1, x2, y2))
-        {
-            return parserData[5];
-        }
-    }
-    return INT_MIN;
-
-    //   int resultClass = -1;
-    // for (int p = 0; p < data.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
-    //       int classNumber = data.parsedData[p][5];
-    //	const GLfloat x1 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][0] * data.plotWidth[data.parsedData[p][4]];
-    //	const GLfloat y1 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][1] * data.plotHeight[data.parsedData[p][4]];
-    //	const GLfloat x2 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][2] * data.plotWidth[data.parsedData[p][4]];
-    //	const GLfloat y2 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][3] * data.plotHeight[data.parsedData[p][4]];
-    //       if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
-    //           resultClass = classNumber;
-    //		break;
-    //       } // Check to see if these need to be rearranged.
-    //	std::cout << "debug" << x1 << x2 << y1 << y2;
-    //}
-
-    // if (resultClass != -1) {
-    //	std::cout << "debug";
-    // }
-
-    //   return resultClass;
-}
-
 std::vector<int> InteractiveSPC::getParserElementsWithPlotNum(int plotNum) {
     std::vector<int> elements;
     for (int i = 0; i < data.parsedData.size(); i++) {
@@ -1834,8 +1795,8 @@ void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
         }
         for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
             int index = parserElementsWithPlotNum[i];
-            data.parsedData[index][0] = 1 - data.parsedData[index][0];
-            data.parsedData[index][2] = 1 - data.parsedData[index][2];
+            data.parsedData[index][0] = 1.0f - data.parsedData[index][0];
+            data.parsedData[index][2] = 1.0f - data.parsedData[index][2];
         }
     } else {
         if (plotsWithYAxisInverted.find(plotNum) == plotsWithYAxisInverted.end()) {
@@ -1845,8 +1806,8 @@ void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
         }
         for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
             int index = parserElementsWithPlotNum[i];
-            data.parsedData[index][1] = 1 - data.parsedData[index][1];
-            data.parsedData[index][3] = 1 - data.parsedData[index][3];
+            data.parsedData[index][1] = 1.0f - data.parsedData[index][1];
+            data.parsedData[index][3] = 1.0f - data.parsedData[index][3];
         }
     }
     thresholdEdgeSelectionZones.clear();
@@ -1951,6 +1912,50 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
     }
 
     return INT_MIN;
+}
+
+int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
+{
+    // TODO
+    // get plot num
+    int plotNum = findPlotNumOfPoint(px, py);
+    // check all rects inside plotnum
+    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
+    {
+        std::vector<float> parserData = data.parsedData[parsedIndex];
+        if (parserData[4] != plotNum)
+            continue;
+        // newcoord = plot location - half of plot width or height + percent of that height that the parser entry dictates
+        const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
+        const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
+        const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
+        const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
+        if (isPointWithinRect(px, py, x1, y1, x2, y2))
+        {
+            return parsedIndex;
+        }
+    }
+    return INT_MIN;
+
+    //   int resultClass = -1;
+    // for (int p = 0; p < data.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+    //       int classNumber = data.parsedData[p][5];
+    //	const GLfloat x1 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][0] * data.plotWidth[data.parsedData[p][4]];
+    //	const GLfloat y1 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][1] * data.plotHeight[data.parsedData[p][4]];
+    //	const GLfloat x2 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][2] * data.plotWidth[data.parsedData[p][4]];
+    //	const GLfloat y2 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][3] * data.plotHeight[data.parsedData[p][4]];
+    //       if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+    //           resultClass = classNumber;
+    //		break;
+    //       } // Check to see if these need to be rearranged.
+    //	std::cout << "debug" << x1 << x2 << y1 << y2;
+    //}
+
+    // if (resultClass != -1) {
+    //	std::cout << "debug";
+    // }
+
+    //   return resultClass;
 }
 
 void InteractiveSPC::drawWorstZone() {
@@ -2060,12 +2065,12 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
         const float lowY = min(zoneToCheckY1, zoneToCheckY2);
         const float highY = max(zoneToCheckY1, zoneToCheckY2);
 
-        if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
-            px = 1.0f - px;
-        }
-        if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
-            py = 1.0f - py;
-        }
+        //if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+        //    px = 1.0f - px;
+        //}
+        //if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+        //    py = 1.0f - py;
+        //}
 
         bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
 
