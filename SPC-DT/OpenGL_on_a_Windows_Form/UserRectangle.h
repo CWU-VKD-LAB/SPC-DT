@@ -1,0 +1,50 @@
+#include "stdafx.h"
+#include "glut.h"
+#pragma once
+
+enum RectangleType {Condense, Exclude, Expand, None};
+// structure representing a user rectangle
+struct UserRectangle {
+	int id;
+	int plotNum;
+	GLfloat X1, X2, Y1, Y2;
+    GLfloat realX1, realX2, realY1, realY2;
+	GLfloat color[3];
+	RectangleType type;
+	ClassData* data;
+	UserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, RectangleType type, int plotNum, ClassData* data) {
+		X1 = (x1 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
+        X2 = (x2 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
+        Y1 = (y1 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+        Y2 = (y2 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+		id = time(NULL);
+		type = None;
+		this->plotNum = plotNum;
+		this->type = type;
+		this->data = data;
+	}
+    void invertX() {
+        X1 = 1.0f - X1;
+        X2 = 1.0f - X2;
+    }
+    void invertY() {
+        Y1 = 1.0f - Y1;
+        Y2 = 1.0f - Y2;
+    }
+    void computeRealCoords() {
+        realX1 = data->x1CoordPlot[plotNum] + (X1 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
+        realX2 = data->x1CoordPlot[plotNum] + (X2 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
+        realY1 = data->y1CoordPlot[plotNum] + (Y1 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+        realY2 = data->y1CoordPlot[plotNum] + (Y2 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+    }
+	void drawEdges() {
+        computeRealCoords();
+		glColor4ub(0, 0, 0, 255);
+		glBegin(GL_LINE_LOOP);
+        glVertex2f(realX1, realY1);
+        glVertex2f(realX2, realY1);
+        glVertex2f(realX2, realY2);
+        glVertex2f(realX1, realY2);
+		glEnd();
+	}
+};

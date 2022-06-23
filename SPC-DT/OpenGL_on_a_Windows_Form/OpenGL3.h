@@ -14,6 +14,7 @@
 #include "ClassData.h"
 #include "FileHandling.h"
 #include "InteractiveSPC.h"
+#include "UserRectangle.h"
 #include <sstream>
 
 ///-------------------------------------------------------------------------------------------------
@@ -242,6 +243,12 @@ public
             graph4.zoneIdThresholdEdgesRecorded.clear();
         }
 
+        void setDrawUserRectangleMode(bool state) {
+            graph4.drawingUserRectangleVertex1 = state;
+            drawUserRectangleMode = state;
+            canDragPlots = !state;
+        }
+
         // set the highlight worst area mode
         void setHighlightWorstAreaMode(bool state) {
             graph4.isHighlightWorstAreaMode = state;
@@ -256,13 +263,13 @@ public
         void setDrawingRectangleState(bool state)
         {
             graph4.isCondenseRectangleMode = state;
-            if (!state)
+            /*if (!state)
             {
                 graph4.condenseRectX1List.clear();
                 graph4.condenseRectX2List.clear();
                 graph4.condenseRectY1List.clear();
                 graph4.condenseRectY2List.clear();
-            }
+            }*/
         }
 
         void setUserRectangleState(bool state) {
@@ -713,68 +720,64 @@ public
                 { // SPC
                     {
                         // rectangle mode
-                        if (drawingRectangleEnabled)
-                        {
-                            if (drawingRectangleVertex1)
-                            {
-                                drawingRectangleX1 = worldMouseX;
-                                drawingRectangleY1 = worldMouseY;
-                                glBegin(GL_POINTS);
-                                glColor3f(0, 0, 0);
-                                glPointSize(8);
-                                glVertex2f(drawingRectangleX1, drawingRectangleY1);
-                                glPointSize(4);
-                                glEnd();
-                            }
-                            else
-                            {
-                                drawingRectangleX2 = worldMouseX;
-                                drawingRectangleY2 = worldMouseY;
-                                drawingRectangleEnabled = !drawingRectangleEnabled;
-                                graph4.condenseRectX1List.push_back((GLfloat)drawingRectangleX1);
-                                graph4.condenseRectY1List.push_back((GLfloat)drawingRectangleY1);
-                                graph4.condenseRectX2List.push_back((GLfloat)drawingRectangleX2);
-                                graph4.condenseRectY2List.push_back((GLfloat)drawingRectangleY2);
-                                /*graph4.rectX1 = drawingRectangleX1;
-                                graph4.rectY1 = drawingRectangleY1;
-                                graph4.rectX2 = drawingRectangleX2;
-                                graph4.rectY2 = drawingRectangleY2;
-                                drawingRectangleEnabled = false;*/
-                                setDrawingRectangleState(true);
-                            }
-                            drawingRectangleVertex1 = !drawingRectangleVertex1;
-                            break;
-                        }
+                        //if (drawingRectangleEnabled)
+                        //{
+                        //    if (drawingRectangleVertex1)
+                        //    {
+                        //        drawingRectangleX1 = worldMouseX;
+                        //        drawingRectangleY1 = worldMouseY;
+                        //        glBegin(GL_POINTS);
+                        //        glColor3f(0, 0, 0);
+                        //        glPointSize(8);
+                        //        glVertex2f(drawingRectangleX1, drawingRectangleY1);
+                        //        glPointSize(4);
+                        //        glEnd();
+                        //    }
+                        //    else
+                        //    {
+                        //        drawingRectangleX2 = worldMouseX;
+                        //        drawingRectangleY2 = worldMouseY;
+                        //        drawingRectangleEnabled = !drawingRectangleEnabled;
+                        //        graph4.condenseRectX1List.push_back((GLfloat)drawingRectangleX1);
+                        //        graph4.condenseRectY1List.push_back((GLfloat)drawingRectangleY1);
+                        //        graph4.condenseRectX2List.push_back((GLfloat)drawingRectangleX2);
+                        //        graph4.condenseRectY2List.push_back((GLfloat)drawingRectangleY2);
+                        //        /*graph4.rectX1 = drawingRectangleX1;
+                        //        graph4.rectY1 = drawingRectangleY1;
+                        //        graph4.rectX2 = drawingRectangleX2;
+                        //        graph4.rectY2 = drawingRectangleY2;
+                        //        drawingRectangleEnabled = false;*/
+                        //        setDrawingRectangleState(true);
+                        //    }
+                        //    drawingRectangleVertex1 = !drawingRectangleVertex1;
+                        //    break;
+                        //}
+
+                        graph4.plotNumClicked = graph4.findClickedGraph(worldMouseX, worldMouseY);
+                        graph4.zoneIdClicked = graph4.findBackgroundZoneIdOfPoint(worldMouseX, worldMouseY, graph4.plotNumClicked);
+                        int plotNumClicked = graph4.plotNumClicked;
 
                         if (drawUserRectangleMode) {
                             if (drawingRectangleVertex1) {
                                 drawingRectangleX1 = worldMouseX;
                                 drawingRectangleY1 = worldMouseY;
-                                glBegin(GL_POINTS);
-                                glColor3f(0, 0, 0);
-                                glPointSize(8);
-                                glVertex2f(drawingRectangleX1, drawingRectangleY1);
-                                glPointSize(4);
-                                glEnd();
+                                setDrawUserRectangleMode(true);
+                                graph4.userRectangleDrawGuideX = drawingRectangleX1;
+                                graph4.userRectangleDrawGuideY = drawingRectangleY1;
                             }
                             else {
                                 drawingRectangleX2 = worldMouseX;
                                 drawingRectangleY2 = worldMouseY;
                                 drawUserRectangleMode = false;
-                                graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2));
-                                //graph4.userRectX1List.push_back((GLfloat)drawingRectangleX1);
-                                //graph4.userRectY1List.push_back((GLfloat)drawingRectangleY1);
-                                //graph4.userRectX2List.push_back((GLfloat)drawingRectangleX2);
-                                //graph4.userRectY2List.push_back((GLfloat)drawingRectangleY2);
+                                graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
                                 setUserRectangleState(true);
+                                setDrawUserRectangleMode(false);
                             }
                             drawingRectangleVertex1 = !drawingRectangleVertex1;
                             break;
                         }
 
-                        graph4.plotNumClicked = graph4.findClickedGraph(worldMouseX, worldMouseY);
-                        graph4.zoneIdClicked = graph4.findBackgroundZoneIdOfPoint(worldMouseX, worldMouseY, graph4.plotNumClicked);
-                        int plotNumClicked = graph4.plotNumClicked;
+
                         ClassData *dataPtr = &graph4.data;
                      
                         // adjust thresholds

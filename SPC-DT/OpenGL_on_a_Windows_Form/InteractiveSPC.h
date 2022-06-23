@@ -6,21 +6,11 @@
 #include "stdafx.h"
 #include "ClassData.h"
 #include "FileHandling.h"
+#include "UserRectangle.h"
+#include "Zone.h"
+#include "ColorUtils.h"
 #pragma once
 
-// structure representing a user rectangle
-struct UserRectangle {
-	int id;
-	GLfloat X1, X2, Y1, Y2;
-	GLfloat color[3];
-	UserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
-		X1 = x1;
-		X2 = x2;
-		Y1 = y1;
-		Y2 = y2;
-		id = time(NULL);
-	}
-};
 
 class InteractiveSPC
 {
@@ -64,21 +54,24 @@ public:
 	bool shouldPointTerminate(GLfloat px, GLfloat py);
 
 	// *** USED FOR DRAWING RECTANGLES AND IDENTIFY WHICH LINES INTERSECT IT
-	std::vector<GLfloat> condenseRectX1List;
-	std::vector<GLfloat> condenseRectY1List;
-	std::vector<GLfloat> condenseRectX2List;
-	std::vector<GLfloat> condenseRectY2List;
+	//std::vector<GLfloat> condenseRectX1List;
+	//std::vector<GLfloat> condenseRectY1List;
+	//std::vector<GLfloat> condenseRectX2List;
+	//std::vector<GLfloat> condenseRectY2List;
     std::vector<UserRectangle> userRectangles;
-    std::vector<std::vector<GLubyte>> userRectColorList;
-	GLfloat rectX1;
-	GLfloat rectY1;
-	GLfloat rectX2;
-	GLfloat rectY2;
+    //std::vector<std::vector<GLubyte>> userRectColorList;
+	//GLfloat rectX1;
+	//GLfloat rectY1;
+	//GLfloat rectX2;
+	//GLfloat rectY2;
 	bool isCondenseRectangleMode = false;
 	bool isUserRectangleMode = false;
 	bool isBackgroundDensityColoringMode = false;
+	bool drawingUserRectangleVertex1 = false;
+	GLfloat userRectangleDrawGuideX;
+	GLfloat userRectangleDrawGuideY;
 	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);
-	bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+	//bool doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	bool* getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rectX1, GLfloat rectY1, GLfloat rectX2, GLfloat rectY2);
 
 	/// *** USED FOR DETERMINING LINE TERMINATION MODE
@@ -142,16 +135,20 @@ public:
 	float findClickedGraph(double x, double y);
 	int findClickedCoordinate(double x, double y);
 	void drawCircle(int x, int y);
-	void drawCondenseRectangles();
-	void drawUserRectangles();
+	//void drawCondenseRectangles();
+	//void drawUserRectangles();
+	void drawRectangle(UserRectangle rectToDraw);
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
 	void drawRectanglesOnGray();
 	void setBackgroundTransparency(float alpha);
 	void setBackgroundColorLightness(float lightness);
-	std::vector<float> RGBtoHSL(std::vector<float> classColor);
-	std::vector<GLubyte> HSLtoRGB(std::vector<float> hsl);
+	//std::vector<float> RGBtoHSL(std::vector<float> classColor);
+	//std::vector<GLubyte> HSLtoRGB(std::vector<float> hsl);
 	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
-	bool shouldLineBeClipped(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, bool* startPointCode, bool* endPointCode);
+	//bool shouldLineBeClipped(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, bool* startPointCode, bool* endPointCode);
 	int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
+
+	float computeBackgroundTransparency(Zone &zone);
+	void computeZoneEdges(Zone &zone);
 };
 

@@ -95,9 +95,10 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		}
 		string attr1 = data.strparsedData[i][6];
 		string attr2 = data.strparsedData[i][7];
+		int destination = -1;
         // if current parser element contains a destination, update destination map
 		if (data.strparsedData[i].size() == 9) {
-			int destination = stoi(data.strparsedData[i][8]);
+			destination = stoi(data.strparsedData[i][8]);
 			data.plotDestinationMap[plotNum][classNum] = destination;
 			/*if (data.plotDestinationMap.find(plotNum) == data.plotDestinationMap.end()) {
                 data.plotDestinationMap[plotNum][classNum] = destination;
@@ -115,7 +116,9 @@ void FileHandling::openParserFile(parseData &dataParsed, ClassData &data)
 		coordinatesPlotnumAndClassnum.push_back(y2);
 		coordinatesPlotnumAndClassnum.push_back(plotNum);
 		coordinatesPlotnumAndClassnum.push_back(classNum);
-
+		if (destination != -1) {
+			coordinatesPlotnumAndClassnum.push_back(destination);
+		}
 		// Get attribute pair names and strip commas 
 		attr1.erase(std::remove(attr1.begin(), attr1.end(), ','), attr1.end());
 		attr2.erase(std::remove(attr2.begin(), attr2.end(), ','), attr2.end());
