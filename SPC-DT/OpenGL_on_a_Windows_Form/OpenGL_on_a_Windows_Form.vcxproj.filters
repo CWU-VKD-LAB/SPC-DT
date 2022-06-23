@@ -53,6 +53,15 @@
     <ClInclude Include="InteractiveSPC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UserRectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Zone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">

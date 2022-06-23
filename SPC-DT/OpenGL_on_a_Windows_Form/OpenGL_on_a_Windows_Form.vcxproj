@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassData.h" />
+    <ClInclude Include="ColorUtils.h" />
     <ClInclude Include="InteractiveSPC.h" />
     <ClInclude Include="FileHandling.h" />
     <ClInclude Include="Form1.h">
@@ -198,6 +199,8 @@
     <ClInclude Include="OpenGL3.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UserRectangle.h" />
+    <ClInclude Include="Zone.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />

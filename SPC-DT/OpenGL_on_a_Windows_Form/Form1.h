@@ -231,7 +231,7 @@ public
         System::Windows::Forms::ComboBox ^ classTransparencySelection;
 
     private:
-        System::Windows::Forms::CheckBox ^ lineTerminationModeCheckbox;
+
 
     private:
         System::Windows::Forms::CheckBox ^ highlightMisclassificationsCheckbox;
@@ -267,6 +267,7 @@ private: System::Windows::Forms::CheckBox^ identifyWorstAreaCheckbox;
 private: System::Windows::Forms::Button^ drawUserRectButton;
 private: System::Windows::Forms::Button^ changeUserRectColorButton;
 private: System::Windows::Forms::Button^ removeUserRectButton;
+private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
 
 
 
@@ -294,6 +295,9 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
             this->graph4 = (gcnew System::Windows::Forms::Button());
             this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
+            this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
+            this->drawUserRectButton = (gcnew System::Windows::Forms::Button());
             this->confusionMatrixTextBox = (gcnew System::Windows::Forms::TextBox());
             this->adjustThresholdsButton = (gcnew System::Windows::Forms::Button());
             this->showClassAccuraciesButton = (gcnew System::Windows::Forms::Button());
@@ -334,7 +338,6 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->lineColorCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->pointColorMode = (gcnew System::Windows::Forms::CheckBox());
             this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
-            this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
             this->backgroundColorLightnessSlider = (gcnew System::Windows::Forms::TrackBar());
             this->backgroundLightness = (gcnew System::Windows::Forms::Label());
@@ -345,9 +348,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
             this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
             this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-            this->drawUserRectButton = (gcnew System::Windows::Forms::Button());
-            this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
-            this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
+            this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->panel1->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             this->groupBox1->SuspendLayout();
@@ -409,6 +410,37 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->panel1->Size = System::Drawing::Size(200, 953);
             this->panel1->TabIndex = 4;
             this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
+            // 
+            // removeUserRectButton
+            // 
+            this->removeUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->removeUserRectButton->Location = System::Drawing::Point(12, 672);
+            this->removeUserRectButton->Name = L"removeUserRectButton";
+            this->removeUserRectButton->Size = System::Drawing::Size(176, 44);
+            this->removeUserRectButton->TabIndex = 42;
+            this->removeUserRectButton->Text = L"Remove User Rect";
+            this->removeUserRectButton->UseVisualStyleBackColor = true;
+            // 
+            // changeUserRectColorButton
+            // 
+            this->changeUserRectColorButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->changeUserRectColorButton->Location = System::Drawing::Point(103, 602);
+            this->changeUserRectColorButton->Name = L"changeUserRectColorButton";
+            this->changeUserRectColorButton->Size = System::Drawing::Size(85, 63);
+            this->changeUserRectColorButton->TabIndex = 41;
+            this->changeUserRectColorButton->Text = L"Change User Rect Color";
+            this->changeUserRectColorButton->UseVisualStyleBackColor = true;
+            // 
+            // drawUserRectButton
+            // 
+            this->drawUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->drawUserRectButton->Location = System::Drawing::Point(12, 602);
+            this->drawUserRectButton->Name = L"drawUserRectButton";
+            this->drawUserRectButton->Size = System::Drawing::Size(85, 63);
+            this->drawUserRectButton->TabIndex = 40;
+            this->drawUserRectButton->Text = L"Draw User Rect";
+            this->drawUserRectButton->UseVisualStyleBackColor = true;
+            this->drawUserRectButton->Click += gcnew System::EventHandler(this, &Form1::drawUserRectButton_Click);
             // 
             // confusionMatrixTextBox
             // 
@@ -531,7 +563,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->label9->Location = System::Drawing::Point(11, 823);
             this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(88, 16);
+            this->label9->Size = System::Drawing::Size(110, 20);
             this->label9->TabIndex = 27;
             this->label9->Text = L"Hide Classes";
             this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
@@ -621,7 +653,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->trackBar1->Location = System::Drawing::Point(4, 71);
             this->trackBar1->Minimum = -10;
             this->trackBar1->Name = L"trackBar1";
-            this->trackBar1->Size = System::Drawing::Size(185, 45);
+            this->trackBar1->Size = System::Drawing::Size(185, 56);
             this->trackBar1->TabIndex = 9;
             this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
             // 
@@ -632,7 +664,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
                 static_cast<System::Byte>(0)));
             this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
             this->ZoomingLabel->Name = L"ZoomingLabel";
-            this->ZoomingLabel->Size = System::Drawing::Size(42, 16);
+            this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
             this->ZoomingLabel->TabIndex = 11;
             this->ZoomingLabel->Text = L"Zoom";
             // 
@@ -661,7 +693,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
                 static_cast<System::Byte>(0)));
             this->PannningLabel->Location = System::Drawing::Point(6, 16);
             this->PannningLabel->Name = L"PannningLabel";
-            this->PannningLabel->Size = System::Drawing::Size(56, 16);
+            this->PannningLabel->Size = System::Drawing::Size(69, 20);
             this->PannningLabel->TabIndex = 10;
             this->PannningLabel->Text = L"Panning";
             // 
@@ -698,7 +730,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             // 
             // colorButton
             // 
-            this->colorButton->Location = System::Drawing::Point(4, 49);
+            this->colorButton->Location = System::Drawing::Point(4, 56);
             this->colorButton->Name = L"colorButton";
             this->colorButton->Size = System::Drawing::Size(192, 31);
             this->colorButton->TabIndex = 0;
@@ -733,7 +765,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
                 static_cast<System::Byte>(0)));
             this->label1->Location = System::Drawing::Point(4, 1);
             this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(126, 16);
+            this->label1->Size = System::Drawing::Size(159, 20);
             this->label1->TabIndex = 12;
             this->label1->Text = L"Change Class Color";
             // 
@@ -743,9 +775,9 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->comboBox1->Cursor = System::Windows::Forms::Cursors::Hand;
             this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
             this->comboBox1->FormattingEnabled = true;
-            this->comboBox1->Location = System::Drawing::Point(4, 21);
+            this->comboBox1->Location = System::Drawing::Point(4, 25);
             this->comboBox1->Name = L"comboBox1";
-            this->comboBox1->Size = System::Drawing::Size(188, 21);
+            this->comboBox1->Size = System::Drawing::Size(188, 24);
             this->comboBox1->TabIndex = 1;
             this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
             // 
@@ -754,7 +786,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->label2->AutoSize = true;
             this->label2->Location = System::Drawing::Point(554, 8);
             this->label2->Name = L"label2";
-            this->label2->Size = System::Drawing::Size(0, 13);
+            this->label2->Size = System::Drawing::Size(0, 16);
             this->label2->TabIndex = 11;
             // 
             // panel2
@@ -785,7 +817,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->identifyWorstAreaCheckbox->AutoSize = true;
             this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
             this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
-            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(124, 17);
+            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(151, 20);
             this->identifyWorstAreaCheckbox->TabIndex = 24;
             this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
             this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
@@ -796,7 +828,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->mitigateAllOverlap->AutoSize = true;
             this->mitigateAllOverlap->Location = System::Drawing::Point(9, 385);
             this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
-            this->mitigateAllOverlap->Size = System::Drawing::Size(123, 17);
+            this->mitigateAllOverlap->Size = System::Drawing::Size(153, 20);
             this->mitigateAllOverlap->TabIndex = 23;
             this->mitigateAllOverlap->Text = L"Mitigate Overlap (All)";
             this->mitigateAllOverlap->UseVisualStyleBackColor = true;
@@ -807,7 +839,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->backgroundDensityColorCheckbox->AutoSize = true;
             this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(9, 408);
             this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
-            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(163, 17);
+            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(203, 20);
             this->backgroundDensityColorCheckbox->TabIndex = 22;
             this->backgroundDensityColorCheckbox->Text = L"Background Density Coloring";
             this->backgroundDensityColorCheckbox->UseVisualStyleBackColor = true;
@@ -818,7 +850,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->mitigateOverlapCheckbox->AutoSize = true;
             this->mitigateOverlapCheckbox->Location = System::Drawing::Point(9, 364);
             this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
-            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(171, 17);
+            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(216, 20);
             this->mitigateOverlapCheckbox->TabIndex = 21;
             this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap (Misclassified)";
             this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
@@ -829,7 +861,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->lineColorCheckbox->AutoSize = true;
             this->lineColorCheckbox->Location = System::Drawing::Point(9, 343);
             this->lineColorCheckbox->Name = L"lineColorCheckbox";
-            this->lineColorCheckbox->Size = System::Drawing::Size(103, 17);
+            this->lineColorCheckbox->Size = System::Drawing::Size(127, 20);
             this->lineColorCheckbox->TabIndex = 20;
             this->lineColorCheckbox->Text = L"Line Color Mode";
             this->lineColorCheckbox->UseVisualStyleBackColor = true;
@@ -840,7 +872,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->pointColorMode->AutoSize = true;
             this->pointColorMode->Location = System::Drawing::Point(9, 301);
             this->pointColorMode->Name = L"pointColorMode";
-            this->pointColorMode->Size = System::Drawing::Size(107, 17);
+            this->pointColorMode->Size = System::Drawing::Size(132, 20);
             this->pointColorMode->TabIndex = 19;
             this->pointColorMode->Text = L"Point Color Mode";
             this->pointColorMode->UseVisualStyleBackColor = true;
@@ -851,22 +883,11 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->highlightMisclassificationsCheckbox->AutoSize = true;
             this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(9, 320);
             this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
-            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
+            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(189, 20);
             this->highlightMisclassificationsCheckbox->TabIndex = 18;
             this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
             this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
             this->highlightMisclassificationsCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::highlightMisclassificationsCheckbox_CheckedChanged);
-            // 
-            // lineTerminationModeCheckbox
-            // 
-            this->lineTerminationModeCheckbox->AutoSize = true;
-            this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
-            this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
-            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(134, 17);
-            this->lineTerminationModeCheckbox->TabIndex = 17;
-            this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
-            this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
-            this->lineTerminationModeCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineTerminationModeCheckbox_CheckedChanged);
             // 
             // groupBox4
             // 
@@ -885,7 +906,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
             this->backgroundColorLightnessSlider->Maximum = 200;
             this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 45);
+            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 56);
             this->backgroundColorLightnessSlider->TabIndex = 10;
             this->backgroundColorLightnessSlider->Value = 2;
             this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -897,7 +918,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundLightness->Location = System::Drawing::Point(4, 16);
             this->backgroundLightness->Name = L"backgroundLightness";
-            this->backgroundLightness->Size = System::Drawing::Size(161, 15);
+            this->backgroundLightness->Size = System::Drawing::Size(196, 18);
             this->backgroundLightness->TabIndex = 11;
             this->backgroundLightness->Text = L"Background Color Lightness";
             // 
@@ -918,7 +939,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
             this->backgroundTransparencySlider->Maximum = 255;
             this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 45);
+            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 56);
             this->backgroundTransparencySlider->TabIndex = 10;
             this->backgroundTransparencySlider->Value = 100;
             this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -930,7 +951,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
             this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-            this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
+            this->backgroundTransparencyLabel->Size = System::Drawing::Size(182, 18);
             this->backgroundTransparencyLabel->TabIndex = 11;
             this->backgroundTransparencyLabel->Text = L"Background Transparency";
             this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -954,7 +975,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->classTransparencySelection->FormattingEnabled = true;
             this->classTransparencySelection->Location = System::Drawing::Point(6, 37);
             this->classTransparencySelection->Name = L"classTransparencySelection";
-            this->classTransparencySelection->Size = System::Drawing::Size(188, 21);
+            this->classTransparencySelection->Size = System::Drawing::Size(188, 24);
             this->classTransparencySelection->TabIndex = 13;
             this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
             // 
@@ -965,7 +986,7 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
             this->transparencySlider->Location = System::Drawing::Point(6, 64);
             this->transparencySlider->Maximum = 255;
             this->transparencySlider->Name = L"transparencySlider";
-            this->transparencySlider->Size = System::Drawing::Size(185, 45);
+            this->transparencySlider->Size = System::Drawing::Size(185, 56);
             this->transparencySlider->TabIndex = 10;
             this->transparencySlider->Value = 255;
             this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -977,40 +998,21 @@ private: System::Windows::Forms::Button^ removeUserRectButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->transparencyLabel->Location = System::Drawing::Point(6, 18);
             this->transparencyLabel->Name = L"transparencyLabel";
-            this->transparencyLabel->Size = System::Drawing::Size(128, 16);
+            this->transparencyLabel->Size = System::Drawing::Size(159, 20);
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
             // 
-            // drawUserRectButton
+            // lineTerminationModeCheckbox
             // 
-            this->drawUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->drawUserRectButton->Location = System::Drawing::Point(12, 602);
-            this->drawUserRectButton->Name = L"drawUserRectButton";
-            this->drawUserRectButton->Size = System::Drawing::Size(85, 63);
-            this->drawUserRectButton->TabIndex = 40;
-            this->drawUserRectButton->Text = L"Draw User Rect";
-            this->drawUserRectButton->UseVisualStyleBackColor = true;
-            this->drawUserRectButton->Click += gcnew System::EventHandler(this, &Form1::drawUserRectButton_Click);
-            // 
-            // changeUserRectColorButton
-            // 
-            this->changeUserRectColorButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->changeUserRectColorButton->Location = System::Drawing::Point(103, 602);
-            this->changeUserRectColorButton->Name = L"changeUserRectColorButton";
-            this->changeUserRectColorButton->Size = System::Drawing::Size(85, 63);
-            this->changeUserRectColorButton->TabIndex = 41;
-            this->changeUserRectColorButton->Text = L"Change User Rect Color";
-            this->changeUserRectColorButton->UseVisualStyleBackColor = true;
-            // 
-            // removeUserRectButton
-            // 
-            this->removeUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->removeUserRectButton->Location = System::Drawing::Point(12, 672);
-            this->removeUserRectButton->Name = L"removeUserRectButton";
-            this->removeUserRectButton->Size = System::Drawing::Size(176, 44);
-            this->removeUserRectButton->TabIndex = 42;
-            this->removeUserRectButton->Text = L"Remove User Rect";
-            this->removeUserRectButton->UseVisualStyleBackColor = true;
+            this->lineTerminationModeCheckbox->AutoSize = true;
+            this->lineTerminationModeCheckbox->Enabled = false;
+            this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
+            this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
+            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(166, 20);
+            this->lineTerminationModeCheckbox->TabIndex = 17;
+            this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
+            this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
+            this->lineTerminationModeCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineTerminationModeCheckbox_CheckedChanged);
             // 
             // Form1
             // 

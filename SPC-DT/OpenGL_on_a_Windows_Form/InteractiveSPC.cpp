@@ -6,6 +6,7 @@
 
 #include "stdafx.h"
 #include "InteractiveSPC.h"
+//#include "ColorUtils.h"
 #include <set>
 #include <map>
 #include <algorithm>
@@ -15,7 +16,6 @@ struct ConnectedZone {
     int classNum;
     std::vector<ConnectedZone*> connectedZones;
     std::vector<float>* parserElement;
-    ConnectedZone();
     ConnectedZone(int zoneNum, float classNum, std::vector<float>* parserElement) {
         this->zoneNum = zoneNum;
         this->classNum = (int)classNum;
@@ -246,8 +246,8 @@ void InteractiveSPC::drawRectanglesOnGray()
             // }
             // else
             // {
-            //     zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-            //     zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+                 zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+                 zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
             // }
             // if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
             // {
@@ -256,14 +256,15 @@ void InteractiveSPC::drawRectanglesOnGray()
             // }
             // else
             // {
-            //     zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-            //     zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+                 zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+                 zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
             // }
-
-            condenseRectX1List.push_back(zoneToDrawX1);
-            condenseRectX2List.push_back(zoneToDrawX2);
-            condenseRectY1List.push_back(zoneToDrawY1);
-            condenseRectY2List.push_back(zoneToDrawY2);
+            userRectangles.push_back(UserRectangle(zoneToDrawX1, zoneToDrawY1, zoneToDrawX2, zoneToDrawY2, Condense, plotNum, &data));
+            // old implementation
+            //condenseRectX1List.push_back(zoneToDrawX1);
+            //condenseRectX2List.push_back(zoneToDrawX2);
+            //condenseRectY1List.push_back(zoneToDrawY1);
+            //condenseRectY2List.push_back(zoneToDrawY2);
         }
     }
 
@@ -462,29 +463,30 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         }
     }
 
-    // condensation mode
-    if (isCondenseRectangleMode)
-    {
-        for (int i = 0; i < condenseRectX1List.size(); i++)
-        {
-            GLfloat highX = max(condenseRectX1List[i], condenseRectX2List[i]);
-            GLfloat lowX = min(condenseRectX1List[i], condenseRectX2List[i]);
-            GLfloat highY = max(condenseRectY1List[i], condenseRectY2List[i]);
-            GLfloat lowY = min(condenseRectY1List[i], condenseRectY2List[i]);
-            if (isPointWithinRect(x1, y1, lowX, highY, highX, lowY))
-            {
-                // if (point1BackgroundClass >= 0) {
-                //  compute new location
-                GLfloat deltaX = abs(condenseRectX2List[i] - condenseRectX1List[i]);
-                GLfloat deltaY = abs(condenseRectY2List[i] - condenseRectY1List[i]);
-                GLfloat newX = lowX + deltaX / 2;
-                GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
-                x1 = newX;
-                y1 = newY;
-                //}
-            }
-        }
-    }
+    //TODO: Make work with all user rectangles
+    //// condensation mode
+    //if (isCondenseRectangleMode)
+    //{
+    //    for (int i = 0; i < condenseRectX1List.size(); i++)
+    //    {
+    //        GLfloat highX = max(condenseRectX1List[i], condenseRectX2List[i]);
+    //        GLfloat lowX = min(condenseRectX1List[i], condenseRectX2List[i]);
+    //        GLfloat highY = max(condenseRectY1List[i], condenseRectY2List[i]);
+    //        GLfloat lowY = min(condenseRectY1List[i], condenseRectY2List[i]);
+    //        if (isPointWithinRect(x1, y1, lowX, highY, highX, lowY))
+    //        {
+    //            // if (point1BackgroundClass >= 0) {
+    //            //  compute new location
+    //            GLfloat deltaX = abs(condenseRectX2List[i] - condenseRectX1List[i]);
+    //            GLfloat deltaY = abs(condenseRectY2List[i] - condenseRectY1List[i]);
+    //            GLfloat newX = lowX + deltaX / 2;
+    //            GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
+    //            x1 = newX;
+    //            y1 = newY;
+    //            //}
+    //        }
+    //    }
+    //}
 
     // debug
     // glPointSize(6.0);
@@ -791,26 +793,27 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         }
     }
 
-    if (isCondenseRectangleMode)
-    {
-        for (int i = 0; i < condenseRectX1List.size(); i++)
-        {
-            GLfloat highX = max(condenseRectX1List[i], condenseRectX2List[i]);
-            GLfloat lowX = min(condenseRectX1List[i], condenseRectX2List[i]);
-            GLfloat highY = max(condenseRectY1List[i], condenseRectY2List[i]);
-            GLfloat lowY = min(condenseRectY1List[i], condenseRectY2List[i]);
-            if (isPointWithinRect(x2, y2, lowX, highY, highX, lowY))
-            {
-                // compute new location
-                GLfloat deltaX = abs(condenseRectX2List[i] - condenseRectX1List[i]);
-                GLfloat deltaY = abs(condenseRectY2List[i] - condenseRectY1List[i]);
-                GLfloat newX = lowX + deltaX / 2;
-                GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
-                x2 = newX;
-                y2 = newY;
-            }
-        }
-    }
+    // TODO: Make this work for all user rectangles
+    //if (isCondenseRectangleMode)
+    //{
+    //    for (int i = 0; i < condenseRectX1List.size(); i++)
+    //    {
+    //        GLfloat highX = max(condenseRectX1List[i], condenseRectX2List[i]);
+    //        GLfloat lowX = min(condenseRectX1List[i], condenseRectX2List[i]);
+    //        GLfloat highY = max(condenseRectY1List[i], condenseRectY2List[i]);
+    //        GLfloat lowY = min(condenseRectY1List[i], condenseRectY2List[i]);
+    //        if (isPointWithinRect(x2, y2, lowX, highY, highX, lowY))
+    //        {
+    //            // compute new location
+    //            GLfloat deltaX = abs(condenseRectX2List[i] - condenseRectX1List[i]);
+    //            GLfloat deltaY = abs(condenseRectY2List[i] - condenseRectY1List[i]);
+    //            GLfloat newX = lowX + deltaX / 2;
+    //            GLfloat newY = highY - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
+    //            x2 = newX;
+    //            y2 = newY;
+    //        }
+    //    }
+    //}
 
     if (isLineColorMode && point2BackgroundClass >= 0)
     {
@@ -1040,10 +1043,156 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 //
 //}
 
+void InteractiveSPC::computeZoneEdges(Zone &zone) {
+    float x1 = zone.x1;
+    float x2 = zone.x2;
+    float y1 = zone.y1;
+    float y2 = zone.y2;
+    int zoneId = zone.id;
+
+    // make note of where zone edges are
+    if (zoneIdThresholdEdgesRecorded.find(zoneId) == zoneIdThresholdEdgesRecorded.end())
+    {
+        zoneIdThresholdEdgesRecorded.insert(zoneId);
+        float selectionZoneWidth = 10;
+        std::vector<std::vector<float>> zoneEdges;
+        std::vector<float> zoneLeftEdge;
+        std::vector<float> zoneRightEdge;
+        std::vector<float> zoneTopEdge;
+        std::vector<float> zoneBottomEdge;
+
+        // get left edge
+        zoneLeftEdge.push_back(x1 - selectionZoneWidth);
+        zoneLeftEdge.push_back(y1 - selectionZoneWidth);
+        zoneLeftEdge.push_back(x1 + selectionZoneWidth);
+        zoneLeftEdge.push_back(y2 + selectionZoneWidth);
+        zoneLeftEdge.push_back(zoneId);
+
+        // get right edge
+        zoneRightEdge.push_back(x2 - selectionZoneWidth);
+        zoneRightEdge.push_back(y1 - selectionZoneWidth);
+        zoneRightEdge.push_back(x2 + selectionZoneWidth);
+        zoneRightEdge.push_back(y2 + selectionZoneWidth);
+        zoneRightEdge.push_back(zoneId);
+
+        // get top edge
+        zoneTopEdge.push_back(x1 - selectionZoneWidth);
+        zoneTopEdge.push_back(y1 - selectionZoneWidth);
+        zoneTopEdge.push_back(x2 + selectionZoneWidth);
+        zoneTopEdge.push_back(y1 + selectionZoneWidth);
+        zoneTopEdge.push_back(zoneId);
+
+        // get bottom edge
+        zoneBottomEdge.push_back(x1 - selectionZoneWidth);
+        zoneBottomEdge.push_back(y2 - selectionZoneWidth);
+        zoneBottomEdge.push_back(x2 + selectionZoneWidth);
+        zoneBottomEdge.push_back(y2 + selectionZoneWidth);
+        zoneBottomEdge.push_back(zoneId);
+
+        // add edges to zoneEdges vector
+        zoneEdges.push_back(zoneLeftEdge);
+        zoneEdges.push_back(zoneRightEdge);
+        zoneEdges.push_back(zoneTopEdge);
+        zoneEdges.push_back(zoneBottomEdge);
+
+        // assign ids to zone edges
+        edgeToParserElementIndex[zoneLeftEdge] = 0;
+        edgeToParserElementIndex[zoneBottomEdge] = 1;
+        edgeToParserElementIndex[zoneRightEdge] = 2;
+        edgeToParserElementIndex[zoneTopEdge] = 3;
+
+        thresholdEdgeSelectionZones.push_back(zoneEdges);
+    }
+}
+
+float InteractiveSPC::computeBackgroundTransparency(Zone &zone) {
+    GLubyte backgroundTransparencyCopy = (GLubyte)backgroundTransparency;
+    const GLubyte maxVal = 245;
+    // check if plot has similar attributes
+    int plot = zone.plotNum;
+    int zoneId = zone.id;
+    int zoneClass = zone.classNum;
+
+    bool isSingleAttributePlot = false;
+    if (data.parsedAttributePairs[plot][0] == data.parsedAttributePairs[plot][1])
+    {
+        isSingleAttributePlot = true;
+    }
+    if (isBackgroundDensityColoringMode && zoneId >= 0 && zoneClass >= 0)
+    {
+        if (isSingleAttributePlot)
+        {
+            int singleAttributePlotSum = (float)data.plotNumZoneTotalCases[plot][zoneId].size();
+            float zoneDensity = ((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone);
+            backgroundTransparencyCopy = min(((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone) * maxVal + backgroundTransparency, maxVal);
+            // we need to sum up all the connected, similarly colored zones
+            std::vector<std::vector<float>*> parserElementsWithPlotNum;
+            for (int i = 0; i < data.strparsedData.size(); i++) {
+                if (data.parsedData[i][4] == plot) {
+                    parserElementsWithPlotNum.push_back(&data.parsedData[i]);
+                }
+            }
+            std::set<int> visitedZones;
+            std::vector<ConnectedZone> connectedZones;
+            for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+                connectedZones.push_back(ConnectedZone(i, parserElementsWithPlotNum[i]->at(4), parserElementsWithPlotNum[i]));
+            }
+            for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+                visitedZones.insert(i);
+                ConnectedZone* currentZoneNode = &connectedZones[i];
+                for (int j = 0; j < parserElementsWithPlotNum.size(); j++) {
+                    if (i == j) continue;
+                    if (parserElementsWithPlotNum[i][4] != parserElementsWithPlotNum[j][4]) continue;
+                    if ((parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][0] || parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][2]) &&
+                        (parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][1] || parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][3]) &&
+                        (visitedZones.find(j) == visitedZones.end())) {
+                        currentZoneNode->connectedZones.push_back(&connectedZones[j]);
+                    }
+                }
+            }
+        }
+        else if (zoneClass >= 0 && data.maxCasesPerPlotZone != 0)
+        {
+            float zoneDensity = ((float)data.plotNumZoneTotalCases[plot][zoneId].size() / (float)data.maxCasesPerPlotZone);
+            backgroundTransparencyCopy = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
+            // debug
+            zone.computeRealCoordinates();
+            float px = zone.realX1 + (zone.realX2 - zone.realX1) * 0.5;
+            float py = zone.realY1 + (zone.realY2 - zone.realY1) * 0.5;
+            data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
+            if (zoneDensity != 0 && zoneDensity < worstZoneNumDensity)
+            {
+                worstZoneNumDensity = zoneDensity;
+                worstZoneNum = zoneId;
+            }
+            // if (backgroundLightnessSet.find(backgroundTransparencyCopy) == backgroundLightnessSet.end())
+            // {
+            //     backgroundLightnessSet.insert(backgroundTransparencyCopy);
+            // }
+        }
+    }
+
+    if (backgroundTransparencyCopy >= 128)
+    {
+        if (data.zonesWithDarkBackgrounds.find(zoneId) == data.zonesWithDarkBackgrounds.end())
+        {
+            data.zonesWithDarkBackgrounds.insert(zoneId);
+        }
+    }
+    else {
+        if (data.zonesWithDarkBackgrounds.find(zoneId) == data.zonesWithDarkBackgrounds.end())
+        {
+            data.zonesWithDarkBackgrounds.erase(zoneId);
+        }
+    }
+
+    return backgroundTransparencyCopy;
+}
+
+
 /* DISPLAY */
 
 // debug list
-std::set<GLubyte> backgroundLightnessSet;
 void InteractiveSPC::display()
 {
     glClearColor(255 / 255.0f, 255 / 255.0f, 254 / 255.0f, 0.0f); // 194, 206, 218. VisCanvas background color.
@@ -1089,245 +1238,40 @@ void InteractiveSPC::display()
     //	newFile.openParserFile(dataParsed, data);
     // }
 
-    if (data.parsedData.size() > 0)
-    {
-        for (int p = 0; p < data.parsedData.size(); p++)
-        {
-            int classNumber = data.parsedData[p][5];
-            int plot = data.parsedData[p][4];
 
-            GLfloat y1 = 0;
-            GLfloat x2 = 0;
-            GLfloat y2 = 0;
-            GLfloat x1 = 0;
-
-            // get plot coords
-
-            // // calculate x components
-            // if (plotsWithXAxisInverted.find(plot) != plotsWithXAxisInverted.end())
-            // {
-            //     x1 = data.x2CoordPlot[plot] - data.parsedData[p][0] * data.plotWidth[plot];
-            //     x2 = data.x2CoordPlot[plot] - data.parsedData[p][2] * data.plotWidth[plot];
-            // }
-            // else
-            // {
-                x1 = data.x1CoordPlot[plot] + data.parsedData[p][0] * data.plotWidth[plot];
-                x2 = data.x1CoordPlot[plot] + data.parsedData[p][2] * data.plotWidth[plot];
-            // }
-
-            // // calculate y components
-            // if (plotsWithYAxisInverted.find(plot) != plotsWithYAxisInverted.end())
-            // {
-            //     y2 = data.y1CoordPlot[plot] + data.parsedData[p][1] * data.plotHeight[plot];
-            //     y1 = data.y1CoordPlot[plot] + data.parsedData[p][3] * data.plotHeight[plot];
-            // }
-            // else
-            // {
-                y2 = data.y2CoordPlot[plot] - data.parsedData[p][1] * data.plotHeight[plot];
-                y1 = data.y2CoordPlot[plot] - data.parsedData[p][3] * data.plotHeight[plot];
-            // }
-
-            float maxX = max(x1, x2);
-            float maxY = max(y1, y2);
-            float minX = min(x1, x2);
-            float minY = min(y1, y2);
-
-            /*float px = minX + maxX / 2;
-            float py = minY + maxY / 2;*/
-            float px = minX + (maxX - minX) / 2;
-            float py = minY + (maxY - minY) / 2;
-            int zone = findBackgroundZoneIdOfPoint(px, py, plot);
-            int zoneClass = findBackgroundClassOfPoint(px, py, plot);
-
-            // make note of where zone edges are
-            if (zoneIdThresholdEdgesRecorded.find(zone) == zoneIdThresholdEdgesRecorded.end())
-            {
-                zoneIdThresholdEdgesRecorded.insert(zone);
-                float selectionZoneWidth = 10;
-                std::vector<std::vector<float>> zoneEdges;
-                std::vector<float> zoneLeftEdge;
-                std::vector<float> zoneRightEdge;
-                std::vector<float> zoneTopEdge;
-                std::vector<float> zoneBottomEdge;
-
-                // get left edge
-                zoneLeftEdge.push_back(x1 - selectionZoneWidth);
-                zoneLeftEdge.push_back(y1 - selectionZoneWidth);
-                zoneLeftEdge.push_back(x1 + selectionZoneWidth);
-                zoneLeftEdge.push_back(y2 + selectionZoneWidth);
-                zoneLeftEdge.push_back(zone);
-
-                // get right edge
-                zoneRightEdge.push_back(x2 - selectionZoneWidth);
-                zoneRightEdge.push_back(y1 - selectionZoneWidth);
-                zoneRightEdge.push_back(x2 + selectionZoneWidth);
-                zoneRightEdge.push_back(y2 + selectionZoneWidth);
-                zoneRightEdge.push_back(zone);
-
-                // get top edge
-                zoneTopEdge.push_back(x1 - selectionZoneWidth);
-                zoneTopEdge.push_back(y1 - selectionZoneWidth);
-                zoneTopEdge.push_back(x2 + selectionZoneWidth);
-                zoneTopEdge.push_back(y1 + selectionZoneWidth);
-                zoneTopEdge.push_back(zone);
-
-                // get bottom edge
-                zoneBottomEdge.push_back(x1 - selectionZoneWidth);
-                zoneBottomEdge.push_back(y2 - selectionZoneWidth);
-                zoneBottomEdge.push_back(x2 + selectionZoneWidth);
-                zoneBottomEdge.push_back(y2 + selectionZoneWidth);
-                zoneBottomEdge.push_back(zone);
-                
-                // add edges to zoneEdges vector
-                zoneEdges.push_back(zoneLeftEdge);
-                zoneEdges.push_back(zoneRightEdge);
-                zoneEdges.push_back(zoneTopEdge);
-                zoneEdges.push_back(zoneBottomEdge);
-
-                // assign ids to zone edges
-                edgeToParserElementIndex[zoneLeftEdge] = 0;
-                edgeToParserElementIndex[zoneBottomEdge] = 1;
-                edgeToParserElementIndex[zoneRightEdge] = 2;
-                edgeToParserElementIndex[zoneTopEdge] = 3;
-
-                thresholdEdgeSelectionZones.push_back(zoneEdges);
-            }
-
-            //debug draw threshold rectangles
-             //for (auto thresholds : thresholdEdgeSelectionZones) {
-             //    for (auto zone : thresholds) {
-             //        glRectf(zone[0], zone[1], zone[2], zone[3]);
-             //    }
-             //}
-            //end debugs
-
-            // check if plot has similar attributes
-            //
-            bool isSingleAttributePlot = false;
-            if (data.parsedAttributePairs[plot][0] == data.parsedAttributePairs[plot][1])
-            {
-                isSingleAttributePlot = true;
-            }
-
-            // make zone color depdendant on accuracy, density
-            // TODO:
-            GLubyte backgroundTransparencyCopy = (GLubyte)backgroundTransparency;
-            const GLubyte maxVal = 245;
-            if (isBackgroundDensityColoringMode && zone >= 0 && zoneClass >= 0)
-            {
-                if (isSingleAttributePlot)
-                {
-                    int singleAttributePlotSum = (float)data.plotNumZoneTotalCases[plot][zone].size();
-                    float zoneDensity = ((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone);
-                    backgroundTransparencyCopy = min(((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone) * maxVal + backgroundTransparency, maxVal);
-                    // we need to sum up all the connected, similarly colored zones
-                    std::vector<std::vector<float>*> parserElementsWithPlotNum;
-                    for (int i = 0; i < data.strparsedData.size(); i++) {
-                        if (data.parsedData[i][4] == plot) {
-                            parserElementsWithPlotNum.push_back(&data.parsedData[i]);
-                        }
-                    }
-                    std::set<int> visitedZones;
-                    std::vector<ConnectedZone> connectedZones;
-                    for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
-                        connectedZones.push_back(ConnectedZone(i, parserElementsWithPlotNum[i]->at(4), parserElementsWithPlotNum[i]));
-                    }
-                    for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
-                        visitedZones.insert(i);
-                        ConnectedZone* currentZoneNode = &connectedZones[i];
-                        for (int j = 0; j < parserElementsWithPlotNum.size(); j++) {
-                            if (i == j) continue;
-                            if (parserElementsWithPlotNum[i][4] != parserElementsWithPlotNum[j][4]) continue;
-                            if ((parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][0] || parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][2]) &&
-                                (parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][1] || parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][3]) && 
-                                (visitedZones.find(j) == visitedZones.end())) {
-                                currentZoneNode->connectedZones.push_back(&connectedZones[j]);
-                            }
-                        }
-                    }
-                    std::cout << "debug";
-                }
-                else if (zoneClass >= 0 && data.maxCasesPerPlotZone != 0)
-                {
-                    float zoneDensity = ((float)data.plotNumZoneTotalCases[plot][zone].size() / (float)data.maxCasesPerPlotZone);
-                    backgroundTransparencyCopy = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
-                    data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
-                    if (zoneDensity != 0 && zoneDensity < worstZoneNumDensity)
-                    {
-                        worstZoneNumDensity = zoneDensity;
-                        worstZoneNum = zone;
-                    }
-                    // if (backgroundLightnessSet.find(backgroundTransparencyCopy) == backgroundLightnessSet.end())
-                    // {
-                    //     backgroundLightnessSet.insert(backgroundTransparencyCopy);
-                    // }
-                }
-            }
-
-            if (isHighlightWorstAreaMode) {
-                drawWorstZone();
-            }
-
-            backgroundLightnessSet.insert(backgroundTransparencyCopy);
-
-            if (backgroundTransparencyCopy >= 128)
-            {
-                if (data.zonesWithDarkBackgrounds.find(zone) == data.zonesWithDarkBackgrounds.end())
-                {
-                    data.zonesWithDarkBackgrounds.insert(zone);
-                }
-            } else {
-                if (data.zonesWithDarkBackgrounds.find(zone) == data.zonesWithDarkBackgrounds.end())
-                {
-                    data.zonesWithDarkBackgrounds.erase(zone);
-                }
-            }
-
-            // TODO: handle multiple decision classes
-            // adjust color based on class
-            std::vector<float> hsl;
-            if (classNumber < 0)
-            {
-                hsl = RGBtoHSL(data.continueClassColor[classNumber]);
-            }
-            else
-            {
-                // we need to adjust the lightness of the background color
-                hsl = RGBtoHSL(data.classColor[classNumber]);
-            }
-            // we need to adjust the lightness of the background color
-
-            hsl[2] = hsl[2] * backgroundClassColorCoefficient;
-
-            std::vector<GLubyte> rgb = HSLtoRGB(hsl);
-
-            glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparencyCopy);
-
-            glRectf(x1, y1, x2, y2);
-
-            // draw edge lines if adjust thresholds mode
-            if (isAdjustThresholdsMode) {
-                glColor4ub(0, 0, 0, 255);
-                glBegin(GL_LINE_LOOP);
-                glVertex2f(x1, y1);
-                glVertex2f(x2, y1);
-                glVertex2f(x2, y2);
-                glVertex2f(x1, y2);
-                glEnd();
-                glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparencyCopy);
-            }
+    std::vector<Zone> zones;
+    // build zone objects
+    for (int i = 0; i < data.parsedData.size(); i++) {
+        std::vector<float>* parserElement = &data.parsedData[i];
+        float x1 = parserElement->at(0);
+        float y1 = parserElement->at(1);
+        float x2 = parserElement->at(2);
+        float y2 = parserElement->at(3);
+        int plotNum = parserElement->at(4);
+        int classNum = parserElement->at(5);
+        int destinationPlot = -1;
+        ZoneType type = Decision;
+        std::vector<float>* color;
+        if (classNum < 0) {
+            destinationPlot = parserElement->at(6);
+            type = Continue;
+            color = &data.continueClassColor[classNum];
         }
+        else {
+            color = &data.classColor[classNum];
+        }
+        
+        zones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, color, &data));
     }
-
-    // Draws rectangle if rectangle mode is enabled
-    if (isCondenseRectangleMode)
-    {
-        drawCondenseRectangles();
-    }
-
-    // draws user defined rectangles
-    if (isUserRectangleMode) {
-        drawUserRectangles();
+    // draw zone objects
+    int selectionZoneWidth = 10;
+    for (int i = 0; i < zones.size(); i++) {
+        float backgroundTransparencyForZone = computeBackgroundTransparency(zones[i]);
+        zones[i].computeSelectionZones(selectionZoneWidth);
+        zones[i].drawZone(backgroundClassColorCoefficient, backgroundTransparencyForZone);
+        //if (isAdjustThresholdsMode) {
+            zones[i].drawEdges();
+        //}
     }
 
     if (drawingUserRectangleVertex1) {
@@ -1339,10 +1283,249 @@ void InteractiveSPC::display()
         glEnd();
     }
 
-    // TODO: We need to shake up the draw order!!!! Draw relative to pairs, not columns!!!!!
-    // for every point, we need to draw it. What constitutes a point?
-    // Well that's in the attribute pairs map which is in the data class
 
+    // draw rectangles
+    for (int i = 0; i < userRectangles.size(); i++) {
+        userRectangles[i].drawEdges();
+    }
+
+
+    // find zone edges
+    //if (data.parsedData.size() > 0)
+    //{
+    //    for (int p = 0; p < data.parsedData.size(); p++)
+    //    {
+    //        int classNumber = data.parsedData[p][5];
+    //        int plot = data.parsedData[p][4];
+
+    //        GLfloat y1 = 0;
+    //        GLfloat x2 = 0;
+    //        GLfloat y2 = 0;
+    //        GLfloat x1 = 0;
+
+    //        // get plot coords
+
+    //        // // calculate x components
+    //        // if (plotsWithXAxisInverted.find(plot) != plotsWithXAxisInverted.end())
+    //        // {
+    //        //     x1 = data.x2CoordPlot[plot] - data.parsedData[p][0] * data.plotWidth[plot];
+    //        //     x2 = data.x2CoordPlot[plot] - data.parsedData[p][2] * data.plotWidth[plot];
+    //        // }
+    //        // else
+    //        // {
+    //            x1 = data.x1CoordPlot[plot] + data.parsedData[p][0] * data.plotWidth[plot];
+    //            x2 = data.x1CoordPlot[plot] + data.parsedData[p][2] * data.plotWidth[plot];
+    //        // }
+
+    //        // // calculate y components
+    //        // if (plotsWithYAxisInverted.find(plot) != plotsWithYAxisInverted.end())
+    //        // {
+    //        //     y2 = data.y1CoordPlot[plot] + data.parsedData[p][1] * data.plotHeight[plot];
+    //        //     y1 = data.y1CoordPlot[plot] + data.parsedData[p][3] * data.plotHeight[plot];
+    //        // }
+    //        // else
+    //        // {
+    //            y2 = data.y2CoordPlot[plot] - data.parsedData[p][1] * data.plotHeight[plot];
+    //            y1 = data.y2CoordPlot[plot] - data.parsedData[p][3] * data.plotHeight[plot];
+    //        // }
+
+    //        float maxX = max(x1, x2);
+    //        float maxY = max(y1, y2);
+    //        float minX = min(x1, x2);
+    //        float minY = min(y1, y2);
+
+    //        /*float px = minX + maxX / 2;
+    //        float py = minY + maxY / 2;*/
+    //        float px = minX + (maxX - minX) / 2;
+    //        float py = minY + (maxY - minY) / 2;
+    //        int zone = findBackgroundZoneIdOfPoint(px, py, plot);
+    //        int zoneClass = findBackgroundClassOfPoint(px, py, plot);
+
+    //        // make note of where zone edges are
+    //        if (zoneIdThresholdEdgesRecorded.find(zone) == zoneIdThresholdEdgesRecorded.end())
+    //        {
+    //            zoneIdThresholdEdgesRecorded.insert(zone);
+    //            float selectionZoneWidth = 10;
+    //            std::vector<std::vector<float>> zoneEdges;
+    //            std::vector<float> zoneLeftEdge;
+    //            std::vector<float> zoneRightEdge;
+    //            std::vector<float> zoneTopEdge;
+    //            std::vector<float> zoneBottomEdge;
+
+    //            // get left edge
+    //            zoneLeftEdge.push_back(x1 - selectionZoneWidth);
+    //            zoneLeftEdge.push_back(y1 - selectionZoneWidth);
+    //            zoneLeftEdge.push_back(x1 + selectionZoneWidth);
+    //            zoneLeftEdge.push_back(y2 + selectionZoneWidth);
+    //            zoneLeftEdge.push_back(zone);
+
+    //            // get right edge
+    //            zoneRightEdge.push_back(x2 - selectionZoneWidth);
+    //            zoneRightEdge.push_back(y1 - selectionZoneWidth);
+    //            zoneRightEdge.push_back(x2 + selectionZoneWidth);
+    //            zoneRightEdge.push_back(y2 + selectionZoneWidth);
+    //            zoneRightEdge.push_back(zone);
+
+    //            // get top edge
+    //            zoneTopEdge.push_back(x1 - selectionZoneWidth);
+    //            zoneTopEdge.push_back(y1 - selectionZoneWidth);
+    //            zoneTopEdge.push_back(x2 + selectionZoneWidth);
+    //            zoneTopEdge.push_back(y1 + selectionZoneWidth);
+    //            zoneTopEdge.push_back(zone);
+
+    //            // get bottom edge
+    //            zoneBottomEdge.push_back(x1 - selectionZoneWidth);
+    //            zoneBottomEdge.push_back(y2 - selectionZoneWidth);
+    //            zoneBottomEdge.push_back(x2 + selectionZoneWidth);
+    //            zoneBottomEdge.push_back(y2 + selectionZoneWidth);
+    //            zoneBottomEdge.push_back(zone);
+    //            
+    //            // add edges to zoneEdges vector
+    //            zoneEdges.push_back(zoneLeftEdge);
+    //            zoneEdges.push_back(zoneRightEdge);
+    //            zoneEdges.push_back(zoneTopEdge);
+    //            zoneEdges.push_back(zoneBottomEdge);
+
+    //            // assign ids to zone edges
+    //            edgeToParserElementIndex[zoneLeftEdge] = 0;
+    //            edgeToParserElementIndex[zoneBottomEdge] = 1;
+    //            edgeToParserElementIndex[zoneRightEdge] = 2;
+    //            edgeToParserElementIndex[zoneTopEdge] = 3;
+
+    //            thresholdEdgeSelectionZones.push_back(zoneEdges);
+    //        }
+
+    //        //debug draw threshold rectangles
+    //         //for (auto thresholds : thresholdEdgeSelectionZones) {
+    //         //    for (auto zone : thresholds) {
+    //         //        glRectf(zone[0], zone[1], zone[2], zone[3]);
+    //         //    }
+    //         //}
+    //        //end debugs
+
+    //        // check if plot has similar attributes
+    //        //
+    //        bool isSingleAttributePlot = false;
+    //        if (data.parsedAttributePairs[plot][0] == data.parsedAttributePairs[plot][1])
+    //        {
+    //            isSingleAttributePlot = true;
+    //        }
+
+    //        // make zone color depdendant on accuracy, density
+    //        // TODO:
+    //        GLubyte backgroundTransparencyCopy = (GLubyte)backgroundTransparency;
+    //        const GLubyte maxVal = 245;
+    //        if (isBackgroundDensityColoringMode && zone >= 0 && zoneClass >= 0)
+    //        {
+    //            if (isSingleAttributePlot)
+    //            {
+    //                int singleAttributePlotSum = (float)data.plotNumZoneTotalCases[plot][zone].size();
+    //                float zoneDensity = ((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone);
+    //                backgroundTransparencyCopy = min(((float)singleAttributePlotSum / (float)data.maxCasesPerPlotZone) * maxVal + backgroundTransparency, maxVal);
+    //                // we need to sum up all the connected, similarly colored zones (present in single attribute plots)
+    //                std::vector<std::vector<float>*> parserElementsWithPlotNum;
+    //                for (int i = 0; i < data.strparsedData.size(); i++) {
+    //                    if (data.parsedData[i][4] == plot) {
+    //                        parserElementsWithPlotNum.push_back(&data.parsedData[i]);
+    //                    }
+    //                }
+    //                std::set<int> visitedZones;
+    //                std::vector<ConnectedZone> connectedZones;
+    //                for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+    //                    connectedZones.push_back(ConnectedZone(i, parserElementsWithPlotNum[i]->at(4), parserElementsWithPlotNum[i]));
+    //                }
+    //                for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+    //                    visitedZones.insert(i);
+    //                    ConnectedZone* currentZoneNode = &connectedZones[i];
+    //                    for (int j = 0; j < parserElementsWithPlotNum.size(); j++) {
+    //                        if (i == j) continue;
+    //                        if (parserElementsWithPlotNum[i][4] != parserElementsWithPlotNum[j][4]) continue;
+    //                        if ((parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][0] || parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][2]) &&
+    //                            (parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][1] || parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][3]) && 
+    //                            (visitedZones.find(j) == visitedZones.end())) {
+    //                            currentZoneNode->connectedZones.push_back(&connectedZones[j]);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            else if (zoneClass >= 0 && data.maxCasesPerPlotZone != 0)
+    //            {
+    //                float zoneDensity = ((float)data.plotNumZoneTotalCases[plot][zone].size() / (float)data.maxCasesPerPlotZone);
+    //                backgroundTransparencyCopy = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
+    //                data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
+    //                if (zoneDensity != 0 && zoneDensity < worstZoneNumDensity)
+    //                {
+    //                    worstZoneNumDensity = zoneDensity;
+    //                    worstZoneNum = zone;
+    //                }
+    //                // if (backgroundLightnessSet.find(backgroundTransparencyCopy) == backgroundLightnessSet.end())
+    //                // {
+    //                //     backgroundLightnessSet.insert(backgroundTransparencyCopy);
+    //                // }
+    //            }
+    //        }
+
+    //        if (backgroundTransparencyCopy >= 128)
+    //        {
+    //            if (data.zonesWithDarkBackgrounds.find(zone) == data.zonesWithDarkBackgrounds.end())
+    //            {
+    //                data.zonesWithDarkBackgrounds.insert(zone);
+    //            }
+    //        } else {
+    //            if (data.zonesWithDarkBackgrounds.find(zone) == data.zonesWithDarkBackgrounds.end())
+    //            {
+    //                data.zonesWithDarkBackgrounds.erase(zone);
+    //            }
+    //        }
+
+    //        // TODO: handle multiple decision classes
+    //        // adjust color based on class
+    //        std::vector<float> hsl;
+    //        if (classNumber < 0)
+    //        {
+    //            hsl = RGBtoHSL(data.continueClassColor[classNumber]);
+    //        }
+    //        else
+    //        {
+    //            // we need to adjust the lightness of the background color
+    //            hsl = RGBtoHSL(data.classColor[classNumber]);
+    //        }
+    //        // we need to adjust the lightness of the background color
+
+    //        hsl[2] = hsl[2] * backgroundClassColorCoefficient;
+
+    //        std::vector<GLubyte> rgb = HSLtoRGB(hsl);
+
+    //        glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparencyCopy);
+
+    //        glRectf(x1, y1, x2, y2);
+
+    //        // draw edge lines if adjust thresholds mode
+    //        if (isAdjustThresholdsMode) {
+    //            glColor4ub(0, 0, 0, 255);
+    //            glBegin(GL_LINE_LOOP);
+    //            glVertex2f(x1, y1);
+    //            glVertex2f(x2, y1);
+    //            glVertex2f(x2, y2);
+    //            glVertex2f(x1, y2);
+    //            glEnd();
+    //            glColor4ub(rgb[0], rgb[1], rgb[2], backgroundTransparencyCopy);
+    //        }
+    //    }
+    //}
+
+    //// Draws rectangle if rectangle mode is enabled
+    //if (isCondenseRectangleMode)
+    //{
+    //    drawCondenseRectangles();
+    //}
+
+    //// draws user defined rectangles
+    //if (isUserRectangleMode) {
+    //    drawUserRectangles();
+    //}
+
+ 
     // debug
     // for (int i = 0; i < data.numPlots; i++) {
     //	drawData(.355, 0.5, 0, i);
@@ -1481,179 +1664,181 @@ void InteractiveSPC::display()
     // data.drawLabels();
 }
 
-bool InteractiveSPC::doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
-{
-    GLfloat boundingBoxLeft = min(rectX1, rectX2);
-    GLfloat boundingBoxTop = max(rectY1, rectY2);
-    GLfloat boundingBoxRight = max(rectX1, rectX2);
-    GLfloat boundingBoxBottom = min(rectY1, rectY2);
-    bool *startPointCode = getPointTrivialityCode(x1, y1, rectX1, rectY1, rectX2, rectY2);
-    bool *endPointCode = getPointTrivialityCode(x2, y2, rectX1, rectY1, rectX2, rectY2);
-    bool result = false;
+//TODO: Check if this is needed
+//bool InteractiveSPC::doPointsIntersectRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+//{
+//    GLfloat boundingBoxLeft = min(rectX1, rectX2);
+//    GLfloat boundingBoxTop = max(rectY1, rectY2);
+//    GLfloat boundingBoxRight = max(rectX1, rectX2);
+//    GLfloat boundingBoxBottom = min(rectY1, rectY2);
+//    bool *startPointCode = getPointTrivialityCode(x1, y1, rectX1, rectY1, rectX2, rectY2);
+//    bool *endPointCode = getPointTrivialityCode(x2, y2, rectX1, rectY1, rectX2, rectY2);
+//    bool result = false;
+//
+//    int lineTriviality = isLineTrivial(startPointCode, endPointCode);
+//
+//    switch (lineTriviality)
+//    {
+//    case 0:
+//        // Line is completely within rectangle
+//        result = true;
+//        break;
+//    case 1:
+//        // trivial reject
+//        break;
+//    case 2:
+//        result = shouldLineBeClipped(x1, y1, x2, y2, startPointCode, endPointCode);
+//        break;
+//    default:
+//        break;
+//    }
+//
+//    return result;
+//}
 
-    int lineTriviality = isLineTrivial(startPointCode, endPointCode);
-
-    switch (lineTriviality)
-    {
-    case 0:
-        // Line is completely within rectangle
-        result = true;
-        break;
-    case 1:
-        // trivial reject
-        break;
-    case 2:
-        result = shouldLineBeClipped(x1, y1, x2, y2, startPointCode, endPointCode);
-        break;
-    default:
-        break;
-    }
-
-    return result;
-}
-
-bool InteractiveSPC::shouldLineBeClipped(GLfloat startX, GLfloat startY, GLfloat endX, GLfloat endY, bool *startPointCode, bool *endPointCode)
-{
-    GLfloat boundingBoxTop = max(rectY1, rectY2);
-    GLfloat boundingBoxBottom = min(rectY1, rectY2);
-    GLfloat boundingBoxLeft = min(rectX1, rectX2);
-    GLfloat boundingBoxRight = max(rectX1, rectX2);
-
-    bool *outCodeStart = getPointTrivialityCode(startX, startY, rectX1, rectY1, rectX2, rectY2);
-    bool *outCodeEnd = getPointTrivialityCode(endX, endY, rectX1, rectY1, rectX2, rectY2);
-
-    bool isAccepted = false;
-
-    while (true)
-    {
-        bool outCodeStartInRect = !outCodeStart[0] && !outCodeStart[1] && !outCodeStart[2] && !outCodeStart[3];
-        bool outCodeEndInRect = !outCodeEnd[0] && !outCodeEnd[1] && !outCodeEnd[2] && !outCodeEnd[3];
-
-        bool doPointsShareAZone = false;
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (outCodeStart[i] && outCodeEnd[i])
-            {
-                doPointsShareAZone = true;
-                break;
-            }
-        }
-
-        if (outCodeStartInRect && outCodeEndInRect)
-        {
-            isAccepted = true;
-            break;
-        }
-        else if (doPointsShareAZone)
-        {
-            break;
-        }
-        else
-        {
-            double x, y;
-
-            bool *outCodeOut = outCodeStart;
-            bool pointChosen = false;
-            for (int i = 0; i < 4; i++)
-            {
-                if (outCodeStart[i] && !outCodeEnd[i])
-                {
-                    break;
-                }
-                if (!outCodeStart[i] && outCodeEnd[i])
-                {
-                    outCodeOut = outCodeEnd;
-                    break;
-                }
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                if (outCodeOut[i])
-                {
-                    switch (i)
-                    {
-                    case 0: // left
-                        y = startY + (endY - startY) * (boundingBoxLeft - startX) / (endX - startX);
-                        x = boundingBoxLeft;
-                        break;
-                    case 1: // top
-                        x = startX + (endX - startX) * (boundingBoxTop - startY) / (endY - startY);
-                        y = boundingBoxTop;
-                        break;
-                    case 2: // right
-                        y = startY + (endY - startY) * (boundingBoxRight - startX) / (endX - startX);
-                        x = boundingBoxRight;
-                        break;
-                    case 3: // bottom
-                        x = startX + (endX - startX) * (boundingBoxBottom - startY) / (startY - endY);
-                        y = boundingBoxBottom;
-                        break;
-                    default:
-                        break;
-                    }
-                    break;
-                }
-            }
-
-            bool doesOutCodeOutEqualOutCodeStart = true;
-            for (int i = 0; i < 4; i++)
-            {
-                if (outCodeOut[i] != outCodeStart[i])
-                {
-                    doesOutCodeOutEqualOutCodeStart = false;
-                    break;
-                }
-            }
-
-            if (doesOutCodeOutEqualOutCodeStart)
-            {
-                startX = x;
-                startY = y;
-                outCodeStart = getPointTrivialityCode(startX, startY, rectX1, rectY1, rectX2, rectY2);
-            }
-            else
-            {
-                endX = x;
-                endY = y;
-                outCodeEnd = getPointTrivialityCode(endX, endY, rectX1, rectY1, rectX2, rectY2);
-            }
-        }
-    }
-
-    // Debug
-    /*glColor4ub(0, 255, 0, 255);
-    glPointSize(8.0);
-    glBegin(GL_POINTS);
-    glVertex2f(startX, startY);
-    glColor4ub(255, 255, 0, 255);
-    glVertex2f(endX, endY);
-    glEnd();
-    glPointSize(4.0);
-
-    glBegin(GL_LINES);
-    glVertex2f(startX, startY);
-    glVertex2f(endX, endY);
-    glEnd();
-
-    glColor4ub(255, 0, 0, 255);
-    glBegin(GL_LINES);
-    glVertex2f(0.0f, boundingBoxBottom);
-    glVertex2f(1000, boundingBoxBottom);
-    glColor4ub(0, 255, 0, 255);
-    glVertex2f(0.0f, boundingBoxTop);
-    glVertex2f(1000, boundingBoxTop);
-    glColor4ub(0, 0, 255, 255);
-    glVertex2f(boundingBoxLeft, 0.0f);
-    glVertex2f(boundingBoxLeft, 1000);
-    glColor4ub(255, 0, 255, 255);
-    glVertex2f(boundingBoxRight, 0.0f);
-    glVertex2f(boundingBoxRight, 1000);
-    glEnd();*/
-
-    return isAccepted;
-}
+//TODO: Don't think this is used anymore
+//bool InteractiveSPC::shouldLineBeClipped(GLfloat startX, GLfloat startY, GLfloat endX, GLfloat endY, bool *startPointCode, bool *endPointCode)
+//{
+//    GLfloat boundingBoxTop = max(rectY1, rectY2);
+//    GLfloat boundingBoxBottom = min(rectY1, rectY2);
+//    GLfloat boundingBoxLeft = min(rectX1, rectX2);
+//    GLfloat boundingBoxRight = max(rectX1, rectX2);
+//
+//    bool *outCodeStart = getPointTrivialityCode(startX, startY, rectX1, rectY1, rectX2, rectY2);
+//    bool *outCodeEnd = getPointTrivialityCode(endX, endY, rectX1, rectY1, rectX2, rectY2);
+//
+//    bool isAccepted = false;
+//
+//    while (true)
+//    {
+//        bool outCodeStartInRect = !outCodeStart[0] && !outCodeStart[1] && !outCodeStart[2] && !outCodeStart[3];
+//        bool outCodeEndInRect = !outCodeEnd[0] && !outCodeEnd[1] && !outCodeEnd[2] && !outCodeEnd[3];
+//
+//        bool doPointsShareAZone = false;
+//
+//        for (int i = 0; i < 4; i++)
+//        {
+//            if (outCodeStart[i] && outCodeEnd[i])
+//            {
+//                doPointsShareAZone = true;
+//                break;
+//            }
+//        }
+//
+//        if (outCodeStartInRect && outCodeEndInRect)
+//        {
+//            isAccepted = true;
+//            break;
+//        }
+//        else if (doPointsShareAZone)
+//        {
+//            break;
+//        }
+//        else
+//        {
+//            double x, y;
+//
+//            bool *outCodeOut = outCodeStart;
+//            bool pointChosen = false;
+//            for (int i = 0; i < 4; i++)
+//            {
+//                if (outCodeStart[i] && !outCodeEnd[i])
+//                {
+//                    break;
+//                }
+//                if (!outCodeStart[i] && outCodeEnd[i])
+//                {
+//                    outCodeOut = outCodeEnd;
+//                    break;
+//                }
+//            }
+//
+//            for (int i = 0; i < 4; i++)
+//            {
+//                if (outCodeOut[i])
+//                {
+//                    switch (i)
+//                    {
+//                    case 0: // left
+//                        y = startY + (endY - startY) * (boundingBoxLeft - startX) / (endX - startX);
+//                        x = boundingBoxLeft;
+//                        break;
+//                    case 1: // top
+//                        x = startX + (endX - startX) * (boundingBoxTop - startY) / (endY - startY);
+//                        y = boundingBoxTop;
+//                        break;
+//                    case 2: // right
+//                        y = startY + (endY - startY) * (boundingBoxRight - startX) / (endX - startX);
+//                        x = boundingBoxRight;
+//                        break;
+//                    case 3: // bottom
+//                        x = startX + (endX - startX) * (boundingBoxBottom - startY) / (startY - endY);
+//                        y = boundingBoxBottom;
+//                        break;
+//                    default:
+//                        break;
+//                    }
+//                    break;
+//                }
+//            }
+//
+//            bool doesOutCodeOutEqualOutCodeStart = true;
+//            for (int i = 0; i < 4; i++)
+//            {
+//                if (outCodeOut[i] != outCodeStart[i])
+//                {
+//                    doesOutCodeOutEqualOutCodeStart = false;
+//                    break;
+//                }
+//            }
+//
+//            if (doesOutCodeOutEqualOutCodeStart)
+//            {
+//                startX = x;
+//                startY = y;
+//                outCodeStart = getPointTrivialityCode(startX, startY, rectX1, rectY1, rectX2, rectY2);
+//            }
+//            else
+//            {
+//                endX = x;
+//                endY = y;
+//                outCodeEnd = getPointTrivialityCode(endX, endY, rectX1, rectY1, rectX2, rectY2);
+//            }
+//        }
+//    }
+//
+//    // Debug
+//    /*glColor4ub(0, 255, 0, 255);
+//    glPointSize(8.0);
+//    glBegin(GL_POINTS);
+//    glVertex2f(startX, startY);
+//    glColor4ub(255, 255, 0, 255);
+//    glVertex2f(endX, endY);
+//    glEnd();
+//    glPointSize(4.0);
+//
+//    glBegin(GL_LINES);
+//    glVertex2f(startX, startY);
+//    glVertex2f(endX, endY);
+//    glEnd();
+//
+//    glColor4ub(255, 0, 0, 255);
+//    glBegin(GL_LINES);
+//    glVertex2f(0.0f, boundingBoxBottom);
+//    glVertex2f(1000, boundingBoxBottom);
+//    glColor4ub(0, 255, 0, 255);
+//    glVertex2f(0.0f, boundingBoxTop);
+//    glVertex2f(1000, boundingBoxTop);
+//    glColor4ub(0, 0, 255, 255);
+//    glVertex2f(boundingBoxLeft, 0.0f);
+//    glVertex2f(boundingBoxLeft, 1000);
+//    glColor4ub(255, 0, 255, 255);
+//    glVertex2f(boundingBoxRight, 0.0f);
+//    glVertex2f(boundingBoxRight, 1000);
+//    glEnd();*/
+//
+//    return isAccepted;
+//}
 
 int InteractiveSPC::isLineTrivial(bool *startPointTriviality, bool *endPointTriviality)
 {
@@ -2137,6 +2322,10 @@ void InteractiveSPC::drawCircle(int x, int y)
     // }
 }
 
+void InteractiveSPC::drawRectangle(UserRectangle rect) {
+    drawRectangle(rect.X1, rect.X2, rect.Y1, rect.Y2, rect.color[0], rect.color[1], rect.color[2]);
+}
+
 void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b)
 {
     glBegin(GL_LINE_STRIP);
@@ -2152,74 +2341,75 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
     glEnd();
 }
 
-void InteractiveSPC::drawCondenseRectangles()
-{
-    for (int i = 0; i < condenseRectX1List.size(); i++)
-    {
-        drawRectangle(condenseRectX1List[i], condenseRectX2List[i], condenseRectY1List[i], condenseRectY2List[i], 0.0f, 0.0f, 0.0f);
-    }
-}
-
-void InteractiveSPC::drawUserRectangles() {
-    for (int i = 0; i < userRectangles.size(); i++) {
-        drawRectangle(userRectangles[i].X1, userRectangles[i].X2, userRectangles[i].Y1, userRectangles[i].Y2, userRectangles[i].color[0], userRectangles[i].color[1], userRectangles[i].color[2]);
-    }
-}
+//TODO: This is probably not needed
+//void InteractiveSPC::drawCondenseRectangles()
+//{
+//    for (int i = 0; i < condenseRectX1List.size(); i++)
+//    {
+//        drawRectangle(condenseRectX1List[i], condenseRectX2List[i], condenseRectY1List[i], condenseRectY2List[i], 0.0f, 0.0f, 0.0f);
+//    }
+//}
+//
+//void InteractiveSPC::drawUserRectangles() {
+//    for (int i = 0; i < userRectangles.size(); i++) {
+//        drawRectangle(userRectangles[i].X1, userRectangles[i].X2, userRectangles[i].Y1, userRectangles[i].Y2, userRectangles[i].color[0], userRectangles[i].color[1], userRectangles[i].color[2]);
+//    }
+//}
 
 /* Display Utilities*/
 
-std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor)
-{
-    std::vector<float> hsl;
-    float rprime = classColor[0] / 255.0;
-    float gprime = classColor[1] / 255.0;
-    float bprime = classColor[2] / 255.0;
-    float cMax = max(max(rprime, gprime), bprime);
-    float cMin = min(min(rprime, gprime), bprime);
-    float cDelta = cMax - cMin;
-    float saturation, lightness = 0;
-    int hue = 0;
-
-    // get hue
-    if (cDelta == 0)
-    {
-        hue = 0;
-    }
-    else if (cMax == rprime)
-    {
-        hue = 60 * fmod(((gprime - bprime) / cDelta), 6);
-    }
-    else if (cMax == gprime)
-    {
-        hue = 60 * ((bprime - rprime) / cDelta + 2);
-    }
-    else if (cMax == bprime)
-    {
-        hue = 60 * ((rprime - gprime) / cDelta + 4);
-    }
-
-    // get lightness
-    lightness = (cMax + cMin) / 2;
-
-    // get saturation
-    if (cDelta == 0)
-    {
-        saturation = 0;
-    }
-    else
-    {
-        saturation = cDelta / (1 - abs(2 * lightness - 1));
-    }
-
-    if (saturation > 1.0f)
-    {
-        saturation = 1.0;
-    }
-    hsl.push_back(hue % 360);
-    hsl.push_back(saturation);
-    hsl.push_back(lightness);
-    return hsl;
-}
+//std::vector<float> InteractiveSPC::RGBtoHSL(std::vector<float> classColor)
+//{
+//    std::vector<float> hsl;
+//    float rprime = classColor[0] / 255.0;
+//    float gprime = classColor[1] / 255.0;
+//    float bprime = classColor[2] / 255.0;
+//    float cMax = max(max(rprime, gprime), bprime);
+//    float cMin = min(min(rprime, gprime), bprime);
+//    float cDelta = cMax - cMin;
+//    float saturation, lightness = 0;
+//    int hue = 0;
+//
+//    // get hue
+//    if (cDelta == 0)
+//    {
+//        hue = 0;
+//    }
+//    else if (cMax == rprime)
+//    {
+//        hue = 60 * fmod(((gprime - bprime) / cDelta), 6);
+//    }
+//    else if (cMax == gprime)
+//    {
+//        hue = 60 * ((bprime - rprime) / cDelta + 2);
+//    }
+//    else if (cMax == bprime)
+//    {
+//        hue = 60 * ((rprime - gprime) / cDelta + 4);
+//    }
+//
+//    // get lightness
+//    lightness = (cMax + cMin) / 2;
+//
+//    // get saturation
+//    if (cDelta == 0)
+//    {
+//        saturation = 0;
+//    }
+//    else
+//    {
+//        saturation = cDelta / (1 - abs(2 * lightness - 1));
+//    }
+//
+//    if (saturation > 1.0f)
+//    {
+//        saturation = 1.0;
+//    }
+//    hsl.push_back(hue % 360);
+//    hsl.push_back(saturation);
+//    hsl.push_back(lightness);
+//    return hsl;
+//}
 
 std::vector<int> InteractiveSPC::findClickedEdge(GLfloat px, GLfloat py) {
     std::vector<int> result;
@@ -2285,61 +2475,61 @@ int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentData
     }
 }
 
-std::vector<GLubyte> InteractiveSPC::HSLtoRGB(std::vector<float> hsl)
-{
-
-    std::vector<float> rgbPrimeVector;
-    std::vector<GLubyte> rgbVector;
-    float hue = hsl[0];
-    float saturation = hsl[1];
-    float lightness = hsl[2];
-
-    float c = (1 - abs(2 * lightness - 1)) * saturation;
-    float x = c * (1 - abs(fmod((hue / 60.0), 2) - 1));
-    float m = lightness - (c / 2.0);
-
-    if (hue >= 0 && hue < 60)
-    {
-        rgbPrimeVector.push_back(c);
-        rgbPrimeVector.push_back(x);
-        rgbPrimeVector.push_back(0);
-    }
-    else if (hue >= 60 && hue < 120)
-    {
-        rgbPrimeVector.push_back(x);
-        rgbPrimeVector.push_back(c);
-        rgbPrimeVector.push_back(0);
-    }
-    else if (hue >= 120 && hue < 180)
-    {
-        rgbPrimeVector.push_back(0);
-        rgbPrimeVector.push_back(c);
-        rgbPrimeVector.push_back(x);
-    }
-    else if (hue >= 180 && hue < 240)
-    {
-        rgbPrimeVector.push_back(0);
-        rgbPrimeVector.push_back(x);
-        rgbPrimeVector.push_back(c);
-    }
-    else if (hue >= 240 && hue < 300)
-    {
-        rgbPrimeVector.push_back(x);
-        rgbPrimeVector.push_back(0);
-        rgbPrimeVector.push_back(c);
-    }
-    else if (hue >= 300 && hue < 360)
-    {
-        rgbPrimeVector.push_back(c);
-        rgbPrimeVector.push_back(0);
-        rgbPrimeVector.push_back(x);
-    }
-
-    rgbVector.push_back((rgbPrimeVector[0] + m) * 255);
-    rgbVector.push_back((rgbPrimeVector[1] + m) * 255);
-    rgbVector.push_back((rgbPrimeVector[2] + m) * 255);
-
-    std::cout << "debug" << std::endl;
-
-    return rgbVector;
-}
+//std::vector<GLubyte> InteractiveSPC::HSLtoRGB(std::vector<float> hsl)
+//{
+//
+//    std::vector<float> rgbPrimeVector;
+//    std::vector<GLubyte> rgbVector;
+//    float hue = hsl[0];
+//    float saturation = hsl[1];
+//    float lightness = hsl[2];
+//
+//    float c = (1 - abs(2 * lightness - 1)) * saturation;
+//    float x = c * (1 - abs(fmod((hue / 60.0), 2) - 1));
+//    float m = lightness - (c / 2.0);
+//
+//    if (hue >= 0 && hue < 60)
+//    {
+//        rgbPrimeVector.push_back(c);
+//        rgbPrimeVector.push_back(x);
+//        rgbPrimeVector.push_back(0);
+//    }
+//    else if (hue >= 60 && hue < 120)
+//    {
+//        rgbPrimeVector.push_back(x);
+//        rgbPrimeVector.push_back(c);
+//        rgbPrimeVector.push_back(0);
+//    }
+//    else if (hue >= 120 && hue < 180)
+//    {
+//        rgbPrimeVector.push_back(0);
+//        rgbPrimeVector.push_back(c);
+//        rgbPrimeVector.push_back(x);
+//    }
+//    else if (hue >= 180 && hue < 240)
+//    {
+//        rgbPrimeVector.push_back(0);
+//        rgbPrimeVector.push_back(x);
+//        rgbPrimeVector.push_back(c);
+//    }
+//    else if (hue >= 240 && hue < 300)
+//    {
+//        rgbPrimeVector.push_back(x);
+//        rgbPrimeVector.push_back(0);
+//        rgbPrimeVector.push_back(c);
+//    }
+//    else if (hue >= 300 && hue < 360)
+//    {
+//        rgbPrimeVector.push_back(c);
+//        rgbPrimeVector.push_back(0);
+//        rgbPrimeVector.push_back(x);
+//    }
+//
+//    rgbVector.push_back((rgbPrimeVector[0] + m) * 255);
+//    rgbVector.push_back((rgbPrimeVector[1] + m) * 255);
+//    rgbVector.push_back((rgbPrimeVector[2] + m) * 255);
+//
+//    std::cout << "debug" << std::endl;
+//
+//    return rgbVector;
+//}
