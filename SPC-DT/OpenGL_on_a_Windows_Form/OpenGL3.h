@@ -99,6 +99,8 @@ public
         int cpPosx;
         int cpPosy;
 
+        bool selectUserRectangleMode = false;
+
         // debug counter
         int DEBUG_COUNTER = 0;
 
@@ -159,11 +161,20 @@ public
             }
         }
 
+        int getUserRectangleCount() {
+            return graph4.userRectangles.size();
+        }
+
         void resetDrawingArea()
         {
             SetWindowPos((HWND)this->Handle.ToPointer(), NULL, 201, 33, originalWW, originalWH, SWP_SHOWWINDOW);
             SetFocus((HWND)this->Handle.ToPointer());
             cpPosx = 201;
+        }
+
+        // delete user rectangles
+        void deleteRectangles() {
+            graph4.userRectangles.clear();
         }
 
         // CHANGE BACKGROUND COLOR
@@ -173,6 +184,7 @@ public
             {
 
                 graph4.data.setClassColor(R, G, B, classnumber);
+                graph4.updateZoneColors(classnumber);
             }
         }
 
@@ -249,6 +261,17 @@ public
             canDragPlots = !state;
         }
 
+        int toggleSelectUserRectangleMode() {
+            if (graph4.userRectangles.empty()) return -1;
+            graph4.isSelectUserRectangleMode = !graph4.isSelectUserRectangleMode;
+            selectUserRectangleMode = !selectUserRectangleMode;
+            return 0;
+        }
+
+        void updateSelectedRectangleType(int state) {
+            graph4.updateSelectedRectangleType(state);
+        }
+
         // set the highlight worst area mode
         void setHighlightWorstAreaMode(bool state) {
             graph4.isHighlightWorstAreaMode = state;
@@ -300,6 +323,10 @@ public
         {
             attributeSwapMode = !attributeSwapMode;
             graph4.swapAttributeAxesMode = !graph4.swapAttributeAxesMode;
+        }
+
+        void removeSelectedUserRectangle() {
+            graph4.deleteSelectedRectangle();
         }
 
         int getClassSize()
@@ -719,6 +746,8 @@ public
                 else if (graphType == 4)
                 { // SPC
                     {
+                        //TODO: cleanup this method
+                        
                         // rectangle mode
                         //if (drawingRectangleEnabled)
                         //{
@@ -753,10 +782,12 @@ public
                         //    break;
                         //}
 
+                        // get click location info
                         graph4.plotNumClicked = graph4.findClickedGraph(worldMouseX, worldMouseY);
                         graph4.zoneIdClicked = graph4.findBackgroundZoneIdOfPoint(worldMouseX, worldMouseY, graph4.plotNumClicked);
                         int plotNumClicked = graph4.plotNumClicked;
 
+                        // drawing user rectangles mode
                         if (drawUserRectangleMode) {
                             if (drawingRectangleVertex1) {
                                 drawingRectangleX1 = worldMouseX;
@@ -772,11 +803,30 @@ public
                                 graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
                                 setUserRectangleState(true);
                                 setDrawUserRectangleMode(false);
+                                
+
                             }
                             drawingRectangleVertex1 = !drawingRectangleVertex1;
                             break;
                         }
 
+                        // select user rectangles mode
+                        if (selectUserRectangleMode) {
+                            if (graph4.selectedRect != nullptr) {
+                                graph4.selectedRect->frameColor[0] = 0;
+                                graph4.selectedRect->frameColor[1] = 0;
+                                graph4.selectedRect->frameColor[2] = 0;
+                            }
+                            graph4.selectedRect = graph4.findClickedRectangle(worldMouseX, worldMouseY);
+                            if (graph4.selectedRect != nullptr) {
+                                graph4.selectedRect->frameColor[0] = 255;
+                                graph4.selectedRect->frameColor[1] = 0;
+                                graph4.selectedRect->frameColor[2] = 0;
+                            }
+                        }
+                        else if (graph4.selectedRect != nullptr) {
+                            graph4.selectedRect = nullptr;
+                        }
 
                         ClassData *dataPtr = &graph4.data;
                      
@@ -786,15 +836,18 @@ public
                             if (graph4.clickedEdge.empty()) {
                                 std::cout << "debug!";
                             }
-                            else if (graph4.clickedEdge.size() == 3) {
+                            else if (graph4.clickedEdge.size() == 2) {
                                 // get edge information
                                 int zoneId = graph4.clickedEdge[0];
-                                int edgeId = graph4.clickedEdge[1];
-                                int direction = graph4.clickedEdge[2];
+                                //int edgeId = graph4.clickedEdge[1];
+                                int direction = graph4.clickedEdge[1];
 
                                 // adjust threshold
                                 graph4.thresholdBeingAdjusted = true;
-                                dataPtr->adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, edgeId, direction);    
+                                dataPtr->adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, direction);    
+
+                                // recompute zone coords
+                                graph4.recomputePlotZones(plotNumClicked);
 
                                 // recompute edges
                                 graph4.thresholdEdgeSelectionZones.clear();
@@ -953,11 +1006,13 @@ public
                         /*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
                         graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
                     }
-                    if (graph4.thresholdBeingAdjusted && graph4.clickedEdge.size() == 3) {
+                    if (graph4.thresholdBeingAdjusted && graph4.clickedEdge.size() == 2) {
                         int zoneId = graph4.clickedEdge[0];
-                        int edgeId = graph4.clickedEdge[1];
-                        int direction = graph4.clickedEdge[2];
-                        graph4.data.adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, edgeId, direction);
+                        //int edgeId = graph4.clickedEdge[1];
+                        int direction = graph4.clickedEdge[1];
+                        // recompute zone coords
+                        graph4.data.adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, direction);
+                        graph4.recomputePlotZones(graph4.plotNumClicked);
                         confusionMatrixTextBox->Text = buildConfusionMatrixString();
                         graph4.thresholdEdgeSelectionZones.clear();
                         graph4.zoneIdThresholdEdgesRecorded.clear();

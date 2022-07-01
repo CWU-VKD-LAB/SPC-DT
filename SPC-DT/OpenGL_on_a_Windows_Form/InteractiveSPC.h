@@ -59,6 +59,14 @@ public:
 	//std::vector<GLfloat> condenseRectX2List;
 	//std::vector<GLfloat> condenseRectY2List;
     std::vector<UserRectangle> userRectangles;
+	void condensePointInRectangle(float& px, float& py, int& caseClass, UserRectangle& userRect);
+	void adjustPointToRectangle(float& x, float& y, int& caseClass);
+	void deleteSelectedRectangle();
+	void updateSelectedRectangleType(int state);
+	UserRectangle* findClickedRectangle(GLfloat px, GLfloat py);
+	UserRectangle* selectedRect;
+	bool isSelectUserRectangleMode = false;
+
     //std::vector<std::vector<GLubyte>> userRectColorList;
 	//GLfloat rectX1;
 	//GLfloat rectY1;
@@ -81,14 +89,20 @@ public:
 	/// *** USED FOR OVERLAP MITIGATION MODE
 	bool isOverlapMitigationMode = false;
 	bool isOverlapMitigationModeAll = false;
-
+	void mitigateOverlap(float& x, float& y, int& caseNum, int& caseClass, int& plotNum, int& pointBackgroundClass, int& pointBackgroundZone);
     /// *** USED FOR ADJUSTING DECISION ZONE THRESHOLDS
+	const int selectionZoneWidth = 10;
     bool isAdjustThresholdsMode = false;
     std::vector<std::vector<std::vector<float>>> thresholdEdgeSelectionZones;
     std::map<std::vector<float>, int> edgeToParserElementIndex; // map: collection of edge points -> list [ zoneId, index for (x1, y1, x2, y2) ]
     std::set<int> zoneIdThresholdEdgesRecorded;
     std::vector<int> findClickedEdge(GLfloat px, GLfloat py);
+	void recomputePlotZones(int& plotNum);
 	std::vector<int> clickedEdge;
+	std::vector<Zone> plotZones;
+	std::map<int, Zone> zoneIdMap;
+	void InteractiveSPC::buildZoneEdges();
+	void InteractiveSPC::updateZoneColors(int classNum);
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
@@ -102,6 +116,7 @@ public:
 	
 	/// *** USED FOR DETERMINING MISCLASSIFICATION HIGHLIGHTING MODE
 	bool isHighlightMisclassficationsMode = false;
+	void handleMisclassifications(float& x, float& y, int& caseClass, int& caseNum, int& pointBackgroundClass);
 
 	/// *** USED FOR DETERMINING POINT COLORING MODE
 	bool isPointColorMode = false;

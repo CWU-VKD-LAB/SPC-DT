@@ -9,7 +9,7 @@ struct UserRectangle {
 	int plotNum;
 	GLfloat X1, X2, Y1, Y2;
     GLfloat realX1, realX2, realY1, realY2;
-	GLfloat color[3];
+	GLubyte frameColor[3];
 	RectangleType type;
 	ClassData* data;
 	UserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, RectangleType type, int plotNum, ClassData* data) {
@@ -18,18 +18,20 @@ struct UserRectangle {
         Y1 = (y1 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
         Y2 = (y2 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
 		id = time(NULL);
-		type = None;
 		this->plotNum = plotNum;
 		this->type = type;
 		this->data = data;
+        computeRealCoords();
 	}
     void invertX() {
         X1 = 1.0f - X1;
         X2 = 1.0f - X2;
+        computeRealCoords();
     }
     void invertY() {
         Y1 = 1.0f - Y1;
         Y2 = 1.0f - Y2;
+        computeRealCoords();
     }
     void computeRealCoords() {
         realX1 = data->x1CoordPlot[plotNum] + (X1 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
@@ -47,4 +49,25 @@ struct UserRectangle {
         glVertex2f(realX1, realY2);
 		glEnd();
 	}
+    void drawEdges(float lineThickness) {
+        glColor3ub(frameColor[0], frameColor[1], frameColor[2]);
+        glLineWidth(lineThickness);
+        drawEdges();
+        glLineWidth(1.0); // TODO: replace with global line width
+    }
+    bool isPointWithinRect(float&px, float&py) {
+        computeRealCoords();
+        if (px >= realX1 && px <= realX2 && py >= realY2 && py <= realY1) {
+            return true;
+        }
+        return false;
+    }
+    void setFrameColor(GLubyte R, GLubyte G, GLubyte B) {
+        frameColor[0] = R;
+        frameColor[1] = G;
+        frameColor[2] = B;
+    }
+    bool operator==(const UserRectangle& rect) const {
+        return rect.id == id;
+    }
 };

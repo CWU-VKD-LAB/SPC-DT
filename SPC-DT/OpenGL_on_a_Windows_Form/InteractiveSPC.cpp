@@ -57,6 +57,14 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
     display();
 }
 
+void InteractiveSPC::updateZoneColors(int classNum) {
+    for (int i = 0; i < plotZones.size(); i++) {
+        if (plotZones[i].classNum == classNum - 1) {
+            plotZones[i].color = data.classColor[classNum - 1];
+        }
+    }
+}
+
 void InteractiveSPC::setBackgroundTransparency(float alpha)
 {
     this->backgroundTransparency = alpha;
@@ -175,6 +183,7 @@ void InteractiveSPC::fillPlotLocations()
         std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
     }
 
+    // debug
     std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
 
     // // constructs plots in a single line
@@ -198,6 +207,12 @@ void InteractiveSPC::fillPlotLocations()
     //}
 }
 
+void InteractiveSPC::deleteSelectedRectangle() {
+    if (selectedRect != nullptr) {
+        std::remove(userRectangles.begin(), userRectangles.end(), *selectedRect);
+    }
+}
+
 /* Draws rectangles in rectangle mode around all continue zones*/
 void InteractiveSPC::drawRectanglesOnGray()
 {
@@ -208,7 +223,7 @@ void InteractiveSPC::drawRectanglesOnGray()
         for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
         { // TODO: if data.parsedData was a map this would be WAY faster...
             std::vector<float> parserData = data.parsedData[parsedIndex];
-            if ((int)parserData[4] != plotNum || parserData[parserData.size() - 1] >= 0)
+            if ((int)parserData[4] != plotNum || parserData[5] >= 0) // if the element's plot num isnt the current plot or the element is not a continue zone, move on
             {
                 continue;
             }
@@ -271,6 +286,253 @@ void InteractiveSPC::drawRectanglesOnGray()
     isCondenseRectangleMode = true;
 }
 
+void InteractiveSPC::mitigateOverlap(float &x, float &y, int& caseNum, int &caseClass, int &plotNum, int &pointBackgroundClass, int &pointBackgroundZone) {
+    // Get the total number of classes underneath this point
+    std::set<int> *pointBackgroundZoneTotalCaseList = &data.plotNumZoneTotalCases[plotNum][pointBackgroundZone];
+    std::set<int> *pointBackgroundZoneMisclassifiedCaseList = &data.plotNumZoneTotalMisclassifiedCases[plotNum][pointBackgroundZone];
+
+    // Compute the total number of classes underneath this point (if any)
+    if (pointBackgroundZoneTotalCaseList->find(caseNum) == pointBackgroundZoneTotalCaseList->end())
+    {
+        pointBackgroundZoneTotalCaseList->insert(caseNum);
+    }
+
+    if (pointBackgroundClass != caseClass)
+    {
+        if (pointBackgroundZoneMisclassifiedCaseList->find(caseNum) == pointBackgroundZoneMisclassifiedCaseList->end())
+        {
+            pointBackgroundZoneMisclassifiedCaseList->insert(caseNum);
+        }
+    }
+    else {
+        auto it = pointBackgroundZoneMisclassifiedCaseList->find(caseNum);
+        if ( it != pointBackgroundZoneMisclassifiedCaseList->end()) {
+            pointBackgroundZoneMisclassifiedCaseList->erase(it);
+        }
+    }
+
+    if (pointBackgroundZoneTotalCaseList->size() > data.maxCasesPerPlotZone)
+    {
+        data.maxCasesPerPlotZone = pointBackgroundZoneTotalCaseList->size();
+    }
+
+    // asses overlap
+    std::vector<int> *overlapList = &overlapMap[x][y][caseClass];
+    if (std::find(overlapList->begin(), overlapList->end(), caseNum) == overlapList->end())
+    {
+        overlapList->push_back(caseNum);
+    }
+    
+    // Overlap shift constants
+    float shiftAmount = 0;
+    float classShiftAmount = 0;
+    const float shiftConstant = 10;
+    const float classShift = 10;
+
+     // overlap mitigation
+    std::map<int, std::vector<int>> caseClassMap = overlapMap[x][y];
+    caseClassMap = overlapMap[x][y];
+    overlapList = &overlapMap[x][y][caseClass];
+    if (isOverlapMitigationModeAll && pointBackgroundClass >= 0)
+    {
+        std::vector<int> caseList;
+        for (int i = 0; i < data.classes.size(); i++)
+        {
+            int classNum = data.classes[i];
+            if (classNum < 0)
+                continue;
+            for (int j = 0; j < caseClassMap[classNum].size(); j++)
+            {
+                caseList.push_back(caseClassMap[classNum][j]);
+            }
+        }
+
+        int totalCases = caseList.size();
+        auto caseIndexIterator = std::find(caseList.begin(), caseList.end(), caseNum);
+        int index = -1;
+        if (caseIndexIterator != caseList.end())
+        {
+            index = caseIndexIterator - caseList.begin();
+        }
+        if (index == -1)
+        {
+            std::cout << "something is wrong";
+        }
+        if (totalCases != 0)
+        {
+            shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
+        }
+        x += shiftAmount + classShiftAmount;
+        y += shiftAmount;
+    }
+    else if (isOverlapMitigationMode && caseClassMap.size() > 1)
+    {
+        if (pointBackgroundClass >= 0)
+        {
+            std::vector<int> overlappingCases; 
+            // count how many cases there are that are overlapping
+            int nonNegClassCount = 0;
+            int totalCases = 0;
+            for (int i = 0; i < data.classes.size(); i++)
+            {
+                int classNum = data.classes[i];
+                if (classNum < 0)
+                    continue;
+                nonNegClassCount++;
+                if (caseClassMap.find(classNum) != caseClassMap.end())
+                {
+                    for (int j = 0; j < caseClassMap[classNum].size(); j++)
+                    {
+                        overlappingCases.push_back(caseClassMap[classNum][j]);
+                        totalCases++;
+                    }
+                }
+            }
+
+            // determine which index position the current case is
+            auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
+            int index = -1;
+            if (caseIndexIterator != overlappingCases.end())
+            {
+                index = caseIndexIterator - overlappingCases.begin();
+            }
+            if (index == -1)
+            {
+                std::cout << "something is wrong";
+            }
+
+            // shuffle function
+            // x1' = x1 + (index / totalCases) * b
+            // y1' = y1 + (index / totalCases) * b
+            // find num of non-negative classes
+            if (totalCases != 0)
+            {
+                shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
+            }
+            if (nonNegClassCount != 0)
+            {
+                classShiftAmount = (float)caseClass / (float)nonNegClassCount;
+            }
+            x += shiftAmount + classShiftAmount;
+            y += shiftAmount;
+
+            std::cout << "debug";
+        }
+    }
+}
+
+void InteractiveSPC::handleMisclassifications(float&x, float&y, int &caseClass, int& caseNum, int &pointBackgroundClass) {
+    int pointWasCorrectlyClassified = false;
+
+    GLubyte classTransparency = data.classTransparencies[caseClass];
+
+    // count misclassifications
+    std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][pointBackgroundClass]; // {actual -> {predicted -> [casenum, ...]}}
+    std::map<int, std::vector<int>> * predictedClasses = &data.misclassifiedCases[caseClass];
+    
+    // remove casenum from whichever class it was in before
+    for (auto it : *predictedClasses) {
+        std::vector<int> * lst = &predictedClasses->at(it.first);
+        auto find = std::find(lst->begin(), lst->end(), caseNum);
+        if (find != lst->end() && it.first != pointBackgroundClass) {
+            lst->erase(find);
+            lst->shrink_to_fit();
+            data.classMisclassifiedCaseCount[caseClass]--;
+            break;
+        }
+    }
+
+    // add casenum if misclassified
+    if (pointBackgroundClass >= 0) {
+        if (pointBackgroundClass != caseClass)
+        {
+            // if we're in here, this is a misclassification
+            if (std::find(misclassifiedClassList->begin(), misclassifiedClassList->end(), caseNum) == misclassifiedClassList->end())
+            {
+                misclassifiedClassList->push_back(caseNum);
+                data.classMisclassifiedCaseCount[caseClass]++;
+            }
+
+            // determine if we should be highlighting misclassified points
+            if (isHighlightMisclassficationsMode)
+            {
+                glColor4ub(255, 0, 0, classTransparency);
+                glPointSize(8.0);
+                glBegin(GL_POINTS);
+                glVertex2f(x, y);
+                glEnd();
+                glPointSize(4.0);
+            }
+        }
+    }
+}
+
+void InteractiveSPC::condensePointInRectangle(float&x, float&y, int &caseClass, UserRectangle &userRect) {
+    //  compute new location
+    GLfloat deltaX = abs(userRect.realX2 - userRect.realX1);
+    GLfloat deltaY = abs(userRect.realY2 - userRect.realY1);
+    GLfloat newX = userRect.realX1 + deltaX * 0.5;
+    GLfloat newY = userRect.realY1 - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
+    x = newX;
+    y = newY;
+}
+
+void InteractiveSPC::updateSelectedRectangleType(int state) {
+    if (selectedRect != nullptr) {
+        switch (state) {
+        case 0: // none
+            selectedRect->type = None;
+            break;
+        case 1:
+            selectedRect->type = Condense;
+            break;
+            // more to come...
+        }
+    }
+}
+
+void InteractiveSPC::adjustPointToRectangle(float &x, float &y, int &caseClass) {
+    for (int i = 0; i < userRectangles.size(); i++) {
+        UserRectangle* userRect = &userRectangles[i];
+        RectangleType type = userRect->type;
+        bool shouldStop = false;
+        switch (type) {
+        case Condense:
+            if (userRect->isPointWithinRect(x, y)) {
+                // debug
+                /*int oldX = x;
+                int oldY = y;
+                glBegin(GL_POINTS);
+                glColor3ub(255, 0, 0);
+                glVertex2f(x, y);
+                glColor3ub(0, 255, 0);*/
+                condensePointInRectangle(x, y, caseClass, *userRect);
+                //glVertex2f(x, y);
+                //glEnd();
+                //glBegin(GL_LINES);
+                //glVertex2f(oldX, oldY);
+                //glVertex2f(x, y);
+                //glEnd();
+                //if (oldX == x) {
+                //    std::cout << "debug";
+                //}
+                shouldStop = true;
+            }
+            break;
+        case Exclude:
+            // TODO: coming soon
+        case Expand:
+            // TODO: coming soon
+        case None:
+        default:
+            break;
+        }
+        if (shouldStop) {
+            break;
+        }
+    }
+}
+
 /* Draws data sets. */
 int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 {
@@ -326,143 +588,139 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // x1 = plt1X1 + (plt1X2 - plt1X1) * x1 + data.pan_x;
     // y1 = plt1Y2 - (plt1Y2 - plt1Y1) * y1 + data.pan_y;
 
-    // Get class and zone id of the data point
+    // mitigate overlap
     int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
     int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
+    mitigateOverlap(x1, y1, caseNum, caseClass, plotNum, point1BackgroundClass, point1BackgroundZone);
 
-    // Get the total number of classes underneath this point
-    std::set<int> *point1BackgroundZoneTotalCaseList = &data.plotNumZoneTotalCases[plotNum][point1BackgroundZone];
-    std::set<int> *point1BackgroundZoneMisclassifiedCaseList = &data.plotNumZoneTotalMisclassifiedCases[plotNum][point1BackgroundZone];
+    // // Get class and zone id of the data point
+    // int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
+    // int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
+    // // Get the total number of classes underneath this point
+    // std::set<int> *point1BackgroundZoneTotalCaseList = &data.plotNumZoneTotalCases[plotNum][point1BackgroundZone];
+    // std::set<int> *point1BackgroundZoneMisclassifiedCaseList = &data.plotNumZoneTotalMisclassifiedCases[plotNum][point1BackgroundZone];
+    // // Compute the total number of classes underneath this point (if any)
+    // if (point1BackgroundZoneTotalCaseList->find(caseNum) == point1BackgroundZoneTotalCaseList->end())
+    // {
+    //     point1BackgroundZoneTotalCaseList->insert(caseNum);
+    // }
+    // if (point1BackgroundClass != caseClass)
+    // {
+    //     if (point1BackgroundZoneMisclassifiedCaseList->find(caseNum) == point1BackgroundZoneMisclassifiedCaseList->end())
+    //     {
+    //         point1BackgroundZoneMisclassifiedCaseList->insert(caseNum);
+    //     }
+    // }
+    // else {
+    //     auto it = point1BackgroundZoneMisclassifiedCaseList->find(caseNum);
+    //     if ( it != point1BackgroundZoneMisclassifiedCaseList->end()) {
+    //         point1BackgroundZoneMisclassifiedCaseList->erase(it);
+    //     }
+    // }
+    // if (point1BackgroundZoneTotalCaseList->size() > data.maxCasesPerPlotZone)
+    // {
+    //     data.maxCasesPerPlotZone = point1BackgroundZoneTotalCaseList->size();
+    // }
+    // // asses overlap
+    // std::vector<int> *overlapList = &overlapMap[x1][y1][caseClass];
+    // if (std::find(overlapList->begin(), overlapList->end(), caseNum) == overlapList->end())
+    // {
+    //     overlapList->push_back(caseNum);
+    // }
+    // // Overlap shift constants
+    // float shiftAmount = 0;
+    // float classShiftAmount = 0;
+    // const float shiftConstant = 10;
+    // const float classShift = 10;
+    // // overlap mitigation
+    // std::map<int, std::vector<int>> caseClassMap = overlapMap[x1][y1];
+    // caseClassMap = overlapMap[x1][y1];
+    // overlapList = &overlapMap[x1][y1][caseClass];
+    // if (isOverlapMitigationModeAll && point1BackgroundClass >= 0)
+    // {
+    //     std::vector<int> caseList;
+    //     for (int i = 0; i < data.classes.size(); i++)
+    //     {
+    //         int classNum = data.classes[i];
+    //         if (classNum < 0)
+    //             continue;
+    //         for (int j = 0; j < caseClassMap[classNum].size(); j++)
+    //         {
+    //             caseList.push_back(caseClassMap[classNum][j]);
+    //         }
+    //     }
+    //     int totalCases = caseList.size();
+    //     auto caseIndexIterator = std::find(caseList.begin(), caseList.end(), caseNum);
+    //     int index = -1;
+    //     if (caseIndexIterator != caseList.end())
+    //     {
+    //         index = caseIndexIterator - caseList.begin();
+    //     }
+    //     if (index == -1)
+    //     {
+    //         std::cout << "something is wrong";
+    //     }
+    //     if (totalCases != 0)
+    //     {
+    //         shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
+    //     }
+    //     x1 += shiftAmount + classShiftAmount;
+    //     y1 += shiftAmount;
+    // }
+    // else if (isOverlapMitigationMode && caseClassMap.size() > 1)
+    // {
+    //     if (point1BackgroundClass >= 0)
+    //     {
+    //         std::vector<int> overlappingCases; 
+    //         // count how many cases there are that are overlapping
+    //         int nonNegClassCount = 0;
+    //         int totalCases = 0;
+    //         for (int i = 0; i < data.classes.size(); i++)
+    //         {
+    //             int classNum = data.classes[i];
+    //             if (classNum < 0)
+    //                 continue;
+    //             nonNegClassCount++;
+    //             if (caseClassMap.find(classNum) != caseClassMap.end())
+    //             {
+    //                 for (int j = 0; j < caseClassMap[classNum].size(); j++)
+    //                 {
+    //                     overlappingCases.push_back(caseClassMap[classNum][j]);
+    //                     totalCases++;
+    //                 }
+    //             }
+    //         }
+    //         // determine which index position the current case is
+    //         auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
+    //         int index = -1;
+    //         if (caseIndexIterator != overlappingCases.end())
+    //         {
+    //             index = caseIndexIterator - overlappingCases.begin();
+    //         }
+    //         if (index == -1)
+    //         {
+    //             std::cout << "something is wrong";
+    //         }
+    //         // shuffle function
+    //         // x1' = x1 + (index / totalCases) * b
+    //         // y1' = y1 + (index / totalCases) * b
+    //         // find num of non-negative classes
+    //         if (totalCases != 0)
+    //         {
+    //             shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
+    //         }
+    //         if (nonNegClassCount != 0)
+    //         {
+    //             classShiftAmount = (float)caseClass / (float)nonNegClassCount;
+    //         }
+    //         x1 += shiftAmount + classShiftAmount;
+    //         y1 += shiftAmount;
+    //         std::cout << "debug";
+    //     }
+    // }
 
-    // Compute the total number of classes underneath this point (if any)
-    if (point1BackgroundZoneTotalCaseList->find(caseNum) == point1BackgroundZoneTotalCaseList->end())
-    {
-        point1BackgroundZoneTotalCaseList->insert(caseNum);
-    }
-
-    if (point1BackgroundClass != caseClass)
-    {
-        if (point1BackgroundZoneMisclassifiedCaseList->find(caseNum) == point1BackgroundZoneMisclassifiedCaseList->end())
-        {
-            point1BackgroundZoneMisclassifiedCaseList->insert(caseNum);
-        }
-    }
-    else {
-        auto it = point1BackgroundZoneMisclassifiedCaseList->find(caseNum);
-        if ( it != point1BackgroundZoneMisclassifiedCaseList->end()) {
-            point1BackgroundZoneMisclassifiedCaseList->erase(it);
-        }
-    }
-
-    if (point1BackgroundZoneTotalCaseList->size() > data.maxCasesPerPlotZone)
-    {
-        data.maxCasesPerPlotZone = point1BackgroundZoneTotalCaseList->size();
-    }
-
-    // asses overlap
-    std::vector<int> *overlapList = &overlapMap[x1][y1][caseClass];
-    if (std::find(overlapList->begin(), overlapList->end(), caseNum) == overlapList->end())
-    {
-        overlapList->push_back(caseNum);
-    }
+    adjustPointToRectangle(x1, y1, caseClass);
     
-    // Overlap shift constants
-    float shiftAmount = 0;
-    float classShiftAmount = 0;
-    const float shiftConstant = 10;
-    const float classShift = 10;
-
-    // overlap mitigation
-    std::map<int, std::vector<int>> caseClassMap = overlapMap[x1][y1];
-    caseClassMap = overlapMap[x1][y1];
-    overlapList = &overlapMap[x1][y1][caseClass];
-    if (isOverlapMitigationModeAll && point1BackgroundClass >= 0)
-    {
-        std::vector<int> caseList;
-        for (int i = 0; i < data.classes.size(); i++)
-        {
-            int classNum = data.classes[i];
-            if (classNum < 0)
-                continue;
-            for (int j = 0; j < caseClassMap[classNum].size(); j++)
-            {
-                caseList.push_back(caseClassMap[classNum][j]);
-            }
-        }
-
-        int totalCases = caseList.size();
-        auto caseIndexIterator = std::find(caseList.begin(), caseList.end(), caseNum);
-        int index = -1;
-        if (caseIndexIterator != caseList.end())
-        {
-            index = caseIndexIterator - caseList.begin();
-        }
-        if (index == -1)
-        {
-            std::cout << "something is wrong";
-        }
-        if (totalCases != 0)
-        {
-            shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-        }
-        x1 += shiftAmount + classShiftAmount;
-        y1 += shiftAmount;
-    }
-    else if (isOverlapMitigationMode && caseClassMap.size() > 1)
-    {
-        if (point1BackgroundClass >= 0)
-        {
-            std::vector<int> overlappingCases; 
-            // count how many cases there are that are overlapping
-            int nonNegClassCount = 0;
-            int totalCases = 0;
-            for (int i = 0; i < data.classes.size(); i++)
-            {
-                int classNum = data.classes[i];
-                if (classNum < 0)
-                    continue;
-                nonNegClassCount++;
-                if (caseClassMap.find(classNum) != caseClassMap.end())
-                {
-                    for (int j = 0; j < caseClassMap[classNum].size(); j++)
-                    {
-                        overlappingCases.push_back(caseClassMap[classNum][j]);
-                        totalCases++;
-                    }
-                }
-            }
-
-            // determine which index position the current case is
-            auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
-            int index = -1;
-            if (caseIndexIterator != overlappingCases.end())
-            {
-                index = caseIndexIterator - overlappingCases.begin();
-            }
-            if (index == -1)
-            {
-                std::cout << "something is wrong";
-            }
-
-            // shuffle function
-            // x1' = x1 + (index / totalCases) * b
-            // y1' = y1 + (index / totalCases) * b
-            // find num of non-negative classes
-            if (totalCases != 0)
-            {
-                shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-            }
-            if (nonNegClassCount != 0)
-            {
-                classShiftAmount = (float)caseClass / (float)nonNegClassCount;
-            }
-            x1 += shiftAmount + classShiftAmount;
-            y1 += shiftAmount;
-
-            std::cout << "debug";
-        }
-    }
-
     //TODO: Make work with all user rectangles
     //// condensation mode
     //if (isCondenseRectangleMode)
@@ -505,50 +763,51 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // glPointSize(4.0);
     // end debug
 
-    int pointWasCorrectlyClassified = false;
+    // int pointWasCorrectlyClassified = false;
 
-    GLubyte classTransparency = data.classTransparencies[caseClass];
+    // GLubyte classTransparency = data.classTransparencies[caseClass];
 
-    // count misclassifications
-    std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass]; // {actual -> {predicted -> [casenum, ...]}}
-    std::map<int, std::vector<int>> * predictedClasses = &data.misclassifiedCases[caseClass];
+    handleMisclassifications(x1, y1, caseClass, caseNum, point1BackgroundClass);
+
+    // // count misclassifications
+    // std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass]; // {actual -> {predicted -> [casenum, ...]}}
+    // std::map<int, std::vector<int>> * predictedClasses = &data.misclassifiedCases[caseClass];
     
+    // // remove casenum from whichever class it was in before
+    // for (auto it : *predictedClasses) {
+    //     std::vector<int> * lst = &predictedClasses->at(it.first);
+    //     auto find = std::find(lst->begin(), lst->end(), caseNum);
+    //     if (find != lst->end() && it.first != point1BackgroundClass) {
+    //         lst->erase(find);
+    //         lst->shrink_to_fit();
+    //         data.classMisclassifiedCaseCount[caseClass]--;
+    //         break;
+    //     }
+    // }
 
-    // remove casenum from whichever class it was in before
-    for (auto it : *predictedClasses) {
-        std::vector<int> * lst = &predictedClasses->at(it.first);
-        auto find = std::find(lst->begin(), lst->end(), caseNum);
-        if (find != lst->end() && it.first != point1BackgroundClass) {
-            lst->erase(find);
-            lst->shrink_to_fit();
-            data.classMisclassifiedCaseCount[caseClass]--;
-            break;
-        }
-    }
+    // // add casenum if misclassified
+    // if (point1BackgroundClass >= 0) {
+    //     if (point1BackgroundClass != caseClass)
+    //     {
+    //         // if we're in here, this is a misclassification
+    //         if (std::find(misclassifiedClassList->begin(), misclassifiedClassList->end(), caseNum) == misclassifiedClassList->end())
+    //         {
+    //             misclassifiedClassList->push_back(caseNum);
+    //             data.classMisclassifiedCaseCount[caseClass]++;
+    //         }
 
-    // add casenum if misclassified
-    if (point1BackgroundClass >= 0) {
-        if (point1BackgroundClass != caseClass)
-        {
-            // if we're in here, this is a misclassification
-            if (std::find(misclassifiedClassList->begin(), misclassifiedClassList->end(), caseNum) == misclassifiedClassList->end())
-            {
-                misclassifiedClassList->push_back(caseNum);
-                data.classMisclassifiedCaseCount[caseClass]++;
-            }
-
-            // determine if we should be highlighting misclassified points
-            if (isHighlightMisclassficationsMode)
-            {
-                glColor4ub(255, 0, 0, classTransparency);
-                glPointSize(8.0);
-                glBegin(GL_POINTS);
-                glVertex2f(x1, y1);
-                glEnd();
-                glPointSize(4.0);
-            }
-        } 
-    }
+    //         // determine if we should be highlighting misclassified points
+    //         if (isHighlightMisclassficationsMode)
+    //         {
+    //             glColor4ub(255, 0, 0, classTransparency);
+    //             glPointSize(8.0);
+    //             glBegin(GL_POINTS);
+    //             glVertex2f(x1, y1);
+    //             glEnd();
+    //             glPointSize(4.0);
+    //         }
+    //     } 
+    //}
 
     // add white frame to points that are hard to see
     if (data.zonesWithDarkBackgrounds.find(point1BackgroundZone) != data.zonesWithDarkBackgrounds.end())
@@ -562,6 +821,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     // draw regular point
     // draw point one
+    GLubyte classTransparency = data.classTransparencies[caseClass];
     glPointSize(4.0);
     glColor4ub(0, 0, 0, classTransparency);
     if (isPointColorMode)
@@ -575,6 +835,11 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
             glColor4ub(r, g, b, a);
         }
     }
+
+    glBegin(GL_POINTS);
+    glVertex2f(x1, y1);
+    glEnd();
+    // end point one draw
 
     // debug
     /*GLubyte r = data.classColor[recordClass][0];
@@ -594,11 +859,11 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     glColor4ub(color[0], color[1], color[2], classTransparency);*/
     // end debug
 
-    glBegin(GL_POINTS);
-    glVertex2f(x1, y1);
-    glEnd();
+    // glBegin(GL_POINTS);
+    // glVertex2f(x1, y1);
+    // glEnd();
     // end point one draw
-
+    bool pointWasCorrectlyClassified = false;
     if (point1BackgroundClass >= 0)
     {
         if (point1BackgroundClass == caseClass)
@@ -686,8 +951,8 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // set line color
     glColor4ub(128, 128, 128, classTransparency);
     int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
-
-    caseClassMap = overlapMap[x2][y2];
+    int point2BackgroundZone = findBackgroundZoneIdOfPoint(x2, y2, nextPlotNum);
+    std::map<int, std::vector<int>>* caseClassMap = &overlapMap[x2][y2];
 
     // check for incorrect classifications
     bool doesCaseClassMapContainMisclassifiedCases = false;
@@ -696,102 +961,97 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         int curClass = data.classes[i];
         if (curClass == caseClass)
             continue;
-        if (caseClassMap.find(curClass) != caseClassMap.end())
+        if (caseClassMap->find(curClass) != caseClassMap->end())
         {
             doesCaseClassMapContainMisclassifiedCases = true;
             break;
         }
     }
 
-    overlapList = &overlapMap[x2][y2][caseClass];
-    if (isOverlapMitigationModeAll && point2BackgroundClass >= 0)
-    {
-        std::vector<int> caseList;
-        for (int i = 0; i < data.classes.size(); i++)
-        {
-            int classNum = data.classes[i];
-            if (classNum < 0)
-                continue;
-            for (int j = 0; j < caseClassMap[classNum].size(); j++)
-            {
-                caseList.push_back(caseClassMap[classNum][j]);
-            }
-        }
-
-        int totalCases = caseList.size();
-        auto caseIndexIterator = std::find(caseList.begin(), caseList.end(), caseNum);
-        int index = -1;
-        if (caseIndexIterator != caseList.end())
-        {
-            index = caseIndexIterator - caseList.begin();
-        }
-        if (index == -1)
-        {
-            std::cout << "something is wrong";
-        }
-        if (totalCases != 0)
-        {
-            shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-            
-        }
-        x2 += shiftAmount + classShiftAmount;
-        y2 += shiftAmount;
-    }
-    else if (isOverlapMitigationMode && (caseClassMap.size() > 1 || doesCaseClassMapContainMisclassifiedCases))
-    {
-        if (point2BackgroundClass >= 0)
-        {
-            std::vector<int> overlappingCases;
-            // count how many cases there are that are overlapping
-            int nonNegClassCount = 0;
-            int totalCases = 0;
-            for (int i = 0; i < data.classes.size(); i++)
-            {
-                int classNum = data.classes[i];
-                if (classNum < 0)
-                    continue;
-                nonNegClassCount++;
-                if (caseClassMap.find(classNum) != caseClassMap.end())
-                {
-                    for (int j = 0; j < caseClassMap[classNum].size(); j++)
-                    {
-                        overlappingCases.push_back(caseClassMap[classNum][j]);
-                        totalCases++;
-                    }
-                }
-            }
-
-            // determine which index position the current case is
-            auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
-            int index = -1;
-            if (caseIndexIterator != overlappingCases.end())
-            {
-                index = caseIndexIterator - overlappingCases.begin();
-            }
-            if (index == -1)
-            {
-                std::cout << "something is wrong";
-            }
-
-            // shuffle function
-            // x1' = x1 + (index / totalCases) * b
-            // y1' = y1 + (index / totalCases) * b
-            // find num of non-negative classes
-            if (totalCases != 0)
-            {
-                shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
-                
-            }
-            if (nonNegClassCount != 0)
-            {
-                classShiftAmount = (float)caseClass / (float)nonNegClassCount;
-            }
-            x2 += shiftAmount + classShiftAmount;
-            y2 += shiftAmount;
-
-            std::cout << "debug";
-        }
-    }
+    //overlapList = &overlapMap[x2][y2][caseClass];
+    mitigateOverlap(x2, y2, caseNum, caseClass, nextPlotNum, point2BackgroundClass, point2BackgroundZone);
+    // if (isOverlapMitigationModeAll && point2BackgroundClass >= 0)
+    // {
+    //     std::vector<int> caseList;
+    //     for (int i = 0; i < data.classes.size(); i++)
+    //     {
+    //         int classNum = data.classes[i];
+    //         if (classNum < 0)
+    //             continue;
+    //         for (int j = 0; j < caseClassMap[classNum].size(); j++)
+    //         {
+    //             caseList.push_back(caseClassMap[classNum][j]);
+    //         }
+    //     }
+    //     int totalCases = caseList.size();
+    //     auto caseIndexIterator = std::find(caseList.begin(), caseList.end(), caseNum);
+    //     int index = -1;
+    //     if (caseIndexIterator != caseList.end())
+    //     {
+    //         index = caseIndexIterator - caseList.begin();
+    //     }
+    //     if (index == -1)
+    //     {
+    //         std::cout << "something is wrong";
+    //     }
+    //     if (totalCases != 0)
+    //     {
+    //         shiftAmount = ((float)index / (float)totalCases) * shiftConstant;
+    //     }
+    //     x2 += shiftAmount + classShiftAmount;
+    //     y2 += shiftAmount;
+    // }
+    // else if (isOverlapMitigationMode && (caseClassMap.size() > 1 || doesCaseClassMapContainMisclassifiedCases))
+    // {
+    //     if (point2BackgroundClass >= 0)
+    //     {
+    //         std::vector<int> overlappingCases;
+    //         // count how many cases there are that are overlapping
+    //         int nonNegClassCount = 0;
+    //         int totalCases = 0;
+    //         for (int i = 0; i < data.classes.size(); i++)
+    //         {
+    //             int classNum = data.classes[i];
+    //             if (classNum < 0)
+    //                 continue;
+    //             nonNegClassCount++;
+    //             if (caseClassMap.find(classNum) != caseClassMap.end())
+    //             {
+    //                 for (int j = 0; j < caseClassMap[classNum].size(); j++)
+    //                 {
+    //                     overlappingCases.push_back(caseClassMap[classNum][j]);
+    //                     totalCases++;
+    //                 }
+    //             }
+    //         }
+    //         // determine which index position the current case is
+    //         auto caseIndexIterator = std::find(overlappingCases.begin(), overlappingCases.end(), caseNum);
+    //         int index = -1;
+    //         if (caseIndexIterator != overlappingCases.end())
+    //         {
+    //             index = caseIndexIterator - overlappingCases.begin();
+    //         }
+    //         if (index == -1)
+    //         {
+    //             std::cout << "something is wrong";
+    //         }
+    //         // shuffle function
+    //         // x1' = x1 + (index / totalCases) * b
+    //         // y1' = y1 + (index / totalCases) * b
+    //         // find num of non-negative classes
+    //         if (totalCases != 0)
+    //         {
+    //             shiftAmount = ((float)index / (float)totalCases) * shiftConstant;                
+    //         }
+    //         if (nonNegClassCount != 0)
+    //         {
+    //             classShiftAmount = (float)caseClass / (float)nonNegClassCount;
+    //         }
+    //         x2 += shiftAmount + classShiftAmount;
+    //         y2 += shiftAmount;
+    //         std::cout << "debug";
+    //     }
+    // }
 
     // TODO: Make this work for all user rectangles
     //if (isCondenseRectangleMode)
@@ -815,6 +1075,8 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //    }
     //}
 
+    adjustPointToRectangle(x2, y2, caseClass);
+
     if (isLineColorMode && point2BackgroundClass >= 0)
     {
         GLubyte r = data.classColor[caseClass][0];
@@ -832,19 +1094,19 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     // only draw line, not the point. point will be covered when point2 becomes point1 on future iterations
 
-    // debug
-    if (point1BackgroundClass == INT_MIN || point1BackgroundClass >= 0)
-    {
-        std::cout << "yay we can stop drawing if we've got line mode on!";
-    }
-    else if (point1BackgroundClass < 0)
-    {
-        std::cout << "debug less than zerp" << point1BackgroundClass;
-    }
-    else
-    {
-        std::cout << "hmmm this shouldnt be hit ever...";
-    }
+    // debug breakpoints
+    // if (point1BackgroundClass == INT_MIN || point1BackgroundClass >= 0)
+    // {
+    //     std::cout << "yay we can stop drawing if we've got line mode on!";
+    // }
+    // else if (point1BackgroundClass < 0)
+    // {
+    //     std::cout << "debug less than zerp" << point1BackgroundClass;
+    // }
+    // else
+    // {
+    //     std::cout << "hmmm this shouldnt be hit ever...";
+    // }
 
     return nextPlotNum;
 }
@@ -1157,9 +1419,10 @@ float InteractiveSPC::computeBackgroundTransparency(Zone &zone) {
             backgroundTransparencyCopy = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
             // debug
             zone.computeRealCoordinates();
-            float px = zone.realX1 + (zone.realX2 - zone.realX1) * 0.5;
-            float py = zone.realY1 + (zone.realY2 - zone.realY1) * 0.5;
-            data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
+            // debug: draws background value on top of background zone
+            //float px = zone.realX1 + (zone.realX2 - zone.realX1) * 0.5;
+            //float py = zone.realY1 + (zone.realY2 - zone.realY1) * 0.5;
+            //data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
             if (zoneDensity != 0 && zoneDensity < worstZoneNumDensity)
             {
                 worstZoneNumDensity = zoneDensity;
@@ -1189,6 +1452,46 @@ float InteractiveSPC::computeBackgroundTransparency(Zone &zone) {
     return backgroundTransparencyCopy;
 }
 
+//
+//void InteractiveSPC::buildZoneEdges() {
+//    float epsilon = 0.001;
+//    // for every zone
+//    for (int i = 0; i < plotZones.size(); i++) {
+//        Zone *zoneToBuild = &plotZones[i];
+//        // for every zone except selected zone
+//        for (int j = 0; j < plotZones.size(); j++) {
+//            if (i == j) continue;
+//            Zone* zoneToCheck = &plotZones[j];
+//            // make sure they share the same plot
+//            if (zoneToBuild->plotNum == zoneToCheck->plotNum) {
+//                // check if they share the first zone's left edge
+//                for (int k = 0; k < 4; k++) {
+//                    bool check = false;
+//                    switch (k) {
+//                    case 0: // for left
+//                        check = abs(zoneToBuild->realX1 - zoneToCheck->realX1) <= epsilon;
+//                        break;
+//                    case 1: // bottom
+//                        check = abs(zoneToBuild->realY2 - zoneToCheck->realY2) <= epsilon;
+//                        break;
+//                    case 2: // right
+//                        check = abs(zoneToBuild->realX2 - zoneToCheck->realX2) <= epsilon;
+//                        break;
+//                    case 3: // top
+//                        check = abs(zoneToBuild->realY1 - zoneToCheck->realY1) <= epsilon;
+//                        break;
+//                    default:
+//                        break;
+//                    }
+//                    if (check) {
+//                        int oppositeIndex = (k + 2) % 4;
+//                        if (zoneToBuild);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 /* DISPLAY */
 
@@ -1238,42 +1541,51 @@ void InteractiveSPC::display()
     //	newFile.openParserFile(dataParsed, data);
     // }
 
-
-    std::vector<Zone> zones;
     // build zone objects
-    for (int i = 0; i < data.parsedData.size(); i++) {
-        std::vector<float>* parserElement = &data.parsedData[i];
-        float x1 = parserElement->at(0);
-        float y1 = parserElement->at(1);
-        float x2 = parserElement->at(2);
-        float y2 = parserElement->at(3);
-        int plotNum = parserElement->at(4);
-        int classNum = parserElement->at(5);
-        int destinationPlot = -1;
-        ZoneType type = Decision;
-        std::vector<float>* color;
-        if (classNum < 0) {
-            destinationPlot = parserElement->at(6);
-            type = Continue;
-            color = &data.continueClassColor[classNum];
+    if (plotZones.empty()) {
+        for (int i = 0; i < data.parsedData.size(); i++) {
+            std::vector<float>* parserElement = &data.parsedData[i];
+            float x1 = parserElement->at(0);
+            float y1 = parserElement->at(1);
+            float x2 = parserElement->at(2);
+            float y2 = parserElement->at(3);
+            int plotNum = parserElement->at(4);
+            int classNum = parserElement->at(5);
+            int destinationPlot = -1;
+            ZoneType type = Decision;
+            std::vector<float>* color;
+            if (classNum < 0) {
+                destinationPlot = parserElement->at(6);
+                type = Continue;
+                color = &data.continueClassColor[classNum];
+            }
+            else {
+                color = &data.classColor[classNum];
+            }
+            ;
+            plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, &data));
+            Zone* z = &plotZones[plotZones.size() - 1];
+            zoneIdMap[z->id] = *z;
         }
-        else {
-            color = &data.classColor[classNum];
-        }
-        
-        zones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, color, &data));
-    }
-    // draw zone objects
-    int selectionZoneWidth = 10;
-    for (int i = 0; i < zones.size(); i++) {
-        float backgroundTransparencyForZone = computeBackgroundTransparency(zones[i]);
-        zones[i].computeSelectionZones(selectionZoneWidth);
-        zones[i].drawZone(backgroundClassColorCoefficient, backgroundTransparencyForZone);
-        //if (isAdjustThresholdsMode) {
-            zones[i].drawEdges();
-        //}
     }
 
+
+    // draw zone objects
+    for (int i = 0; i < plotZones.size(); i++) {
+        float backgroundTransparencyForZone = computeBackgroundTransparency(plotZones[i]);
+        plotZones[i].computeSelectionZones(selectionZoneWidth);
+        plotZones[i].drawZone(backgroundClassColorCoefficient, backgroundTransparencyForZone);
+        if (isAdjustThresholdsMode) {
+            plotZones[i].drawEdges();
+            if (!clickedEdge.empty()) {
+                Zone selectedZone = plotZones[clickedEdge[0]];
+                selectedZone.color = std::vector<float>({ 0, 255, 0 });
+                selectedZone.drawEdges();
+            }
+        }
+    }
+
+    // draw point when drawing a rectangle
     if (drawingUserRectangleVertex1) {
         glBegin(GL_POINTS);
         glPointSize(10.0);
@@ -1283,10 +1595,10 @@ void InteractiveSPC::display()
         glEnd();
     }
 
-
-    // draw rectangles
+    // draw user rectangles
+    float selectModeLineWidth = 5.0;
     for (int i = 0; i < userRectangles.size(); i++) {
-        userRectangles[i].drawEdges();
+        userRectangles[i].drawEdges(selectModeLineWidth);
     }
 
 
@@ -1531,6 +1843,7 @@ void InteractiveSPC::display()
     //	drawData(.355, 0.5, 0, i);
     // }
 
+    // draw datapoints
     for (int caseNum = 0; caseNum < data.normalizedValues.size(); caseNum++)
     {
         int plotToDrawNext = 0;
@@ -2011,99 +2324,116 @@ void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
 // zoneid is the same as the index in parserData
 int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
+    for (int i = 0; i < plotZones.size(); i++) {
+        if (plotZones[i].plotNum == plotNum) {
+            if (plotZones[i].isPointWithinZone(px, py)) {
+                return plotZones[i].id;
+            }
+        }
+    }
+
+    // debug
+    //glBegin(GL_POINTS);
+    //glColor3ub(0, 0, 255);
+    //glVertex2f(px, py);
+    //glEnd();
+
+    std::cout << "debug";
+
+
     // TODO
     // get plot num
     // int plotNum = findPlotNumOfPoint(px, py);
     // check all rects inside plotnum
-    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
-    {
-        std::vector<float> * parserData = &data.parsedData[parsedIndex];
-        if ((int)parserData->at(4) != plotNum)
-        {
-            std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
-            continue;
-        }
-        // TODO: There's probably a MUCH easier way to do this
-        // need to accomodate various swappings
-        // X/Y swap swaps parser data itself, so we need not do anything here
-        // but the x and y invert buttons DONT alter data, so we need to make up for that here
-        const float zoneX1 = parserData->at(0);
-        const float zoneY1 = parserData->at(1);
-        const float zoneX2 = parserData->at(2);
-        const float zoneY2 = parserData->at(3);
+    //for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
+    //{
+    //    std::vector<float> * parserData = &data.parsedData[parsedIndex];
+    //    if ((int)parserData->at(4) != plotNum)
+    //    {
+    //        std::cout << "debug: I wonder if there's some sort of float / int comparison issue";
+    //        continue;
+    //    }
+    //    // TODO: There's probably a MUCH easier way to do this
+    //    // need to accomodate various swappings
+    //    // X/Y swap swaps parser data itself, so we need not do anything here
+    //    // but the x and y invert buttons DONT alter data, so we need to make up for that here
+    //    const float zoneX1 = parserData->at(0);
+    //    const float zoneY1 = parserData->at(1);
+    //    const float zoneX2 = parserData->at(2);
+    //    const float zoneY2 = parserData->at(3);
 
-        const float pltX1 = data.x1CoordPlot[plotNum];
-        const float pltY1 = data.y1CoordPlot[plotNum];
-        const float pltX2 = data.x2CoordPlot[plotNum];
-        const float pltY2 = data.y2CoordPlot[plotNum];
+    //    const float pltX1 = data.x1CoordPlot[plotNum];
+    //    const float pltY1 = data.y1CoordPlot[plotNum];
+    //    const float pltX2 = data.x2CoordPlot[plotNum];
+    //    const float pltY2 = data.y2CoordPlot[plotNum];
 
-        const float plotWidth = data.plotWidth[plotNum];
-        const float plotHeight = data.plotHeight[plotNum];
+    //    const float plotWidth = data.plotWidth[plotNum];
+    //    const float plotHeight = data.plotHeight[plotNum];
 
-        GLfloat zoneToCheckX1;
-        GLfloat zoneToCheckX2;
-        GLfloat zoneToCheckY1;
-        GLfloat zoneToCheckY2;
+    //    GLfloat zoneToCheckX1;
+    //    GLfloat zoneToCheckX2;
+    //    GLfloat zoneToCheckY1;
+    //    GLfloat zoneToCheckY2;
 
-        // old
-         zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-         zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-         zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-         zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+    //    // old
+    //     zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+    //     zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+    //     zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+    //     zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
 
-         //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-         //{
-         //    zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
-         //    zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
-         //}
-         //else
-         //{
-            //zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-            //zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-         /*}
-         if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-         {*/
-            // zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
-            // zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
-         /*}
-         else
-         {*/
-            //zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-            //zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-         //}
+    //     //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+    //     //{
+    //     //    zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+    //     //    zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+    //     //}
+    //     //else
+    //     //{
+    //        //zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+    //        //zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+    //     /*}
+    //     if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+    //     {*/
+    //        // zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+    //        // zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+    //     /*}
+    //     else
+    //     {*/
+    //        //zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+    //        //zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+    //     //}
 
-        // debug
-        // glBegin(GL_POINTS);
-        // glColor4ub(255, 0, 0, 255);
-        // glVertex2f(zoneToCheckX1, zoneToCheckY1);
-        // glColor4ub(0, 255, 0, 255);
-        // glVertex2f(zoneToCheckX2, zoneToCheckY2);
-        // glEnd();
-        // end debug
+    //    // debug
+    //    // glBegin(GL_POINTS);
+    //    // glColor4ub(255, 0, 0, 255);
+    //    // glVertex2f(zoneToCheckX1, zoneToCheckY1);
+    //    // glColor4ub(0, 255, 0, 255);
+    //    // glVertex2f(zoneToCheckX2, zoneToCheckY2);
+    //    // glEnd();
+    //    // end debug
 
-        const float lowX = min(zoneToCheckX1, zoneToCheckX2);
-        const float highX = max(zoneToCheckX1, zoneToCheckX2);
-        const float lowY = min(zoneToCheckY1, zoneToCheckY2);
-        const float highY = max(zoneToCheckY1, zoneToCheckY2);
+    //    const float lowX = min(zoneToCheckX1, zoneToCheckX2);
+    //    const float highX = max(zoneToCheckX1, zoneToCheckX2);
+    //    const float lowY = min(zoneToCheckY1, zoneToCheckY2);
+    //    const float highY = max(zoneToCheckY1, zoneToCheckY2);
 
-        if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-        {
-            px = 1.0f - px;
-        }
-        if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-        {
-            py = 1.0f - py;
-        }
+    //    if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+    //    {
+    //        px = 1.0f - px;
+    //    }
+    //    if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+    //    {
+    //        py = 1.0f - py;
+    //    }
 
-        bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
-        // bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
+    //    bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
+    //    // bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
 
 
-        if (withinRect)
-        {
-            return parsedIndex;
-        }
-    }
+    //    if (withinRect)
+    //    {
+    //        return parsedIndex;
+    //    }
+    //}
 
     return INT_MIN;
 }
@@ -2323,7 +2653,7 @@ void InteractiveSPC::drawCircle(int x, int y)
 }
 
 void InteractiveSPC::drawRectangle(UserRectangle rect) {
-    drawRectangle(rect.X1, rect.X2, rect.Y1, rect.Y2, rect.color[0], rect.color[1], rect.color[2]);
+    drawRectangle(rect.X1, rect.X2, rect.Y1, rect.Y2, rect.frameColor[0], rect.frameColor[1], rect.frameColor[2]);
 }
 
 void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b)
@@ -2411,23 +2741,51 @@ void InteractiveSPC::drawRectangle(float rect_x1, float rect_x2, float rect_y1, 
 //    return hsl;
 //}
 
-std::vector<int> InteractiveSPC::findClickedEdge(GLfloat px, GLfloat py) {
-    std::vector<int> result;
-    for (int zoneId = 0; zoneId < thresholdEdgeSelectionZones.size(); zoneId++) {
-        std::vector<std::vector<float>> zoneEdges = thresholdEdgeSelectionZones[zoneId];
-        for (int edgeId = 0; edgeId < zoneEdges.size(); edgeId++) {
-            std::vector<float> edge = zoneEdges[edgeId];
-            if (px >= edge[0] && px <= edge[2]) {
-                if (py >= edge[1] && py <= edge[3]) {
-                    result.push_back(zoneId); // get zoneid
-                    result.push_back(edgeId); // get edgeid
-                    result.push_back(edgeToParserElementIndex[edge]); // get left, right, top, bottom
-                    return result;
-                }
-            }
+void InteractiveSPC::recomputePlotZones(int& plotNum) {
+    for (int i = 0; i < plotZones.size(); i++) {
+        if (plotZones[i].plotNum == plotNum) {
+            plotZones[i].computeSelectionZones(selectionZoneWidth);
+        }
+    }
+}
+
+UserRectangle* InteractiveSPC::findClickedRectangle(GLfloat px, GLfloat py) {
+    UserRectangle* result;
+    for (int i = 0; i < userRectangles.size(); i++) {
+        if (userRectangles[i].isPointWithinRect(px, py)) {
+            result = &userRectangles[i];
+            break;
         }
     }
     return result;
+}
+
+std::vector<int> InteractiveSPC::findClickedEdge(GLfloat px, GLfloat py) {
+    std::vector<int> result;
+    for (int i = 0; i < plotZones.size(); i++) {
+        result = plotZones[i].findEdgeForPoint(px, py);
+        if (result.empty()) {
+            continue;
+        }
+        break;
+    }
+    return result;
+    //std::vector<int> result;
+    //for (int zoneId = 0; zoneId < thresholdEdgeSelectionZones.size(); zoneId++) {
+    //    std::vector<std::vector<float>> zoneEdges = thresholdEdgeSelectionZones[zoneId];
+    //    for (int edgeId = 0; edgeId < zoneEdges.size(); edgeId++) {
+    //        std::vector<float> edge = zoneEdges[edgeId];
+    //        if (px >= edge[0] && px <= edge[2]) {
+    //            if (py >= edge[1] && py <= edge[3]) {
+    //                result.push_back(zoneId); // get zoneid
+    //                result.push_back(edgeId); // get edgeid
+    //                result.push_back(edgeToParserElementIndex[edge]); // get left, right, top, bottom
+    //                return result;
+    //            }
+    //        }
+    //    }
+    //}
+    //return result;
 }
 
 bool InteractiveSPC::isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
