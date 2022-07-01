@@ -32,6 +32,8 @@ namespace OpenGL_on_a_Windows_Form
     /// <summary>	The old zoom value. </summary>
     int oldZoomValue = 0;
 
+    bool firstLoad = true;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>
     /// 	Summary for Form1
@@ -174,10 +176,10 @@ public
         System::Windows::Forms::Button ^ button1;
 
     private:
-        System::Windows::Forms::Button ^ button6;
+
 
     private:
-        System::Windows::Forms::Button ^ button2;
+
 
     private:
         System::Windows::Forms::CheckBox ^ checkBox1;
@@ -268,6 +270,15 @@ private: System::Windows::Forms::Button^ drawUserRectButton;
 private: System::Windows::Forms::Button^ changeUserRectColorButton;
 private: System::Windows::Forms::Button^ removeUserRectButton;
 private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
+private: System::Windows::Forms::Button^ button6;
+private: System::Windows::Forms::Button^ button2;
+private: System::Windows::Forms::Button^ selectRectangleButton;
+private: System::Windows::Forms::Label^ label3;
+private: System::Windows::Forms::ComboBox^ userRectangleTypeSelection;
+
+private: System::Windows::Forms::Label^ label4;
+private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
+
 
 
 
@@ -295,6 +306,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
             this->graph4 = (gcnew System::Windows::Forms::Button());
             this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->selectRectangleButton = (gcnew System::Windows::Forms::Button());
             this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
             this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
             this->drawUserRectButton = (gcnew System::Windows::Forms::Button());
@@ -338,6 +350,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->lineColorCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->pointColorMode = (gcnew System::Windows::Forms::CheckBox());
             this->highlightMisclassificationsCheckbox = (gcnew System::Windows::Forms::CheckBox());
+            this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
             this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
             this->backgroundColorLightnessSlider = (gcnew System::Windows::Forms::TrackBar());
             this->backgroundLightness = (gcnew System::Windows::Forms::Label());
@@ -348,7 +361,10 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->classTransparencySelection = (gcnew System::Windows::Forms::ComboBox());
             this->transparencySlider = (gcnew System::Windows::Forms::TrackBar());
             this->transparencyLabel = (gcnew System::Windows::Forms::Label());
-            this->lineTerminationModeCheckbox = (gcnew System::Windows::Forms::CheckBox());
+            this->userRectangleTypeSelection = (gcnew System::Windows::Forms::ComboBox());
+            this->label3 = (gcnew System::Windows::Forms::Label());
+            this->label4 = (gcnew System::Windows::Forms::Label());
+            this->userRectangleParametersPanel = (gcnew System::Windows::Forms::Panel());
             this->panel1->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             this->groupBox1->SuspendLayout();
@@ -360,6 +376,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->backgroundTransparencySlider))->BeginInit();
             this->groupBox2->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->transparencySlider))->BeginInit();
+            this->userRectangleParametersPanel->SuspendLayout();
             this->SuspendLayout();
             // 
             // timer1
@@ -370,6 +387,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // graph4
             // 
+            this->graph4->Enabled = false;
             this->graph4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
             this->graph4->Location = System::Drawing::Point(9, 9);
@@ -384,6 +402,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // panel1
             // 
             this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+            this->panel1->Controls->Add(this->selectRectangleButton);
             this->panel1->Controls->Add(this->removeUserRectButton);
             this->panel1->Controls->Add(this->changeUserRectColorButton);
             this->panel1->Controls->Add(this->drawUserRectButton);
@@ -411,40 +430,57 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->panel1->TabIndex = 4;
             this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
             // 
+            // selectRectangleButton
+            // 
+            this->selectRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->selectRectangleButton->Location = System::Drawing::Point(9, 672);
+            this->selectRectangleButton->Name = L"selectRectangleButton";
+            this->selectRectangleButton->Size = System::Drawing::Size(174, 39);
+            this->selectRectangleButton->TabIndex = 43;
+            this->selectRectangleButton->Text = L"Select Rectangle";
+            this->selectRectangleButton->UseVisualStyleBackColor = true;
+            this->selectRectangleButton->Click += gcnew System::EventHandler(this, &Form1::selectRectangleButton_Click);
+            // 
             // removeUserRectButton
             // 
+            this->removeUserRectButton->Enabled = false;
             this->removeUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->removeUserRectButton->Location = System::Drawing::Point(12, 672);
+            this->removeUserRectButton->Location = System::Drawing::Point(9, 717);
             this->removeUserRectButton->Name = L"removeUserRectButton";
-            this->removeUserRectButton->Size = System::Drawing::Size(176, 44);
+            this->removeUserRectButton->Size = System::Drawing::Size(174, 44);
             this->removeUserRectButton->TabIndex = 42;
             this->removeUserRectButton->Text = L"Remove User Rect";
             this->removeUserRectButton->UseVisualStyleBackColor = true;
+            this->removeUserRectButton->Click += gcnew System::EventHandler(this, &Form1::removeUserRectButton_Click);
             // 
             // changeUserRectColorButton
             // 
+            this->changeUserRectColorButton->Enabled = false;
             this->changeUserRectColorButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->changeUserRectColorButton->Location = System::Drawing::Point(103, 602);
+            this->changeUserRectColorButton->Location = System::Drawing::Point(100, 477);
             this->changeUserRectColorButton->Name = L"changeUserRectColorButton";
-            this->changeUserRectColorButton->Size = System::Drawing::Size(85, 63);
+            this->changeUserRectColorButton->Size = System::Drawing::Size(80, 63);
             this->changeUserRectColorButton->TabIndex = 41;
             this->changeUserRectColorButton->Text = L"Change User Rect Color";
             this->changeUserRectColorButton->UseVisualStyleBackColor = true;
+            this->changeUserRectColorButton->Visible = false;
             // 
             // drawUserRectButton
             // 
+            this->drawUserRectButton->Enabled = false;
             this->drawUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->drawUserRectButton->Location = System::Drawing::Point(12, 602);
+            this->drawUserRectButton->Location = System::Drawing::Point(9, 602);
             this->drawUserRectButton->Name = L"drawUserRectButton";
-            this->drawUserRectButton->Size = System::Drawing::Size(85, 63);
+            this->drawUserRectButton->Size = System::Drawing::Size(88, 63);
             this->drawUserRectButton->TabIndex = 40;
-            this->drawUserRectButton->Text = L"Draw User Rect";
+            this->drawUserRectButton->Text = L"Draw Rectangle";
             this->drawUserRectButton->UseVisualStyleBackColor = true;
             this->drawUserRectButton->Click += gcnew System::EventHandler(this, &Form1::drawUserRectButton_Click);
             // 
             // confusionMatrixTextBox
             // 
             this->confusionMatrixTextBox->AcceptsReturn = true;
+            this->confusionMatrixTextBox->Enabled = false;
             this->confusionMatrixTextBox->Location = System::Drawing::Point(16, 282);
             this->confusionMatrixTextBox->Multiline = true;
             this->confusionMatrixTextBox->Name = L"confusionMatrixTextBox";
@@ -457,6 +493,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // adjustThresholdsButton
             // 
+            this->adjustThresholdsButton->Enabled = false;
             this->adjustThresholdsButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->adjustThresholdsButton->Location = System::Drawing::Point(12, 202);
             this->adjustThresholdsButton->Name = L"adjustThresholdsButton";
@@ -468,6 +505,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // showClassAccuraciesButton
             // 
+            this->showClassAccuraciesButton->Enabled = false;
             this->showClassAccuraciesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 241);
             this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
@@ -479,21 +517,23 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // button9
             // 
+            this->button9->Enabled = false;
             this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button9->Location = System::Drawing::Point(12, 554);
+            this->button9->Location = System::Drawing::Point(9, 547);
             this->button9->Name = L"button9";
-            this->button9->Size = System::Drawing::Size(176, 41);
+            this->button9->Size = System::Drawing::Size(174, 49);
             this->button9->TabIndex = 34;
-            this->button9->Text = L"Draw Rects On Gray";
+            this->button9->Text = L"Draw Rects On Gray Areas";
             this->button9->UseVisualStyleBackColor = true;
             this->button9->Click += gcnew System::EventHandler(this, &Form1::button9_Click_1);
             // 
             // SwapAttributesButton
             // 
+            this->SwapAttributesButton->Enabled = false;
             this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->SwapAttributesButton->Location = System::Drawing::Point(16, 767);
+            this->SwapAttributesButton->Location = System::Drawing::Point(9, 812);
             this->SwapAttributesButton->Name = L"SwapAttributesButton";
-            this->SwapAttributesButton->Size = System::Drawing::Size(173, 34);
+            this->SwapAttributesButton->Size = System::Drawing::Size(174, 34);
             this->SwapAttributesButton->TabIndex = 33;
             this->SwapAttributesButton->Text = L"Swap X/Y";
             this->SwapAttributesButton->UseVisualStyleBackColor = true;
@@ -501,30 +541,34 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // clearRectangleButton
             // 
+            this->clearRectangleButton->Enabled = false;
             this->clearRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->clearRectangleButton->Location = System::Drawing::Point(103, 477);
+            this->clearRectangleButton->Location = System::Drawing::Point(103, 602);
             this->clearRectangleButton->Name = L"clearRectangleButton";
             this->clearRectangleButton->Size = System::Drawing::Size(85, 61);
             this->clearRectangleButton->TabIndex = 32;
-            this->clearRectangleButton->Text = L"Clear Rectangle";
+            this->clearRectangleButton->Text = L"Clear Rectangles";
             this->clearRectangleButton->UseVisualStyleBackColor = true;
             this->clearRectangleButton->Click += gcnew System::EventHandler(this, &Form1::clearRectangleButton_Click);
             // 
             // drawRectangleButton
             // 
+            this->drawRectangleButton->Enabled = false;
             this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->drawRectangleButton->Location = System::Drawing::Point(12, 477);
+            this->drawRectangleButton->Location = System::Drawing::Point(9, 477);
             this->drawRectangleButton->Name = L"drawRectangleButton";
             this->drawRectangleButton->Size = System::Drawing::Size(85, 61);
             this->drawRectangleButton->TabIndex = 31;
-            this->drawRectangleButton->Text = L"Draw Rectangle";
+            this->drawRectangleButton->Text = L"Draw Rectangle (OLD)";
             this->drawRectangleButton->UseVisualStyleBackColor = true;
+            this->drawRectangleButton->Visible = false;
             this->drawRectangleButton->Click += gcnew System::EventHandler(this, &Form1::drawRectangleButton_Click);
             // 
             // button7
             // 
+            this->button7->Enabled = false;
             this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button7->Location = System::Drawing::Point(103, 722);
+            this->button7->Location = System::Drawing::Point(103, 767);
             this->button7->Name = L"button7";
             this->button7->Size = System::Drawing::Size(80, 39);
             this->button7->TabIndex = 30;
@@ -534,8 +578,9 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // button8
             // 
+            this->button8->Enabled = false;
             this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button8->Location = System::Drawing::Point(16, 722);
+            this->button8->Location = System::Drawing::Point(9, 767);
             this->button8->Name = L"button8";
             this->button8->Size = System::Drawing::Size(81, 39);
             this->button8->TabIndex = 29;
@@ -548,40 +593,47 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->checkedListBox4->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->checkedListBox4->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
             this->checkedListBox4->CheckOnClick = true;
+            this->checkedListBox4->Enabled = false;
             this->checkedListBox4->ForeColor = System::Drawing::SystemColors::WindowText;
             this->checkedListBox4->FormattingEnabled = true;
-            this->checkedListBox4->Location = System::Drawing::Point(132, 824);
+            this->checkedListBox4->Location = System::Drawing::Point(132, 869);
             this->checkedListBox4->Name = L"checkedListBox4";
             this->checkedListBox4->Size = System::Drawing::Size(59, 2);
             this->checkedListBox4->TabIndex = 28;
             this->checkedListBox4->ThreeDCheckBoxes = true;
+            this->checkedListBox4->Visible = false;
             this->checkedListBox4->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::checkedListBox4_SelectedIndexChanged);
             // 
             // label9
             // 
             this->label9->AutoSize = true;
+            this->label9->Enabled = false;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->label9->Location = System::Drawing::Point(11, 823);
+            this->label9->Location = System::Drawing::Point(11, 868);
             this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(110, 20);
+            this->label9->Size = System::Drawing::Size(156, 29);
             this->label9->TabIndex = 27;
             this->label9->Text = L"Hide Classes";
+            this->label9->Visible = false;
             this->label9->Click += gcnew System::EventHandler(this, &Form1::label9_Click);
             // 
             // checkBox1
             // 
             this->checkBox1->CheckAlign = System::Drawing::ContentAlignment::TopLeft;
-            this->checkBox1->Location = System::Drawing::Point(15, 846);
+            this->checkBox1->Enabled = false;
+            this->checkBox1->Location = System::Drawing::Point(15, 891);
             this->checkBox1->Name = L"checkBox1";
             this->checkBox1->Size = System::Drawing::Size(173, 31);
             this->checkBox1->TabIndex = 14;
             this->checkBox1->Text = L"Enable Data Display Based on Selected Area";
             this->checkBox1->TextAlign = System::Drawing::ContentAlignment::TopLeft;
             this->checkBox1->UseVisualStyleBackColor = true;
+            this->checkBox1->Visible = false;
             this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox1_CheckedChanged_1);
             // 
             // button6
             // 
+            this->button6->Enabled = false;
             this->button6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button6->Location = System::Drawing::Point(12, 127);
             this->button6->Name = L"button6";
@@ -589,10 +641,12 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->button6->TabIndex = 26;
             this->button6->Text = L"Show Testing Data";
             this->button6->UseVisualStyleBackColor = true;
+            this->button6->Visible = false;
             this->button6->Click += gcnew System::EventHandler(this, &Form1::button6_Click_1);
             // 
             // button2
             // 
+            this->button2->Enabled = false;
             this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button2->Location = System::Drawing::Point(12, 90);
             this->button2->Name = L"button2";
@@ -600,6 +654,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->button2->TabIndex = 25;
             this->button2->Text = L"Show Training Data";
             this->button2->UseVisualStyleBackColor = true;
+            this->button2->Visible = false;
             this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click_1);
             // 
             // button1
@@ -615,6 +670,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // button4
             // 
+            this->button4->Enabled = false;
             this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button4->Location = System::Drawing::Point(12, 12);
             this->button4->Name = L"button4";
@@ -626,6 +682,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // button3
             // 
+            this->button3->Enabled = false;
             this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button3->Location = System::Drawing::Point(12, 165);
             this->button3->Name = L"button3";
@@ -633,10 +690,12 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->button3->TabIndex = 8;
             this->button3->Text = L"Move Graph";
             this->button3->UseVisualStyleBackColor = true;
+            this->button3->Visible = false;
             this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
             // 
             // button5
             // 
+            this->button5->Enabled = false;
             this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button5->Location = System::Drawing::Point(9, 705);
             this->button5->Name = L"button5";
@@ -644,16 +703,18 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->button5->TabIndex = 10;
             this->button5->Text = L"Show/Hide Lines";
             this->button5->UseVisualStyleBackColor = true;
+            this->button5->Visible = false;
             this->button5->Click += gcnew System::EventHandler(this, &Form1::button5_Click);
             // 
             // trackBar1
             // 
             this->trackBar1->BackColor = System::Drawing::SystemColors::Control;
+            this->trackBar1->Enabled = false;
             this->trackBar1->LargeChange = 1;
             this->trackBar1->Location = System::Drawing::Point(4, 71);
             this->trackBar1->Minimum = -10;
             this->trackBar1->Name = L"trackBar1";
-            this->trackBar1->Size = System::Drawing::Size(185, 56);
+            this->trackBar1->Size = System::Drawing::Size(185, 80);
             this->trackBar1->TabIndex = 9;
             this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
             // 
@@ -664,7 +725,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                 static_cast<System::Byte>(0)));
             this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
             this->ZoomingLabel->Name = L"ZoomingLabel";
-            this->ZoomingLabel->Size = System::Drawing::Size(50, 20);
+            this->ZoomingLabel->Size = System::Drawing::Size(75, 29);
             this->ZoomingLabel->TabIndex = 11;
             this->ZoomingLabel->Text = L"Zoom";
             // 
@@ -679,26 +740,31 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // hScrollBar1
             // 
+            this->hScrollBar1->Enabled = false;
             this->hScrollBar1->Location = System::Drawing::Point(102, 16);
             this->hScrollBar1->Minimum = -100;
             this->hScrollBar1->Name = L"hScrollBar1";
             this->hScrollBar1->Size = System::Drawing::Size(50, 40);
             this->hScrollBar1->TabIndex = 8;
+            this->hScrollBar1->Visible = false;
             this->hScrollBar1->Scroll += gcnew System::Windows::Forms::ScrollEventHandler(this, &Form1::hScrollBar1_Scroll);
             // 
             // PannningLabel
             // 
             this->PannningLabel->AutoSize = true;
+            this->PannningLabel->Enabled = false;
             this->PannningLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
             this->PannningLabel->Location = System::Drawing::Point(6, 16);
             this->PannningLabel->Name = L"PannningLabel";
-            this->PannningLabel->Size = System::Drawing::Size(69, 20);
+            this->PannningLabel->Size = System::Drawing::Size(101, 29);
             this->PannningLabel->TabIndex = 10;
             this->PannningLabel->Text = L"Panning";
+            this->PannningLabel->Visible = false;
             // 
             // menuStrip1
             // 
+            this->menuStrip1->GripMargin = System::Windows::Forms::Padding(2, 2, 0, 2);
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
@@ -730,7 +796,8 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // 
             // colorButton
             // 
-            this->colorButton->Location = System::Drawing::Point(4, 56);
+            this->colorButton->Enabled = false;
+            this->colorButton->Location = System::Drawing::Point(4, 103);
             this->colorButton->Name = L"colorButton";
             this->colorButton->Size = System::Drawing::Size(192, 31);
             this->colorButton->TabIndex = 0;
@@ -765,7 +832,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                 static_cast<System::Byte>(0)));
             this->label1->Location = System::Drawing::Point(4, 1);
             this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(159, 20);
+            this->label1->Size = System::Drawing::Size(169, 58);
             this->label1->TabIndex = 12;
             this->label1->Text = L"Change Class Color";
             // 
@@ -774,10 +841,11 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->comboBox1->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->comboBox1->Cursor = System::Windows::Forms::Cursors::Hand;
             this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+            this->comboBox1->Enabled = false;
             this->comboBox1->FormattingEnabled = true;
-            this->comboBox1->Location = System::Drawing::Point(4, 25);
+            this->comboBox1->Location = System::Drawing::Point(4, 63);
             this->comboBox1->Name = L"comboBox1";
-            this->comboBox1->Size = System::Drawing::Size(188, 24);
+            this->comboBox1->Size = System::Drawing::Size(188, 32);
             this->comboBox1->TabIndex = 1;
             this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
             // 
@@ -786,7 +854,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->label2->AutoSize = true;
             this->label2->Location = System::Drawing::Point(554, 8);
             this->label2->Name = L"label2";
-            this->label2->Size = System::Drawing::Size(0, 16);
+            this->label2->Size = System::Drawing::Size(0, 25);
             this->label2->TabIndex = 11;
             // 
             // panel2
@@ -809,26 +877,29 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->panel2->Controls->Add(this->graph4);
             this->panel2->Location = System::Drawing::Point(1698, 27);
             this->panel2->Name = L"panel2";
-            this->panel2->Size = System::Drawing::Size(209, 926);
+            this->panel2->Size = System::Drawing::Size(209, 794);
             this->panel2->TabIndex = 13;
             // 
             // identifyWorstAreaCheckbox
             // 
             this->identifyWorstAreaCheckbox->AutoSize = true;
+            this->identifyWorstAreaCheckbox->Enabled = false;
             this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
             this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
-            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(151, 20);
+            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(218, 29);
             this->identifyWorstAreaCheckbox->TabIndex = 24;
             this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
             this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
+            this->identifyWorstAreaCheckbox->Visible = false;
             this->identifyWorstAreaCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::identifyWorstAreaCheckbox_CheckedChanged);
             // 
             // mitigateAllOverlap
             // 
             this->mitigateAllOverlap->AutoSize = true;
+            this->mitigateAllOverlap->Enabled = false;
             this->mitigateAllOverlap->Location = System::Drawing::Point(9, 385);
             this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
-            this->mitigateAllOverlap->Size = System::Drawing::Size(153, 20);
+            this->mitigateAllOverlap->Size = System::Drawing::Size(221, 29);
             this->mitigateAllOverlap->TabIndex = 23;
             this->mitigateAllOverlap->Text = L"Mitigate Overlap (All)";
             this->mitigateAllOverlap->UseVisualStyleBackColor = true;
@@ -837,9 +908,10 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // backgroundDensityColorCheckbox
             // 
             this->backgroundDensityColorCheckbox->AutoSize = true;
+            this->backgroundDensityColorCheckbox->Enabled = false;
             this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(9, 408);
             this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
-            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(203, 20);
+            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(291, 29);
             this->backgroundDensityColorCheckbox->TabIndex = 22;
             this->backgroundDensityColorCheckbox->Text = L"Background Density Coloring";
             this->backgroundDensityColorCheckbox->UseVisualStyleBackColor = true;
@@ -848,9 +920,10 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // mitigateOverlapCheckbox
             // 
             this->mitigateOverlapCheckbox->AutoSize = true;
+            this->mitigateOverlapCheckbox->Enabled = false;
             this->mitigateOverlapCheckbox->Location = System::Drawing::Point(9, 364);
             this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
-            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(216, 20);
+            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(310, 29);
             this->mitigateOverlapCheckbox->TabIndex = 21;
             this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap (Misclassified)";
             this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
@@ -859,9 +932,10 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // lineColorCheckbox
             // 
             this->lineColorCheckbox->AutoSize = true;
+            this->lineColorCheckbox->Enabled = false;
             this->lineColorCheckbox->Location = System::Drawing::Point(9, 343);
             this->lineColorCheckbox->Name = L"lineColorCheckbox";
-            this->lineColorCheckbox->Size = System::Drawing::Size(127, 20);
+            this->lineColorCheckbox->Size = System::Drawing::Size(182, 29);
             this->lineColorCheckbox->TabIndex = 20;
             this->lineColorCheckbox->Text = L"Line Color Mode";
             this->lineColorCheckbox->UseVisualStyleBackColor = true;
@@ -870,9 +944,10 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // pointColorMode
             // 
             this->pointColorMode->AutoSize = true;
+            this->pointColorMode->Enabled = false;
             this->pointColorMode->Location = System::Drawing::Point(9, 301);
             this->pointColorMode->Name = L"pointColorMode";
-            this->pointColorMode->Size = System::Drawing::Size(132, 20);
+            this->pointColorMode->Size = System::Drawing::Size(189, 29);
             this->pointColorMode->TabIndex = 19;
             this->pointColorMode->Text = L"Point Color Mode";
             this->pointColorMode->UseVisualStyleBackColor = true;
@@ -881,13 +956,27 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // highlightMisclassificationsCheckbox
             // 
             this->highlightMisclassificationsCheckbox->AutoSize = true;
+            this->highlightMisclassificationsCheckbox->Enabled = false;
             this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(9, 320);
             this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
-            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(189, 20);
+            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(269, 29);
             this->highlightMisclassificationsCheckbox->TabIndex = 18;
             this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
             this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
             this->highlightMisclassificationsCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::highlightMisclassificationsCheckbox_CheckedChanged);
+            // 
+            // lineTerminationModeCheckbox
+            // 
+            this->lineTerminationModeCheckbox->AutoSize = true;
+            this->lineTerminationModeCheckbox->Enabled = false;
+            this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
+            this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
+            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(238, 29);
+            this->lineTerminationModeCheckbox->TabIndex = 17;
+            this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
+            this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
+            this->lineTerminationModeCheckbox->Visible = false;
+            this->lineTerminationModeCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineTerminationModeCheckbox_CheckedChanged);
             // 
             // groupBox4
             // 
@@ -902,11 +991,12 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // backgroundColorLightnessSlider
             // 
             this->backgroundColorLightnessSlider->BackColor = System::Drawing::SystemColors::Control;
+            this->backgroundColorLightnessSlider->Enabled = false;
             this->backgroundColorLightnessSlider->LargeChange = 1;
             this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
             this->backgroundColorLightnessSlider->Maximum = 200;
             this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 56);
+            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 80);
             this->backgroundColorLightnessSlider->TabIndex = 10;
             this->backgroundColorLightnessSlider->Value = 2;
             this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -918,7 +1008,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundLightness->Location = System::Drawing::Point(4, 16);
             this->backgroundLightness->Name = L"backgroundLightness";
-            this->backgroundLightness->Size = System::Drawing::Size(196, 18);
+            this->backgroundLightness->Size = System::Drawing::Size(258, 25);
             this->backgroundLightness->TabIndex = 11;
             this->backgroundLightness->Text = L"Background Color Lightness";
             // 
@@ -935,11 +1025,12 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // backgroundTransparencySlider
             // 
             this->backgroundTransparencySlider->BackColor = System::Drawing::SystemColors::Control;
+            this->backgroundTransparencySlider->Enabled = false;
             this->backgroundTransparencySlider->LargeChange = 1;
             this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
             this->backgroundTransparencySlider->Maximum = 255;
             this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 56);
+            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 80);
             this->backgroundTransparencySlider->TabIndex = 10;
             this->backgroundTransparencySlider->Value = 100;
             this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -951,7 +1042,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
             this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-            this->backgroundTransparencyLabel->Size = System::Drawing::Size(182, 18);
+            this->backgroundTransparencyLabel->Size = System::Drawing::Size(243, 25);
             this->backgroundTransparencyLabel->TabIndex = 11;
             this->backgroundTransparencyLabel->Text = L"Background Transparency";
             this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -972,21 +1063,23 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->classTransparencySelection->BackColor = System::Drawing::SystemColors::ButtonFace;
             this->classTransparencySelection->Cursor = System::Windows::Forms::Cursors::Hand;
             this->classTransparencySelection->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+            this->classTransparencySelection->Enabled = false;
             this->classTransparencySelection->FormattingEnabled = true;
             this->classTransparencySelection->Location = System::Drawing::Point(6, 37);
             this->classTransparencySelection->Name = L"classTransparencySelection";
-            this->classTransparencySelection->Size = System::Drawing::Size(188, 24);
+            this->classTransparencySelection->Size = System::Drawing::Size(188, 32);
             this->classTransparencySelection->TabIndex = 13;
             this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
             // 
             // transparencySlider
             // 
             this->transparencySlider->BackColor = System::Drawing::SystemColors::Control;
+            this->transparencySlider->Enabled = false;
             this->transparencySlider->LargeChange = 1;
             this->transparencySlider->Location = System::Drawing::Point(6, 64);
             this->transparencySlider->Maximum = 255;
             this->transparencySlider->Name = L"transparencySlider";
-            this->transparencySlider->Size = System::Drawing::Size(185, 56);
+            this->transparencySlider->Size = System::Drawing::Size(185, 80);
             this->transparencySlider->TabIndex = 10;
             this->transparencySlider->Value = 255;
             this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -998,26 +1091,59 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->transparencyLabel->Location = System::Drawing::Point(6, 18);
             this->transparencyLabel->Name = L"transparencyLabel";
-            this->transparencyLabel->Size = System::Drawing::Size(159, 20);
+            this->transparencyLabel->Size = System::Drawing::Size(226, 29);
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
             // 
-            // lineTerminationModeCheckbox
+            // userRectangleTypeSelection
             // 
-            this->lineTerminationModeCheckbox->AutoSize = true;
-            this->lineTerminationModeCheckbox->Enabled = false;
-            this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
-            this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
-            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(166, 20);
-            this->lineTerminationModeCheckbox->TabIndex = 17;
-            this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
-            this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
-            this->lineTerminationModeCheckbox->CheckedChanged += gcnew System::EventHandler(this, &Form1::lineTerminationModeCheckbox_CheckedChanged);
+            this->userRectangleTypeSelection->FormattingEnabled = true;
+            this->userRectangleTypeSelection->Location = System::Drawing::Point(76, 25);
+            this->userRectangleTypeSelection->Name = L"userRectangleTypeSelection";
+            this->userRectangleTypeSelection->Size = System::Drawing::Size(121, 32);
+            this->userRectangleTypeSelection->TabIndex = 25;
+            this->userRectangleTypeSelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox2_SelectedIndexChanged_1);
+            // 
+            // label3
+            // 
+            this->label3->AutoSize = true;
+            this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->label3->Location = System::Drawing::Point(7, 4);
+            this->label3->Name = L"label3";
+            this->label3->Size = System::Drawing::Size(250, 25);
+            this->label3->TabIndex = 12;
+            this->label3->Text = L"User Rectangle Parameters";
+            this->label3->Click += gcnew System::EventHandler(this, &Form1::label3_Click);
+            // 
+            // label4
+            // 
+            this->label4->AutoSize = true;
+            this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->label4->Location = System::Drawing::Point(29, 28);
+            this->label4->Name = L"label4";
+            this->label4->Size = System::Drawing::Size(63, 25);
+            this->label4->TabIndex = 26;
+            this->label4->Text = L"Type:";
+            this->label4->Click += gcnew System::EventHandler(this, &Form1::label4_Click_1);
+            // 
+            // userRectangleParametersPanel
+            // 
+            this->userRectangleParametersPanel->Controls->Add(this->label4);
+            this->userRectangleParametersPanel->Controls->Add(this->label3);
+            this->userRectangleParametersPanel->Controls->Add(this->userRectangleTypeSelection);
+            this->userRectangleParametersPanel->Enabled = false;
+            this->userRectangleParametersPanel->Location = System::Drawing::Point(1698, 827);
+            this->userRectangleParametersPanel->Name = L"userRectangleParametersPanel";
+            this->userRectangleParametersPanel->Size = System::Drawing::Size(200, 100);
+            this->userRectangleParametersPanel->TabIndex = 14;
             // 
             // Form1
             // 
             this->BackColor = System::Drawing::SystemColors::Control;
             this->ClientSize = System::Drawing::Size(1907, 978);
+            this->Controls->Add(this->userRectangleParametersPanel);
             this->Controls->Add(this->panel2);
             this->Controls->Add(this->label2);
             this->Controls->Add(this->statusStrip1);
@@ -1029,6 +1155,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
             this->Text = L"Interactive Shifted Paired Coordinates";
             this->TransparencyKey = System::Drawing::Color::Maroon;
+            this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
             this->panel1->ResumeLayout(false);
             this->panel1->PerformLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
@@ -1047,6 +1174,8 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             this->groupBox2->ResumeLayout(false);
             this->groupBox2->PerformLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->transparencySlider))->EndInit();
+            this->userRectangleParametersPanel->ResumeLayout(false);
+            this->userRectangleParametersPanel->PerformLayout();
             this->ResumeLayout(false);
             this->PerformLayout();
 
@@ -1069,6 +1198,69 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             System::Runtime::InteropServices::Marshal::FreeHGlobal(IntPtr((void *)location));
             return temp;
         }
+
+        // change to upload parser state
+        void changeToUploadParserState() {
+            setInteractiveOptionsState(false);
+            button1->Enabled = true; // upload parser
+            button4->Enabled = false; // upload data
+        }
+
+        // change to upload data state
+        void changeToUploadDataState() {
+            setInteractiveOptionsState(false);
+            button1->Enabled = false; // upload parser
+            button4->Enabled = true; // upload data
+        }
+
+        // change to interactive state
+        void changeToInteractiveState() {
+            setInteractiveOptionsState(true);
+            selectRectangleButton->Enabled = false;
+            button1->Enabled = false; // upload parser
+            button4->Enabled = false; // upload data    
+        }
+
+        void setInteractiveOptionsState(bool state) {
+            //menuStrip1->Enabled = state; // right menu panel
+            //panel1->Enabled = state; // left meny panel
+            adjustThresholdsButton->Enabled = state;
+            showClassAccuraciesButton->Enabled = state;
+            confusionMatrixTextBox->Enabled = state;
+            drawRectangleButton->Enabled = state;
+            clearRectangleButton->Enabled = state;
+            drawUserRectButton->Enabled = state;
+            changeUserRectColorButton->Enabled = state;
+            removeUserRectButton->Enabled = state;
+            button8->Enabled = state; // invert x
+            button9->Enabled = state; // draw rects on gray
+            button7->Enabled = state; // invert y
+            SwapAttributesButton->Enabled = state;
+            menuStrip1->Enabled = state;
+            selectRectangleButton->Enabled = state;
+
+
+            // right panel
+            graph4->Enabled = state;
+            trackBar1->Enabled = state;
+            classTransparencySelection->Enabled = state;
+            transparencySlider->Enabled = state;
+            pointColorMode->Enabled = state;
+            highlightMisclassificationsCheckbox->Enabled = state;
+            lineColorCheckbox->Enabled = state;
+            mitigateOverlapCheckbox->Enabled = state;
+            mitigateAllOverlap->Enabled = state;
+            backgroundDensityColorCheckbox->Enabled = state;
+            identifyWorstAreaCheckbox->Enabled = state;
+            backgroundTransparencySlider->Enabled = state;
+            backgroundColorLightnessSlider->Enabled = state;
+            comboBox1->Enabled = state;
+            colorButton->Enabled = state;
+
+            // user rect panel
+            userRectangleParametersPanel->Enabled = state;
+        }
+
 
         // File Opening
 
@@ -1139,6 +1331,8 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
         {
             UNREFERENCED_PARAMETER(sender);
             UNREFERENCED_PARAMETER(e);
+            selectRectangleButton->Enabled = OpenGL3->getUserRectangleCount();
+
 
             if (graphType == 4) // Combined SPC graph4
             {
@@ -1187,6 +1381,8 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             {
                 OpenGL3->clearAllGraphData();
                 OpenGL3->setParserFileName(dataParsed);
+
+                // TODO: figure out how to reset zone colors
                 data.parsedData = dataParsed.parsedData;
                 data.parsedAttributePairs = dataParsed.parsedAttributePairs;
                 data.strparsedData = dataParsed.strparsedData;
@@ -1206,7 +1402,11 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                     this->comboBox1->Items->Add(i); // set the combobox for "Class combobox" to the data in item1
                     this->classTransparencySelection->Items->Add(i);
                 }
-
+                // populate user rectangle types
+                this->userRectangleTypeSelection->Items->Add("None");
+                this->userRectangleTypeSelection->Items->Add("Condense");
+                //this->userRectangleTypeSelection->Items->Add("Exclude");
+                //this->userRectangleTypeSelection->Items->Add("Expand");
                 lineTerminationModeCheckbox->Checked = false;
                 pointColorMode->Checked = false;
                 highlightMisclassificationsCheckbox->Checked = false;
@@ -1479,6 +1679,7 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
                     this->classTransparencySelection->Items->Add(i);
                 }
             }
+            changeToInteractiveState();
         }
 
     private:
@@ -1637,6 +1838,8 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             data.parsedAttributePairs = dataParsed.parsedAttributePairs;
             data.strparsedData = dataParsed.strparsedData;
 
+            changeToUploadDataState();
+
             // OpenGL3->parserFileOpen();
             // openParserFile(); // starts select file window
 
@@ -1780,11 +1983,13 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             {
                 String ^ str = "To draw a rectangle, click once for the first corner, then click again for the opposite corner.";
                 MessageBox::Show(str);
+                OpenGL3->canDragPlots = false;
                 OpenGL3->drawingRectangleEnabled = true;
             }
             else
             {
                 OpenGL3->drawingRectangleEnabled = false;
+                OpenGL3->canDragPlots = true;
             }
         }
 
@@ -1794,7 +1999,8 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
             // Clear rectangle
             OpenGL3->drawingRectangleEnabled = false;
             OpenGL3->setDrawingRectangleState(false);
-            OpenGL3->seedDataTerminationPoints();
+            OpenGL3->deleteRectangles();
+            //OpenGL3->seedDataTerminationPoints();
         }
 
         int classSelectionForTransparency = -1;
@@ -1928,11 +2134,11 @@ private: System::Windows::Forms::CheckBox^ lineTerminationModeCheckbox;
         {
             if (adjustThresholdsButtonToggle)
             {
-                adjustThresholdsButton->Text = adjustThresholdsButton->Text + " (BUTTON ACTIVE) ";
+                //adjustThresholdsButton->Text = adjustThresholdsButton->Text + " (BUTTON ACTIVE) ";
             }
             else
             {
-                adjustThresholdsButton->Text = adjustThresholdsButton->Text->Substring(0, adjustThresholdsButton->Text->Length - 17);
+                //adjustThresholdsButton->Text = adjustThresholdsButton->Text->Substring(0, adjustThresholdsButton->Text->Length - 17);
             }
             adjustThresholdsButtonToggle = !adjustThresholdsButtonToggle;
             OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
@@ -1946,7 +2152,42 @@ private: System::Void identifyWorstAreaCheckbox_CheckedChanged(System::Object^ s
 }
 
 private: System::Void drawUserRectButton_Click(System::Object^ sender, System::EventArgs^ e) {
-    OpenGL3->setDrawUserRectangleMode(true);
+    String^ str = "To draw a rectangle, click once for the first corner, then click again for the opposite corner.";
+    MessageBox::Show(str);
+    OpenGL3->setDrawUserRectangleMode(true); // will be set to false  further down the drawing stack
+}
+private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
+    if (fileopened) {
+        changeToInteractiveState();
+    }
+    else {
+        changeToUploadParserState();
+    }
+}
+       bool selectRectangleState = false;
+private: System::Void selectRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    OpenGL3->canDragPlots = selectRectangleState;
+    if (OpenGL3->toggleSelectUserRectangleMode() == -1) {
+        OpenGL3->canDragPlots = true;
+        MessageBox::Show("Please place at least one rectangle before trying to select it");
+        return;
+    }
+    selectRectangleState = !selectRectangleState;
+    userRectangleParametersPanel->Enabled = selectRectangleState;
+}
+private: System::Void comboBox2_SelectedIndexChanged_1(System::Object^ sender, System::EventArgs^ e) {
+    int state = userRectangleTypeSelection->SelectedIndex;
+    OpenGL3->updateSelectedRectangleType(state);
+}
+private: System::Void label4_Click_1(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+       bool enabled = true;
+private: System::Void removeUserRectButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    OpenGL3->removeSelectedUserRectangle();
+    userRectangleTypeSelection->Enabled = enabled;
+    enabled = !enabled;
 }
 };
 }

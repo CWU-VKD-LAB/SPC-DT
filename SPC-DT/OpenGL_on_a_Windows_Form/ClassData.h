@@ -991,11 +991,11 @@ public:
 		return result;
 	}
 
-	void adjustThresholds(float worldMouseX, float worldMouseY, int plotId, int zone, int edgeId, int direction) {
+	void adjustThresholds(float worldMouseX, float worldMouseY, int plotId, int zone, int direction) {
 		// catch errors
-		if (plotId < 0 || plotId > numPlots - 1) {
-			return;
-		}
+		//if (plotId < 0 || plotId > numPlots - 1) {
+		//	return;
+		//}
 
 		// compute where mouse is in plot
 		float centerX = xPlotCoordinates[plotId];
@@ -1069,7 +1069,6 @@ public:
                 adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotY;
             }
         }
-
 		zonesWithDarkBackgrounds.clear();
 		plotNumZoneTotalCases.clear();
 		plotNumZoneTotalMisclassifiedCases.clear();
