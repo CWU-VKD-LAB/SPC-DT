@@ -191,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="ClassData.h" />
     <ClInclude Include="ColorUtils.h" />
+    <ClInclude Include="DrawingUtils.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="InteractiveSPC.h" />
     <ClInclude Include="FileHandling.h" />

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Zone.h"
+#include "DrawingUtils.h"
 #pragma once
 
 struct Plot {
@@ -53,8 +54,8 @@ struct Plot {
 		/*float plotHeight = nonOrthoY2[i] - nonOrthoY1[i];
 		float width = nonOrthoX2[i] - nonOrthoX1[i];*/
 		float fractionOfWidth = width / 3;
-		//drawBitmapText(xLabelArr, getX1() + fractionOfWidth, getY2() + xLabelVerticalOffset);
-		//drawBitmapText(yLabelArr, getX1() + fractionOfWidth, getY2() + yLabelVerticalOffset);
+		drawBitmapText(xLabelArr, getX1() + fractionOfWidth, getY2() + xLabelVerticalOffset);
+		drawBitmapText(yLabelArr, getX1() + fractionOfWidth, getY2() + yLabelVerticalOffset);
 
 
 		int precision = 4;
@@ -87,16 +88,16 @@ struct Plot {
 			std::cout << "debug";
 		}
 
-		//drawBitmapText(&xLowRange[0], getX1(), getY2() + 1.5 * lineSeparation);
-		//drawBitmapText(&xHighRange[0], getX2() - xHighRange.length() / 2, getY2() + 1.5 * lineSeparation);
-		//drawBitmapText(&yLowRange[0], getX1() - ((float)precision / 1.5f) * lineSeparation, getY2());
-		//drawBitmapText(&yHighRange[0], getX1() - ((float)precision / 1.5f) * lineSeparation, getY1() + yHighRange.length() / 2);
+		drawBitmapText(&xLowRange[0], getX1(), getY2() + 1.5 * lineSeparation);
+		drawBitmapText(&xHighRange[0], getX2() - xHighRange.length() / 2, getY2() + 1.5 * lineSeparation);
+		drawBitmapText(&yLowRange[0], getX1() - ((float)precision / 1.5f) * lineSeparation, getY2());
+		drawBitmapText(&yHighRange[0], getX1() - ((float)precision / 1.5f) * lineSeparation, getY1() + yHighRange.length() / 2);
 
 		// debug draw plot num
 		std::string plot = "plotId:" + std::to_string(plotNum);
 		char* plotAsArr = &plot[0];
 		float plotIdOffset = yLabelVerticalOffset + lineSeparation;
-		//drawBitmapText(plotAsArr, getX1() + fractionOfWidth, getY2() + plotIdOffset);
+		drawBitmapText(plotAsArr, getX1() + fractionOfWidth, getY2() + plotIdOffset);
 	}
 	
 	void drawZones() {
