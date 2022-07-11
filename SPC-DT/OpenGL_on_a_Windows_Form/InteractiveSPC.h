@@ -162,7 +162,7 @@ public:
 	//std::vector<GLubyte> HSLtoRGB(std::vector<float> hsl);
 	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	//bool shouldLineBeClipped(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, bool* startPointCode, bool* endPointCode);
-	int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
+	//int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
 
 	float computeBackgroundTransparency(Zone &zone);
 	void computeZoneEdges(Zone &zone);

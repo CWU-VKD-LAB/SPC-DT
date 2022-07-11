@@ -2937,38 +2937,38 @@ bool InteractiveSPC::isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLflo
     return false;
 }
 
-int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex)
-{
-    int dataIndex = -100; // arbitrary! Need better way to do this
-
-    // check for termination classes
-    for (int i = 0; i < data.parsedData.size(); i++)
-    {
-        if (i == currentDataIndex)
-            continue;
-        GLfloat testRectx1 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][0] * data.plotWidth[data.parsedData[i][4]];
-        GLfloat testRecty1 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][1] * data.plotHeight[data.parsedData[i][4]];
-        GLfloat testRectx2 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][2] * data.plotWidth[data.parsedData[i][4]];
-        GLfloat testRecty2 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][3] * data.plotHeight[data.parsedData[i][4]];
-
-        if (isPointWithinRect(px, py, testRectx1, testRecty1, testRectx2, testRecty2))
-        {
-            dataIndex = i;
-            break;
-        }
-    }
-
-    // check for continue classes
-
-    if (dataIndex < 0)
-    {
-        return -200;
-    }
-    else
-    {
-        return data.parsedData[dataIndex][5];
-    }
-}
+//int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex)
+//{
+//    int dataIndex = -100; // arbitrary! Need better way to do this
+//
+//    // check for termination classes
+//    for (int i = 0; i < data.parsedData.size(); i++)
+//    {
+//        if (i == currentDataIndex)
+//            continue;
+//        GLfloat testRectx1 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][0] * data.plotWidth[data.parsedData[i][4]];
+//        GLfloat testRecty1 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][1] * data.plotHeight[data.parsedData[i][4]];
+//        GLfloat testRectx2 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][2] * data.plotWidth[data.parsedData[i][4]];
+//        GLfloat testRecty2 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][3] * data.plotHeight[data.parsedData[i][4]];
+//
+//        if (isPointWithinRect(px, py, testRectx1, testRecty1, testRectx2, testRecty2))
+//        {
+//            dataIndex = i;
+//            break;
+//        }
+//    }
+//
+//    // check for continue classes
+//
+//    if (dataIndex < 0)
+//    {
+//        return -200;
+//    }
+//    else
+//    {
+//        return data.parsedData[dataIndex][5];
+//    }
+//}
 
 //std::vector<GLubyte> InteractiveSPC::HSLtoRGB(std::vector<float> hsl)
 //{
