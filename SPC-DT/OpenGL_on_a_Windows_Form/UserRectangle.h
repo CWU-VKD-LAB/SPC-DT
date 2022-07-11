@@ -13,10 +13,14 @@ struct UserRectangle {
 	RectangleType type;
 	ClassData* data;
 	UserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, RectangleType type, int plotNum, ClassData* data) {
-		X1 = (x1 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
-        X2 = (x2 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
-        Y1 = (y1 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
-        Y2 = (y2 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+		//X1 = (x1 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
+  //      X2 = (x2 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
+  //      Y1 = (y1 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+  //      Y2 = (y2 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+        X1 = (x1 - data->plots[plotNum].getX1()) / (data->plots[plotNum].width);
+		X2 = (x2 - data->plots[plotNum].getX1()) / (data->plots[plotNum].width);
+		Y1 = (y1 - data->plots[plotNum].getY1()) / (data->plots[plotNum].height);
+		Y2 = (y2 - data->plots[plotNum].getY1()) / (data->plots[plotNum].height);
 		id = time(NULL);
 		this->plotNum = plotNum;
 		this->type = type;
@@ -34,10 +38,14 @@ struct UserRectangle {
         computeRealCoords();
     }
     void computeRealCoords() {
-        realX1 = data->x1CoordPlot[plotNum] + (X1 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
-        realX2 = data->x1CoordPlot[plotNum] + (X2 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
-        realY1 = data->y1CoordPlot[plotNum] + (Y1 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
-        realY2 = data->y1CoordPlot[plotNum] + (Y2 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+        //realX1 = data->x1CoordPlot[plotNum] + (X1 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
+        //realX2 = data->x1CoordPlot[plotNum] + (X2 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
+        //realY1 = data->y1CoordPlot[plotNum] + (Y1 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+        //realY2 = data->y1CoordPlot[plotNum] + (Y2 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+		realX1 = data->plots[plotNum].getX1() + (X1 * data->plots[plotNum].width);
+		realX2 = data->plots[plotNum].getX1() + (X2 * data->plots[plotNum].width);
+		realY1 = data->plots[plotNum].getY1() + (Y1 * data->plots[plotNum].height);
+		realY2 = data->plots[plotNum].getY1() + (Y2 * data->plots[plotNum].height);
     }
 	void drawEdges() {
         computeRealCoords();

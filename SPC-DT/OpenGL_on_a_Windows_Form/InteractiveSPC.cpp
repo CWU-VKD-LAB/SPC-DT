@@ -336,10 +336,14 @@ void InteractiveSPC::drawRectanglesOnGray()
             const float zoneX2 = parserData[2];
             const float zoneY2 = parserData[3];
 
-            const float pltX1 = data.x1CoordPlot[plotNum];
-            const float pltY1 = data.y1CoordPlot[plotNum];
-            const float pltX2 = data.x2CoordPlot[plotNum];
-            const float pltY2 = data.y2CoordPlot[plotNum];
+            //const float pltX1 = data.x1CoordPlot[plotNum];
+            //const float pltY1 = data.y1CoordPlot[plotNum];
+            //const float pltX2 = data.x2CoordPlot[plotNum];
+            //const float pltY2 = data.y2CoordPlot[plotNum];
+            const float pltX1 = data.plots[plotNum].getX1();
+			const float pltY1 = data.plots[plotNum].getY1();
+			const float pltX2 = data.plots[plotNum].getX2();
+			const float pltY2 = data.plots[plotNum].getY2();
 
             const float plotWidth = data.plotWidth[plotNum];
             const float plotHeight = data.plotHeight[plotNum];
@@ -2625,10 +2629,14 @@ void InteractiveSPC::drawWorstZone() {
     const float parsedZoneX2 = parserData[2];
     const float parsedZoneY2 = parserData[3];
     const int plotNum = parserData[4];
-    const float plotX1 = data.x1CoordPlot[plotNum];
-    const float plotY1 = data.y1CoordPlot[plotNum];
-    const float plotX2 = data.x2CoordPlot[plotNum];
-    const float plotY2 = data.y2CoordPlot[plotNum];
+    //const float plotX1 = data.x1CoordPlot[plotNum];
+    //const float plotY1 = data.y1CoordPlot[plotNum];
+    //const float plotX2 = data.x2CoordPlot[plotNum];
+    //const float plotY2 = data.y2CoordPlot[plotNum];
+    const float plotX1 = data.plots[plotNum].getX1();
+	const float plotY1 = data.plots[plotNum].getY1();
+	const float plotX2 = data.plots[plotNum].getX2();
+	const float plotY2 = data.plots[plotNum].getY2();
     const float zoneX1 = plotX1 + parsedZoneX1 * (plotX2 - plotX1);
     const float zoneY1 = plotY2 - parsedZoneY1 * (plotY2 - plotY1);
     const float zoneX2 = plotX1 + parsedZoneX2 * (plotX2 - plotX1);
@@ -2751,10 +2759,15 @@ int InteractiveSPC::findPlotNumOfPoint(GLfloat px, GLfloat py)
 {
     for (int i = 0; i < data.numPlots; i++)
     {
-        float x1 = data.x1CoordPlot[i];
-        float y1 = data.y1CoordPlot[i];
-        float x2 = data.x2CoordPlot[i];
-        float y2 = data.y2CoordPlot[i];
+        //float x1 = data.x1CoordPlot[i];
+        //float y1 = data.y1CoordPlot[i];
+        //float x2 = data.x2CoordPlot[i];
+        //float y2 = data.y2CoordPlot[i];
+
+		float x1 = data.plots[i].getX1();
+		float y1 = data.plots[i].getY1();
+		float x2 = data.plots[i].getX2();
+		float y2 = data.plots[i].getY2();
 
         if (px >= x1 && px <= x2)
         {
