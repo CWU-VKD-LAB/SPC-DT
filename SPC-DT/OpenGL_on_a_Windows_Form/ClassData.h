@@ -930,36 +930,36 @@ public:
 		std::cout << "debug treedepth" << rootDepth;
 	}
 
-	void calculateTerminationPoint(int i) {
-		int classnum = classNum[i] - 1;
-		for (int j = 0; j < dataTerminationIndex[i]; j++) {
-			float px = xPlotCoordinates[j];
-			float py = yPlotCoordinates[j];
-			px -= (plotWidth[j] / 2);
-			py += (plotHeight[j] / 2);
-			float x1Coord = plotWidth[j] * xdata[i][j];
-			float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
-			float x1CoordTrans = x1Coord + (px + pan_x);
-			float y1CoordTrans = y1Coord + (py + pan_y);
+	//void calculateTerminationPoint(int i) {
+	//	int classnum = classNum[i] - 1;
+	//	for (int j = 0; j < dataTerminationIndex[i]; j++) {
+	//		float px = xPlotCoordinates[j];
+	//		float py = yPlotCoordinates[j];
+	//		px -= (plotWidth[j] / 2);
+	//		py += (plotHeight[j] / 2);
+	//		float x1Coord = plotWidth[j] * xdata[i][j];
+	//		float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
+	//		float x1CoordTrans = x1Coord + (px + pan_x);
+	//		float y1CoordTrans = y1Coord + (py + pan_y);
 
-			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+	//		int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
 
-			if (backgroundClass >= 0) {
-				std::cout << "debug";
-				if (backgroundClass == classnum) {
-					if (j < 2) {
-						dataTerminationIndex[i] = 2; // might need to be 2
-					}
-					else {
-						dataTerminationIndex[i] = j;
-					}
-				}
-			}
-			else {
-				// TODO
-			}
-		}
-	}
+	//		if (backgroundClass >= 0) {
+	//			std::cout << "debug";
+	//			if (backgroundClass == classnum) {
+	//				if (j < 2) {
+	//					dataTerminationIndex[i] = 2; // might need to be 2
+	//				}
+	//				else {
+	//					dataTerminationIndex[i] = j;
+	//				}
+	//			}
+	//		}
+	//		else {
+	//			// TODO
+	//		}
+	//	}
+	//}
 
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
 		// TODO

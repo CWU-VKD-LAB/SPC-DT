@@ -2363,6 +2363,13 @@ void InteractiveSPC::calculateDataTerminationPoints()
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y)
 {
+    for (int i = 0; i < data.plots.size(); i++) {
+        if (data.plots[i].isPointWithinPlot(x, y)) {
+            return data.plots[i].plotNum;
+        }
+    }
+    return -1;
+	
     for (int i = 0; i < data.numPlots; i++)
     {
         if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&

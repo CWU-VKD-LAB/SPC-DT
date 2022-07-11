@@ -129,6 +129,13 @@ struct Plot {
 		zones.push_back(zone);
 	}
 
+	bool isPointWithinPlot(GLfloat px, GLfloat py) {
+		if (px >= getX1() && px <= getX2() && py >= getY1() && py <= getY2()) {
+			return true;
+		}
+		return false;
+	}
+
 	GLfloat getX1() {
 		return centerX - width / 2;
 	}
