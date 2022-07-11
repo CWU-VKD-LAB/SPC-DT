@@ -9,6 +9,7 @@
 #include "UserRectangle.h"
 #include "Zone.h"
 #include "ColorUtils.h"
+#include "Plot.h"
 #pragma once
 
 
@@ -19,6 +20,7 @@ public:
 	ClassData data;
 	parseData dataParsed;
 	FileHandling newFile;
+	std::vector<Plot> plots;
 	float backgroundTransparency = 100; // Default value
 	float backgroundClassColorCoefficient = 1.0; // Default value
 	std::vector<int> plotDrawOrder;
@@ -29,7 +31,7 @@ public:
 
 	InteractiveSPC(ClassData&, parseData&, double, double);
 
-	void fillPlotLocations();
+	//void fillPlotLocations();
 
 	/* Drawing data sets. */
 
@@ -101,8 +103,8 @@ public:
 	std::vector<int> clickedEdge;
 	std::vector<Zone> plotZones;
 	std::map<int, Zone> zoneIdMap;
-	void InteractiveSPC::buildZoneEdges();
-	void InteractiveSPC::updateZoneColors(int classNum);
+	void buildZoneEdges();
+	void updateZoneColors(int classNum);
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
@@ -110,6 +112,7 @@ public:
 	std::set<int> swappedPlots;
 	std::set<int> plotsWithXAxisInverted;
 	std::set<int> plotsWithYAxisInverted;
+	void initializePlots();
 
 	/// *** USED TO DETERMINE IF INCOMING PARSER BRANCHES
 	bool doesParserBranch = false;

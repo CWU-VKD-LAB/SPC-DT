@@ -50,7 +50,7 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
     // Height size for each graph
 
     doesParserBranch = data.doesDecisionTreeBranch;
-    fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
+    //fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -77,31 +77,34 @@ void InteractiveSPC::setBackgroundColorLightness(float lightnessCoeff)
 
 void InteractiveSPC::updatePlotLocation(double mouseX, double mouseY, int plotNum)
 {
-    data.xPlotCoordinates[plotNum] = mouseX - data.pan_x;
-    data.yPlotCoordinates[plotNum] = mouseY - data.pan_y;
+    plots[plotNum].centerX = mouseX - data.pan_x;
+    plots[plotNum].centerY = mouseY - data.pan_y;
+    //data.xPlotCoordinates[plotNum] = mouseX - data.pan_x;
+    //data.yPlotCoordinates[plotNum] = mouseY - data.pan_y;
 
-    // update references to plot x1,y1 and x2,y2
-    float plotWidth = data.x2CoordPlot[plotNum] - data.x1CoordPlot[plotNum];
-    float plotHeight = data.y2CoordPlot[plotNum] - data.y1CoordPlot[plotNum];
-    data.x1CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] - plotWidth / 2;
-    data.y1CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] - plotHeight / 2;
-    data.x2CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] + plotWidth / 2;
-    data.y2CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] + plotHeight / 2;
+    //// update references to plot x1,y1 and x2,y2
+    //float plotWidth = data.x2CoordPlot[plotNum] - data.x1CoordPlot[plotNum];
+    //float plotHeight = data.y2CoordPlot[plotNum] - data.y1CoordPlot[plotNum];
+    //data.x1CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] - plotWidth / 2;
+    //data.y1CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] - plotHeight / 2;
+    //data.x2CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] + plotWidth / 2;
+    //data.y2CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] + plotHeight / 2;
 }
 
-// Filling Graph Locations
-void InteractiveSPC::fillPlotLocations()
-{
-    // for (int k = 1; k <= data.xdata.size(); k++)
-    //{
-
+void InteractiveSPC::initializePlots() {
+    
     int numPlots = data.numPlots;
-    Node *root = data.rootNode;
+    Node* root = data.rootNode;
     int treeDepth = root->subtreeDepth;
+
+    // init plot list
+    for (int i = 0; i < numPlots; i++) {
+        plots.push_back(Plot(i, data.attributeMinMax));
+    }
 
     // Compute spans for each depth
     std::vector<int> depthSpanList;
-    std::vector<std::vector<Node *>> depthList;
+    std::vector<std::vector<Node*>> depthList;
     for (int i = 0; i < treeDepth; i++)
     {
         depthSpanList.push_back(root->getSpanAtDepth(i));
@@ -109,19 +112,10 @@ void InteractiveSPC::fillPlotLocations()
     }
 
     // update plot widths
-    for (int plotNum = 0; plotNum < data.plotWidth.size(); plotNum++)
+    for (int plotNum = 0; plotNum < numPlots; plotNum++)
     {
         data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
-    }
-
-    for (int i = 0; i < numPlots; i++)
-    {
-        data.xPlotCoordinates.push_back(0);
-        data.yPlotCoordinates.push_back(0);
-        data.x1CoordPlot.push_back(0);
-        data.y1CoordPlot.push_back(0);
-        data.x2CoordPlot.push_back(0);
-        data.y2CoordPlot.push_back(0);
+		plots[plotNum].width = data.worldWidth / (root->subtreeDepth + 1);
     }
 
     // For every depth, compute plot coordinates
@@ -129,26 +123,25 @@ void InteractiveSPC::fillPlotLocations()
     {
         int currentSpan = depthSpanList[currentDepth];
         // get all nodes at given depth
-        std::vector<Node *> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
-        for (int i = 0; i < nodesAtCurrentDepth.size(); i++)
+        std::vector<Node*> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
+ /*       for (int i = 0; i < nodesAtCurrentDepth.size(); i++)
         {
             plotDrawOrder.push_back(nodesAtCurrentDepth[i]->plotNum);
-        }
+        }*/
         int plotWidth = data.plotWidth[currentDepth];
-        double plotHeight = 0.0;
-        if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
-        {
-            plotHeight = data.plotHeight[0] / 5.0;
-        }
-        else
-        {
-            plotHeight = data.plotHeight[0] / (double)(nodesAtCurrentDepth.size() + 1); // need to figure this out
-        }
+		
+        //double plotHeight = 0.0;
+        //if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
+        //{
+        //    plotHeight = data.plotHeight[0] / 5.0;
+        //}
+        //else
+        //{
+        //    plotHeight = data.plotHeight[0] / (double)(nodesAtCurrentDepth.size() + 1); // need to figure this out
+        //}
 
-        std::cout << currentSpan << plotWidth << &nodesAtCurrentDepth << plotHeight;
-
-        float plotX1 = (plotWidth * (currentDepth + 1) + currentDepth * 10) - plotWidth / 2;
-        float plotX2 = plotX1 + plotWidth;
+        //float plotX1 = (plotWidth * (currentDepth + 1) + currentDepth * 10) - plotWidth / 2;
+        //float plotX2 = plotX1 + plotWidth;
 
         double screenHeight = data.plotHeight[0] * 2;
         double plotHeightAtThisDepth = screenHeight / (nodesAtCurrentDepth.size() + 1);
@@ -166,46 +159,143 @@ void InteractiveSPC::fillPlotLocations()
         // iterate through each node at this depth
         for (int nodeIndex = 0; nodeIndex < nodesAtCurrentDepth.size(); nodeIndex++)
         {
-            Node *currentNode = root;
+            Node* currentNode = root;
             // data.graphheight[]
             int plotNum = nodesAtCurrentDepth[nodeIndex]->plotNum;
-            data.xPlotCoordinates[plotNum] = (plotWidth * (currentDepth + 1) + currentDepth * 10);
-            data.yPlotCoordinates[plotNum] = ((nodeIndex + 1) * plotHeightAtThisDepth);
 
-            data.x1CoordPlot[plotNum] = (plotX1);
-            data.x2CoordPlot[plotNum] = (plotX2);
-            data.y1CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
-            data.y2CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
-            data.plotHeight[plotNum] = plotHeightAtThisDepth - plotHeightGap;
+            plots[plotNum].centerX = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+			plots[plotNum].centerY = ((nodeIndex + 1) * plotHeightAtThisDepth);
+
+            //data.xPlotCoordinates[plotNum] = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+            //data.yPlotCoordinates[plotNum] = ((nodeIndex + 1) * plotHeightAtThisDepth);
+            //data.x1CoordPlot[plotNum] = (plotX1);
+            //data.x2CoordPlot[plotNum] = (plotX2);
+            //data.y1CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
+            //data.y2CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+            //data.plotHeight[plotNum] = plotHeightAtThisDepth - plotHeightGap;
+			
+			plots[plotNum].height = plotHeightAtThisDepth - plotHeightGap;
         }
-        std::cout << "debug";
-        std::cout << &data.xPlotCoordinates << &data.yPlotCoordinates;
-        std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
     }
-
-    // debug
-    std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
-
-    // // constructs plots in a single line
-    // for (int i = 1; i <= data.classsize; i++)
-    // {
-
-    // 	//data.xPlotCoordinates.push_back(data.graphwidth[currentDepth - 1] * currentDepth + currentDepth * 0.08 * data.graphwidth[data.graphwidth.size() - 1]);
-    // 	data.xPlotCoordinates.push_back(data.graphwidth[i - 1] * i + i * 10);
-    // 	data.yPlotCoordinates.push_back(data.graphheight[i - 1]);
-
-    // 	//set coordinates to draw rectangles
-    // 	data.x1CoordGraph.push_back(data.xPlotCoordinates[i - 1] - data.graphwidth[i - 1] / 2);
-    // 	data.x2CoordGraph.push_back(data.xPlotCoordinates[i - 1] + data.graphwidth[i - 1] / 2);
-    // 	data.y1CoordGraph.push_back(data.yPlotCoordinates[i - 1] - data.graphheight[i - 1] / 2);
-    // 	data.y2CoordGraph.push_back(data.yPlotCoordinates[i - 1] + data.graphheight[i - 1] / 2);
-
-    // }
-
-    // data.xclasses.push_back(data.xPlotCoordinates);
-    // data.yclasses.push_back(data.yPlotCoordinates);
-    //}
 }
+
+// Filling Graph Locations
+//void InteractiveSPC::fillPlotLocations()
+//{
+//    // for (int k = 1; k <= data.xdata.size(); k++)
+//    //{
+//
+//    int numPlots = data.numPlots;
+//    Node *root = data.rootNode;
+//    int treeDepth = root->subtreeDepth;
+//
+//    // Compute spans for each depth
+//    std::vector<int> depthSpanList;
+//    std::vector<std::vector<Node *>> depthList;
+//    for (int i = 0; i < treeDepth; i++)
+//    {
+//        depthSpanList.push_back(root->getSpanAtDepth(i));
+//        depthList.push_back(root->getAllNodesAtDepth(i));
+//    }
+//
+//    // update plot widths
+//    for (int plotNum = 0; plotNum < data.plotWidth.size(); plotNum++)
+//    {
+//        data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
+//    }
+//
+//    for (int i = 0; i < numPlots; i++)
+//    {
+//        data.xPlotCoordinates.push_back(0);
+//        data.yPlotCoordinates.push_back(0);
+//        data.x1CoordPlot.push_back(0);
+//        data.y1CoordPlot.push_back(0);
+//        data.x2CoordPlot.push_back(0);
+//        data.y2CoordPlot.push_back(0);
+//    }
+//
+//    // For every depth, compute plot coordinates
+//    for (int currentDepth = 0; currentDepth < treeDepth; currentDepth++)
+//    {
+//        int currentSpan = depthSpanList[currentDepth];
+//        // get all nodes at given depth
+//        std::vector<Node *> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
+//        for (int i = 0; i < nodesAtCurrentDepth.size(); i++)
+//        {
+//            plotDrawOrder.push_back(nodesAtCurrentDepth[i]->plotNum);
+//        }
+//        int plotWidth = data.plotWidth[currentDepth];
+//        double plotHeight = 0.0;
+//        if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
+//        {
+//            plotHeight = data.plotHeight[0] / 5.0;
+//        }
+//        else
+//        {
+//            plotHeight = data.plotHeight[0] / (double)(nodesAtCurrentDepth.size() + 1); // need to figure this out
+//        }
+//
+//        std::cout << currentSpan << plotWidth << &nodesAtCurrentDepth << plotHeight;
+//
+//        float plotX1 = (plotWidth * (currentDepth + 1) + currentDepth * 10) - plotWidth / 2;
+//        float plotX2 = plotX1 + plotWidth;
+//
+//        double screenHeight = data.plotHeight[0] * 2;
+//        double plotHeightAtThisDepth = screenHeight / (nodesAtCurrentDepth.size() + 1);
+//        if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
+//        {
+//            plotHeightAtThisDepth = screenHeight / (3 + 1);
+//        }
+//
+//        double plotHeightGap = 0;
+//        if (nodesAtCurrentDepth.size() > 1)
+//        {
+//            plotHeightGap = 20;
+//        }
+//
+//        // iterate through each node at this depth
+//        for (int nodeIndex = 0; nodeIndex < nodesAtCurrentDepth.size(); nodeIndex++)
+//        {
+//            Node *currentNode = root;
+//            // data.graphheight[]
+//            int plotNum = nodesAtCurrentDepth[nodeIndex]->plotNum;
+//            data.xPlotCoordinates[plotNum] = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+//            data.yPlotCoordinates[plotNum] = ((nodeIndex + 1) * plotHeightAtThisDepth);
+//
+//            data.x1CoordPlot[plotNum] = (plotX1);
+//            data.x2CoordPlot[plotNum] = (plotX2);
+//            data.y1CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
+//            data.y2CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+//            data.plotHeight[plotNum] = plotHeightAtThisDepth - plotHeightGap;
+//        }
+//        std::cout << "debug";
+//        std::cout << &data.xPlotCoordinates << &data.yPlotCoordinates;
+//        std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
+//    }
+//
+//    // debug
+//    std::cout << &data.x1CoordPlot << &data.x2CoordPlot << &data.y1CoordPlot << &data.y2CoordPlot;
+//
+//    // // constructs plots in a single line
+//    // for (int i = 1; i <= data.classsize; i++)
+//    // {
+//
+//    // 	//data.xPlotCoordinates.push_back(data.graphwidth[currentDepth - 1] * currentDepth + currentDepth * 0.08 * data.graphwidth[data.graphwidth.size() - 1]);
+//    // 	data.xPlotCoordinates.push_back(data.graphwidth[i - 1] * i + i * 10);
+//    // 	data.yPlotCoordinates.push_back(data.graphheight[i - 1]);
+//
+//    // 	//set coordinates to draw rectangles
+//    // 	data.x1CoordGraph.push_back(data.xPlotCoordinates[i - 1] - data.graphwidth[i - 1] / 2);
+//    // 	data.x2CoordGraph.push_back(data.xPlotCoordinates[i - 1] + data.graphwidth[i - 1] / 2);
+//    // 	data.y1CoordGraph.push_back(data.yPlotCoordinates[i - 1] - data.graphheight[i - 1] / 2);
+//    // 	data.y2CoordGraph.push_back(data.yPlotCoordinates[i - 1] + data.graphheight[i - 1] / 2);
+//
+//    // }
+//
+//    // data.xclasses.push_back(data.xPlotCoordinates);
+//    // data.yclasses.push_back(data.yPlotCoordinates);
+//    //}
+//}
 
 void InteractiveSPC::deleteSelectedRectangle() {
     if (selectedRect != nullptr) {
@@ -216,74 +306,86 @@ void InteractiveSPC::deleteSelectedRectangle() {
 /* Draws rectangles in rectangle mode around all continue zones*/
 void InteractiveSPC::drawRectanglesOnGray()
 {
-    // iterate through each plot
-    for (int plotNum = 0; plotNum < data.numPlots; plotNum++)
-    {
-        // find each zone within the plot that is not a termination zone
-        for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
-        { // TODO: if data.parsedData was a map this would be WAY faster...
-            std::vector<float> parserData = data.parsedData[parsedIndex];
-            if ((int)parserData[4] != plotNum || parserData[5] >= 0) // if the element's plot num isnt the current plot or the element is not a continue zone, move on
-            {
-                continue;
+    for (int i = 0; i < plots.size(); i++) {
+        Plot* plt = &plots[i];
+        for (int j = 0; j < plt->zones.size(); j++) {
+            Zone* zone = &plt->zones[j];
+            if (zone->type == Continue) {
+                UserRectangle rect(zone->realX1, zone->realY1, zone->realX2, zone->realY2, Condense, i, &data);
+                rect.parentPlot = plt;
+                userRectangles.push_back(rect);
             }
-            // TODO: There's probably a MUCH easier way to do this
-            // need to accomodate various swappings
-            // X/Y swap swaps parser data itself, so we need not do anything here
-            // but the x and y invert buttons DONT alter data, so we need to make up for that here
-            const float zoneX1 = parserData[0];
-            const float zoneY1 = parserData[1];
-            const float zoneX2 = parserData[2];
-            const float zoneY2 = parserData[3];
-
-            const float pltX1 = data.x1CoordPlot[plotNum];
-            const float pltY1 = data.y1CoordPlot[plotNum];
-            const float pltX2 = data.x2CoordPlot[plotNum];
-            const float pltY2 = data.y2CoordPlot[plotNum];
-
-            const float plotWidth = data.plotWidth[plotNum];
-            const float plotHeight = data.plotHeight[plotNum];
-
-            GLfloat zoneToDrawX1;
-            GLfloat zoneToDrawX2;
-            GLfloat zoneToDrawY1;
-            GLfloat zoneToDrawY2;
-
-            // old
-            // zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-            // zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-            // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-            // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-            // if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-            // {
-            //     zoneToDrawX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
-            //     zoneToDrawX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
-            // }
-            // else
-            // {
-                 zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-                 zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-            // }
-            // if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-            // {
-            //     zoneToDrawY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
-            //     zoneToDrawY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
-            // }
-            // else
-            // {
-                 zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-                 zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-            // }
-            userRectangles.push_back(UserRectangle(zoneToDrawX1, zoneToDrawY1, zoneToDrawX2, zoneToDrawY2, Condense, plotNum, &data));
-            // old implementation
-            //condenseRectX1List.push_back(zoneToDrawX1);
-            //condenseRectX2List.push_back(zoneToDrawX2);
-            //condenseRectY1List.push_back(zoneToDrawY1);
-            //condenseRectY2List.push_back(zoneToDrawY2);
         }
     }
 
-    isCondenseRectangleMode = true;
+    //// iterate through each plot
+    //for (int plotNum = 0; plotNum < data.numPlots; plotNum++)
+    //{
+    //    // find each zone within the plot that is not a termination zone
+    //    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
+    //    { // TODO: if data.parsedData was a map this would be WAY faster...
+    //        std::vector<float> parserData = data.parsedData[parsedIndex];
+    //        if ((int)parserData[4] != plotNum || parserData[5] >= 0) // if the element's plot num isnt the current plot or the element is not a continue zone, move on
+    //        {
+    //            continue;
+    //        }
+    //        // TODO: There's probably a MUCH easier way to do this
+    //        // need to accomodate various swappings
+    //        // X/Y swap swaps parser data itself, so we need not do anything here
+    //        // but the x and y invert buttons DONT alter data, so we need to make up for that here
+    //        const float zoneX1 = parserData[0];
+    //        const float zoneY1 = parserData[1];
+    //        const float zoneX2 = parserData[2];
+    //        const float zoneY2 = parserData[3];
+
+    //        const float pltX1 = data.x1CoordPlot[plotNum];
+    //        const float pltY1 = data.y1CoordPlot[plotNum];
+    //        const float pltX2 = data.x2CoordPlot[plotNum];
+    //        const float pltY2 = data.y2CoordPlot[plotNum];
+
+    //        const float plotWidth = data.plotWidth[plotNum];
+    //        const float plotHeight = data.plotHeight[plotNum];
+
+    //        GLfloat zoneToDrawX1;
+    //        GLfloat zoneToDrawX2;
+    //        GLfloat zoneToDrawY1;
+    //        GLfloat zoneToDrawY2;
+
+    //        // old
+    //        // zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+    //        // zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+    //        // zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+    //        // zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+    //        // if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+    //        // {
+    //        //     zoneToDrawX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+    //        //     zoneToDrawX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+    //        // }
+    //        // else
+    //        // {
+    //             zoneToDrawX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+    //             zoneToDrawX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+    //        // }
+    //        // if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+    //        // {
+    //        //     zoneToDrawY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+    //        //     zoneToDrawY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+    //        // }
+    //        // else
+    //        // {
+    //             zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+    //             zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+    //        // }
+    //        userRectangles.push_back(UserRectangle(zoneToDrawX1, zoneToDrawY1, zoneToDrawX2, zoneToDrawY2, Condense, plotNum, &data));
+    //        // old implementation
+    //        //condenseRectX1List.push_back(zoneToDrawX1);
+    //        //condenseRectX2List.push_back(zoneToDrawX2);
+    //        //condenseRectY1List.push_back(zoneToDrawY1);
+    //        //condenseRectY2List.push_back(zoneToDrawY2);
+    //    }
+    //}
+
+    //isCondenseRectangleMode = true;
 }
 
 void InteractiveSPC::mitigateOverlap(float &x, float &y, int& caseNum, int &caseClass, int &plotNum, int &pointBackgroundClass, int &pointBackgroundZone) {
@@ -544,10 +646,14 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     int caseClass = data.classNum[caseNum] - 1;
 
     // get plot coordinates
-    float plt1X1 = data.x1CoordPlot[plotNum];
-    float plt1Y1 = data.y1CoordPlot[plotNum];
-    float plt1X2 = data.x2CoordPlot[plotNum];
-    float plt1Y2 = data.y2CoordPlot[plotNum];
+    //float plt1X1 = data.x1CoordPlot[plotNum];
+    //float plt1Y1 = data.y1CoordPlot[plotNum];
+    //float plt1X2 = data.x2CoordPlot[plotNum];
+    //float plt1Y2 = data.y2CoordPlot[plotNum];
+    float plt1X1 = plots[plotNum].getX1();
+    float plt1X2 = plots[plotNum].getX2();
+    float plt1Y1 = plots[plotNum].getY1();
+    float plt1Y2 = plots[plotNum].getY2();
 
     // get plot width and height
     float plotHeight = data.plotHeight[plotNum];
@@ -915,10 +1021,14 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     float x2 = data.normalizedValues[caseNum][destAttr1Index];
     float y2 = data.normalizedValues[caseNum][destAttr2Index];
 
-    float plt2X1 = data.x1CoordPlot[nextPlotNum];
-    float plt2Y1 = data.y1CoordPlot[nextPlotNum];
-    float plt2X2 = data.x2CoordPlot[nextPlotNum];
-    float plt2Y2 = data.y2CoordPlot[nextPlotNum];
+    //float plt2X1 = data.x1CoordPlot[nextPlotNum];
+    //float plt2Y1 = data.y1CoordPlot[nextPlotNum];
+    //float plt2X2 = data.x2CoordPlot[nextPlotNum];
+    //float plt2Y2 = data.y2CoordPlot[nextPlotNum];
+    float plt2X1 = plots[nextPlotNum].getX1();
+    float plt2X2 = plots[nextPlotNum].getX2();
+    float plt2Y1 = plots[nextPlotNum].getY1();
+    float plt2Y2 = plots[nextPlotNum].getY2();
 
     plotHeight = data.plotHeight[nextPlotNum];
     plotWidth = data.plotWidth[nextPlotNum];
@@ -1514,9 +1624,9 @@ void InteractiveSPC::display()
     // ahhh but we want to draw in the order that appears in the tree! Not just in order
     for (int i = 0; i < plotDrawOrder.size(); i++)
     {
-        int plotToDraw = plotDrawOrder[i];
+        /*int plotToDraw = plotDrawOrder[i];
         data.drawPlot(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], data.plotWidth[plotToDraw], data.plotHeight[plotToDraw], plotToDraw);
-        updatePlotLocation(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], plotToDraw);
+        updatePlotLocation(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], plotToDraw);*/
     }
 
     /*for (int i = 0; i < data.numPlots; i++)
@@ -1563,7 +1673,7 @@ void InteractiveSPC::display()
                 color = &data.classColor[classNum];
             }
             ;
-            plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, &data));
+            plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color));
             Zone* z = &plotZones[plotZones.size() - 1];
             zoneIdMap[z->id] = *z;
         }
@@ -2214,53 +2324,54 @@ bool *InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rec
  * @brief Not used anymore
  * 
  */
-void InteractiveSPC::calculateDataTerminationPoints()
-{
-    for (int i = 0; i < data.dataTerminationIndex.size(); i++)
-    {
-        int classnum = data.classNum[i] - 1;
-        for (int j = 0; j < data.dataTerminationIndex[i]; i++)
-        {
-            float px = data.xPlotCoordinates[j];
-            float py = data.yPlotCoordinates[j];
-            px -= (data.plotWidth[j] / 2);
-            py += (data.plotHeight[j] / 2);
-            float x1Coord = data.plotWidth[j] * data.xdata[i][j];
-            float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; // height of graph is constant = 328.5
-            float x1CoordTrans = x1Coord + (px + data.pan_x);
-            float y1CoordTrans = y1Coord + (py + data.pan_y);
-
-            int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
-
-            if (backgroundClass != -1)
-            {
-                if (backgroundClass != classnum)
-                { // do something special if point class doesnt match background zone
-                }
-                else
-                {
-                    data.dataTerminationIndex[i] = j;
-                }
-            }
-        }
-    }
-}
+//void InteractiveSPC::calculateDataTerminationPoints()
+//{
+//    for (int i = 0; i < data.dataTerminationIndex.size(); i++)
+//    {
+//        int classnum = data.classNum[i] - 1;
+//        for (int j = 0; j < data.dataTerminationIndex[i]; i++)
+//        {
+//            float px = data.xPlotCoordinates[j];
+//            float py = data.yPlotCoordinates[j];
+//            px -= (data.plotWidth[j] / 2);
+//            py += (data.plotHeight[j] / 2);
+//            float x1Coord = data.plotWidth[j] * data.xdata[i][j];
+//            float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; // height of graph is constant = 328.5
+//            float x1CoordTrans = x1Coord + (px + data.pan_x);
+//            float y1CoordTrans = y1Coord + (py + data.pan_y);
+//
+//            int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+//
+//            if (backgroundClass != -1)
+//            {
+//                if (backgroundClass != classnum)
+//                { // do something special if point class doesnt match background zone
+//                }
+//                else
+//                {
+//                    data.dataTerminationIndex[i] = j;
+//                }
+//            }
+//        }
+//    }
+//}
 
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y)
 {
-    for (int i = 0; i < data.numPlots; i++)
-    {
-        if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&
-            data.xPlotCoordinates[i] + data.pan_x + (data.plotWidth[i] / 2) >= x &&
-            data.yPlotCoordinates[i] + data.pan_y - (data.plotHeight[i] / 2) <= y &&
-            data.yPlotCoordinates[i] + data.pan_y + (data.plotHeight[i] / 2) >= y)
-        {
+    return findPlotNumOfPoint(x, y);
+    //for (int i = 0; i < data.numPlots; i++)
+    //{
+    //    if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&
+    //        data.xPlotCoordinates[i] + data.pan_x + (data.plotWidth[i] / 2) >= x &&
+    //        data.yPlotCoordinates[i] + data.pan_y - (data.plotHeight[i] / 2) <= y &&
+    //        data.yPlotCoordinates[i] + data.pan_y + (data.plotHeight[i] / 2) >= y)
+    //    {
 
-            return i;
-        }
-    }
-    return -1;
+    //        return i;
+    //    }
+    //}
+    //return -1;
 }
 
 int InteractiveSPC::findClickedCoordinate(double x, double y)
@@ -2268,13 +2379,13 @@ int InteractiveSPC::findClickedCoordinate(double x, double y)
     for (int i = 0; i < data.numPlots; i++)
     {
 
-        if (x <= (data.yPlotCoordinates[i] - 150) && x >= (data.yPlotCoordinates[i] - 500))
+        if (x <= (plots[i].centerY - 150) && x >= (plots[i].centerX - 500))
         {
             return 0;
         }
 
-        else if (data.xPlotCoordinates[i] - 25 <= x &&
-                 data.xPlotCoordinates[i] + 25 >= x)
+        else if (plots[i].centerX - 25 <= x &&
+            plots[i].centerX + 25 >= x)
         {
             return 1;
         }
@@ -2440,26 +2551,33 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
 
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
 {
-    // TODO
-    // get plot num
-    int plotNum = findPlotNumOfPoint(px, py);
-    // check all rects inside plotnum
-    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
-    {
-        std::vector<float> parserData = data.parsedData[parsedIndex];
-        if (parserData[4] != plotNum)
-            continue;
-        // newcoord = plot location - half of plot width or height + percent of that height that the parser entry dictates
-        const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
-        const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
-        const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
-        const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
-        if (isPointWithinRect(px, py, x1, y1, x2, y2))
-        {
-            return parsedIndex;
+    for (int i = 0; i < plots.size(); i++) {
+        Zone* z = plots[i].getZoneFromPoint(px, py);
+        if (z != nullptr) {
+            return z->classNum;
         }
     }
     return INT_MIN;
+    //// TODO
+    //// get plot num
+    //int plotNum = findPlotNumOfPoint(px, py);
+    //// check all rects inside plotnum
+    //for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
+    //{
+    //    std::vector<float> parserData = data.parsedData[parsedIndex];
+    //    if (parserData[4] != plotNum)
+    //        continue;
+    //    // newcoord = plot location - half of plot width or height + percent of that height that the parser entry dictates
+    //    const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
+    //    const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
+    //    const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
+    //    const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
+    //    if (isPointWithinRect(px, py, x1, y1, x2, y2))
+    //    {
+    //        return parsedIndex;
+    //    }
+    //}
+    //return INT_MIN;
 
     //   int resultClass = -1;
     // for (int p = 0; p < data.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
@@ -2482,153 +2600,167 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
     //   return resultClass;
 }
 
-void InteractiveSPC::drawWorstZone() {
-    if (worstZoneNum < 0 || worstZoneNum >= data.parsedData.size()) {
-        return;
-    }
-    std::vector<float> parserData = data.parsedData[worstZoneNum];
-    const float parsedZoneX1 = parserData[0];
-    const float parsedZoneY1 = parserData[1];
-    const float parsedZoneX2 = parserData[2];
-    const float parsedZoneY2 = parserData[3];
-    const int plotNum = parserData[4];
-    const float plotX1 = data.x1CoordPlot[plotNum];
-    const float plotY1 = data.y1CoordPlot[plotNum];
-    const float plotX2 = data.x2CoordPlot[plotNum];
-    const float plotY2 = data.y2CoordPlot[plotNum];
-    const float zoneX1 = plotX1 + parsedZoneX1 * (plotX2 - plotX1);
-    const float zoneY1 = plotY2 - parsedZoneY1 * (plotY2 - plotY1);
-    const float zoneX2 = plotX1 + parsedZoneX2 * (plotX2 - plotX1);
-    const float zoneY2 = plotY2 - parsedZoneY2 * (plotY2 - plotY1);
-
-    int lineThickness = 3;
-    float lineOffset = (float)lineThickness * 0.5;
-    glLineWidth(lineThickness);
-    glColor4ub(255, 0, 0, 255);
-    glBegin(GL_LINE_LOOP);
-    glVertex2f(zoneX1 - lineOffset, zoneY1 - lineOffset);
-    glVertex2f(zoneX2 + lineOffset, zoneY1 - lineOffset);
-    glVertex2f(zoneX2 + lineOffset, zoneY2 + lineOffset);
-    glVertex2f(zoneX1 - lineOffset, zoneY2 + lineOffset);
-    glEnd();
-    glLineWidth(1);
-}
+//void InteractiveSPC::drawWorstZone() {
+//    if (worstZoneNum < 0 || worstZoneNum >= data.parsedData.size()) {
+//        return;
+//    }
+//    std::vector<float> parserData = data.parsedData[worstZoneNum];
+//    const float parsedZoneX1 = parserData[0];
+//    const float parsedZoneY1 = parserData[1];
+//    const float parsedZoneX2 = parserData[2];
+//    const float parsedZoneY2 = parserData[3];
+//    const int plotNum = parserData[4];
+//    const float plotX1 = data.x1CoordPlot[plotNum];
+//    const float plotY1 = data.y1CoordPlot[plotNum];
+//    const float plotX2 = data.x2CoordPlot[plotNum];
+//    const float plotY2 = data.y2CoordPlot[plotNum];
+//    const float zoneX1 = plotX1 + parsedZoneX1 * (plotX2 - plotX1);
+//    const float zoneY1 = plotY2 - parsedZoneY1 * (plotY2 - plotY1);
+//    const float zoneX2 = plotX1 + parsedZoneX2 * (plotX2 - plotX1);
+//    const float zoneY2 = plotY2 - parsedZoneY2 * (plotY2 - plotY1);
+//
+//    int lineThickness = 3;
+//    float lineOffset = (float)lineThickness * 0.5;
+//    glLineWidth(lineThickness);
+//    glColor4ub(255, 0, 0, 255);
+//    glBegin(GL_LINE_LOOP);
+//    glVertex2f(zoneX1 - lineOffset, zoneY1 - lineOffset);
+//    glVertex2f(zoneX2 + lineOffset, zoneY1 - lineOffset);
+//    glVertex2f(zoneX2 + lineOffset, zoneY2 + lineOffset);
+//    glVertex2f(zoneX1 - lineOffset, zoneY2 + lineOffset);
+//    glEnd();
+//    glLineWidth(1);
+//}
 
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
-    // TODO
-    // get plot num
-    // int plotNum = findPlotNumOfPoint(px, py);
-    // check all rects inside plotnum
-    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
-    {
-        std::vector<float> parserData = data.parsedData[parsedIndex];
-        if ((int)parserData[4] != plotNum)
-        {
-            continue;
-        }
-        // TODO: There's probably a MUCH easier way to do this
-        // need to accomodate various swappings
-        // X/Y swap swaps parser data itself, so we need not do anything here
-        const float zoneX1 = parserData[0];
-        const float zoneY1 = parserData[1];
-        const float zoneX2 = parserData[2];
-        const float zoneY2 = parserData[3];
-
-        const float pltX1 = data.x1CoordPlot[plotNum];
-        const float pltY1 = data.y1CoordPlot[plotNum];
-        const float pltX2 = data.x2CoordPlot[plotNum];
-        const float pltY2 = data.y2CoordPlot[plotNum];
-
-        const float plotWidth = data.plotWidth[plotNum];
-        const float plotHeight = data.plotHeight[plotNum];
-
-        GLfloat zoneToCheckX1;
-        GLfloat zoneToCheckX2;
-        GLfloat zoneToCheckY1;
-        GLfloat zoneToCheckY2;
-
-        // old
-         zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-         zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-         zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-         zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-
-         //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
-         //{
-         //    zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
-         //    zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
-         //}
-         //else
-         //{
-         //   zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
-         //   zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
-         //}
-         //if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
-         //{
-         //    zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
-         //    zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
-         //}
-         //else
-         //{
-         //   zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
-         //   zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
-         //}
-
-        // debug
-         //glBegin(GL_POINTS);
-         //glColor4ub(255, 0, 0, 255);
-         //glVertex2f(zoneToCheckX1, zoneToCheckY1);
-         //glColor4ub(0, 255, 0, 255);
-         //glVertex2f(zoneToCheckX2, zoneToCheckY2);
-         //glEnd();
-        // end debug
-
-        const float lowX = min(zoneToCheckX1, zoneToCheckX2);
-        const float highX = max(zoneToCheckX1, zoneToCheckX2);
-        const float lowY = min(zoneToCheckY1, zoneToCheckY2);
-        const float highY = max(zoneToCheckY1, zoneToCheckY2);
-
-        //if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
-        //    px = 1.0f - px;
-        //}
-        //if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
-        //    py = 1.0f - py;
-        //}
-
-        bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
-
-
-        //bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
-
-        if (withinRect)
-        {
-            return parserData[5];
-        }
+    Zone* z = plots[plotNum].getZoneFromPoint(px, py);
+    if (z == nullptr) {
+        return INT_MIN;
     }
+    else {
+        return z->classNum;
+    }
+	
+    //// TODO
+    //// get plot num
+    //// int plotNum = findPlotNumOfPoint(px, py);
+    //// check all rects inside plotnum
+    //for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
+    //{
+    //    std::vector<float> parserData = data.parsedData[parsedIndex];
+    //    if ((int)parserData[4] != plotNum)
+    //    {
+    //        continue;
+    //    }
+    //    // TODO: There's probably a MUCH easier way to do this
+    //    // need to accomodate various swappings
+    //    // X/Y swap swaps parser data itself, so we need not do anything here
+    //    const float zoneX1 = parserData[0];
+    //    const float zoneY1 = parserData[1];
+    //    const float zoneX2 = parserData[2];
+    //    const float zoneY2 = parserData[3];
 
-    return INT_MIN;
+    //    const float pltX1 = data.x1CoordPlot[plotNum];
+    //    const float pltY1 = data.y1CoordPlot[plotNum];
+    //    const float pltX2 = data.x2CoordPlot[plotNum];
+    //    const float pltY2 = data.y2CoordPlot[plotNum];
+
+    //    const float plotWidth = data.plotWidth[plotNum];
+    //    const float plotHeight = data.plotHeight[plotNum];
+
+    //    GLfloat zoneToCheckX1;
+    //    GLfloat zoneToCheckX2;
+    //    GLfloat zoneToCheckY1;
+    //    GLfloat zoneToCheckY2;
+
+    //    // old
+    //     zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+    //     zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+    //     zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+    //     zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+
+    //     //if (plotsWithXAxisInverted.size() != 0 && plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+    //     //{
+    //     //    zoneToCheckX2 = pltX2 - plotWidth * zoneX1 + data.pan_x;
+    //     //    zoneToCheckX1 = pltX2 - plotWidth * zoneX2 + data.pan_x;
+    //     //}
+    //     //else
+    //     //{
+    //     //   zoneToCheckX1 = pltX1 + plotWidth * zoneX1 + data.pan_x;
+    //     //   zoneToCheckX2 = pltX1 + plotWidth * zoneX2 + data.pan_x;
+    //     //}
+    //     //if (plotsWithYAxisInverted.size() != 0 && plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+    //     //{
+    //     //    zoneToCheckY1 = pltY1 + plotHeight * zoneY2 + data.pan_y;
+    //     //    zoneToCheckY2 = pltY1 + plotHeight * zoneY1 + data.pan_y;
+    //     //}
+    //     //else
+    //     //{
+    //     //   zoneToCheckY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
+    //     //   zoneToCheckY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
+    //     //}
+
+    //    // debug
+    //     //glBegin(GL_POINTS);
+    //     //glColor4ub(255, 0, 0, 255);
+    //     //glVertex2f(zoneToCheckX1, zoneToCheckY1);
+    //     //glColor4ub(0, 255, 0, 255);
+    //     //glVertex2f(zoneToCheckX2, zoneToCheckY2);
+    //     //glEnd();
+    //    // end debug
+
+    //    const float lowX = min(zoneToCheckX1, zoneToCheckX2);
+    //    const float highX = max(zoneToCheckX1, zoneToCheckX2);
+    //    const float lowY = min(zoneToCheckY1, zoneToCheckY2);
+    //    const float highY = max(zoneToCheckY1, zoneToCheckY2);
+
+    //    //if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end()) {
+    //    //    px = 1.0f - px;
+    //    //}
+    //    //if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end()) {
+    //    //    py = 1.0f - py;
+    //    //}
+
+    //    bool withinRect = isPointWithinRect(px, py, lowX, highY, highX, lowY);
+
+
+    //    //bool withinRect = isPointWithinRect(px, py, zoneToCheckX1, zoneToCheckY1, zoneToCheckX2, zoneToCheckY2);
+
+    //    if (withinRect)
+    //    {
+    //        return parserData[5];
+    //    }
+    //}
+
+    //return INT_MIN;
 }
 
 int InteractiveSPC::findPlotNumOfPoint(GLfloat px, GLfloat py)
 {
-    for (int i = 0; i < data.numPlots; i++)
-    {
-        float x1 = data.x1CoordPlot[i];
-        float y1 = data.y1CoordPlot[i];
-        float x2 = data.x2CoordPlot[i];
-        float y2 = data.y2CoordPlot[i];
-
-        if (px >= x1 && px <= x2)
-        {
-            if (py >= y1 && py <= y2)
-            {
-                return i;
-            }
+    for (int i = 0; i < plots.size(); i++) {
+        if (plots[i].isPointWithinPlot(px, py)) {
+            return i;
         }
     }
-
     return -1;
+    //for (int i = 0; i < data.numPlots; i++)
+    //{
+    //    float x1 = data.x1CoordPlot[i];
+    //    float y1 = data.y1CoordPlot[i];
+    //    float x2 = data.x2CoordPlot[i];
+    //    float y2 = data.y2CoordPlot[i];
+
+    //    if (px >= x1 && px <= x2)
+    //    {
+    //        if (py >= y1 && py <= y2)
+    //        {
+    //            return i;
+    //        }
+    //    }
+    //}
+
+    //return -1;
 }
 
 void InteractiveSPC::drawCircle(int x, int y)
@@ -2802,35 +2934,42 @@ bool InteractiveSPC::isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLflo
 
 int InteractiveSPC::getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex)
 {
-    int dataIndex = -100; // arbitrary! Need better way to do this
-
-    // check for termination classes
-    for (int i = 0; i < data.parsedData.size(); i++)
-    {
-        if (i == currentDataIndex)
-            continue;
-        GLfloat testRectx1 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][0] * data.plotWidth[data.parsedData[i][4]];
-        GLfloat testRecty1 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][1] * data.plotHeight[data.parsedData[i][4]];
-        GLfloat testRectx2 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][2] * data.plotWidth[data.parsedData[i][4]];
-        GLfloat testRecty2 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][3] * data.plotHeight[data.parsedData[i][4]];
-
-        if (isPointWithinRect(px, py, testRectx1, testRecty1, testRectx2, testRecty2))
-        {
-            dataIndex = i;
-            break;
+    for (int i = 0; i < plots.size(); i++) {
+        Zone* z = plots[i].getZoneFromPoint(px, py);
+        if (z != nullptr) {
+            return z->classNum;
         }
     }
+    return -200;
+    //int dataIndex = -100; // arbitrary! Need better way to do this
 
-    // check for continue classes
+    //// check for termination classes
+    //for (int i = 0; i < data.parsedData.size(); i++)
+    //{
+    //    if (i == currentDataIndex)
+    //        continue;
+    //    GLfloat testRectx1 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][0] * data.plotWidth[data.parsedData[i][4]];
+    //    GLfloat testRecty1 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][1] * data.plotHeight[data.parsedData[i][4]];
+    //    GLfloat testRectx2 = data.xPlotCoordinates[data.parsedData[i][4]] - data.plotWidth[data.parsedData[i][4]] / 2 + data.parsedData[i][2] * data.plotWidth[data.parsedData[i][4]];
+    //    GLfloat testRecty2 = data.yPlotCoordinates[data.parsedData[i][4]] + data.plotHeight[data.parsedData[i][4]] / 2 - data.parsedData[i][3] * data.plotHeight[data.parsedData[i][4]];
 
-    if (dataIndex < 0)
-    {
-        return -200;
-    }
-    else
-    {
-        return data.parsedData[dataIndex][5];
-    }
+    //    if (isPointWithinRect(px, py, testRectx1, testRecty1, testRectx2, testRecty2))
+    //    {
+    //        dataIndex = i;
+    //        break;
+    //    }
+    //}
+
+    //// check for continue classes
+
+    //if (dataIndex < 0)
+    //{
+    //    return -200;
+    //}
+    //else
+    //{
+    //    return data.parsedData[dataIndex][5];
+    //}
 }
 
 //std::vector<GLubyte> InteractiveSPC::HSLtoRGB(std::vector<float> hsl)

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "glut.h"
+#include "Plot.h"
 #pragma once
 
 enum RectangleType {Condense, Exclude, Expand, None};
@@ -12,11 +13,16 @@ struct UserRectangle {
 	GLubyte frameColor[3];
 	RectangleType type;
 	ClassData* data;
+    Plot* parentPlot;
 	UserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, RectangleType type, int plotNum, ClassData* data) {
-		X1 = (x1 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
-        X2 = (x2 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
-        Y1 = (y1 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
-        Y2 = (y2 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+		//X1 = (x1 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
+  //      X2 = (x2 - data->x1CoordPlot[plotNum]) / (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]);
+  //      Y1 = (y1 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+  //      Y2 = (y2 - data->y1CoordPlot[plotNum]) / (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]);
+        X1 = (x1 - parentPlot->getX1()) / parentPlot->width;
+		X2 = (x2 - parentPlot->getX1()) / parentPlot->width;
+		Y1 = (y1 - parentPlot->getY1()) / parentPlot->height;
+		Y2 = (y2 - parentPlot->getY1()) / parentPlot->height;
 		id = time(NULL);
 		this->plotNum = plotNum;
 		this->type = type;
@@ -34,10 +40,14 @@ struct UserRectangle {
         computeRealCoords();
     }
     void computeRealCoords() {
-        realX1 = data->x1CoordPlot[plotNum] + (X1 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
-        realX2 = data->x1CoordPlot[plotNum] + (X2 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
-        realY1 = data->y1CoordPlot[plotNum] + (Y1 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
-        realY2 = data->y1CoordPlot[plotNum] + (Y2 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+        //realX1 = data->x1CoordPlot[plotNum] + (X1 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
+        //realX2 = data->x1CoordPlot[plotNum] + (X2 * (data->x2CoordPlot[plotNum] - data->x1CoordPlot[plotNum]));
+        //realY1 = data->y1CoordPlot[plotNum] + (Y1 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+        //realY2 = data->y1CoordPlot[plotNum] + (Y2 * (data->y2CoordPlot[plotNum] - data->y1CoordPlot[plotNum]));
+        realX1 = parentPlot->getX1() + (X1 * parentPlot->width);
+		realX2 = parentPlot->getX1() + (X2 * parentPlot->width);
+		realY1 = parentPlot->getY1() + (Y1 * parentPlot->height);
+		realY2 = parentPlot->getY1() + (Y2 * parentPlot->height);
     }
 	void drawEdges() {
         computeRealCoords();
