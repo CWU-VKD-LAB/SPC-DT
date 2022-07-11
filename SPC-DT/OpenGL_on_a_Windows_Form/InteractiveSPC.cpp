@@ -97,7 +97,7 @@ void InteractiveSPC::initializePlots() {
 
     // initialize plot objects
     for (int i = 0; i < numPlots; i++) {
-        data.plots.push_back(Plot(i, data.attributeMinMax));
+        data.plots.push_back(Plot(i, data.attributeMinMax, data.parsedAttributePairs[i][0], data.parsedAttributePairs[i][1]));
     }
 
     // Compute spans for each depth
