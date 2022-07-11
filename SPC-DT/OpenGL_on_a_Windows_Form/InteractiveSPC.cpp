@@ -2328,37 +2328,37 @@ bool *InteractiveSPC::getPointTrivialityCode(GLfloat px, GLfloat py, GLfloat rec
  * @brief Not used anymore
  * 
  */
-void InteractiveSPC::calculateDataTerminationPoints()
-{
-    for (int i = 0; i < data.dataTerminationIndex.size(); i++)
-    {
-        int classnum = data.classNum[i] - 1;
-        for (int j = 0; j < data.dataTerminationIndex[i]; i++)
-        {
-            float px = data.xPlotCoordinates[j];
-            float py = data.yPlotCoordinates[j];
-            px -= (data.plotWidth[j] / 2);
-            py += (data.plotHeight[j] / 2);
-            float x1Coord = data.plotWidth[j] * data.xdata[i][j];
-            float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; // height of graph is constant = 328.5
-            float x1CoordTrans = x1Coord + (px + data.pan_x);
-            float y1CoordTrans = y1Coord + (py + data.pan_y);
-
-            int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
-
-            if (backgroundClass != -1)
-            {
-                if (backgroundClass != classnum)
-                { // do something special if point class doesnt match background zone
-                }
-                else
-                {
-                    data.dataTerminationIndex[i] = j;
-                }
-            }
-        }
-    }
-}
+//void InteractiveSPC::calculateDataTerminationPoints()
+//{
+//    for (int i = 0; i < data.dataTerminationIndex.size(); i++)
+//    {
+//        int classnum = data.classNum[i] - 1;
+//        for (int j = 0; j < data.dataTerminationIndex[i]; i++)
+//        {
+//            float px = data.xPlotCoordinates[j];
+//            float py = data.yPlotCoordinates[j];
+//            px -= (data.plotWidth[j] / 2);
+//            py += (data.plotHeight[j] / 2);
+//            float x1Coord = data.plotWidth[j] * data.xdata[i][j];
+//            float y1Coord = -data.plotHeight[j] * data.ydata[i][j]; // height of graph is constant = 328.5
+//            float x1CoordTrans = x1Coord + (px + data.pan_x);
+//            float y1CoordTrans = y1Coord + (py + data.pan_y);
+//
+//            int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+//
+//            if (backgroundClass != -1)
+//            {
+//                if (backgroundClass != classnum)
+//                { // do something special if point class doesnt match background zone
+//                }
+//                else
+//                {
+//                    data.dataTerminationIndex[i] = j;
+//                }
+//            }
+//        }
+//    }
+//}
 
 // Dragging Graphs
 float InteractiveSPC::findClickedGraph(double x, double y)
@@ -2559,49 +2559,61 @@ int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plot
     return INT_MIN;
 }
 
-int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
-{
-    // TODO
-    // get plot num
-    int plotNum = findPlotNumOfPoint(px, py);
-    // check all rects inside plotnum
-    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
-    {
-        std::vector<float> parserData = data.parsedData[parsedIndex];
-        if (parserData[4] != plotNum)
-            continue;
-        // newcoord = plot location - half of plot width or height + percent of that height that the parser entry dictates
-        const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
-        const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
-        const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
-        const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
-        if (isPointWithinRect(px, py, x1, y1, x2, y2))
-        {
-            return parsedIndex;
-        }
-    }
-    return INT_MIN;
-
-    //   int resultClass = -1;
-    // for (int p = 0; p < data.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
-    //       int classNumber = data.parsedData[p][5];
-    //	const GLfloat x1 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][0] * data.plotWidth[data.parsedData[p][4]];
-    //	const GLfloat y1 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][1] * data.plotHeight[data.parsedData[p][4]];
-    //	const GLfloat x2 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][2] * data.plotWidth[data.parsedData[p][4]];
-    //	const GLfloat y2 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][3] * data.plotHeight[data.parsedData[p][4]];
-    //       if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
-    //           resultClass = classNumber;
-    //		break;
-    //       } // Check to see if these need to be rearranged.
-    //	std::cout << "debug" << x1 << x2 << y1 << y2;
-    //}
-
-    // if (resultClass != -1) {
-    //	std::cout << "debug";
-    // }
-
-    //   return resultClass;
-}
+//int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py)
+//{
+//    for (int i = 0; i < data.plots.size(); i++) {
+//        Plot* plt = &data.plots[i];
+//        if (plt->isPointWithinPlot(px, py)) {
+//            for (int j = 0; j < plt->zones.size(); j++) {
+//				Zone* zn = &plt->zones[j];
+//				if (zn->isPointWithinZone(px, py)) {
+//					return zn->classNum; // wait is this the id?
+//				}
+//            }
+//        }
+//    }
+//
+//    // TODO
+//    // get plot num
+//    int plotNum = findPlotNumOfPoint(px, py);
+//    // check all rects inside plotnum
+//    for (int parsedIndex = 0; parsedIndex < data.parsedData.size(); parsedIndex++)
+//    {
+//        std::vector<float> parserData = data.parsedData[parsedIndex];
+//        if (parserData[4] != plotNum)
+//            continue;
+//        // newcoord = plot location - half of plot width or height + percent of that height that the parser entry dictates
+//        const GLfloat x1 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[0] * data.plotWidth[parserData[4]];
+//        const GLfloat y1 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[1] * data.plotHeight[parserData[4]];
+//        const GLfloat x2 = data.xPlotCoordinates[parserData[4]] - data.plotWidth[parserData[4]] / 2 + parserData[2] * data.plotWidth[parserData[4]];
+//        const GLfloat y2 = data.yPlotCoordinates[parserData[4]] + data.plotHeight[parserData[4]] / 2 - parserData[3] * data.plotHeight[parserData[4]];
+//        if (isPointWithinRect(px, py, x1, y1, x2, y2))
+//        {
+//            return parsedIndex;
+//        }
+//    }
+//    return INT_MIN;
+//
+//    //   int resultClass = -1;
+//    // for (int p = 0; p < data.parsedData.size(); p++) { // Will we need to state which graph we are looking at?
+//    //       int classNumber = data.parsedData[p][5];
+//    //	const GLfloat x1 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][0] * data.plotWidth[data.parsedData[p][4]];
+//    //	const GLfloat y1 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][1] * data.plotHeight[data.parsedData[p][4]];
+//    //	const GLfloat x2 = data.xPlotCoordinates[data.parsedData[p][4]] - data.plotWidth[data.parsedData[p][4]] / 2 + data.parsedData[p][2] * data.plotWidth[data.parsedData[p][4]];
+//    //	const GLfloat y2 = data.yPlotCoordinates[data.parsedData[p][4]] + data.plotHeight[data.parsedData[p][4]] / 2 - data.parsedData[p][3] * data.plotHeight[data.parsedData[p][4]];
+//    //       if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+//    //           resultClass = classNumber;
+//    //		break;
+//    //       } // Check to see if these need to be rearranged.
+//    //	std::cout << "debug" << x1 << x2 << y1 << y2;
+//    //}
+//
+//    // if (resultClass != -1) {
+//    //	std::cout << "debug";
+//    // }
+//
+//    //   return resultClass;
+//}
 
 void InteractiveSPC::drawWorstZone() {
     if (worstZoneNum < 0 || worstZoneNum >= data.parsedData.size()) {

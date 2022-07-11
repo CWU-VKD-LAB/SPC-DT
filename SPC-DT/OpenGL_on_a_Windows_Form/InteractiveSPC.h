@@ -47,7 +47,7 @@ public:
 	void calculateDataTerminationPoints();
 
 	// *** USED FOR DRAWING LINE COLORS
-	int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
+	//int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum);
 	int findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum);
 	int findPlotNumOfPoint(GLfloat px, GLfloat py);
