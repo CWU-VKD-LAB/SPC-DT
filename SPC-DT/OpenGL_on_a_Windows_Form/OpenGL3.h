@@ -476,7 +476,8 @@ public
             }
 
             graph4.data.computeDecisionTreeBranches();
-            graph4.fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
+            //graph4.fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
+            graph4.initializePlots();
             graph4.data.setClassColors();
             graph4.data.setContinueClassColors();
 

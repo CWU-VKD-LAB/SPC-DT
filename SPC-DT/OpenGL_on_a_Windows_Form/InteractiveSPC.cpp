@@ -89,6 +89,101 @@ void InteractiveSPC::updatePlotLocation(double mouseX, double mouseY, int plotNu
     data.y2CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] + plotHeight / 2;
 }
 
+void InteractiveSPC::initializePlots() {
+
+    int numPlots = data.numPlots;
+    Node* root = data.rootNode;
+    int treeDepth = root->subtreeDepth;
+
+    // initialize plot objects
+    for (int i = 0; i < numPlots; i++) {
+        data.plots.push_back(Plot(i, data.attributeMinMax));
+    }
+
+    // Compute spans for each depth
+    std::vector<int> depthSpanList;
+    std::vector<std::vector<Node*>> depthList;
+    for (int i = 0; i < treeDepth; i++)
+    {
+        depthSpanList.push_back(root->getSpanAtDepth(i));
+        depthList.push_back(root->getAllNodesAtDepth(i));
+    }
+
+    // update plot widths
+    for (int plotNum = 0; plotNum < data.plotWidth.size(); plotNum++)
+    {
+        data.plots[plotNum].width = data.worldWidth / (root->subtreeDepth + 1);
+        data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
+    }
+
+    //for (int i = 0; i < numPlots; i++)
+    //{
+    //    data.xPlotCoordinates.push_back(0);
+    //    data.yPlotCoordinates.push_back(0);
+    //    data.x1CoordPlot.push_back(0);
+    //    data.y1CoordPlot.push_back(0);
+    //    data.x2CoordPlot.push_back(0);
+    //    data.y2CoordPlot.push_back(0);
+    //}
+
+    // For every depth, compute plot coordinates
+    for (int currentDepth = 0; currentDepth < treeDepth; currentDepth++)
+    {
+        int currentSpan = depthSpanList[currentDepth];
+        // get all nodes at given depth
+        std::vector<Node*> nodesAtCurrentDepth = root->getAllNodesAtDepth(currentDepth);
+        //for (int i = 0; i < nodesAtCurrentDepth.size(); i++)
+        //{
+        //    plotDrawOrder.push_back(nodesAtCurrentDepth[i]->plotNum);
+        //}
+        int plotWidth = data.plotWidth[currentDepth];
+        //double plotHeight = 0.0;
+        //if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
+        //{
+        //    plotHeight = data.plotHeight[0] / 5.0;
+        //}
+        //else
+        //{
+        //    plotHeight = data.plotHeight[0] / (double)(nodesAtCurrentDepth.size() + 1); // need to figure this out
+        //}
+		
+        //float plotX1 = (plotWidth * (currentDepth + 1) + currentDepth * 10) - plotWidth / 2;
+        //float plotX2 = plotX1 + plotWidth;
+
+        double screenHeight = data.plotHeight[0] * 2;
+        double plotHeightAtThisDepth = screenHeight / (nodesAtCurrentDepth.size() + 1);
+        if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
+        {
+            plotHeightAtThisDepth = screenHeight / (3 + 1);
+        }
+
+        double plotHeightGap = 0;
+        if (nodesAtCurrentDepth.size() > 1)
+        {
+            plotHeightGap = 20;
+        }
+
+        // iterate through each node at this depth
+        for (int nodeIndex = 0; nodeIndex < nodesAtCurrentDepth.size(); nodeIndex++)
+        {
+            Node* currentNode = root;
+            // data.graphheight[]
+            int plotNum = nodesAtCurrentDepth[nodeIndex]->plotNum;
+			data.plots[nodeIndex].centerX = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+			data.plots[nodeIndex].centerY = ((nodeIndex + 1) * plotHeightAtThisDepth);
+            data.plots[nodeIndex].height = plotHeightAtThisDepth - plotHeightGap;
+            //data.xPlotCoordinates[plotNum] = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+            //data.yPlotCoordinates[plotNum] = ((nodeIndex + 1) * plotHeightAtThisDepth);
+            //data.x1CoordPlot[plotNum] = (plotX1);
+            //data.x2CoordPlot[plotNum] = (plotX2);
+            //data.y1CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] - (plotHeightAtThisDepth / 2) + plotHeightGap / 2);
+            //data.y2CoordPlot[plotNum] = (data.yPlotCoordinates[plotNum] + (plotHeightAtThisDepth / 2) - plotHeightGap / 2);
+            //data.plotHeight[plotNum] = plotHeightAtThisDepth - plotHeightGap;
+        }
+    }
+}
+
+
 // Filling Graph Locations
 void InteractiveSPC::fillPlotLocations()
 {

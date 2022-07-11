@@ -9,7 +9,12 @@ struct Plot {
 	std::vector<Zone> zones;
 	std::string attribute1Name, attribute2Name;
 	std::map<std::string, std::vector<float>>* attributeMinMax;
-	bool isXInverted, isYInverted, isXYSwapped;
+	bool isXInverted, isYInverted, isXYSwapped = false;
+
+	Plot(int id, std::map<std::string, std::vector<float>>& attributeMinMax) {
+		plotNum = id;
+		this->attributeMinMax = &attributeMinMax;
+	}
 
 	Plot(GLfloat centerX, GLfloat centerY, GLfloat width, GLfloat height) {
 		this->centerX = centerX;

@@ -101,12 +101,13 @@ public:
 	std::vector<int> clickedEdge;
 	std::vector<Zone> plotZones;
 	std::map<int, Zone> zoneIdMap;
-	void InteractiveSPC::buildZoneEdges();
-	void InteractiveSPC::updateZoneColors(int classNum);
+	void buildZoneEdges();
+	void updateZoneColors(int classNum);
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
     void invertPlotNum(int plotNum, bool isXAxist);
+	void initializePlots();
 	std::set<int> swappedPlots;
 	std::set<int> plotsWithXAxisInverted;
 	std::set<int> plotsWithYAxisInverted;
