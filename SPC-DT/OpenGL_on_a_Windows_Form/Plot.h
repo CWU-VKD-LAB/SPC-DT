@@ -40,17 +40,19 @@ struct Plot {
 		// tbd
 
 		// used for panning
-		//glPushMatrix(); // Makes a new layer
-		//glTranslatef(x + pan_x, y + pan_y, 0.0f);
-		//glScalef((plotW / 2), (plotH / 2), 0.0f);
-		////glRotatef(45, 1, 1, 1);
-		//glBegin(GL_LINE_STRIP);
-		//glColor3ub(0, 0, 0); // Line color
-		//glVertex2f(nonOrthoX1[plotNum], nonOrthoY1[plotNum]); //defines Y axis -1 for 90 degrees, change the first element to change angle	
-		//glVertex2f(-1, 1);
-		//glVertex2f(nonOrthoX2[plotNum], nonOrthoY2[plotNum]); //defines X axis, change the second element to change angle	
-		//glEnd();
-		//glPopMatrix(); // Removes the layer
+		GLfloat pan_x = 0;
+		GLfloat pan_y = 0;
+		glPushMatrix(); // Makes a new layer
+		glTranslatef(centerX + pan_x, centerY + pan_y, 0.0f);
+		glScalef((width / 2), (height / 2), 0.0f);
+		//glRotatef(45, 1, 1, 1);
+		glBegin(GL_LINE_STRIP);
+		glColor3ub(0, 0, 0); // Line color
+		glVertex2f(-1, -1); //defines Y axis -1 for 90 degrees, change the first element to change angle	
+		glVertex2f(-1, 1);
+		glVertex2f(1, 1); //defines X axis, change the second element to change angle	
+		glEnd();
+		glPopMatrix(); // Removes the layer
 
 		/*float labelsDistanceFromPlot = 10;
 		float xLabelLocation = labelsDistanceFromPlot + 10;*/
