@@ -1233,7 +1233,7 @@ void OpenGLForm::COpenGL3::showTestingData()
 
 void OpenGLForm::COpenGL3::displaySelectedData()
 {
-    float rectClickedX, rectClickedY;
+    /*float rectClickedX, rectClickedY;
     int rectIndex;
 
     rectClickedX = (worldMouseX - (graph4.data.xPlotCoordinates[graph4.plotNumClicked] - graph4.data.plotWidth[graph4.plotNumClicked] / 2)) / graph4.data.plotWidth[graph4.plotNumClicked];
@@ -1259,7 +1259,7 @@ void OpenGLForm::COpenGL3::displaySelectedData()
         {
             graph4.data.dataTransparency[i] = 0.1;
         }
-    }
+    }*/
 }
 
 void OpenGLForm::COpenGL3::setReverseDataX()

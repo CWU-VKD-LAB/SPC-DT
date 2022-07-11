@@ -535,10 +535,10 @@ public:
 	std::vector<float> originalYPlotCoordinates;
 
 	/// <summary>	These hold x &amp; y coordinates for each graph position. </summary>
-	std::vector<float> xPlotCoordinates;
+	//std::vector<float> xPlotCoordinates;
 	bool fOpen;
 	/// <summary>	The yPlotCoordinates. </summary>
-	std::vector<float> yPlotCoordinates;
+	//std::vector<float> yPlotCoordinates;
 
 
 	// for zooming and panning ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -621,13 +621,13 @@ public:
 		values.clear();
 		x1CoordPlot.clear();
 		x2CoordPlot.clear();
-		xPlotCoordinates.clear();
+		//xPlotCoordinates.clear();
 		xclasses.clear();
 		xdata.clear();
 		xmax = 0;
 		y1CoordPlot.clear();
 		y2CoordPlot.clear();
-		yPlotCoordinates.clear();
+		//yPlotCoordinates.clear();
 		yclasses.clear();
 		ydata.clear();
 		ymax = 0;
@@ -646,8 +646,8 @@ public:
 		yclasses.clear();
 		originalXPlotCoordinates.clear();
 		originalYPlotCoordinates.clear();
-		xPlotCoordinates.clear();
-		yPlotCoordinates.clear();
+		//xPlotCoordinates.clear();
+		//yPlotCoordinates.clear();
 		classNum.clear();
 		parsedAttributePairs.clear();
 		parsedData.clear();
@@ -1001,8 +1001,10 @@ public:
 		//}
 
 		// compute where mouse is in plot
-		float centerX = xPlotCoordinates[plotId];
-		float centerY = yPlotCoordinates[plotId];
+		//float centerX = xPlotCoordinates[plotId];
+		//float centerY = yPlotCoordinates[plotId];
+		float centerX = plots[plotId].centerX;
+		float centerY = plots[plotId].centerY;
 		float x1 = centerX - plotWidth[plotId] / 2;
 		float x2 = centerX + plotWidth[plotId] / 2;
 		float y1 = centerY - plotHeight[plotId] / 2;
