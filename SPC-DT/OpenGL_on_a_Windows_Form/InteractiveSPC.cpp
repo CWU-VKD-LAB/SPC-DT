@@ -38,12 +38,20 @@ InteractiveSPC::InteractiveSPC(ClassData &given, parseData &given1, double world
     newFile.sortGraphNotBasedOnParser(data);
 
     data.numPlots = int(data.xdata[0].size());
-    for (int y1 = 0; y1 < data.plotWidth.size(); y1++)
+    //for (int y1 = 0; y1 < data.plotWidth.size(); y1++)
+    //{
+
+    //    {
+    //        data.plotWidth[y1] = worldW / (data.numPlots * 2.5);
+    //        data.plotHeight[y1] = worldH / 2.0;
+    //    }
+    //}
+         for (int y1 = 0; y1 < data.plots.size(); y1++)
     {
 
         {
-            data.plotWidth[y1] = worldW / (data.numPlots * 2.5);
-            data.plotHeight[y1] = worldH / 2.0;
+            data.plots[y1].width = worldW / (data.numPlots * 2.5);
+            data.plots[y1].height = worldH / 2.0;
         }
     }
     // Width size for each graph
@@ -115,10 +123,10 @@ void InteractiveSPC::initializePlots() {
     }
 
     // update plot widths
-    for (int plotNum = 0; plotNum < data.plotWidth.size(); plotNum++)
+    for (int plotNum = 0; plotNum < data.plots.size(); plotNum++)
     {
         data.plots[plotNum].width = data.worldWidth / (root->subtreeDepth + 1);
-        data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
+        //data.plotWidth[plotNum] = data.worldWidth / (root->subtreeDepth + 1);
     }
 
     //for (int i = 0; i < numPlots; i++)
@@ -141,7 +149,9 @@ void InteractiveSPC::initializePlots() {
         //{
         //    plotDrawOrder.push_back(nodesAtCurrentDepth[i]->plotNum);
         //}
-        int plotWidth = data.plotWidth[currentDepth];
+
+        int plotWidth = data.plots[currentDepth].width;
+
         //double plotHeight = 0.0;
         //if (currentDepth > 0 && nodesAtCurrentDepth.size() == 1)
         //{
@@ -345,8 +355,10 @@ void InteractiveSPC::drawRectanglesOnGray()
 			const float pltX2 = data.plots[plotNum].getX2();
 			const float pltY2 = data.plots[plotNum].getY2();
 
-            const float plotWidth = data.plotWidth[plotNum];
-            const float plotHeight = data.plotHeight[plotNum];
+            //const float plotWidth = data.plotWidth[plotNum];
+            //const float plotHeight = data.plotHeight[plotNum];
+            const float plotWidth = data.plots[plotNum].width;
+			const float plotHeight = data.plots[plotNum].height;
 
             GLfloat zoneToDrawX1;
             GLfloat zoneToDrawX2;
@@ -646,21 +658,25 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }*/
 
     int caseClass = data.classNum[caseNum] - 1;
+    Plot* plot = &data.plots[plotNum];
+	
 
     // get plot coordinates
     //float plt1X1 = data.x1CoordPlot[plotNum];
     //float plt1Y1 = data.y1CoordPlot[plotNum];
     //float plt1X2 = data.x2CoordPlot[plotNum];
     //float plt1Y2 = data.y2CoordPlot[plotNum];
-    float plt1X1 = data.plots[plotNum].getX1();
-	float plt1Y1 = data.plots[plotNum].getY1();
-	float plt1X2 = data.plots[plotNum].getX2();
-	float plt1Y2 = data.plots[plotNum].getY2();
+    float plt1X1 = plot->getX1();
+	float plt1Y1 = plot->getY1();
+	float plt1X2 = plot->getX2();
+	float plt1Y2 = plot->getY2();
 
 
     // get plot width and height
-    float plotHeight = data.plotHeight[plotNum];
-    float plotWidth = data.plotWidth[plotNum];
+    //float plotHeight = data.plotHeight[plotNum];
+    //float plotWidth = data.plotWidth[plotNum];
+    float plotHeight = plot->height;
+	float plotWidth = plot->width;
 
     // Adjust if X axis is inverted
     if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
@@ -1024,17 +1040,21 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     float x2 = data.normalizedValues[caseNum][destAttr1Index];
     float y2 = data.normalizedValues[caseNum][destAttr2Index];
 
+    plot = &data.plots[nextPlotNum];
+
     //float plt2X1 = data.x1CoordPlot[nextPlotNum];
     //float plt2Y1 = data.y1CoordPlot[nextPlotNum];
     //float plt2X2 = data.x2CoordPlot[nextPlotNum];
     //float plt2Y2 = data.y2CoordPlot[nextPlotNum];
-    float plt2X1 = data.plots[nextPlotNum].getX1();
-	float plt2Y1 = data.plots[nextPlotNum].getY1();
-	float plt2X2 = data.plots[nextPlotNum].getX2();
-	float plt2Y2 = data.plots[nextPlotNum].getY2();
+    float plt2X1 = plot->getX1();
+	float plt2Y1 = plot->getY1();
+	float plt2X2 = plot->getX2();
+	float plt2Y2 = plot->getY2();
 
-    plotHeight = data.plotHeight[nextPlotNum];
-    plotWidth = data.plotWidth[nextPlotNum];
+    //plotHeight = data.plotHeight[nextPlotNum];
+    //plotWidth = data.plotWidth[nextPlotNum];
+    plotHeight = plot->height;
+    plotWidth = plot->width;
 
     if (plotsWithXAxisInverted.find(nextPlotNum) != plotsWithXAxisInverted.end())
     {
@@ -1656,7 +1676,7 @@ void InteractiveSPC::display()
     // }
 
     // build zone objects
-    if (plotZones.empty()) {
+    if (zonesNotBuilt) {
         for (int i = 0; i < data.parsedData.size(); i++) {
             std::vector<float>* parserElement = &data.parsedData[i];
             float x1 = parserElement->at(0);
@@ -1677,9 +1697,13 @@ void InteractiveSPC::display()
                 color = &data.classColor[classNum];
             }
             //plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, data.parsedData));
-            Zone z = Zone(x1, y1, x2, y2, i, destinationPlot, classNum, type, 20.0f, color, &data.parsedData, &data.maxCasesPerPlotZone, &data.plotNumZoneTotalCases, &isBackgroundDensityColoringMode, &backgroundClassColorCoefficient);
+            Zone z = Zone(x1, y1, x2, y2, i, destinationPlot, classNum, type, 20.0f, color, 
+                &data.parsedData, &data.maxCasesPerPlotZone, &data.plotNumZoneTotalCases, 
+                &isBackgroundDensityColoringMode, &backgroundClassColorCoefficient, 
+                &backgroundTransparency);
             data.plots[plotNum].addZone(z);
         }
+        zonesNotBuilt = false;
     }
 
 	// draw all plots

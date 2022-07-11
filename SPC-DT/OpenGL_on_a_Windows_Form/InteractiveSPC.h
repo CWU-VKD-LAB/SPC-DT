@@ -103,6 +103,7 @@ public:
 	std::map<int, Zone> zoneIdMap;
 	void buildZoneEdges();
 	void updateZoneColors(int classNum);
+	bool zonesNotBuilt = true;
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;

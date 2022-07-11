@@ -27,6 +27,7 @@ struct Zone {
     float selectionZoneWidth;
     bool hasDarkBackground = false;
     GLfloat* backgroundClassColorCoeff;
+    GLfloat* backgroundTransparencyGlobal;
     bool* isBackgroundDensityColoringMode;
     //Edge* edges[4]; // left, top, right, bottom
     
@@ -36,7 +37,8 @@ struct Zone {
         std::vector<float>* color, std::vector<std::vector<float>>* parsedData, int* maxCasesPerPlotZone,
         std::map<int, std::map<int, std::set<int>>>* plotNumZoneTotalCases,
         bool* isBackgroundDensityColoringMode,
-        GLfloat* backgroundClassColorCoeff) 
+        GLfloat* backgroundClassColorCoeff,
+        GLfloat* backgroundTransparencyGlobal)
     {
 		this->x1 = x1;
 		this->x2 = x2;
@@ -53,6 +55,7 @@ struct Zone {
 		this->plotNumZoneTotalCases = plotNumZoneTotalCases;
 		this->isBackgroundDensityColoringMode = isBackgroundDensityColoringMode;
 		this->backgroundClassColorCoeff = backgroundClassColorCoeff;
+		this->backgroundTransparencyGlobal = backgroundTransparencyGlobal;
     }
 	
     //Zone(GLfloat& x1, GLfloat& y1, GLfloat& x2, GLfloat& y2, int id, int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth, std::vector<float>* color, std::vector<std::vector<float>> &parsedData) {
@@ -102,12 +105,13 @@ struct Zone {
 		realY1 = (*parentCenterY - (*parentHeight / 2)) + y1 * (*parentHeight);
 		realY2 = (*parentCenterY - (*parentHeight / 2)) + y2 * (*parentHeight);
     }
-    void setColor(float backgroundClassColorCoefficient, GLubyte transparency) {
+    void setColor(GLubyte transparency) {
         // TODO: handle multiple decision classes
         // adjust color based on class
+
         std::vector<float> hsl = RGBtoHSL(color);
-        // we need to adjust the lightness of the background color
-        hsl[2] *= backgroundClassColorCoefficient;
+        // we need to adjust the lightness of the background colors
+        hsl[2] *= *backgroundClassColorCoeff;
         std::vector<GLubyte> rgb = HSLtoRGB(hsl);
         glColor4ub(rgb[0], rgb[1], rgb[2], transparency);
     }
@@ -115,7 +119,7 @@ struct Zone {
         updateFromParser();
         computeRealCoordinates();
         GLfloat backgroundTransparency = computeBackgroundTransparency();
-        setColor(*backgroundClassColorCoeff, backgroundTransparency);
+        setColor(backgroundTransparency);
         glRectf(realX1, realY1, realX2, realY2);
     }
     void computeSelectionZones(float selectionWidth) {
@@ -204,7 +208,7 @@ struct Zone {
     }
 
     GLfloat computeBackgroundTransparency() {
-        GLubyte backgroundTransparency = 100;
+        GLubyte backgroundTransparency = *backgroundTransparencyGlobal;
         const GLubyte maxVal = 245;
         // check if plot has similar attributes
         int plot = plotNum;
