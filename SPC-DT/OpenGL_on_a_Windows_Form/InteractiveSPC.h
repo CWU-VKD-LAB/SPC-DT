@@ -44,7 +44,7 @@ public:
     std::vector<int> getParserElementsWithPlotNum(int plotNum);
 
 	// Calculates termination nodes for each datapoint
-	void calculateDataTerminationPoints();
+	//void calculateDataTerminationPoints();
 
 	// *** USED FOR DRAWING LINE COLORS
 	//int findBackgroundClassOfPoint(GLfloat px, GLfloat py);

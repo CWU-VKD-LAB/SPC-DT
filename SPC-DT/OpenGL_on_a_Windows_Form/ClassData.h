@@ -961,28 +961,28 @@ public:
 	//	}
 	//}
 
-	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
-		// TODO
-		int resultClass = 0;
-		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which plot we are looking at?
-			int classNumber = parsedData[p][5];
-			int plot = parsedData[p][4];
-			GLfloat x1 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][0] * plotWidth[plot];
-			GLfloat y1 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][1] * plotHeight[plot];
-			GLfloat x2 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][2] * plotWidth[plot];
-			GLfloat y2 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][3] * plotHeight[plot];
-			if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
-				resultClass = classNumber;
-			} // Check to see if these need to be rearranged.
-			std::cout << "debug" << x1 << x2 << y1 << y2;
-		}
+	//int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
+	//	// TODO
+	//	int resultClass = 0;
+	//	for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which plot we are looking at?
+	//		int classNumber = parsedData[p][5];
+	//		int plot = parsedData[p][4];
+	//		GLfloat x1 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][0] * plotWidth[plot];
+	//		GLfloat y1 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][1] * plotHeight[plot];
+	//		GLfloat x2 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][2] * plotWidth[plot];
+	//		GLfloat y2 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][3] * plotHeight[plot];
+	//		if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+	//			resultClass = classNumber;
+	//		} // Check to see if these need to be rearranged.
+	//		std::cout << "debug" << x1 << x2 << y1 << y2;
+	//	}
 
-		if (resultClass != -1) {
-			std::cout << "debug";
-		}
+	//	if (resultClass != -1) {
+	//		std::cout << "debug";
+	//	}
 
-		return resultClass;
-	}
+	//	return resultClass;
+	//}
 
 	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
 		bool result = false;
