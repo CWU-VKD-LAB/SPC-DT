@@ -1120,7 +1120,8 @@ System::String ^ OpenGLForm::COpenGL3::logLineCoords(System::String ^ func)
     log = gcnew System::String("");
     for (int i = 0; i < graph4.data.plotWidth.size(); i++)
     {
-        log = log + graph4.data.xPlotCoordinates[i] + " " + graph4.data.plotWidth[i] + " ";
+        //log = log + graph4.data.xPlotCoordinates[i] + " " + graph4.data.plotWidth[i] + " ";
+        log = log + graph4.data.plots[i].getX1() + " " + graph4.data.plots[i].width + " ";
     }
 
     return func + "-" + log + "\n";
