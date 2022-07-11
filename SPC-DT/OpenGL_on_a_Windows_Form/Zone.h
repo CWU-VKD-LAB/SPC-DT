@@ -97,10 +97,10 @@ struct Zone {
         computeSelectionZones();
     }
     void computeRealCoordinates() {
-        realX1 = (*parentCenterX) + x1 * (*parentWidth);
-		realX2 = (*parentCenterX) + x2 * (*parentWidth);
-		realY1 = (*parentCenterY) + y1 * (*parentHeight);
-		realY2 = (*parentCenterY) + y2 * (*parentHeight);
+        realX1 = (*parentCenterX - (*parentWidth / 2)) + x1 * (*parentWidth);
+		realX2 = (*parentCenterX - (*parentWidth / 2)) + x2 * (*parentWidth);
+		realY1 = (*parentCenterY - (*parentHeight / 2)) + y1 * (*parentHeight);
+		realY2 = (*parentCenterY - (*parentHeight / 2)) + y2 * (*parentHeight);
     }
     void setColor(float backgroundClassColorCoefficient, GLubyte transparency) {
         // TODO: handle multiple decision classes
@@ -114,7 +114,7 @@ struct Zone {
     void drawZone() {
         updateFromParser();
         computeRealCoordinates();
-        GLfloat backgroundTransparency = computeBackgroundTransparency(isBackgroundDensityColoringMode);
+        GLfloat backgroundTransparency = computeBackgroundTransparency();
         setColor(*backgroundClassColorCoeff, backgroundTransparency);
         glRectf(realX1, realY1, realX2, realY2);
     }
@@ -203,7 +203,7 @@ struct Zone {
         return isPointWithinRect(px, py, lowX, lowY, highX, highY);
     }
 
-    GLfloat computeBackgroundTransparency(bool isBackgroundDensityColoringMode) {
+    GLfloat computeBackgroundTransparency() {
         GLubyte backgroundTransparency = 100;
         const GLubyte maxVal = 245;
         // check if plot has similar attributes
@@ -211,9 +211,9 @@ struct Zone {
         int zoneId = id;
         int zoneClass = classNum;
 
-        if (isBackgroundDensityColoringMode && zoneId >= 0 && zoneClass >= 0)
+        if (*isBackgroundDensityColoringMode && zoneId >= 0 && zoneClass >= 0)
         {
-            if (isSingleAttributePlot)
+            if (*isSingleAttributePlot)
             {
                 int singleAttributePlotSum = (float)plotNumZoneTotalCases->at(plot)[zoneId].size();
                 float zoneDensity = ((float)singleAttributePlotSum / (float)(*maxCasesPerPlotZone));

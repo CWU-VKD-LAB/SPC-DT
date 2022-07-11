@@ -174,9 +174,9 @@ void InteractiveSPC::initializePlots() {
             Node* currentNode = root;
             // data.graphheight[]
             int plotNum = nodesAtCurrentDepth[nodeIndex]->plotNum;
-			data.plots[nodeIndex].centerX = (plotWidth * (currentDepth + 1) + currentDepth * 10);
-			data.plots[nodeIndex].centerY = ((nodeIndex + 1) * plotHeightAtThisDepth);
-            data.plots[nodeIndex].height = plotHeightAtThisDepth - plotHeightGap;
+			data.plots[plotNum].centerX = (plotWidth * (currentDepth + 1) + currentDepth * 10);
+			data.plots[plotNum].centerY = ((nodeIndex + 1) * plotHeightAtThisDepth);
+            data.plots[plotNum].height = plotHeightAtThisDepth - plotHeightGap;
             //data.xPlotCoordinates[plotNum] = (plotWidth * (currentDepth + 1) + currentDepth * 10);
             //data.yPlotCoordinates[plotNum] = ((nodeIndex + 1) * plotHeightAtThisDepth);
             //data.x1CoordPlot[plotNum] = (plotX1);
@@ -644,10 +644,15 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     int caseClass = data.classNum[caseNum] - 1;
 
     // get plot coordinates
-    float plt1X1 = data.x1CoordPlot[plotNum];
-    float plt1Y1 = data.y1CoordPlot[plotNum];
-    float plt1X2 = data.x2CoordPlot[plotNum];
-    float plt1Y2 = data.y2CoordPlot[plotNum];
+    //float plt1X1 = data.x1CoordPlot[plotNum];
+    //float plt1Y1 = data.y1CoordPlot[plotNum];
+    //float plt1X2 = data.x2CoordPlot[plotNum];
+    //float plt1Y2 = data.y2CoordPlot[plotNum];
+    float plt1X1 = data.plots[plotNum].getX1();
+	float plt1Y1 = data.plots[plotNum].getY1();
+	float plt1X2 = data.plots[plotNum].getX2();
+	float plt1Y2 = data.plots[plotNum].getY2();
+
 
     // get plot width and height
     float plotHeight = data.plotHeight[plotNum];
@@ -1015,10 +1020,14 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     float x2 = data.normalizedValues[caseNum][destAttr1Index];
     float y2 = data.normalizedValues[caseNum][destAttr2Index];
 
-    float plt2X1 = data.x1CoordPlot[nextPlotNum];
-    float plt2Y1 = data.y1CoordPlot[nextPlotNum];
-    float plt2X2 = data.x2CoordPlot[nextPlotNum];
-    float plt2Y2 = data.y2CoordPlot[nextPlotNum];
+    //float plt2X1 = data.x1CoordPlot[nextPlotNum];
+    //float plt2Y1 = data.y1CoordPlot[nextPlotNum];
+    //float plt2X2 = data.x2CoordPlot[nextPlotNum];
+    //float plt2Y2 = data.y2CoordPlot[nextPlotNum];
+    float plt2X1 = data.plots[nextPlotNum].getX1();
+	float plt2Y1 = data.plots[nextPlotNum].getY1();
+	float plt2X2 = data.plots[nextPlotNum].getX2();
+	float plt2Y2 = data.plots[nextPlotNum].getY2();
 
     plotHeight = data.plotHeight[nextPlotNum];
     plotWidth = data.plotWidth[nextPlotNum];
@@ -1663,10 +1672,9 @@ void InteractiveSPC::display()
             else {
                 color = &data.classColor[classNum];
             }
-            ;
             //plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, data.parsedData));
             Zone z = Zone(x1, y1, x2, y2, i, destinationPlot, classNum, type, 20.0f, color, &data.parsedData, &data.maxCasesPerPlotZone, &data.plotNumZoneTotalCases, &isBackgroundDensityColoringMode, &backgroundClassColorCoefficient);
-            data.plots[i].addZone(z);
+            data.plots[plotNum].addZone(z);
         }
     }
 
@@ -2641,10 +2649,14 @@ int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotN
         const float zoneX2 = parserData[2];
         const float zoneY2 = parserData[3];
 
-        const float pltX1 = data.x1CoordPlot[plotNum];
-        const float pltY1 = data.y1CoordPlot[plotNum];
-        const float pltX2 = data.x2CoordPlot[plotNum];
-        const float pltY2 = data.y2CoordPlot[plotNum];
+        //const float pltX1 = data.x1CoordPlot[plotNum];
+        //const float pltY1 = data.y1CoordPlot[plotNum];
+        //const float pltX2 = data.x2CoordPlot[plotNum];
+        //const float pltY2 = data.y2CoordPlot[plotNum];
+        const float pltX1 = data.plots[plotNum].getX1();
+		const float pltY1 = data.plots[plotNum].getY1();
+		const float pltX2 = data.plots[plotNum].getX2();
+		const float pltY2 = data.plots[plotNum].getY2();
 
         const float plotWidth = data.plotWidth[plotNum];
         const float plotHeight = data.plotHeight[plotNum];
