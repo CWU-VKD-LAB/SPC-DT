@@ -29,7 +29,7 @@ public:
 
 	InteractiveSPC(ClassData&, parseData&, double, double);
 
-	void fillPlotLocations();
+	//void fillPlotLocations();
 
 	/* Drawing data sets. */
 
