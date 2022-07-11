@@ -14,13 +14,18 @@ struct Zone {
     GLfloat realX1, realX2, realY1, realY2 = -1; // real: meaning actual coordinates
 	ZoneType type;
     std::vector<float> color;
-    ClassData *data;
+    //ClassData *data;
+    std::vector<std::vector<float>>* parsedData;
+    GLfloat* parentCenterX;
+	GLfloat* parentCenterY;
+    GLfloat* parentWidth;
+	GLfloat* parentHeight;
     float edgeSelectionZones[4][2][2];
     float selectionZoneWidth;
     //Edge* edges[4]; // left, top, right, bottom
     
     Zone() {}
-    Zone(GLfloat& x1, GLfloat& y1, GLfloat& x2, GLfloat& y2, int id, int plotNum, int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth, std::vector<float>* color, ClassData *data) {
+    Zone(GLfloat& x1, GLfloat& y1, GLfloat& x2, GLfloat& y2, int id, int plotNum, int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth, std::vector<float>* color, std::vector<std::vector<float>> &parsedData) {
         this->id = id;
         this->plotNum = plotNum;
         this->destinationPlot = destinationPlot;
@@ -32,7 +37,8 @@ struct Zone {
         this->selectionZoneWidth = selectionZoneWidth;
         this->type = type;
         this->color = *color;
-        this->data = data;
+        //this->data = data;
+        this->parsedData = &parsedData;
         computeRealCoordinates();
     }
     void invertX() {
@@ -54,18 +60,18 @@ struct Zone {
         computeSelectionZones();
     }
     void updateFromParser() {
-        x1 = data->parsedData[id][0];
-        y1 = data->parsedData[id][1];
-        x2 = data->parsedData[id][2];
-        y2 = data->parsedData[id][3];
+        x1 = parsedData->at(id)[0];
+		y1 = parsedData->at(id)[1];
+		x2 = parsedData->at(id)[2];
+		y2 = parsedData->at(id)[3];
         computeRealCoordinates();
         computeSelectionZones();
     }
     void computeRealCoordinates() {
-        realX1 = data->x1CoordPlot[plotNum] + x1 * data->plotWidth[plotNum];
-        realX2 = data->x1CoordPlot[plotNum] + x2 * data->plotWidth[plotNum];
-        realY2 = data->y2CoordPlot[plotNum] - y1 * data->plotHeight[plotNum];
-        realY1 = data->y2CoordPlot[plotNum] - y2 * data->plotHeight[plotNum];
+        realX1 = (*parentCenterX) + x1 * (*parentWidth);
+		realX2 = (*parentCenterX) + x2 * (*parentWidth);
+		realY1 = (*parentCenterY) + y1 * (*parentHeight);
+		realY2 = (*parentCenterY) + y2 * (*parentHeight);
     }
     void setColor(float backgroundClassColorCoefficient, GLubyte transparency) {
         // TODO: handle multiple decision classes

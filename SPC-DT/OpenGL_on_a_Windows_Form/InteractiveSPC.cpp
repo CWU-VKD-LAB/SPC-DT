@@ -1563,7 +1563,7 @@ void InteractiveSPC::display()
                 color = &data.classColor[classNum];
             }
             ;
-            plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, &data));
+            plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, data.parsedData));
             Zone* z = &plotZones[plotZones.size() - 1];
             zoneIdMap[z->id] = *z;
         }

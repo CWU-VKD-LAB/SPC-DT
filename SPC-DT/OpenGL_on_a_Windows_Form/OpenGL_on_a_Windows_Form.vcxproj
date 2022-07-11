@@ -198,6 +198,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="OpenGL3.h" />
+    <ClInclude Include="Plot.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UserRectangle.h" />

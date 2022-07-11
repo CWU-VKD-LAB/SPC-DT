@@ -12,6 +12,7 @@
 #include <fstream>
 #include <map>
 #include <set>
+#include "Plot.h"
 
 #pragma once
 
@@ -247,6 +248,8 @@ public:
     std::map<int, std::map<int, std::set<int>>> plotNumZoneTotalMisclassifiedCases;
     int maxCasesPerPlotZone = 0;
     std::set<int> zonesWithDarkBackgrounds;
+
+	std::vector<Plot> plots;
 
 	void computeClassAccuracies() {
 		if (casesPerClass.size() == 0) {
