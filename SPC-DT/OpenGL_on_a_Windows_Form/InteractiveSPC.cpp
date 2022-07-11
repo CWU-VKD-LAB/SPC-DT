@@ -2370,38 +2370,38 @@ float InteractiveSPC::findClickedGraph(double x, double y)
     }
     return -1;
 	
-    for (int i = 0; i < data.numPlots; i++)
-    {
-        if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&
-            data.xPlotCoordinates[i] + data.pan_x + (data.plotWidth[i] / 2) >= x &&
-            data.yPlotCoordinates[i] + data.pan_y - (data.plotHeight[i] / 2) <= y &&
-            data.yPlotCoordinates[i] + data.pan_y + (data.plotHeight[i] / 2) >= y)
-        {
+    //for (int i = 0; i < data.numPlots; i++)
+    //{
+    //    if (data.xPlotCoordinates[i] + data.pan_x - (data.plotWidth[i] / 2) <= x &&
+    //        data.xPlotCoordinates[i] + data.pan_x + (data.plotWidth[i] / 2) >= x &&
+    //        data.yPlotCoordinates[i] + data.pan_y - (data.plotHeight[i] / 2) <= y &&
+    //        data.yPlotCoordinates[i] + data.pan_y + (data.plotHeight[i] / 2) >= y)
+    //    {
 
-            return i;
-        }
-    }
-    return -1;
+    //        return i;
+    //    }
+    //}
+    //return -1;
 }
 
-int InteractiveSPC::findClickedCoordinate(double x, double y)
-{
-    for (int i = 0; i < data.numPlots; i++)
-    {
-
-        if (x <= (data.yPlotCoordinates[i] - 150) && x >= (data.yPlotCoordinates[i] - 500))
-        {
-            return 0;
-        }
-
-        else if (data.xPlotCoordinates[i] - 25 <= x &&
-                 data.xPlotCoordinates[i] + 25 >= x)
-        {
-            return 1;
-        }
-    }
-    return -1;
-}
+//int InteractiveSPC::findClickedCoordinate(double x, double y)
+//{
+//    for (int i = 0; i < data.numPlots; i++)
+//    {
+//
+//        if (x <= (data.yPlotCoordinates[i] - 150) && x >= (data.yPlotCoordinates[i] - 500))
+//        {
+//            return 0;
+//        }
+//
+//        else if (data.xPlotCoordinates[i] - 25 <= x &&
+//                 data.xPlotCoordinates[i] + 25 >= x)
+//        {
+//            return 1;
+//        }
+//    }
+//    return -1;
+//}
 
 std::vector<int> InteractiveSPC::getParserElementsWithPlotNum(int plotNum) {
     std::vector<int> elements;
