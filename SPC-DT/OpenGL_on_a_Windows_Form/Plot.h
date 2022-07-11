@@ -9,13 +9,16 @@ struct Plot {
 	std::vector<Zone> zones;
 	std::string attribute1Name, attribute2Name;
 	std::map<std::string, std::vector<float>>* attributeMinMax;
-	bool isXInverted, isYInverted, isXYSwapped = false;
+	bool isXInverted, isYInverted, isXYSwapped, isSingleAttributePlot = false;
 
 	Plot(int id, std::map<std::string, std::vector<float>>& attributeMinMax, std::string &attribute1Name, std::string &attribute2Name) {
 		plotNum = id;
 		this->attributeMinMax = &attributeMinMax;
 		this->attribute1Name = attribute1Name;
 		this->attribute2Name = attribute2Name;
+		if (attribute1Name == attribute2Name) {
+			isSingleAttributePlot = true;
+		}
 	}
 
 	Plot(GLfloat centerX, GLfloat centerY, GLfloat width, GLfloat height) {
@@ -36,6 +39,7 @@ struct Plot {
 	void drawPlot() {
 		// tbd
 
+		// used for panning
 		//glPushMatrix(); // Makes a new layer
 		//glTranslatef(x + pan_x, y + pan_y, 0.0f);
 		//glScalef((plotW / 2), (plotH / 2), 0.0f);
@@ -109,8 +113,20 @@ struct Plot {
 	
 	void drawZones() {
 		for (int i = 0; i < zones.size(); i++) {
-			zones[i].drawZone(0, 0);
+			zones[i].drawZone();
 		}
+	}
+
+	void addZone(Zone &zone) {
+		zone.parentCenterX = &centerX;
+		zone.parentCenterY = &centerY;
+		zone.parentWidth = &width;
+		zone.parentHeight = &height;
+		zone.plotNum = plotNum;
+		zone.isSingleAttributePlot = &isSingleAttributePlot;
+		zone.computeRealCoordinates();
+		zone.computeSelectionZones();
+		zones.push_back(zone);
 	}
 
 	GLfloat getX1() {

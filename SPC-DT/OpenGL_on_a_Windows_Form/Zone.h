@@ -16,31 +16,60 @@ struct Zone {
     std::vector<float> color;
     //ClassData *data;
     std::vector<std::vector<float>>* parsedData;
+    std::map<int, std::map<int, std::set<int>>>* plotNumZoneTotalCases;
+    int* maxCasesPerPlotZone;
     GLfloat* parentCenterX;
 	GLfloat* parentCenterY;
     GLfloat* parentWidth;
 	GLfloat* parentHeight;
+    bool* isSingleAttributePlot;
     float edgeSelectionZones[4][2][2];
     float selectionZoneWidth;
+    bool hasDarkBackground = false;
+    GLfloat* backgroundClassColorCoeff;
+    bool* isBackgroundDensityColoringMode;
     //Edge* edges[4]; // left, top, right, bottom
     
     Zone() {}
-    Zone(GLfloat& x1, GLfloat& y1, GLfloat& x2, GLfloat& y2, int id, int plotNum, int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth, std::vector<float>* color, std::vector<std::vector<float>> &parsedData) {
-        this->id = id;
-        this->plotNum = plotNum;
-        this->destinationPlot = destinationPlot;
-        this->classNum = classNum;
-        this->x1 = x1;
-        this->x2 = x2;
-        this->y1 = y1;
-        this->y2 = y2;
-        this->selectionZoneWidth = selectionZoneWidth;
-        this->type = type;
-        this->color = *color;
-        //this->data = data;
-        this->parsedData = &parsedData;
-        computeRealCoordinates();
+    Zone(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, int i,
+        int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth,
+        std::vector<float>* color, std::vector<std::vector<float>>* parsedData, int* maxCasesPerPlotZone,
+        std::map<int, std::map<int, std::set<int>>>* plotNumZoneTotalCases,
+        bool* isBackgroundDensityColoringMode,
+        GLfloat* backgroundClassColorCoeff) 
+    {
+		this->x1 = x1;
+		this->x2 = x2;
+	    this->y1 = y1;
+		this->y2 = y2;
+		this->id = i;
+		this->destinationPlot = destinationPlot;
+		this->classNum = classNum;
+		this->type = type;
+		this->selectionZoneWidth = selectionZoneWidth;
+		this->color = *color;
+		this->parsedData = parsedData;
+		this->maxCasesPerPlotZone = maxCasesPerPlotZone;
+		this->plotNumZoneTotalCases = plotNumZoneTotalCases;
+		this->isBackgroundDensityColoringMode = isBackgroundDensityColoringMode;
+		this->backgroundClassColorCoeff = backgroundClassColorCoeff;
     }
+	
+    //Zone(GLfloat& x1, GLfloat& y1, GLfloat& x2, GLfloat& y2, int id, int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth, std::vector<float>* color, std::vector<std::vector<float>> &parsedData) {
+    //    this->id = id;
+    //    this->destinationPlot = destinationPlot;
+    //    this->classNum = classNum;
+    //    this->x1 = x1;
+    //    this->x2 = x2;
+    //    this->y1 = y1;
+    //    this->y2 = y2;
+    //    this->selectionZoneWidth = selectionZoneWidth;
+    //    this->type = type;
+    //    this->color = *color;
+    //    //this->data = data;
+    //    this->parsedData = &parsedData;
+    //    computeRealCoordinates();
+    //}
     void invertX() {
         x1 = 1.0f - x1;
         x2 = 1.0f - x2;
@@ -82,10 +111,11 @@ struct Zone {
         std::vector<GLubyte> rgb = HSLtoRGB(hsl);
         glColor4ub(rgb[0], rgb[1], rgb[2], transparency);
     }
-    void drawZone(float backgroundClassColorCoeffient, GLubyte transparency) {
+    void drawZone() {
         updateFromParser();
         computeRealCoordinates();
-        setColor(backgroundClassColorCoeffient, transparency);
+        GLfloat backgroundTransparency = computeBackgroundTransparency(isBackgroundDensityColoringMode);
+        setColor(*backgroundClassColorCoeff, backgroundTransparency);
         glRectf(realX1, realY1, realX2, realY2);
     }
     void computeSelectionZones(float selectionWidth) {
@@ -172,6 +202,77 @@ struct Zone {
         float lowY = min(realY1, realY2);
         return isPointWithinRect(px, py, lowX, lowY, highX, highY);
     }
+
+    GLfloat computeBackgroundTransparency(bool isBackgroundDensityColoringMode) {
+        GLubyte backgroundTransparency = 100;
+        const GLubyte maxVal = 245;
+        // check if plot has similar attributes
+        int plot = plotNum;
+        int zoneId = id;
+        int zoneClass = classNum;
+
+        if (isBackgroundDensityColoringMode && zoneId >= 0 && zoneClass >= 0)
+        {
+            if (isSingleAttributePlot)
+            {
+                int singleAttributePlotSum = (float)plotNumZoneTotalCases->at(plot)[zoneId].size();
+                float zoneDensity = ((float)singleAttributePlotSum / (float)(*maxCasesPerPlotZone));
+                backgroundTransparency = min(((float)singleAttributePlotSum / (float)(*maxCasesPerPlotZone)) * maxVal + backgroundTransparency, maxVal);
+                // we need to sum up all the connected, similarly colored zones
+                std::vector<std::vector<float>*> parserElementsWithPlotNum;
+                for (int i = 0; i < parsedData->size(); i++) {
+                    if (parsedData->at(i)[4] == plot) {
+                        parserElementsWithPlotNum.push_back(&parsedData->at(i));
+                    }
+                }
+                //std::set<int> visitedZones;
+                //std::vector<ConnectedZone> connectedZones;
+                //for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+                //    connectedZones.push_back(ConnectedZone(i, parserElementsWithPlotNum[i]->at(4), parserElementsWithPlotNum[i]));
+                //}
+                //for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+                //    visitedZones.insert(i);
+                //    ConnectedZone* currentZoneNode = &connectedZones[i];
+                //    for (int j = 0; j < parserElementsWithPlotNum.size(); j++) {
+                //        if (i == j) continue;
+                //        if (parserElementsWithPlotNum[i][4] != parserElementsWithPlotNum[j][4]) continue;
+                //        if ((parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][0] || parserElementsWithPlotNum[i][0] == parserElementsWithPlotNum[j][2]) &&
+                //            (parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][1] || parserElementsWithPlotNum[i][1] == parserElementsWithPlotNum[j][3]) &&
+                //            (visitedZones.find(j) == visitedZones.end())) {
+                //            currentZoneNode->connectedZones.push_back(&connectedZones[j]);
+                //        }
+                //    }
+                //}
+            }
+            else if (zoneClass >= 0 && *maxCasesPerPlotZone != 0)
+            {
+                float zoneDensity = ((float)plotNumZoneTotalCases[plot][zoneId].size() / (float)(*maxCasesPerPlotZone));
+                backgroundTransparency = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
+                // debug
+                computeRealCoordinates();
+                // debug: draws background value on top of background zone
+                //float px = zone.realX1 + (zone.realX2 - zone.realX1) * 0.5;
+                //float py = zone.realY1 + (zone.realY2 - zone.realY1) * 0.5;
+                //data.drawBitmapText(std::to_string(zoneDensity).c_str(), px, py);
+                //if (zoneDensity != 0 && zoneDensity < worstZoneNumDensity)
+                //{
+                //    worstZoneNumDensity = zoneDensity;
+                //    worstZoneNum = zoneId;
+                //}
+                // if (backgroundLightnessSet.find(backgroundTransparencyCopy) == backgroundLightnessSet.end())
+                // {
+                //     backgroundLightnessSet.insert(backgroundTransparencyCopy);
+                // }
+            }
+        }
+
+        hasDarkBackground = backgroundTransparency >= 128;
+        
+        return backgroundTransparency;
+    }
+
+	
+
 private:
     void swap(float &x, float &y) {
         float tmp = x;

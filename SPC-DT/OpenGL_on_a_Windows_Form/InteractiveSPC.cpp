@@ -75,19 +75,24 @@ void InteractiveSPC::setBackgroundColorLightness(float lightnessCoeff)
     this->backgroundClassColorCoefficient = lightnessCoeff;
 }
 
-void InteractiveSPC::updatePlotLocation(double mouseX, double mouseY, int plotNum)
-{
-    data.xPlotCoordinates[plotNum] = mouseX - data.pan_x;
-    data.yPlotCoordinates[plotNum] = mouseY - data.pan_y;
-
-    // update references to plot x1,y1 and x2,y2
-    float plotWidth = data.x2CoordPlot[plotNum] - data.x1CoordPlot[plotNum];
-    float plotHeight = data.y2CoordPlot[plotNum] - data.y1CoordPlot[plotNum];
-    data.x1CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] - plotWidth / 2;
-    data.y1CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] - plotHeight / 2;
-    data.x2CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] + plotWidth / 2;
-    data.y2CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] + plotHeight / 2;
+void InteractiveSPC::updatePlotLocation(double mouseX, double mouseY, int plotNum) {
+    data.plots[plotNum].centerX = mouseX;
+	data.plots[plotNum].centerY = mouseY;
 }
+
+//void InteractiveSPC::updatePlotLocation(double mouseX, double mouseY, int plotNum)
+//{
+//    data.xPlotCoordinates[plotNum] = mouseX - data.pan_x;
+//    data.yPlotCoordinates[plotNum] = mouseY - data.pan_y;
+//
+//    // update references to plot x1,y1 and x2,y2
+//    float plotWidth = data.x2CoordPlot[plotNum] - data.x1CoordPlot[plotNum];
+//    float plotHeight = data.y2CoordPlot[plotNum] - data.y1CoordPlot[plotNum];
+//    data.x1CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] - plotWidth / 2;
+//    data.y1CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] - plotHeight / 2;
+//    data.x2CoordPlot[plotNum] = data.xPlotCoordinates[plotNum] + plotWidth / 2;
+//    data.y2CoordPlot[plotNum] = data.yPlotCoordinates[plotNum] + plotHeight / 2;
+//}
 
 void InteractiveSPC::initializePlots() {
 
@@ -1607,12 +1612,13 @@ void InteractiveSPC::display()
 
     /* Draws a plot for each dimension */
     // ahhh but we want to draw in the order that appears in the tree! Not just in order
-    for (int i = 0; i < plotDrawOrder.size(); i++)
-    {
-        int plotToDraw = plotDrawOrder[i];
-        data.drawPlot(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], data.plotWidth[plotToDraw], data.plotHeight[plotToDraw], plotToDraw);
-        updatePlotLocation(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], plotToDraw);
-    }
+    //for (int i = 0; i < plotDrawOrder.size(); i++)
+    //{
+    //    //int plotToDraw = plotDrawOrder[i];
+    //    //data.drawPlot(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], data.plotWidth[plotToDraw], data.plotHeight[plotToDraw], plotToDraw);
+    //    //data.plots[i].draw();
+    //    //updatePlotLocation(data.xPlotCoordinates[plotToDraw], data.yPlotCoordinates[plotToDraw], plotToDraw);
+    //}
 
     /*for (int i = 0; i < data.numPlots; i++)
     {
@@ -1658,27 +1664,32 @@ void InteractiveSPC::display()
                 color = &data.classColor[classNum];
             }
             ;
-            plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, data.parsedData));
-            Zone* z = &plotZones[plotZones.size() - 1];
-            zoneIdMap[z->id] = *z;
+            //plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, data.parsedData));
+            Zone z = Zone(x1, y1, x2, y2, i, destinationPlot, classNum, type, 20.0f, color, &data.parsedData, &data.maxCasesPerPlotZone, &data.plotNumZoneTotalCases, &isBackgroundDensityColoringMode, &backgroundClassColorCoefficient);
+            data.plots[i].addZone(z);
         }
     }
 
-
-    // draw zone objects
-    for (int i = 0; i < plotZones.size(); i++) {
-        float backgroundTransparencyForZone = computeBackgroundTransparency(plotZones[i]);
-        plotZones[i].computeSelectionZones(selectionZoneWidth);
-        plotZones[i].drawZone(backgroundClassColorCoefficient, backgroundTransparencyForZone);
-        if (isAdjustThresholdsMode) {
-            plotZones[i].drawEdges();
-            if (!clickedEdge.empty()) {
-                Zone selectedZone = plotZones[clickedEdge[0]];
-                selectedZone.color = std::vector<float>({ 0, 255, 0 });
-                selectedZone.drawEdges();
-            }
-        }
+	// draw all plots
+    for (int i = 0; i < data.plots.size(); i++) {
+        data.plots[i].draw();
     }
+
+
+    //// draw zone objects
+    //for (int i = 0; i < plotZones.size(); i++) {
+        //float backgroundTransparencyForZone = computeBackgroundTransparency(plotZones[i]);
+    //    plotZones[i].computeSelectionZones(selectionZoneWidth);
+    //    plotZones[i].drawZone(backgroundClassColorCoefficient, backgroundTransparencyForZone);
+    //    if (isAdjustThresholdsMode) {
+    //        plotZones[i].drawEdges();
+    //        if (!clickedEdge.empty()) {
+    //            Zone selectedZone = plotZones[clickedEdge[0]];
+    //            selectedZone.color = std::vector<float>({ 0, 255, 0 });
+    //            selectedZone.drawEdges();
+    //        }
+    //    }
+    //}
 
     // draw point when drawing a rectangle
     if (drawingUserRectangleVertex1) {
