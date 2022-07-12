@@ -1681,8 +1681,25 @@ void InteractiveSPC::display()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
+
     /* Adjust the windows aspect ratio? */
-    glOrtho(data.leftWidth, data.worldWidth, data.worldHeight, data.bottomHeight, -1, 1);
+    glOrtho(data.leftWidth, data.worldWidth, data.worldHeight, data.bottomHeight, -1, 1); 
+   
+    // draw viewport debug
+ //   glBegin(GL_LINE_LOOP);
+	//glVertex2f(data.leftWidth, data.bottomHeight);
+	//glVertex2f(data.leftWidth, data.worldHeight);
+	//glVertex2f(data.worldWidth, data.worldHeight);
+	//glVertex2f(data.worldWidth, data.bottomHeight);
+	//glEnd();
+
+ //   glBegin(GL_LINE_LOOP);
+ //   glVertex2f(0, 0);
+	//glVertex2f(0, 100);
+	//glVertex2f(100, 100);
+	//glVertex2f(100, 0);
+	//glEnd();
+
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); // Reset the model-view matrix
