@@ -9,13 +9,17 @@ struct Plot {
 	std::vector<Zone> zones;
 	std::string attribute1Name, attribute2Name;
 	std::map<std::string, std::vector<float>>* attributeMinMax;
-	bool isXInverted, isYInverted, isXYSwapped, isSingleAttributePlot = false;
+	bool isXInverted, isYInverted, isXYSwapped, isSingleAttributePlot;
 
 	Plot(int id, std::map<std::string, std::vector<float>>& attributeMinMax, std::string &attribute1Name, std::string &attribute2Name) {
 		plotNum = id;
 		this->attributeMinMax = &attributeMinMax;
 		this->attribute1Name = attribute1Name;
 		this->attribute2Name = attribute2Name;
+		isXInverted = false;
+		isYInverted = false;
+		isXYSwapped = false;
+		isSingleAttributePlot = false;
 		if (attribute1Name == attribute2Name) {
 			isSingleAttributePlot = true;
 		}
@@ -27,7 +31,6 @@ struct Plot {
 		this->width = width;
 		this->height = height;
 	}
-
 
 	void draw() {
 		// draw plot
@@ -126,9 +129,20 @@ struct Plot {
 		zone.parentHeight = &height;
 		zone.plotNum = plotNum;
 		zone.isSingleAttributePlot = &isSingleAttributePlot;
-		zone.computeRealCoordinates();
+		// zone.computeRealCoordinates();
 		zone.computeSelectionZones();
 		zones.push_back(zone);
+	}
+
+	Zone* getZoneThatContainsPoint(GLfloat px, GLfloat py) {
+		Zone* z = nullptr;
+		for (int i = 0; i < zones.size(); i++) {
+			if (zones[i].isPointWithinZone(px, py)) {
+				z = &zones[i];
+				break;
+			}
+		}
+		return z;
 	}
 
 	bool isPointWithinPlot(GLfloat px, GLfloat py) {
@@ -150,4 +164,23 @@ struct Plot {
 	GLfloat getY2() {
 		return centerY + height / 2;
 	}
+
+    void swapAxes() {
+        isXYSwapped = !isXYSwapped;
+        for (int i = 0; i < zones.size(); i++) {
+            zones[i].swapAxes();
+        }
+    }
+
+    void invertAxis(bool isXAxis) {
+        if (isXAxis) {
+            isXInverted = !isXInverted;
+        } else {
+            isYInverted = !isYInverted;
+        }
+
+        for (int i = 0; i < zones.size(); i++) {
+            zones[i].invertAxis(isXAxis);
+        }
+    }
 };

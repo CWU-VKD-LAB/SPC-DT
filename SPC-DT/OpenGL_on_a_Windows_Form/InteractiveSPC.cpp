@@ -659,7 +659,8 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     int caseClass = data.classNum[caseNum] - 1;
     Plot* plot = &data.plots[plotNum];
-	
+    
+
 
     // get plot coordinates
     //float plt1X1 = data.x1CoordPlot[plotNum];
@@ -679,7 +680,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 	float plotWidth = plot->width;
 
     // Adjust if X axis is inverted
-    if (plotsWithXAxisInverted.find(plotNum) != plotsWithXAxisInverted.end())
+    if (plot->isXInverted)
     {
         //x1 = plt1X2 - plotWidth * x1 + data.pan_x;
         x1 = plt1X1 + plotWidth * (1.0f - x1) + data.pan_x;
@@ -690,7 +691,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }
 
     // Adjust if Y axis is inverted
-    if (plotsWithYAxisInverted.find(plotNum) != plotsWithYAxisInverted.end())
+    if (plot->isYInverted)
     {
         //y1 = plt1Y1 + plotHeight * y1 + data.pan_y;
         y1 = plt1Y2 - plotHeight * (1.0f - y1) + data.pan_y;
@@ -700,6 +701,14 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     {
         y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
     }
+
+    if (plot->isXYSwapped) {
+		float temp = x1;
+		x1 = y1;
+		y1 = temp;
+    }
+
+    Zone* z = plot->getZoneThatContainsPoint(x1, y1);
 
     // debug
     // glColor3ub(255, 0, 0);
@@ -935,7 +944,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //}
 
     // add white frame to points that are hard to see
-    if (data.zonesWithDarkBackgrounds.find(point1BackgroundZone) != data.zonesWithDarkBackgrounds.end())
+    if (z != nullptr && z->hasDarkBackground)
     {
         glPointSize(6.0);
         glColor4ub(255, 255, 255, 255);
@@ -1056,10 +1065,10 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     plotHeight = plot->height;
     plotWidth = plot->width;
 
-    if (plotsWithXAxisInverted.find(nextPlotNum) != plotsWithXAxisInverted.end())
+    if (plot->isXInverted)
     {
         //x2 = plt2X2 - plotWidth * x2 + data.pan_x;
-        x2 = plt2X1 + plotWidth * (1 - x2) + data.pan_x;
+        x2 = plt2X1 + plotWidth * (1.0f - x2) + data.pan_x;
 
     }
     else
@@ -1067,16 +1076,24 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         x2 = plt2X1 + plotWidth * x2 + data.pan_x;
     }
 
-    if (plotsWithYAxisInverted.find(nextPlotNum) != plotsWithYAxisInverted.end())
+    if (plot->isYInverted)
     {
         //y2 = plt2Y1 + plotHeight * y2 + data.pan_y;
-        y2 = plt2Y2 - plotHeight * (1 - y2) + data.pan_y;
+        y2 = plt2Y2 - plotHeight * (1.0f - y2) + data.pan_y;
 
     }
     else
     {
         y2 = plt2Y2 - plotHeight * y2 + data.pan_y;
     }
+
+    if (plot->isXYSwapped) {
+		float temp = x2;
+		x2 = y2;
+		y2 = temp;
+    }
+
+    z = plot->getZoneThatContainsPoint(x2, y2);
 
     // x2 = plt2X1 + (plt2X2 - plt2X1) * x2 + data.pan_x;
     // y2 = plt2Y2 - (plt2Y2 - plt2Y1) * y2 + data.pan_y;
@@ -1439,10 +1456,10 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 //}
 
 void InteractiveSPC::computeZoneEdges(Zone &zone) {
-    float x1 = zone.x1;
-    float x2 = zone.x2;
-    float y1 = zone.y1;
-    float y2 = zone.y2;
+    float x1 = *zone.x1;
+    float x2 = *zone.x2;
+    float y1 = *zone.y1;
+    float y2 = *zone.y2;
     int zoneId = zone.id;
 
     // make note of where zone edges are
@@ -1551,7 +1568,7 @@ float InteractiveSPC::computeBackgroundTransparency(Zone &zone) {
             float zoneDensity = ((float)data.plotNumZoneTotalCases[plot][zoneId].size() / (float)data.maxCasesPerPlotZone);
             backgroundTransparencyCopy = min(zoneDensity * maxVal + backgroundTransparency, maxVal);
             // debug
-            zone.computeRealCoordinates();
+            // zone.computeRealCoordinates();
             // debug: draws background value on top of background zone
             //float px = zone.realX1 + (zone.realX2 - zone.realX1) * 0.5;
             //float py = zone.realY1 + (zone.realY2 - zone.realY1) * 0.5;
@@ -1679,10 +1696,10 @@ void InteractiveSPC::display()
     if (zonesNotBuilt) {
         for (int i = 0; i < data.parsedData.size(); i++) {
             std::vector<float>* parserElement = &data.parsedData[i];
-            float x1 = parserElement->at(0);
-            float y1 = parserElement->at(1);
-            float x2 = parserElement->at(2);
-            float y2 = parserElement->at(3);
+            // float x1 = parserElement->at(0);
+            // float y1 = parserElement->at(1);
+            // float x2 = parserElement->at(2);
+            // float y2 = parserElement->at(3);
             int plotNum = parserElement->at(4);
             int classNum = parserElement->at(5);
             int destinationPlot = -1;
@@ -1697,7 +1714,7 @@ void InteractiveSPC::display()
                 color = &data.classColor[classNum];
             }
             //plotZones.push_back(Zone(x1, y1, x2, y2, i, plotNum, destinationPlot, classNum, type, 20, color, data.parsedData));
-            Zone z = Zone(x1, y1, x2, y2, i, destinationPlot, classNum, type, 20.0f, color, 
+            Zone z = Zone(i, destinationPlot, type, 20.0f, color, 
                 &data.parsedData, &data.maxCasesPerPlotZone, &data.plotNumZoneTotalCases, 
                 &isBackgroundDensityColoringMode, &backgroundClassColorCoefficient, 
                 &backgroundTransparency);
@@ -2441,31 +2458,36 @@ std::vector<int> InteractiveSPC::getParserElementsWithPlotNum(int plotNum) {
     return elements;
 }
 
-void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
-    std::vector<int> parserElementsWithPlotNum = getParserElementsWithPlotNum(plotNum);
-    if (isXAxis) {
-        if (plotsWithXAxisInverted.find(plotNum) == plotsWithXAxisInverted.end()) {
-            plotsWithXAxisInverted.insert(plotNum);
-        } else {
-            plotsWithXAxisInverted.erase(plotNum);
-        }
-        for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
-            int index = parserElementsWithPlotNum[i];
-            data.parsedData[index][0] = 1.0f - data.parsedData[index][0];
-            data.parsedData[index][2] = 1.0f - data.parsedData[index][2];
-        }
-    } else {
-        if (plotsWithYAxisInverted.find(plotNum) == plotsWithYAxisInverted.end()) {
-            plotsWithYAxisInverted.insert(plotNum);
-        } else {
-            plotsWithYAxisInverted.erase(plotNum);
-        }
-        for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
-            int index = parserElementsWithPlotNum[i];
-            data.parsedData[index][1] = 1.0f - data.parsedData[index][1];
-            data.parsedData[index][3] = 1.0f - data.parsedData[index][3];
-        }
-    }
+void InteractiveSPC::swapPlotNumAxes(int plotNum) {
+    data.plots[plotNum].swapAxes();
+}
+
+void InteractiveSPC::invertPlotNumAxis(int plotNum, bool isXAxis) {
+    data.plots[plotNum].invertAxis(isXAxis);
+    // std::vector<int> parserElementsWithPlotNum = getParserElementsWithPlotNum(plotNum);
+    // if (isXAxis) {
+    //     if (plotsWithXAxisInverted.find(plotNum) == plotsWithXAxisInverted.end()) {
+    //         plotsWithXAxisInverted.insert(plotNum);
+    //     } else {
+    //         plotsWithXAxisInverted.erase(plotNum);
+    //     }
+        // for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+        //     int index = parserElementsWithPlotNum[i];
+        //     data.parsedData[index][0] = 1.0f - data.parsedData[index][0];
+        //     data.parsedData[index][2] = 1.0f - data.parsedData[index][2];
+        // }
+    // } else {
+    //     if (plotsWithYAxisInverted.find(plotNum) == plotsWithYAxisInverted.end()) {
+    //         plotsWithYAxisInverted.insert(plotNum);
+    //     } else {
+    //         plotsWithYAxisInverted.erase(plotNum);
+    //     }
+        // for (int i = 0; i < parserElementsWithPlotNum.size(); i++) {
+        //     int index = parserElementsWithPlotNum[i];
+        //     data.parsedData[index][1] = 1.0f - data.parsedData[index][1];
+        //     data.parsedData[index][3] = 1.0f - data.parsedData[index][3];
+        // }
+    // }
     thresholdEdgeSelectionZones.clear();
     zoneIdThresholdEdgesRecorded.clear();
 }
@@ -2473,13 +2495,23 @@ void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
 // zoneid is the same as the index in parserData
 int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
-    for (int i = 0; i < plotZones.size(); i++) {
-        if (plotZones[i].plotNum == plotNum) {
-            if (plotZones[i].isPointWithinZone(px, py)) {
-                return plotZones[i].id;
-            }
-        }
+    Plot* plt = &data.plots[plotNum];
+    Zone* z = plt->getZoneThatContainsPoint(px, py);
+	if (z != NULL) {
+		return z->id;
     }
+    else {
+		return INT_MIN;
+    }
+	
+
+    //for (int i = 0; i < plotZones.size(); i++) {
+    //    if (plotZones[i].plotNum == plotNum) {
+    //        if (plotZones[i].isPointWithinZone(px, py)) {
+    //            return plotZones[i].id;
+    //        }
+    //    }
+    //}
 
     // debug
     //glBegin(GL_POINTS);
@@ -2681,6 +2713,16 @@ void InteractiveSPC::drawWorstZone() {
 
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
+    Plot* plt = &data.plots[plotNum];
+    Zone* z = plt->getZoneThatContainsPoint(px, py);
+    if (z == NULL) {
+        return INT_MIN;
+    }
+    else {
+        return z->classNum;
+	}
+
+
     // TODO
     // get plot num
     // int plotNum = findPlotNumOfPoint(px, py);

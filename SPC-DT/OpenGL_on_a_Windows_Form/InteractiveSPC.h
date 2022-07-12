@@ -107,7 +107,8 @@ public:
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
-    void invertPlotNum(int plotNum, bool isXAxist);
+    void invertPlotNumAxis(int plotNum, bool isXAxis);
+    void swapPlotNumAxes(int plotNum);
 	void initializePlots();
 	std::set<int> swappedPlots;
 	std::set<int> plotsWithXAxisInverted;

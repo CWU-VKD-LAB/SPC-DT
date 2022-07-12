@@ -864,32 +864,33 @@ public
                         // adds plot clicked to list of plots with swapped axes
                         if (attributeSwapMode && plotNumClicked >= 0 && plotNumClicked < graph4.data.numPlots)
                         {
-                            if (graph4.swappedPlots.find(plotNumClicked) == graph4.swappedPlots.end())
-                            {
-                                graph4.swappedPlots.insert(plotNumClicked);
-                            }
-                            else
-                            {
-                                graph4.swappedPlots.erase(plotNumClicked);
-                            }
+                            graph4.swapPlotNumAxes(plotNumClicked);
+                            // if (graph4.swappedPlots.find(plotNumClicked) == graph4.swappedPlots.end())
+                            // {
+                            //     graph4.swappedPlots.insert(plotNumClicked);
+                            // }
+                            // else
+                            // {
+                            //     graph4.swappedPlots.erase(plotNumClicked);
+                            // }
 
-                            std::string tmp = graph4.data.parsedAttributePairs[plotNumClicked][0];
-                            dataPtr->parsedAttributePairs[plotNumClicked][0] = graph4.data.parsedAttributePairs[plotNumClicked][1];
-                            dataPtr->parsedAttributePairs[plotNumClicked][1] = tmp;
-                            for (int i = 0; i < dataPtr->parsedData.size(); i++)
-                            {
-                                if (dataPtr->parsedData[i][4] == plotNumClicked)
-                                {
-                                    float tmp = dataPtr->parsedData[i][0];
-                                    dataPtr->parsedData[i][0] = dataPtr->parsedData[i][1];
-                                    dataPtr->parsedData[i][1] = tmp;
-                                    tmp = dataPtr->parsedData[i][2];
-                                    dataPtr->parsedData[i][2] = dataPtr->parsedData[i][3];
-                                    dataPtr->parsedData[i][3] = tmp;
-                                }
-                            }
-                            //graph4.dataParsed.parsedData = dataPtr->parsedData;
-                            graph4.data.parsedData = dataPtr->parsedData;
+                            // std::string tmp = graph4.data.parsedAttributePairs[plotNumClicked][0];
+                            // dataPtr->parsedAttributePairs[plotNumClicked][0] = graph4.data.parsedAttributePairs[plotNumClicked][1];
+                            // dataPtr->parsedAttributePairs[plotNumClicked][1] = tmp;
+                            // for (int i = 0; i < dataPtr->parsedData.size(); i++)
+                            // {
+                            //     if (dataPtr->parsedData[i][4] == plotNumClicked)
+                            //     {
+                            //         float tmp = dataPtr->parsedData[i][0];
+                            //         dataPtr->parsedData[i][0] = dataPtr->parsedData[i][1];
+                            //         dataPtr->parsedData[i][1] = tmp;
+                            //         tmp = dataPtr->parsedData[i][2];
+                            //         dataPtr->parsedData[i][2] = dataPtr->parsedData[i][3];
+                            //         dataPtr->parsedData[i][3] = tmp;
+                            //     }
+                            // }
+                            // //graph4.dataParsed.parsedData = dataPtr->parsedData;
+                            // graph4.data.parsedData = dataPtr->parsedData;
                             graph4.thresholdEdgeSelectionZones.clear();
                             graph4.zoneIdThresholdEdgesRecorded.clear();
                         }
@@ -897,7 +898,7 @@ public
                         // adds clicked plot to list of plots with inverted X axes
                         if (isXAxisInvertMode)
                         {
-                            graph4.invertPlotNum(plotNumClicked, true);
+                            graph4.invertPlotNumAxis(plotNumClicked, true);
 
                             // std::set<int> *xAxisInvert = &graph4.plotsWithXAxisInverted;
                             // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
@@ -924,7 +925,7 @@ public
                         // adds clicked plot to list of plots with inverted Y axes
                         if (isYAxisInvertMode)
                         {
-                            graph4.invertPlotNum(plotNumClicked, false);
+                            graph4.invertPlotNumAxis(plotNumClicked, false);
 
                             // std::set<int> *yAxisInvert = &graph4.plotsWithYAxisInverted;
                             // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
