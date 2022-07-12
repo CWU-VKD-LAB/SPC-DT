@@ -109,11 +109,13 @@ struct Zone
     }
     GLfloat getRealY1()
     {
-        return (*parentCenterY - (*parentHeight / 2)) + *y1 * (*parentHeight);
+        //return (*parentCenterY - (*parentHeight / 2)) + *y1 * (*parentHeight);
+        return (*parentCenterY + (*parentHeight / 2)) - *y1 * (*parentHeight);
     }
     GLfloat getRealY2()
     {
-        return (*parentCenterY - (*parentHeight / 2)) + *y2 * (*parentHeight);
+        //return (*parentCenterY - (*parentHeight / 2)) + *y2 * (*parentHeight);
+		return (*parentCenterY + (*parentHeight / 2)) - *y2 * (*parentHeight);
     }
     void setColor(GLubyte transparency)
     {
@@ -315,12 +317,12 @@ struct Zone
 
     void swapAxes()
     {
-        float *temp = x1;
-        x1 = y1;
-        y1 = temp;
-        temp = x2;
-        x2 = y2;
-        y2 = temp;
+        float temp = *x1;
+        *x1 = *y1;
+        *y1 = temp;
+        temp = *x2;
+        *x2 = *y2;
+        *y2 = temp;
     }
 
 private:
@@ -332,10 +334,6 @@ private:
     }
     bool isPointWithinRect(float &px, float &py, float &rectX1, float &rectY1, float &rectX2, float &rectY2)
     {
-        if (abs(py - rectY2 < 1) && abs(py - rectY2 > 0))
-        {
-            std::cout << "debug";
-        }
         if (px >= rectX1 && px <= rectX2 && py <= rectY2 && py >= rectY1)
         {
             return true;

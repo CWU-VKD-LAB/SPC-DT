@@ -679,6 +679,12 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     float plotHeight = plot->height;
 	float plotWidth = plot->width;
 
+    if (plot->isXYSwapped) {
+        float temp = x1;
+        x1 = y1;
+        y1 = temp;
+    }
+
     // Adjust if X axis is inverted
     if (plot->isXInverted)
     {
@@ -702,12 +708,6 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
     }
 
-    if (plot->isXYSwapped) {
-		float temp = x1;
-		x1 = y1;
-		y1 = temp;
-    }
-
     Zone* z = plot->getZoneThatContainsPoint(x1, y1);
 
     // debug
@@ -723,8 +723,10 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // y1 = plt1Y2 - (plt1Y2 - plt1Y1) * y1 + data.pan_y;
 
     // mitigate overlap
-    int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
-    int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
+    //int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
+    int point1BackgroundClass = z->classNum;
+    //int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
+	int point1BackgroundZone = z->id;
     mitigateOverlap(x1, y1, caseNum, caseClass, plotNum, point1BackgroundClass, point1BackgroundZone);
 
     // // Get class and zone id of the data point
@@ -997,49 +999,54 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // glVertex2f(x1, y1);
     // glEnd();
     // end point one draw
-    bool pointWasCorrectlyClassified = false;
-    if (point1BackgroundClass >= 0)
-    {
-        if (point1BackgroundClass == caseClass)
-        {
-            // point correctly classified
-            pointWasCorrectlyClassified = true;
-            // if (isLineTerminationMode) {
-            //	return;
-            // }
-            // else {
-            //	// if not line termination mode, continue to render down the tree. If not, do nothing
-            //	// again, how would we know which path to take?
-            //	return; // return for now. TODO
-            // }
-        }
-        else
-        {
-            // point incorrectly classified
-            // either way, continue drawing
-            // oh wait how would this work?
-            // if we're using decision tree, we don't know what the next tree should be unless we land on a continue zone
+    //bool pointWasCorrectlyClassified = false;
+    //if (point1BackgroundClass >= 0)
+    //{
+    //    if (point1BackgroundClass == caseClass)
+    //    {
+    //        // point correctly classified
+    //        pointWasCorrectlyClassified = true;
+    //        // if (isLineTerminationMode) {
+    //        //	return;
+    //        // }
+    //        // else {
+    //        //	// if not line termination mode, continue to render down the tree. If not, do nothing
+    //        //	// again, how would we know which path to take?
+    //        //	return; // return for now. TODO
+    //        // }
+    //    }
+    //    else
+    //    {
+    //        // point incorrectly classified
+    //        // either way, continue drawing
+    //        // oh wait how would this work?
+    //        // if we're using decision tree, we don't know what the next tree should be unless we land on a continue zone
 
-            // idea: option that says : "trace misclassifications" which has a drop down for which misclassification to view.
-            //		then the user can select one and it will render the point on each plot.
-            //		i.e. : render selected record on all paths through tree to leaves, while highlighting the incorrectly classified zones
-            // for now return
-        }
-        // data.dataTerminationIndex[recordNum] = plotNum;
-        return -1;
-    }
-    else if (point1BackgroundClass == INT_MIN)
-    {
-        // if there is no zone behind us, I don't think we're even supposed to draw the point but we'll see.
-        // data.dataTerminationIndex[recordNum] = plotNum;
-        /*glBegin(GL_POINTS);
-        glColor3ub(0, 0, 255);
-        glVertex2f(x1, y1);
-        glEnd();*/
-        return -1;
-    }
+    //        // idea: option that says : "trace misclassifications" which has a drop down for which misclassification to view.
+    //        //		then the user can select one and it will render the point on each plot.
+    //        //		i.e. : render selected record on all paths through tree to leaves, while highlighting the incorrectly classified zones
+    //        // for now return
+    //    }
+    //    // data.dataTerminationIndex[recordNum] = plotNum;
+    //    return -1;
+    //}
+    //else if (point1BackgroundClass == INT_MIN)
+    //{
+    //    // if there is no zone behind us, I don't think we're even supposed to draw the point but we'll see.
+    //    // data.dataTerminationIndex[recordNum] = plotNum;
+    //    /*glBegin(GL_POINTS);
+    //    glColor3ub(0, 0, 255);
+    //    glVertex2f(x1, y1);
+    //    glEnd();*/
+    //    return -1;
+    //}
     // continue drawing based on what's in the continue zone's destination param
 
+
+    if (z->type == Decision || z->type == Continue) {
+        return -1;
+    }
+	
     // get next point
     // we have: record number, next plot number, record class. get point from record with attributes present in next plot
     int nextPlotNum = data.plotDestinationMap[plotNum][point1BackgroundClass];
@@ -1065,6 +1072,12 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     plotHeight = plot->height;
     plotWidth = plot->width;
 
+    if (plot->isXYSwapped) {
+        float temp = x2;
+        x2 = y2;
+        y2 = temp;
+    }
+
     if (plot->isXInverted)
     {
         //x2 = plt2X2 - plotWidth * x2 + data.pan_x;
@@ -1087,12 +1100,6 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y2 = plt2Y2 - plotHeight * y2 + data.pan_y;
     }
 
-    if (plot->isXYSwapped) {
-		float temp = x2;
-		x2 = y2;
-		y2 = temp;
-    }
-
     z = plot->getZoneThatContainsPoint(x2, y2);
 
     // x2 = plt2X1 + (plt2X2 - plt2X1) * x2 + data.pan_x;
@@ -1100,8 +1107,10 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     // set line color
     glColor4ub(128, 128, 128, classTransparency);
-    int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
-    int point2BackgroundZone = findBackgroundZoneIdOfPoint(x2, y2, nextPlotNum);
+    //int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
+    //int point2BackgroundZone = findBackgroundZoneIdOfPoint(x2, y2, nextPlotNum);
+    int point2BackgroundClass = z->classNum;
+	int point2BackgroundZone = z->id;
     std::map<int, std::vector<int>>* caseClassMap = &overlapMap[x2][y2];
 
     // check for incorrect classifications
