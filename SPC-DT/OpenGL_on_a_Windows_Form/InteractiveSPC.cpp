@@ -658,7 +658,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }*/
 
     int caseClass = data.classNum[caseNum] - 1;
-    Plot* plot = &data.plots[plotNum];
+    Plot* point1Plot = &data.plots[plotNum];
     
 
 
@@ -667,26 +667,26 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //float plt1Y1 = data.y1CoordPlot[plotNum];
     //float plt1X2 = data.x2CoordPlot[plotNum];
     //float plt1Y2 = data.y2CoordPlot[plotNum];
-    float plt1X1 = plot->getX1();
-	float plt1Y1 = plot->getY1();
-	float plt1X2 = plot->getX2();
-	float plt1Y2 = plot->getY2();
+    float plt1X1 = point1Plot->getX1();
+	float plt1Y1 = point1Plot->getY1();
+	float plt1X2 = point1Plot->getX2();
+	float plt1Y2 = point1Plot->getY2();
 
 
     // get plot width and height
     //float plotHeight = data.plotHeight[plotNum];
     //float plotWidth = data.plotWidth[plotNum];
-    float plotHeight = plot->height;
-	float plotWidth = plot->width;
+    float plotHeight = point1Plot->height;
+	float plotWidth = point1Plot->width;
 
-    if (plot->isXYSwapped) {
+    if (point1Plot->isXYSwapped) {
         float temp = x1;
         x1 = y1;
         y1 = temp;
     }
 
     // Adjust if X axis is inverted
-    if (plot->isXInverted)
+    if (point1Plot->isXInverted)
     {
         //x1 = plt1X2 - plotWidth * x1 + data.pan_x;
         x1 = plt1X1 + plotWidth * (1.0f - x1) + data.pan_x;
@@ -697,7 +697,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }
 
     // Adjust if Y axis is inverted
-    if (plot->isYInverted)
+    if (point1Plot->isYInverted)
     {
         //y1 = plt1Y1 + plotHeight * y1 + data.pan_y;
         y1 = plt1Y2 - plotHeight * (1.0f - y1) + data.pan_y;
@@ -708,7 +708,13 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
     }
 
-    Zone* z = plot->getZoneThatContainsPoint(x1, y1);
+    Zone* point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
+
+    if (point1PlotZone == nullptr) {
+        std::cout << "debug";
+        point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
+        return -1;
+    }
 
     // debug
     // glColor3ub(255, 0, 0);
@@ -724,9 +730,9 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     // mitigate overlap
     //int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
-    int point1BackgroundClass = z->classNum;
+    int point1BackgroundClass = point1PlotZone->classNum;
     //int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
-	int point1BackgroundZone = z->id;
+	int point1BackgroundZone = point1PlotZone->id;
     mitigateOverlap(x1, y1, caseNum, caseClass, plotNum, point1BackgroundClass, point1BackgroundZone);
 
     // // Get class and zone id of the data point
@@ -946,7 +952,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //}
 
     // add white frame to points that are hard to see
-    if (z != nullptr && z->hasDarkBackground)
+    if (point1PlotZone != nullptr && point1PlotZone->hasDarkBackground)
     {
         glPointSize(6.0);
         glColor4ub(255, 255, 255, 255);
@@ -1043,42 +1049,43 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // continue drawing based on what's in the continue zone's destination param
 
 
-    if (z->type == Decision || z->type == Continue) {
+    if (point1PlotZone->type == Decision) {
         return -1;
     }
 	
     // get next point
     // we have: record number, next plot number, record class. get point from record with attributes present in next plot
-    int nextPlotNum = data.plotDestinationMap[plotNum][point1BackgroundClass];
+    int nextPlotNum = point1PlotZone->destinationPlot;
+    //int nextPlotNum = data.plotDestinationMap[plotNum][point1BackgroundClass];
     std::vector<std::string> destinationPlotAttributes = data.parsedAttributePairs[nextPlotNum];
     int destAttr1Index = data.attributeNameToDataIndex[destinationPlotAttributes[0]];
     int destAttr2Index = data.attributeNameToDataIndex[destinationPlotAttributes[1]];
     float x2 = data.normalizedValues[caseNum][destAttr1Index];
     float y2 = data.normalizedValues[caseNum][destAttr2Index];
 
-    plot = &data.plots[nextPlotNum];
+    Plot* point2Plot = &data.plots[nextPlotNum];
 
     //float plt2X1 = data.x1CoordPlot[nextPlotNum];
     //float plt2Y1 = data.y1CoordPlot[nextPlotNum];
     //float plt2X2 = data.x2CoordPlot[nextPlotNum];
     //float plt2Y2 = data.y2CoordPlot[nextPlotNum];
-    float plt2X1 = plot->getX1();
-	float plt2Y1 = plot->getY1();
-	float plt2X2 = plot->getX2();
-	float plt2Y2 = plot->getY2();
+    float plt2X1 = point2Plot->getX1();
+	float plt2Y1 = point2Plot->getY1();
+	float plt2X2 = point2Plot->getX2();
+	float plt2Y2 = point2Plot->getY2();
 
     //plotHeight = data.plotHeight[nextPlotNum];
     //plotWidth = data.plotWidth[nextPlotNum];
-    plotHeight = plot->height;
-    plotWidth = plot->width;
+    plotHeight = point2Plot->height;
+    plotWidth = point2Plot->width;
 
-    if (plot->isXYSwapped) {
+    if (point2Plot->isXYSwapped) {
         float temp = x2;
         x2 = y2;
         y2 = temp;
     }
 
-    if (plot->isXInverted)
+    if (point2Plot->isXInverted)
     {
         //x2 = plt2X2 - plotWidth * x2 + data.pan_x;
         x2 = plt2X1 + plotWidth * (1.0f - x2) + data.pan_x;
@@ -1089,7 +1096,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         x2 = plt2X1 + plotWidth * x2 + data.pan_x;
     }
 
-    if (plot->isYInverted)
+    if (point2Plot->isYInverted)
     {
         //y2 = plt2Y1 + plotHeight * y2 + data.pan_y;
         y2 = plt2Y2 - plotHeight * (1.0f - y2) + data.pan_y;
@@ -1100,7 +1107,12 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y2 = plt2Y2 - plotHeight * y2 + data.pan_y;
     }
 
-    z = plot->getZoneThatContainsPoint(x2, y2);
+    Zone* point2PlotZone = point2Plot->getZoneThatContainsPoint(x2, y2);
+
+    if (point2PlotZone == nullptr) {
+        std::cout << "debug";
+        return -1;
+    }
 
     // x2 = plt2X1 + (plt2X2 - plt2X1) * x2 + data.pan_x;
     // y2 = plt2Y2 - (plt2Y2 - plt2Y1) * y2 + data.pan_y;
@@ -1109,8 +1121,8 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     glColor4ub(128, 128, 128, classTransparency);
     //int point2BackgroundClass = findBackgroundClassOfPoint(x2, y2, nextPlotNum);
     //int point2BackgroundZone = findBackgroundZoneIdOfPoint(x2, y2, nextPlotNum);
-    int point2BackgroundClass = z->classNum;
-	int point2BackgroundZone = z->id;
+    int point2BackgroundClass = point2PlotZone->classNum;
+	int point2BackgroundZone = point2PlotZone->id;
     std::map<int, std::vector<int>>* caseClassMap = &overlapMap[x2][y2];
 
     // check for incorrect classifications
@@ -1128,7 +1140,11 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }
 
     //overlapList = &overlapMap[x2][y2][caseClass];
+
+	
     mitigateOverlap(x2, y2, caseNum, caseClass, nextPlotNum, point2BackgroundClass, point2BackgroundZone);
+
+	
     // if (isOverlapMitigationModeAll && point2BackgroundClass >= 0)
     // {
     //     std::vector<int> caseList;
@@ -1267,7 +1283,9 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //     std::cout << "hmmm this shouldnt be hit ever...";
     // }
 
-    return nextPlotNum;
+    return point1PlotZone->destinationPlot;
+
+    //return nextPlotNum;
 }
 
 // NOT USED ANYMORE
@@ -2504,14 +2522,19 @@ void InteractiveSPC::invertPlotNumAxis(int plotNum, bool isXAxis) {
 // zoneid is the same as the index in parserData
 int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
+    if (plotNum < 0 || plotNum > data.plots.size()) {
+        return INT_MIN;
+    }
+
     Plot* plt = &data.plots[plotNum];
+    if (plt == NULL) return INT_MIN;
+
     Zone* z = plt->getZoneThatContainsPoint(px, py);
-	if (z != NULL) {
-		return z->id;
+	if (z == NULL) {
+        return INT_MIN;
     }
-    else {
-		return INT_MIN;
-    }
+    
+    return z->id;
 	
 
     //for (int i = 0; i < plotZones.size(); i++) {

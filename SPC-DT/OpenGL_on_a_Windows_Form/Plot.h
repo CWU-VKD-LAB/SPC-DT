@@ -136,6 +136,10 @@ struct Plot {
 
 	Zone* getZoneThatContainsPoint(GLfloat px, GLfloat py) {
 		Zone* z = nullptr;
+		if (!isPointWithinPlot(px, py)) {
+			isPointWithinPlot(px, py); // debug
+			return z;
+		}
 		for (int i = 0; i < zones.size(); i++) {
 			if (zones[i].isPointWithinZone(px, py)) {
 				z = &zones[i];
@@ -146,9 +150,28 @@ struct Plot {
 	}
 
 	bool isPointWithinPlot(GLfloat px, GLfloat py) {
-		if (px >= getX1() && px <= getX2() && py >= getY1() && py <= getY2()) {
+		GLfloat x1 = getX1();
+		GLfloat x2 = getX2();
+		GLfloat y1 = getY1();
+		GLfloat y2 = getY2();
+		float eps = 0.001;
+		if (px != x1 && abs(px - x1) < eps) {
+			px = x1;
+		} else if (px != x2 && abs(px - x2) < eps) {
+			px = x2;
+		}
+
+		if (py != y1 && abs(py - y1) < eps) {
+			py = y1;
+		} else if (py != y2 && abs(py - y2) < eps) {
+			py = y2;
+		}
+		
+
+		if (px >= x1 && px <= x2 && py >= y1 && py <= y2) {
 			return true;
 		}
+
 		return false;
 	}
 

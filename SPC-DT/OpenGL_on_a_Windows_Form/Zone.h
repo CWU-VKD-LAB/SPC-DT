@@ -46,11 +46,11 @@ struct Zone
          GLfloat *backgroundTransparencyGlobal)
     {
         this->id = i;
-        this->x1 = &parsedData->at(id)[0];
+        this->x1 = &parsedData->at(id)[0]; 
         this->y1 = &parsedData->at(id)[1];
         this->x2 = &parsedData->at(id)[2];
         this->y2 = &parsedData->at(id)[3];
-        this->classNum = parsedData->at(id)[4];
+        this->classNum = parsedData->at(id)[5];
         this->destinationPlot = destinationPlot;
         this->type = type;
         this->selectionZoneWidth = selectionZoneWidth;
