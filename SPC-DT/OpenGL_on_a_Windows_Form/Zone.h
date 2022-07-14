@@ -101,22 +101,32 @@ struct Zone
     // }
     GLfloat getRealX1()
     {
-        return (*parentCenterX - (*parentWidth / 2)) + *x1 * (*parentWidth);
+        return getParentRealX1() + *x1 * (*parentWidth);
     }
-    GLfloat getRealX2()
-    {
-        return (*parentCenterX - (*parentWidth / 2)) + *x2 * (*parentWidth);
+	GLfloat getRealX2()
+	{
+		return getParentRealX1() + *x2 * (*parentWidth);
+	}
+	GLfloat getRealY1()
+		{
+		return getParentRealY1() + *y1 * (*parentHeight);
+		}
+	GLfloat getRealY2()
+		{
+		return getParentRealY1() + *y2 * (*parentHeight);
+		}
+    GLfloat getParentRealX1() {
+		return (*parentCenterX - (*parentWidth / 2));
     }
-    GLfloat getRealY1()
-    {
-        //return (*parentCenterY - (*parentHeight / 2)) + *y1 * (*parentHeight);
-        return (*parentCenterY + (*parentHeight / 2)) - *y1 * (*parentHeight);
-    }
-    GLfloat getRealY2()
-    {
-        //return (*parentCenterY - (*parentHeight / 2)) + *y2 * (*parentHeight);
-		return (*parentCenterY + (*parentHeight / 2)) - *y2 * (*parentHeight);
-    }
+	GLfloat getParentRealX2() {
+		return (*parentCenterX + (*parentWidth / 2));
+	}
+	GLfloat getParentRealY1() {
+		return (*parentCenterY - (*parentHeight / 2));
+		}
+	GLfloat getParentRealY2() {
+		return (*parentCenterY + (*parentHeight / 2));
+		}
     void setColor(GLubyte transparency)
     {
         // TODO: handle multiple decision classes

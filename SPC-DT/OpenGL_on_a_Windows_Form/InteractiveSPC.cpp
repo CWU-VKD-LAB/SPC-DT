@@ -326,6 +326,14 @@ void InteractiveSPC::deleteSelectedRectangle() {
 /* Draws rectangles in rectangle mode around all continue zones*/
 void InteractiveSPC::drawRectanglesOnGray()
 {
+    for (int i = 0; i < data.plots.size(); i++) {
+		Plot* plt = &data.plots[i];
+        plt->drawRectsOnGray(Condense);
+    }
+
+    return;
+
+
     // iterate through each plot
     for (int plotNum = 0; plotNum < data.numPlots; plotNum++)
     {
@@ -390,7 +398,7 @@ void InteractiveSPC::drawRectanglesOnGray()
                  zoneToDrawY2 = pltY2 - plotHeight * zoneY2 + data.pan_y;
                  zoneToDrawY1 = pltY2 - plotHeight * zoneY1 + data.pan_y;
             // }
-            userRectangles.push_back(UserRectangle(zoneToDrawX1, zoneToDrawY1, zoneToDrawX2, zoneToDrawY2, Condense, plotNum, &data));
+            userRectangles.push_back(UserRectangle(zoneToDrawX1, zoneToDrawY1, zoneToDrawX2, zoneToDrawY2, Condense, plotNum));
             // old implementation
             //condenseRectX1List.push_back(zoneToDrawX1);
             //condenseRectX2List.push_back(zoneToDrawX2);
@@ -585,12 +593,12 @@ void InteractiveSPC::handleMisclassifications(float&x, float&y, int &caseClass, 
 
 void InteractiveSPC::condensePointInRectangle(float&x, float&y, int &caseClass, UserRectangle &userRect) {
     //  compute new location
-    GLfloat deltaX = abs(userRect.realX2 - userRect.realX1);
-    GLfloat deltaY = abs(userRect.realY2 - userRect.realY1);
-    GLfloat newX = userRect.realX1 + deltaX * 0.5;
-    GLfloat newY = userRect.realY1 - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
-    x = newX;
-    y = newY;
+    //GLfloat deltaX = abs(userRect.realX2 - userRect.realX1);
+    //GLfloat deltaY = abs(userRect.realY2 - userRect.realY1);
+    //GLfloat newX = userRect.realX1 + deltaX * 0.5;
+    //GLfloat newY = userRect.realY1 - (deltaY / (data.numOfClasses + 2)) * (caseClass + 1);
+    //x = newX;
+    //y = newY;
 }
 
 void InteractiveSPC::updateSelectedRectangleType(int state) {
@@ -2065,11 +2073,12 @@ void InteractiveSPC::display()
             float x = data.normalizedValues[caseNum][attr1Index];
             float y = data.normalizedValues[caseNum][attr2Index];
 
+            int caseClass = data.classNum[caseNum] - 1;
             // if (attr1Index == attr2Index) {
             //	// this means that the two attributes are the same so we are on a single attribute plot
             //	y = x;
             // }
-
+            data.plots[plotNum].drawData(&data.parsedAttributePairs, &data.attributeNameToDataIndex, &data.normalizedValues, caseNum, caseClass);
             plotToDrawNext = drawData(x, y, caseNum, plotNum);
         }
 
@@ -2915,6 +2924,13 @@ void InteractiveSPC::drawCircle(int x, int y)
     //	classColor[currentDepth].push_back(100);
     //	classTransparency.push_back(255);
     // }
+}
+
+void InteractiveSPC::addUserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, int plotNum)
+{
+    // Add a new rectangle to the list of rectangles
+    Plot* plt = &data.plots[plotNum];
+    plt->addUserRectangle(x1, y1, x2, y2, None);
 }
 
 void InteractiveSPC::drawRectangle(UserRectangle rect) {

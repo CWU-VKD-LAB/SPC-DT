@@ -155,6 +155,7 @@ public:
 	void drawCircle(int x, int y);
 	//void drawCondenseRectangles();
 	//void drawUserRectangles();
+    void addUserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	void drawRectangle(UserRectangle rectToDraw);
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
 	void drawRectanglesOnGray();
@@ -168,5 +169,7 @@ public:
 
 	float computeBackgroundTransparency(Zone &zone);
 	void computeZoneEdges(Zone &zone);
+
+	void addUserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, int plotNum);
 };
 

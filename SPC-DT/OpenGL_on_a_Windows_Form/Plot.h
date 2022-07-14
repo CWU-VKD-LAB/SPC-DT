@@ -1,14 +1,26 @@
 #include "stdafx.h"
 #include "Zone.h"
+#include "UserRectangle.h"
 #include "DrawingUtils.h"
+#include "Classification.h"
 #pragma once
 
 struct Plot {
 	int plotNum;
 	GLfloat centerX, centerY, width, height;
 	std::vector<Zone> zones;
+    std::vector<UserRectangle> userRects;
 	std::string attribute1Name, attribute2Name;
 	std::map<std::string, std::vector<float>>* attributeMinMax;
+	std::vector<std::vector<std::string>> *parsedAttributePairs;
+	std::map<std::string, int> *attributeNameToDataIndex;
+	std::vector<std::vector<float>> *normalizedValues;
+	std::vector<Plot> *plots;
+	std::vector<float> *classTransparencies;
+	std::vector<float>* caseColor;
+	std::set<int> classifiedCases;
+	std::set<Classification> misclassifiedCases;
+	std::set<Classification> correctlyClassifiedCases;
 	bool isXInverted, isYInverted, isXYSwapped, isSingleAttributePlot;
 
 	Plot(int id, std::map<std::string, std::vector<float>>& attributeMinMax, std::string &attribute1Name, std::string &attribute2Name) {
@@ -37,8 +49,25 @@ struct Plot {
 		drawPlot();
 		// draw zones
 		drawZones();
+
+		drawUserRectangles();
+	}
+
+	void drawUserRectangles() {
+		for (UserRectangle userRect : userRects) {
+			userRect.draw();
+		}
 	}
 	
+	void drawRectsOnGray(RectangleType type) {
+		for (int i = 0; i < zones.size(); i++) {
+			Zone* z = &zones[i];
+			if (z->type == type) {
+				addUserRectangle(*z->x1, *z->y1, *z->x2, *z->y2, type);
+			}
+		}
+	}
+
 	void drawPlot() {
 		// tbd
 
@@ -132,6 +161,129 @@ struct Plot {
 		// zone.computeRealCoordinates();
 		zone.computeSelectionZones();
 		zones.push_back(zone);
+	}
+
+    void addUserRectangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, RectangleType type) {
+        UserRectangle userRectangle(x1, y1, x2, y2, type, plotNum);
+		userRectangle.parentCenterX = &centerX;
+		userRectangle.parentCenterY = &centerY;
+		userRectangle.parentWidth = &width;
+		userRectangle.parentHeight = &height;
+        userRects.push_back(userRectangle);
+    }
+
+	/**
+	 * @brief Function draws a point on the plot and accounts for any possible user rectangles
+	 * 
+	 * @param px The incoming point on range [0-1]
+	 * @param py The incoming point on range [0-1]
+	 * @return int The next plot this point leads to
+	 */
+	int drawData(std::vector<std::vector<std::string>>& parsedAttributePairs, std::map<std::string, int>& attributeNameToDataIndex,
+		std::vector<std::vector<float>>& normalizedValues, std::vector<Plot>& plots, std::vector<float>& classTransparencies,
+		std::map<int, std::vector<float>>& classColors, int caseNum, int caseClass) 
+	{
+		std::vector<std::string> attributePairAndPlotNum = parsedAttributePairs[plotNum];
+		std::string attr1 = attributePairAndPlotNum[0];
+		std::string attr2 = attributePairAndPlotNum[1];
+		int attr1Index = attributeNameToDataIndex[attr1];
+		int attr2Index = attributeNameToDataIndex[attr2];
+		float x = normalizedValues[caseNum][attr1Index];
+		float y = normalizedValues[caseNum][attr2Index];
+		int plotToDrawNext = drawData(x, y, caseNum, caseClass);
+		if (plotToDrawNext == -1) {
+			return -1;
+		}
+		attributePairAndPlotNum = parsedAttributePairs[plotToDrawNext];
+		attr1 = attributePairAndPlotNum[0];
+		attr2 = attributePairAndPlotNum[1];
+		attr1Index = attributeNameToDataIndex[attr1];
+		attr2Index = attributeNameToDataIndex[attr2];
+		float x2 = normalizedValues[caseNum][attr1Index];
+		float y2 = normalizedValues[caseNum][attr2Index];
+		for (int i = 0; i < plots.size(); i++) {
+			Plot* plt = &plots[i];
+			Zone* zone = plt->getZoneThatContainsPoint(x2, y2);
+			if (zone == nullptr) {
+				return -1;
+			}
+			if (zone->type == Decision) {
+				glColor4ub(
+			}
+		}
+		drawLine(x, y, x2, y2);
+	}
+	int drawData(GLfloat px, GLfloat py, int caseNum, int caseClass) {
+		if (!isPointWithinPlot(px, py)) return -1;
+		Zone* zonePointLandsIn = getZoneThatContainsPoint(px, py);
+		if (zonePointLandsIn == NULL) return -1;
+		// check userRectangles
+		adjustToUserRectangles(px, py);
+		// handle classifications
+		constructClassification(caseNum, caseClass, zonePointLandsIn);
+		GLubyte classTransparency = classTransparencies->at(caseClass);
+		if (zonePointLandsIn->type == Decision) {
+			GLubyte r = classColor->at(caseClass)[0];
+			GLubyte g = classColor->at(caseClass)[1];
+			GLubyte b = classColor->at(caseClass)[2];
+			GLubyte a = classTransparency;
+			glColor4ub(r, g, b, a);
+		}
+		else {
+			glColor4ub(0, 0, 255, 255);
+		}
+		drawPoint(px, py);
+		return zonePointLandsIn->destinationPlot;
+	}
+
+	void constructClassification(int caseNum, int caseClass, Zone* z) {
+		if (z->type != Decision) return;
+		if (classifiedCases.find(caseNum) != classifiedCases.end()) return;
+		Classification classification(caseNum, caseClass, z->classNum);
+		if (classification.isMisclassification) {
+			misclassifiedCases.insert(classification);
+		}
+		else {
+			correctlyClassifiedCases.insert(classification);
+		}
+		classifiedCases.insert(caseNum);
+	}
+
+	void clearClassifications() {
+		classifiedCases.clear();
+		misclassifiedCases.clear();
+		correctlyClassifiedCases.clear();
+	}
+
+	void adjustToUserRectangles(GLfloat px, GLfloat py) {
+		std::vector<UserRectangle*> userRectanglesThatPointLandsIn = getUserRectanglesThatPointLandsIn(px, py);
+		for (int i = 0; i < userRectanglesThatPointLandsIn.size(); i++) {
+			UserRectangle* userRect = userRectanglesThatPointLandsIn[i];
+			userRect->adjustPoint(&px, &py);
+		}
+	}
+
+	void drawPoint(GLfloat px, GLfloat py) {
+		glBegin(GL_POINT);
+		glVertex2f(px, py);
+		glEnd();
+	}
+
+	void drawLine(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+		glBegin(GL_LINES);
+		glVertex2f(x1, y1);
+		glVertex2f(x2, y2);
+		glEnd();
+	}
+
+	std::vector<UserRectangle*> getUserRectanglesThatPointLandsIn(GLfloat px, GLfloat py) {
+		std::vector<UserRectangle*> userRectanglesThatPointLandsIn;
+		for (int i = 0; i < userRects.size(); i++) {
+			if (userRects[i].isPointWithinRectangle(px, py)) {
+				userRectanglesThatPointLandsIn.push_back(&userRects[i]);
+			}
+		}
+		return userRectanglesThatPointLandsIn;
 	}
 
 	Zone* getZoneThatContainsPoint(GLfloat px, GLfloat py) {

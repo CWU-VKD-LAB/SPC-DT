@@ -984,15 +984,15 @@ public:
 	//	return resultClass;
 	//}
 
-	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
-		bool result = false;
-		if (px <= x2 && px >= x1) {
-			if (py <= y1 && py >= y2) {
-				result = true;
-			}
-		}
-		return result;
-	}
+	//bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+	//	bool result = false;
+	//	if (px <= x2 && px >= x1) {
+	//		if (py <= y1 && py >= y2) {
+	//			result = true;
+	//		}
+	//	}
+	//	return result;
+	//}
 
 	void adjustThresholds(float worldMouseX, float worldMouseY, int plotId, int zone, int direction) {
 		// catch errors

@@ -801,7 +801,8 @@ public
                                 drawingRectangleX2 = worldMouseX;
                                 drawingRectangleY2 = worldMouseY;
                                 drawUserRectangleMode = false;
-                                graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
+                                graph4.addUserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, plotNumClicked);
+                                // graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
                                 setUserRectangleState(true);
                                 setDrawUserRectangleMode(false);
                                 
