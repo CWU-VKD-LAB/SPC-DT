@@ -56,6 +56,8 @@ public
         ///
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        String^ defaultModeString = "Drag Plots";
+
         Form1(void)
         {
             InitializeComponent();
@@ -278,6 +280,9 @@ private: System::Windows::Forms::ComboBox^ userRectangleTypeSelection;
 
 private: System::Windows::Forms::Label^ label4;
 private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
+private: System::Windows::Forms::Label^ modeLabel;
+private: System::Windows::Forms::Label^ currentModeDisplay;
+
 
 
 
@@ -306,6 +311,8 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
             this->graph4 = (gcnew System::Windows::Forms::Button());
             this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->currentModeDisplay = (gcnew System::Windows::Forms::Label());
+            this->modeLabel = (gcnew System::Windows::Forms::Label());
             this->selectRectangleButton = (gcnew System::Windows::Forms::Button());
             this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
             this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
@@ -402,6 +409,8 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             // panel1
             // 
             this->panel1->BackColor = System::Drawing::SystemColors::ButtonFace;
+            this->panel1->Controls->Add(this->currentModeDisplay);
+            this->panel1->Controls->Add(this->modeLabel);
             this->panel1->Controls->Add(this->selectRectangleButton);
             this->panel1->Controls->Add(this->removeUserRectButton);
             this->panel1->Controls->Add(this->changeUserRectColorButton);
@@ -430,6 +439,28 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->panel1->TabIndex = 4;
             this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Form1::panel1_Paint);
             // 
+            // currentModeDisplay
+            // 
+            this->currentModeDisplay->AutoSize = true;
+            this->currentModeDisplay->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->currentModeDisplay->Location = System::Drawing::Point(49, 925);
+            this->currentModeDisplay->Name = L"currentModeDisplay";
+            this->currentModeDisplay->Size = System::Drawing::Size(80, 16);
+            this->currentModeDisplay->TabIndex = 44;
+            this->currentModeDisplay->Text = L"Drag Plots";
+            // 
+            // modeLabel
+            // 
+            this->modeLabel->AutoSize = true;
+            this->modeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->modeLabel->Location = System::Drawing::Point(3, 906);
+            this->modeLabel->Name = L"modeLabel";
+            this->modeLabel->Size = System::Drawing::Size(90, 16);
+            this->modeLabel->TabIndex = 15;
+            this->modeLabel->Text = L"Current Mode:";
+            // 
             // selectRectangleButton
             // 
             this->selectRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
@@ -449,7 +480,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->removeUserRectButton->Name = L"removeUserRectButton";
             this->removeUserRectButton->Size = System::Drawing::Size(174, 44);
             this->removeUserRectButton->TabIndex = 42;
-            this->removeUserRectButton->Text = L"Remove User Rect";
+            this->removeUserRectButton->Text = L"Remove Selected Rectangle";
             this->removeUserRectButton->UseVisualStyleBackColor = true;
             this->removeUserRectButton->Click += gcnew System::EventHandler(this, &Form1::removeUserRectButton_Click);
             // 
@@ -611,7 +642,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->label9->Location = System::Drawing::Point(11, 868);
             this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(156, 29);
+            this->label9->Size = System::Drawing::Size(88, 16);
             this->label9->TabIndex = 27;
             this->label9->Text = L"Hide Classes";
             this->label9->Visible = false;
@@ -682,15 +713,13 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             // 
             // button3
             // 
-            this->button3->Enabled = false;
             this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->button3->Location = System::Drawing::Point(12, 165);
             this->button3->Name = L"button3";
             this->button3->Size = System::Drawing::Size(173, 31);
             this->button3->TabIndex = 8;
-            this->button3->Text = L"Move Graph";
+            this->button3->Text = L"Drag Plots";
             this->button3->UseVisualStyleBackColor = true;
-            this->button3->Visible = false;
             this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
             // 
             // button5
@@ -714,7 +743,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->trackBar1->Location = System::Drawing::Point(4, 71);
             this->trackBar1->Minimum = -10;
             this->trackBar1->Name = L"trackBar1";
-            this->trackBar1->Size = System::Drawing::Size(185, 80);
+            this->trackBar1->Size = System::Drawing::Size(185, 45);
             this->trackBar1->TabIndex = 9;
             this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
             // 
@@ -725,7 +754,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 static_cast<System::Byte>(0)));
             this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
             this->ZoomingLabel->Name = L"ZoomingLabel";
-            this->ZoomingLabel->Size = System::Drawing::Size(75, 29);
+            this->ZoomingLabel->Size = System::Drawing::Size(42, 16);
             this->ZoomingLabel->TabIndex = 11;
             this->ZoomingLabel->Text = L"Zoom";
             // 
@@ -757,14 +786,13 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 static_cast<System::Byte>(0)));
             this->PannningLabel->Location = System::Drawing::Point(6, 16);
             this->PannningLabel->Name = L"PannningLabel";
-            this->PannningLabel->Size = System::Drawing::Size(101, 29);
+            this->PannningLabel->Size = System::Drawing::Size(56, 16);
             this->PannningLabel->TabIndex = 10;
             this->PannningLabel->Text = L"Panning";
             this->PannningLabel->Visible = false;
             // 
             // menuStrip1
             // 
-            this->menuStrip1->GripMargin = System::Windows::Forms::Padding(2, 2, 0, 2);
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
@@ -797,7 +825,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             // colorButton
             // 
             this->colorButton->Enabled = false;
-            this->colorButton->Location = System::Drawing::Point(4, 103);
+            this->colorButton->Location = System::Drawing::Point(4, 49);
             this->colorButton->Name = L"colorButton";
             this->colorButton->Size = System::Drawing::Size(192, 31);
             this->colorButton->TabIndex = 0;
@@ -832,7 +860,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 static_cast<System::Byte>(0)));
             this->label1->Location = System::Drawing::Point(4, 1);
             this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(169, 58);
+            this->label1->Size = System::Drawing::Size(126, 16);
             this->label1->TabIndex = 12;
             this->label1->Text = L"Change Class Color";
             // 
@@ -843,9 +871,9 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
             this->comboBox1->Enabled = false;
             this->comboBox1->FormattingEnabled = true;
-            this->comboBox1->Location = System::Drawing::Point(4, 63);
+            this->comboBox1->Location = System::Drawing::Point(4, 21);
             this->comboBox1->Name = L"comboBox1";
-            this->comboBox1->Size = System::Drawing::Size(188, 32);
+            this->comboBox1->Size = System::Drawing::Size(188, 21);
             this->comboBox1->TabIndex = 1;
             this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
             // 
@@ -854,7 +882,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->label2->AutoSize = true;
             this->label2->Location = System::Drawing::Point(554, 8);
             this->label2->Name = L"label2";
-            this->label2->Size = System::Drawing::Size(0, 25);
+            this->label2->Size = System::Drawing::Size(0, 13);
             this->label2->TabIndex = 11;
             // 
             // panel2
@@ -886,7 +914,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->identifyWorstAreaCheckbox->Enabled = false;
             this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
             this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
-            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(218, 29);
+            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(124, 17);
             this->identifyWorstAreaCheckbox->TabIndex = 24;
             this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
             this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
@@ -899,7 +927,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->mitigateAllOverlap->Enabled = false;
             this->mitigateAllOverlap->Location = System::Drawing::Point(9, 385);
             this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
-            this->mitigateAllOverlap->Size = System::Drawing::Size(221, 29);
+            this->mitigateAllOverlap->Size = System::Drawing::Size(123, 17);
             this->mitigateAllOverlap->TabIndex = 23;
             this->mitigateAllOverlap->Text = L"Mitigate Overlap (All)";
             this->mitigateAllOverlap->UseVisualStyleBackColor = true;
@@ -911,7 +939,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->backgroundDensityColorCheckbox->Enabled = false;
             this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(9, 408);
             this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
-            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(291, 29);
+            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(163, 17);
             this->backgroundDensityColorCheckbox->TabIndex = 22;
             this->backgroundDensityColorCheckbox->Text = L"Background Density Coloring";
             this->backgroundDensityColorCheckbox->UseVisualStyleBackColor = true;
@@ -923,7 +951,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->mitigateOverlapCheckbox->Enabled = false;
             this->mitigateOverlapCheckbox->Location = System::Drawing::Point(9, 364);
             this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
-            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(310, 29);
+            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(171, 17);
             this->mitigateOverlapCheckbox->TabIndex = 21;
             this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap (Misclassified)";
             this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
@@ -935,7 +963,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->lineColorCheckbox->Enabled = false;
             this->lineColorCheckbox->Location = System::Drawing::Point(9, 343);
             this->lineColorCheckbox->Name = L"lineColorCheckbox";
-            this->lineColorCheckbox->Size = System::Drawing::Size(182, 29);
+            this->lineColorCheckbox->Size = System::Drawing::Size(103, 17);
             this->lineColorCheckbox->TabIndex = 20;
             this->lineColorCheckbox->Text = L"Line Color Mode";
             this->lineColorCheckbox->UseVisualStyleBackColor = true;
@@ -947,7 +975,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->pointColorMode->Enabled = false;
             this->pointColorMode->Location = System::Drawing::Point(9, 301);
             this->pointColorMode->Name = L"pointColorMode";
-            this->pointColorMode->Size = System::Drawing::Size(189, 29);
+            this->pointColorMode->Size = System::Drawing::Size(107, 17);
             this->pointColorMode->TabIndex = 19;
             this->pointColorMode->Text = L"Point Color Mode";
             this->pointColorMode->UseVisualStyleBackColor = true;
@@ -959,7 +987,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->highlightMisclassificationsCheckbox->Enabled = false;
             this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(9, 320);
             this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
-            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(269, 29);
+            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
             this->highlightMisclassificationsCheckbox->TabIndex = 18;
             this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
             this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
@@ -971,7 +999,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->lineTerminationModeCheckbox->Enabled = false;
             this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
             this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
-            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(238, 29);
+            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(134, 17);
             this->lineTerminationModeCheckbox->TabIndex = 17;
             this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
             this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
@@ -996,7 +1024,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
             this->backgroundColorLightnessSlider->Maximum = 200;
             this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 80);
+            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 45);
             this->backgroundColorLightnessSlider->TabIndex = 10;
             this->backgroundColorLightnessSlider->Value = 2;
             this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -1008,7 +1036,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundLightness->Location = System::Drawing::Point(4, 16);
             this->backgroundLightness->Name = L"backgroundLightness";
-            this->backgroundLightness->Size = System::Drawing::Size(258, 25);
+            this->backgroundLightness->Size = System::Drawing::Size(161, 15);
             this->backgroundLightness->TabIndex = 11;
             this->backgroundLightness->Text = L"Background Color Lightness";
             // 
@@ -1030,7 +1058,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
             this->backgroundTransparencySlider->Maximum = 255;
             this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 80);
+            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 45);
             this->backgroundTransparencySlider->TabIndex = 10;
             this->backgroundTransparencySlider->Value = 100;
             this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -1042,7 +1070,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
             this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-            this->backgroundTransparencyLabel->Size = System::Drawing::Size(243, 25);
+            this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
             this->backgroundTransparencyLabel->TabIndex = 11;
             this->backgroundTransparencyLabel->Text = L"Background Transparency";
             this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -1067,7 +1095,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->classTransparencySelection->FormattingEnabled = true;
             this->classTransparencySelection->Location = System::Drawing::Point(6, 37);
             this->classTransparencySelection->Name = L"classTransparencySelection";
-            this->classTransparencySelection->Size = System::Drawing::Size(188, 32);
+            this->classTransparencySelection->Size = System::Drawing::Size(188, 21);
             this->classTransparencySelection->TabIndex = 13;
             this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
             // 
@@ -1079,7 +1107,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             this->transparencySlider->Location = System::Drawing::Point(6, 64);
             this->transparencySlider->Maximum = 255;
             this->transparencySlider->Name = L"transparencySlider";
-            this->transparencySlider->Size = System::Drawing::Size(185, 80);
+            this->transparencySlider->Size = System::Drawing::Size(185, 45);
             this->transparencySlider->TabIndex = 10;
             this->transparencySlider->Value = 255;
             this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -1091,16 +1119,19 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->transparencyLabel->Location = System::Drawing::Point(6, 18);
             this->transparencyLabel->Name = L"transparencyLabel";
-            this->transparencyLabel->Size = System::Drawing::Size(226, 29);
+            this->transparencyLabel->Size = System::Drawing::Size(128, 16);
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
             // 
             // userRectangleTypeSelection
             // 
+            this->userRectangleTypeSelection->BackColor = System::Drawing::SystemColors::ButtonFace;
+            this->userRectangleTypeSelection->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->userRectangleTypeSelection->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
             this->userRectangleTypeSelection->FormattingEnabled = true;
             this->userRectangleTypeSelection->Location = System::Drawing::Point(76, 25);
             this->userRectangleTypeSelection->Name = L"userRectangleTypeSelection";
-            this->userRectangleTypeSelection->Size = System::Drawing::Size(121, 32);
+            this->userRectangleTypeSelection->Size = System::Drawing::Size(121, 21);
             this->userRectangleTypeSelection->TabIndex = 25;
             this->userRectangleTypeSelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox2_SelectedIndexChanged_1);
             // 
@@ -1111,7 +1142,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 static_cast<System::Byte>(0)));
             this->label3->Location = System::Drawing::Point(7, 4);
             this->label3->Name = L"label3";
-            this->label3->Size = System::Drawing::Size(250, 25);
+            this->label3->Size = System::Drawing::Size(159, 15);
             this->label3->TabIndex = 12;
             this->label3->Text = L"User Rectangle Parameters";
             this->label3->Click += gcnew System::EventHandler(this, &Form1::label3_Click);
@@ -1123,7 +1154,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                 static_cast<System::Byte>(0)));
             this->label4->Location = System::Drawing::Point(29, 28);
             this->label4->Name = L"label4";
-            this->label4->Size = System::Drawing::Size(63, 25);
+            this->label4->Size = System::Drawing::Size(36, 15);
             this->label4->TabIndex = 26;
             this->label4->Text = L"Type:";
             this->label4->Click += gcnew System::EventHandler(this, &Form1::label4_Click_1);
@@ -1238,6 +1269,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             SwapAttributesButton->Enabled = state;
             menuStrip1->Enabled = state;
             selectRectangleButton->Enabled = state;
+            button3->Enabled = state; // drag plots button
 
 
             // right panel
@@ -1365,6 +1397,7 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             OpenGL3->setLineTerminationMode(false);
             OpenGL3->setAdjustThresholdsMode(false);
             OpenGL3->setDrawingRectangleState(false);
+            /*OpenGL3->setModeDisplayParams(currentModeDisplay->Text, defaultModeString);*/
             OpenGL3->setUserRectangleState(false);
 
             for (int x = 0; x < checkedListBox4->Items->Count; x++)
@@ -1611,6 +1644,8 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
     private:
         System::Void button3_Click(System::Object ^ sender, System::EventArgs ^ e)
         {
+            currentModeDisplay->Text = defaultModeString;
+            OpenGL3->setDragMode();
         }
 
     private:
@@ -1648,6 +1683,10 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
                     this->comboBox1->Items->Add(data.continueElements[i]);
                     this->classTransparencySelection->Items->Add(data.continueElements[i]);
                 }
+
+                // populate user rectangle types
+                this->userRectangleTypeSelection->Items->Add("None");
+                this->userRectangleTypeSelection->Items->Add("Condense");
 
                 data.numOfClasses = OpenGL3->getClassSize();
 
@@ -1905,43 +1944,49 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
         System::Void label9_Click(System::Object ^ sender, System::EventArgs ^ e)
         {
         }
-        bool swapXToggle = false;
 
+        bool swapXToggle = false;
     private:
         System::Void button8_Click_1(System::Object ^ sender, System::EventArgs ^ e)
         {
+            swapXToggle = !swapXToggle;
             checkBox1->Checked = false;
             // OpenGL3->reverseDataAxis = 1;
             OpenGL3->isXAxisInvertMode = !OpenGL3->isXAxisInvertMode;
-            OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
+            OpenGL3->canDragPlots = !swapXToggle;
             if (!swapXToggle)
             {
-                button8->Text = button8->Text + " (BUTTON ACTIVE) ";
+                currentModeDisplay->Text = "Invert X Axis";
+                //button8->Text = button8->Text + " (BUTTON ACTIVE) ";
             }
             else
             {
-                button8->Text = button8->Text->Substring(0, button8->Text->Length - 17);
+                currentModeDisplay->Text = defaultModeString;
+                //button8->Text = button8->Text->Substring(0, button8->Text->Length - 17);
             }
-            swapXToggle = !swapXToggle;
+            
         }
+		
         bool swapYToggle = false;
-
     private:
         System::Void button7_Click_1(System::Object ^ sender, System::EventArgs ^ e)
         {
+            swapYToggle = !swapYToggle;
             checkBox1->Checked = false;
             // OpenGL3->reverseDataAxis = 2;
             OpenGL3->isYAxisInvertMode = !OpenGL3->isYAxisInvertMode;
-            OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
+            OpenGL3->canDragPlots = !swapYToggle;
             if (!swapYToggle)
             {
-                button7->Text = button7->Text + " (BUTTON ACTIVE) ";
+				currentModeDisplay->Text = "Invert Y Axis";
+                //button7->Text = button7->Text + " (BUTTON ACTIVE) ";
             }
             else
             {
-                button7->Text = button7->Text->Substring(0, button7->Text->Length - 17);
+				currentModeDisplay->Text = defaultModeString;
+                //button7->Text = button7->Text->Substring(0, button7->Text->Length - 17);
             }
-            swapYToggle = !swapYToggle;
+            
         }
 
     private:
@@ -2044,11 +2089,13 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
             if (!swapButtonToggled)
             {
-                SwapAttributesButton->Text = SwapAttributesButton->Text + " (BUTTON ACTIVE) ";
+                /*SwapAttributesButton->Text = SwapAttributesButton->Text + " (BUTTON ACTIVE) ";*/
+                currentModeDisplay->Text = "Swap Attributes";
             }
             else
             {
-                SwapAttributesButton->Text = SwapAttributesButton->Text->Substring(0, SwapAttributesButton->Text->Length - 17);
+                currentModeDisplay->Text = this->defaultModeString;
+                //SwapAttributesButton->Text = SwapAttributesButton->Text->Substring(0, SwapAttributesButton->Text->Length - 17);
             }
             swapButtonToggled = !swapButtonToggled;
         }
@@ -2135,10 +2182,12 @@ private: System::Windows::Forms::Panel^ userRectangleParametersPanel;
             if (adjustThresholdsButtonToggle)
             {
                 //adjustThresholdsButton->Text = adjustThresholdsButton->Text + " (BUTTON ACTIVE) ";
+                currentModeDisplay->Text = "Adjust Thresholds";
             }
             else
             {
                 //adjustThresholdsButton->Text = adjustThresholdsButton->Text->Substring(0, adjustThresholdsButton->Text->Length - 17);
+                currentModeDisplay->Text = this->defaultModeString;
             }
             adjustThresholdsButtonToggle = !adjustThresholdsButtonToggle;
             OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
@@ -2154,7 +2203,10 @@ private: System::Void identifyWorstAreaCheckbox_CheckedChanged(System::Object^ s
 private: System::Void drawUserRectButton_Click(System::Object^ sender, System::EventArgs^ e) {
     String^ str = "To draw a rectangle, click once for the first corner, then click again for the opposite corner.";
     MessageBox::Show(str);
-    OpenGL3->setDrawUserRectangleMode(true); // will be set to false  further down the drawing stack
+    currentModeDisplay->Text = "Draw Rectangle";
+    //OpenGL3->setModeDisplayParams(&currentModeDisplay, &defaultModeString);
+    OpenGL3->setDrawUserRectangleMode(true);
+    // will be set to false  further down the drawing stack
 }
 private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
     if (fileopened) {
@@ -2167,13 +2219,24 @@ private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
        bool selectRectangleState = false;
 private: System::Void selectRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
     OpenGL3->canDragPlots = selectRectangleState;
-    if (OpenGL3->toggleSelectUserRectangleMode() == -1) {
+    if (OpenGL3->toggleSelectUserRectangleMode(removeUserRectButton) == -1) {
         OpenGL3->canDragPlots = true;
         MessageBox::Show("Please place at least one rectangle before trying to select it");
         return;
     }
     selectRectangleState = !selectRectangleState;
+    if (selectRectangleState) {
+		currentModeDisplay->Text = "Select Rectangle";
+        removeUserRectButton->Enabled = true;
+	}
+	else {
+		currentModeDisplay->Text = this->defaultModeString;
+        removeUserRectButton->Enabled = false;
+    }
     userRectangleParametersPanel->Enabled = selectRectangleState;
+    this->userRectangleTypeSelection->Items->Clear();
+    this->userRectangleTypeSelection->Items->Add("None");
+    this->userRectangleTypeSelection->Items->Add("Condense");
 }
 private: System::Void comboBox2_SelectedIndexChanged_1(System::Object^ sender, System::EventArgs^ e) {
     int state = userRectangleTypeSelection->SelectedIndex;

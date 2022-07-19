@@ -209,7 +209,14 @@ void InteractiveSPC::fillPlotLocations()
 
 void InteractiveSPC::deleteSelectedRectangle() {
     if (selectedRect != nullptr) {
-        std::remove(userRectangles.begin(), userRectangles.end(), *selectedRect);
+        for (int i = 0; i < userRectangles.size(); i++) {
+			UserRectangle *rect = &userRectangles[i];
+            if (rect->id = selectedRect->id) {
+                userRectangles.erase(userRectangles.begin() + i);
+                userRectangles.shrink_to_fit();
+                break;
+            }
+        }
     }
 }
 
@@ -506,7 +513,7 @@ void InteractiveSPC::adjustPointToRectangle(float &x, float &y, int &caseClass) 
                 glColor3ub(255, 0, 0);
                 glVertex2f(x, y);
                 glColor3ub(0, 255, 0);*/
-                condensePointInRectangle(x, y, caseClass, *userRect);
+                //condensePointInRectangle(x, y, caseClass, *userRect);
                 //glVertex2f(x, y);
                 //glEnd();
                 //glBegin(GL_LINES);
@@ -516,6 +523,7 @@ void InteractiveSPC::adjustPointToRectangle(float &x, float &y, int &caseClass) 
                 //if (oldX == x) {
                 //    std::cout << "debug";
                 //}
+                userRect->condensePoint(x, y, caseClass);
                 shouldStop = true;
             }
             break;

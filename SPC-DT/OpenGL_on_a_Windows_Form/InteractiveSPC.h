@@ -66,7 +66,7 @@ public:
 	UserRectangle* findClickedRectangle(GLfloat px, GLfloat py);
 	UserRectangle* selectedRect;
 	bool isSelectUserRectangleMode = false;
-
+	
     //std::vector<std::vector<GLubyte>> userRectColorList;
 	//GLfloat rectX1;
 	//GLfloat rectY1;
@@ -76,6 +76,8 @@ public:
 	bool isUserRectangleMode = false;
 	bool isBackgroundDensityColoringMode = false;
 	bool drawingUserRectangleVertex1 = false;
+	System::Windows::Forms::Label^* currentModeDisplay;
+	System::String^* defaultModeDisplay;
 	GLfloat userRectangleDrawGuideX;
 	GLfloat userRectangleDrawGuideY;
 	int isLineTrivial(bool * startPointTriviality, bool * endPointTriviality);

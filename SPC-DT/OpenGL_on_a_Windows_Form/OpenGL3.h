@@ -107,6 +107,9 @@ public
         // reference to the confusion matrix text box
         System::Windows::Forms::TextBox^ confusionMatrixTextBox;
 
+        System::String^ currentModeDisplay;
+        System::String^ defaultModeDisplay;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         ///
         ///
@@ -246,6 +249,13 @@ public
             graph4.isOverlapMitigationModeAll = state;
         }
 
+        void setDragMode() {
+            graph4.isAdjustThresholdsMode = false;
+            graph4.isSelectUserRectangleMode = false;
+            graph4.swapAttributeAxesMode = false;
+            canDragPlots = true;
+        }
+
         // Set adjust thresholds mode
         void setAdjustThresholdsMode(bool state)
         {
@@ -255,15 +265,29 @@ public
             graph4.zoneIdThresholdEdgesRecorded.clear();
         }
 
+        //void setModeDisplayParams(System::String^& currentModeDisplay, System::String^ &defaultModeDisplay) {
+        //    this->currentModeDisplay = currentModeDisplay;
+        //    this->defaultModeDisplay = defaultModeDisplay;
+        //}
+
         void setDrawUserRectangleMode(bool state) {
             graph4.drawingUserRectangleVertex1 = state;
             drawUserRectangleMode = state;
             canDragPlots = !state;
+            //if (canDragPlots) {
+            //    this->currentModeDisplay->Text = defaultModeDisplay;
+            //}
+            //else {
+            //    this->currentModeDisplay->Text = "Draw Rectangle";
+            //}
         }
 
-        int toggleSelectUserRectangleMode() {
+        int toggleSelectUserRectangleMode(System::Windows::Forms::Button^ removeUserRectButton) {
             if (graph4.userRectangles.empty()) return -1;
             graph4.isSelectUserRectangleMode = !graph4.isSelectUserRectangleMode;
+            if (!graph4.isSelectUserRectangleMode && graph4.selectedRect != nullptr) {
+                graph4.selectedRect->setFrameColor(0, 0, 0);
+            }
             selectUserRectangleMode = !selectUserRectangleMode;
             return 0;
         }
@@ -813,15 +837,11 @@ public
                         // select user rectangles mode
                         if (selectUserRectangleMode) {
                             if (graph4.selectedRect != nullptr) {
-                                graph4.selectedRect->frameColor[0] = 0;
-                                graph4.selectedRect->frameColor[1] = 0;
-                                graph4.selectedRect->frameColor[2] = 0;
+                                graph4.selectedRect->setFrameColor(0, 0, 0);
                             }
                             graph4.selectedRect = graph4.findClickedRectangle(worldMouseX, worldMouseY);
                             if (graph4.selectedRect != nullptr) {
-                                graph4.selectedRect->frameColor[0] = 255;
-                                graph4.selectedRect->frameColor[1] = 0;
-                                graph4.selectedRect->frameColor[2] = 0;
+                                graph4.selectedRect->setFrameColor(255, 0, 0);
                             }
                         }
                         else if (graph4.selectedRect != nullptr) {

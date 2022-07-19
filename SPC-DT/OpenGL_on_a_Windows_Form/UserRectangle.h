@@ -22,6 +22,7 @@ struct UserRectangle {
 		this->type = type;
 		this->data = data;
         computeRealCoords();
+        setFrameColor(0, 0, 0);
 	}
     void invertX() {
         X1 = 1.0f - X1;
@@ -41,8 +42,8 @@ struct UserRectangle {
     }
 	void drawEdges() {
         computeRealCoords();
-		glColor4ub(0, 0, 0, 255);
-		glBegin(GL_LINE_LOOP);
+        glColor3ub(frameColor[0], frameColor[1], frameColor[2]);
+        glBegin(GL_LINE_LOOP);
         glVertex2f(realX1, realY1);
         glVertex2f(realX2, realY1);
         glVertex2f(realX2, realY2);
@@ -50,17 +51,32 @@ struct UserRectangle {
 		glEnd();
 	}
     void drawEdges(float lineThickness) {
-        glColor3ub(frameColor[0], frameColor[1], frameColor[2]);
         glLineWidth(lineThickness);
         drawEdges();
         glLineWidth(1.0); // TODO: replace with global line width
     }
     bool isPointWithinRect(float&px, float&py) {
         computeRealCoords();
-        if (px >= realX1 && px <= realX2 && py >= realY2 && py <= realY1) {
+        GLfloat highX = max(realX1, realX2);
+        GLfloat lowX = min(realX1, realX2);
+		GLfloat highY = max(realY1, realY2);
+		GLfloat lowY = min(realY1, realY2);
+        if (px >= lowX && px <= highX && py >= lowY && py <= highY) {
             return true;
         }
         return false;
+    }
+    void condensePoint(GLfloat& px, GLfloat& py, int classNum) {
+        computeRealCoords();
+		GLfloat highX = max(realX1, realX2);
+		GLfloat lowX = min(realX1, realX2);
+		GLfloat highY = max(realY1, realY2);
+		GLfloat lowY = min(realY1, realY2);
+		GLfloat width = highX - lowX;
+		GLfloat height = highY - lowY;
+        int numClasses = data->classes.size();
+        px = lowX + (width / 2);
+        py = highY - (classNum + 1) * (height / (numClasses + 1));
     }
     void setFrameColor(GLubyte R, GLubyte G, GLubyte B) {
         frameColor[0] = R;
