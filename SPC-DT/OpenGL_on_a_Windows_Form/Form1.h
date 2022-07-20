@@ -314,7 +314,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->currentModeDisplay = (gcnew System::Windows::Forms::Label());
             this->modeLabel = (gcnew System::Windows::Forms::Label());
             this->selectRectangleButton = (gcnew System::Windows::Forms::Button());
-            this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
             this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
             this->drawUserRectButton = (gcnew System::Windows::Forms::Button());
             this->confusionMatrixTextBox = (gcnew System::Windows::Forms::TextBox());
@@ -334,6 +333,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->button1 = (gcnew System::Windows::Forms::Button());
             this->button4 = (gcnew System::Windows::Forms::Button());
             this->button3 = (gcnew System::Windows::Forms::Button());
+            this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
             this->button5 = (gcnew System::Windows::Forms::Button());
             this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
             this->ZoomingLabel = (gcnew System::Windows::Forms::Label());
@@ -412,7 +412,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->panel1->Controls->Add(this->currentModeDisplay);
             this->panel1->Controls->Add(this->modeLabel);
             this->panel1->Controls->Add(this->selectRectangleButton);
-            this->panel1->Controls->Add(this->removeUserRectButton);
             this->panel1->Controls->Add(this->changeUserRectColorButton);
             this->panel1->Controls->Add(this->drawUserRectButton);
             this->panel1->Controls->Add(this->confusionMatrixTextBox);
@@ -471,18 +470,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->selectRectangleButton->Text = L"Select Rectangle";
             this->selectRectangleButton->UseVisualStyleBackColor = true;
             this->selectRectangleButton->Click += gcnew System::EventHandler(this, &Form1::selectRectangleButton_Click);
-            // 
-            // removeUserRectButton
-            // 
-            this->removeUserRectButton->Enabled = false;
-            this->removeUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->removeUserRectButton->Location = System::Drawing::Point(9, 717);
-            this->removeUserRectButton->Name = L"removeUserRectButton";
-            this->removeUserRectButton->Size = System::Drawing::Size(174, 44);
-            this->removeUserRectButton->TabIndex = 42;
-            this->removeUserRectButton->Text = L"Remove Selected Rectangle";
-            this->removeUserRectButton->UseVisualStyleBackColor = true;
-            this->removeUserRectButton->Click += gcnew System::EventHandler(this, &Form1::removeUserRectButton_Click);
             // 
             // changeUserRectColorButton
             // 
@@ -722,6 +709,18 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->button3->UseVisualStyleBackColor = true;
             this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
             // 
+            // removeUserRectButton
+            // 
+            this->removeUserRectButton->Enabled = false;
+            this->removeUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->removeUserRectButton->Location = System::Drawing::Point(5, 64);
+            this->removeUserRectButton->Name = L"removeUserRectButton";
+            this->removeUserRectButton->Size = System::Drawing::Size(189, 29);
+            this->removeUserRectButton->TabIndex = 42;
+            this->removeUserRectButton->Text = L"Remove Selected Rectangle";
+            this->removeUserRectButton->UseVisualStyleBackColor = true;
+            this->removeUserRectButton->Click += gcnew System::EventHandler(this, &Form1::removeUserRectButton_Click);
+            // 
             // button5
             // 
             this->button5->Enabled = false;
@@ -796,7 +795,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
-            this->menuStrip1->Size = System::Drawing::Size(1907, 24);
+            this->menuStrip1->Size = System::Drawing::Size(1454, 24);
             this->menuStrip1->TabIndex = 5;
             this->menuStrip1->Text = L"menuStrip1";
             // 
@@ -805,7 +804,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->statusStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->statusStrip1->Location = System::Drawing::Point(0, 956);
             this->statusStrip1->Name = L"statusStrip1";
-            this->statusStrip1->Size = System::Drawing::Size(1907, 22);
+            this->statusStrip1->Size = System::Drawing::Size(1454, 22);
             this->statusStrip1->TabIndex = 6;
             this->statusStrip1->Text = L"statusStrip1";
             // 
@@ -903,7 +902,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->panel2->Controls->Add(this->groupBox1);
             this->panel2->Controls->Add(this->button5);
             this->panel2->Controls->Add(this->graph4);
-            this->panel2->Location = System::Drawing::Point(1698, 27);
+            this->panel2->Location = System::Drawing::Point(1240, 1);
             this->panel2->Name = L"panel2";
             this->panel2->Size = System::Drawing::Size(209, 794);
             this->panel2->TabIndex = 13;
@@ -1164,8 +1163,9 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->userRectangleParametersPanel->Controls->Add(this->label4);
             this->userRectangleParametersPanel->Controls->Add(this->label3);
             this->userRectangleParametersPanel->Controls->Add(this->userRectangleTypeSelection);
+            this->userRectangleParametersPanel->Controls->Add(this->removeUserRectButton);
             this->userRectangleParametersPanel->Enabled = false;
-            this->userRectangleParametersPanel->Location = System::Drawing::Point(1698, 827);
+            this->userRectangleParametersPanel->Location = System::Drawing::Point(1252, 801);
             this->userRectangleParametersPanel->Name = L"userRectangleParametersPanel";
             this->userRectangleParametersPanel->Size = System::Drawing::Size(200, 100);
             this->userRectangleParametersPanel->TabIndex = 14;
@@ -1173,7 +1173,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // Form1
             // 
             this->BackColor = System::Drawing::SystemColors::Control;
-            this->ClientSize = System::Drawing::Size(1907, 978);
+            this->ClientSize = System::Drawing::Size(1454, 978);
             this->Controls->Add(this->userRectangleParametersPanel);
             this->Controls->Add(this->panel2);
             this->Controls->Add(this->label2);
@@ -1945,16 +1945,17 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
         {
         }
 
-        bool swapXToggle = false;
+        //bool swapXToggle = false;
     private:
         System::Void button8_Click_1(System::Object ^ sender, System::EventArgs ^ e)
         {
-            swapXToggle = !swapXToggle;
+            OpenGL3->toggleXAxisInversionMode();
+            bool swapXToggle = OpenGL3->getSelectionMode() == InteractiveSPC::SelectionMode::InvertX;
             checkBox1->Checked = false;
             // OpenGL3->reverseDataAxis = 1;
-            OpenGL3->isXAxisInvertMode = !OpenGL3->isXAxisInvertMode;
+            //OpenGL3->isXAxisInvertMode = !OpenGL3->isXAxisInvertMode;
             OpenGL3->canDragPlots = !swapXToggle;
-            if (!swapXToggle)
+            if (swapXToggle)
             {
                 currentModeDisplay->Text = "Invert X Axis";
                 //button8->Text = button8->Text + " (BUTTON ACTIVE) ";
@@ -1967,16 +1968,17 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             
         }
 		
-        bool swapYToggle = false;
+        //bool swapYToggle = false;
     private:
         System::Void button7_Click_1(System::Object ^ sender, System::EventArgs ^ e)
         {
-            swapYToggle = !swapYToggle;
+            OpenGL3->toggleYAxisInversionMode();
+            bool swapYToggle = OpenGL3->getSelectionMode() == InteractiveSPC::SelectionMode::InvertY;
             checkBox1->Checked = false;
             // OpenGL3->reverseDataAxis = 2;
-            OpenGL3->isYAxisInvertMode = !OpenGL3->isYAxisInvertMode;
+            //OpenGL3->isYAxisInvertMode = !OpenGL3->isYAxisInvertMode;
             OpenGL3->canDragPlots = !swapYToggle;
-            if (!swapYToggle)
+            if (swapYToggle)
             {
 				currentModeDisplay->Text = "Invert Y Axis";
                 //button7->Text = button7->Text + " (BUTTON ACTIVE) ";
@@ -2216,15 +2218,17 @@ private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
         changeToUploadParserState();
     }
 }
-       bool selectRectangleState = false;
+       //bool selectRectangleState = false;
 private: System::Void selectRectangleButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    OpenGL3->toggleSelectUserRectangleMode();
+    bool selectRectangleState = OpenGL3->getSelectionMode() == InteractiveSPC::SelectionMode::SelectRect;
     OpenGL3->canDragPlots = selectRectangleState;
     if (OpenGL3->toggleSelectUserRectangleMode(removeUserRectButton) == -1) {
         OpenGL3->canDragPlots = true;
         MessageBox::Show("Please place at least one rectangle before trying to select it");
         return;
     }
-    selectRectangleState = !selectRectangleState;
+    //selectRectangleState = !selectRectangleState;
     if (selectRectangleState) {
 		currentModeDisplay->Text = "Select Rectangle";
         removeUserRectButton->Enabled = true;

@@ -69,12 +69,12 @@ public
         bool thresholdBeingAdjusted = false;
 
         /// <summary> Whether the edge selection mode is on
-        bool isAdjustThresholdsMode = false;
+        //bool isAdjustThresholdsMode = false;
 
         /// <summary>	Is made true via mouselistener when dragging the mouse. </summary>
         bool drawingDragged;
         bool drawingRectangleEnabled = false;
-        bool drawUserRectangleMode = false;
+        //bool drawUserRectangleMode = false;
         bool drawingRectangleVertex1 = true;
         GLfloat drawingRectangleX1;
         GLfloat drawingRectangleY1;
@@ -88,9 +88,9 @@ public
         int graphType = -1;
         bool displayData;
 
-        bool attributeSwapMode = false;
-        bool isXAxisInvertMode = false;
-        bool isYAxisInvertMode = false;
+        //bool attributeSwapMode = false;
+        //bool isXAxisInvertMode = false;
+        //bool isYAxisInvertMode = false;
 
         /// <summary>	The original wh. </summary>
         int originalWH;
@@ -99,7 +99,7 @@ public
         int cpPosx;
         int cpPosy;
 
-        bool selectUserRectangleMode = false;
+        //bool selectUserRectangleMode = false;
 
         // debug counter
         int DEBUG_COUNTER = 0;
@@ -250,17 +250,24 @@ public
         }
 
         void setDragMode() {
-            graph4.isAdjustThresholdsMode = false;
-            graph4.isSelectUserRectangleMode = false;
-            graph4.swapAttributeAxesMode = false;
+            graph4.selectionMode = graph4.DragPlot;
+            //graph4.isAdjustThresholdsMode = false;
+            //graph4.isSelectUserRectangleMode = false;
+            //graph4.swapAttributeAxesMode = false;
             canDragPlots = true;
         }
 
         // Set adjust thresholds mode
         void setAdjustThresholdsMode(bool state)
         {
-            isAdjustThresholdsMode = state;
-            graph4.isAdjustThresholdsMode = state;
+            if (state) {
+				graph4.selectionMode = graph4.AdjustThresholds;
+            }
+            else {
+                graph4.selectionMode = graph4.DragPlot;
+            }
+            //isAdjustThresholdsMode = state;
+            //graph4.isAdjustThresholdsMode = state;
             graph4.thresholdEdgeSelectionZones.clear();
             graph4.zoneIdThresholdEdgesRecorded.clear();
         }
@@ -272,7 +279,13 @@ public
 
         void setDrawUserRectangleMode(bool state) {
             graph4.drawingUserRectangleVertex1 = state;
-            drawUserRectangleMode = state;
+            //drawUserRectangleMode = state;
+            if (state) {
+				graph4.selectionMode = graph4.DrawRect;
+			}
+			else {
+				graph4.selectionMode = graph4.DragPlot;
+            }
             canDragPlots = !state;
             //if (canDragPlots) {
             //    this->currentModeDisplay->Text = defaultModeDisplay;
@@ -282,13 +295,57 @@ public
             //}
         }
 
+        void toggleXAxisInversionMode() {
+            if (graph4.selectionMode != graph4.InvertX) {
+				graph4.selectionMode = graph4.InvertX;
+			}
+			else {
+				graph4.selectionMode = graph4.DragPlot;
+            }
+        }
+
+        void toggleYAxisInversionMode() {
+            if (graph4.selectionMode != graph4.InvertY) {
+                graph4.selectionMode = graph4.InvertY;
+            }
+            else {
+				graph4.selectionMode = graph4.DragPlot;
+            }
+        }
+
+        void toggleXYSwapMode() {
+			if (graph4.selectionMode != graph4.SwapXY) {
+				graph4.selectionMode = graph4.SwapXY;
+			}
+			else {
+				graph4.selectionMode = graph4.DragPlot;
+			}
+        }
+
+        void toggleSelectUserRectangleMode() {
+            if (graph4.selectionMode != graph4.SelectRect) {
+                graph4.selectionMode = graph4.SelectRect;
+            }
+            else {
+				graph4.selectionMode = graph4.DragPlot;
+			}	
+        }
+
         int toggleSelectUserRectangleMode(System::Windows::Forms::Button^ removeUserRectButton) {
             if (graph4.userRectangles.empty()) return -1;
-            graph4.isSelectUserRectangleMode = !graph4.isSelectUserRectangleMode;
-            if (!graph4.isSelectUserRectangleMode && graph4.selectedRect != nullptr) {
-                graph4.selectedRect->setFrameColor(0, 0, 0);
+            if (graph4.selectionMode != graph4.SelectRect) {
+                graph4.selectionMode = graph4.SelectRect;
             }
-            selectUserRectangleMode = !selectUserRectangleMode;
+            else {
+				graph4.selectionMode = graph4.DragPlot;
+                if (graph4.selectedRect != nullptr) {
+                    graph4.selectedRect->setFrameColor(0, 0, 0);
+                }
+            }
+            //graph4.isSelectUserRectangleMode = !graph4.isSelectUserRectangleMode;
+            //if (!graph4.isSelectUserRectangleMode && graph4.selectedRect != nullptr) {
+            //    graph4.selectedRect->setFrameColor(0, 0, 0);
+            //}
             return 0;
         }
 
@@ -345,8 +402,14 @@ public
         // toggle attribute flip mode
         void toggleSwapAttributeAxesMode()
         {
-            attributeSwapMode = !attributeSwapMode;
-            graph4.swapAttributeAxesMode = !graph4.swapAttributeAxesMode;
+            if (graph4.selectionMode != graph4.SwapXY) {
+				graph4.selectionMode = graph4.SwapXY;
+			}
+			else {
+				graph4.selectionMode = graph4.DragPlot;
+            }
+            //attributeSwapMode = !attributeSwapMode;
+            //graph4.swapAttributeAxesMode = !graph4.swapAttributeAxesMode;
         }
 
         void removeSelectedUserRectangle() {
@@ -363,6 +426,10 @@ public
             // }
             return graph4.data.numOfClasses;
             // return numberOfClasses;
+        }
+
+        InteractiveSPC::SelectionMode getSelectionMode() {
+            return graph4.selectionMode;
         }
 
         std::vector<int> getContinueClassList()
@@ -810,171 +877,287 @@ public
                         graph4.plotNumClicked = graph4.findClickedGraph(worldMouseX, worldMouseY);
                         graph4.zoneIdClicked = graph4.findBackgroundZoneIdOfPoint(worldMouseX, worldMouseY, graph4.plotNumClicked);
                         int plotNumClicked = graph4.plotNumClicked;
+                        InteractiveSPC::SelectionMode mode = graph4.selectionMode;
+                        bool shouldBreak = false;
+                        ClassData* dataPtr = &graph4.data;
+                        switch (mode) {
+                            case InteractiveSPC::SelectionMode::DrawRect:
+                                if (drawingRectangleVertex1) {
+                                    drawingRectangleX1 = worldMouseX;
+                                    drawingRectangleY1 = worldMouseY;
+                                    setDrawUserRectangleMode(true);
+                                    graph4.userRectangleDrawGuideX = drawingRectangleX1;
+                                    graph4.userRectangleDrawGuideY = drawingRectangleY1;
+                                }
+                                else {
+                                    drawingRectangleX2 = worldMouseX;
+                                    drawingRectangleY2 = worldMouseY;
+                                    //drawUserRectangleMode = false;
+                                    graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
+                                    setUserRectangleState(true);
+                                    setDrawUserRectangleMode(false);
+                                }
+                                drawingRectangleVertex1 = !drawingRectangleVertex1;
+                                shouldBreak = true;
+                                break;
+                            case InteractiveSPC::SelectionMode::SelectRect:
+                                if (graph4.selectedRect != nullptr) {
+                                    graph4.selectedRect->setFrameColor(0, 0, 0);
+                                }
+                                graph4.selectedRect = graph4.findClickedRectangle(worldMouseX, worldMouseY);
+                                if (graph4.selectedRect != nullptr) {
+                                    graph4.selectedRect->setFrameColor(255, 0, 0);
+                                }
+                                break;
+                            case InteractiveSPC::SelectionMode::AdjustThresholds:
+                                graph4.clickedEdge = graph4.findClickedEdge(worldMouseX, worldMouseY);
+                                if (graph4.clickedEdge.empty()) {
+                                    std::cout << "debug!";
+                                }
+                                else if (graph4.clickedEdge.size() == 2) {
+                                    // get edge information
+                                    int zoneId = graph4.clickedEdge[0];
+                                    //int edgeId = graph4.clickedEdge[1];
+                                    int direction = graph4.clickedEdge[1];
 
-                        // drawing user rectangles mode
-                        if (drawUserRectangleMode) {
-                            if (drawingRectangleVertex1) {
-                                drawingRectangleX1 = worldMouseX;
-                                drawingRectangleY1 = worldMouseY;
-                                setDrawUserRectangleMode(true);
-                                graph4.userRectangleDrawGuideX = drawingRectangleX1;
-                                graph4.userRectangleDrawGuideY = drawingRectangleY1;
-                            }
-                            else {
-                                drawingRectangleX2 = worldMouseX;
-                                drawingRectangleY2 = worldMouseY;
-                                drawUserRectangleMode = false;
-                                graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
-                                setUserRectangleState(true);
-                                setDrawUserRectangleMode(false);
-                                
+                                    // adjust threshold
+                                    graph4.thresholdBeingAdjusted = true;
+                                    dataPtr->adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, direction);
 
-                            }
-                            drawingRectangleVertex1 = !drawingRectangleVertex1;
+                                    // recompute zone coords
+                                    graph4.recomputePlotZones(plotNumClicked);
+
+                                    // recompute edges
+                                    graph4.thresholdEdgeSelectionZones.clear();
+                                    graph4.zoneIdThresholdEdgesRecorded.clear();
+                                    graph4.worstZoneNum = -1;
+                                    graph4.worstZoneNumDensity = INT32_MAX;
+                                }
+                                // update confusion matrix
+                                confusionMatrixTextBox->Text = "Computing...";
+                                confusionMatrixTextBox->Text = buildConfusionMatrixString();
+                                break;
+                            case InteractiveSPC::SelectionMode::SwapXY:
+                                if (plotNumClicked >= 0 && plotNumClicked < graph4.data.numPlots) {
+                                    if (graph4.swappedPlots.find(plotNumClicked) == graph4.swappedPlots.end())
+                                    {
+                                        graph4.swappedPlots.insert(plotNumClicked);
+                                    }
+                                    else
+                                    {
+                                        graph4.swappedPlots.erase(plotNumClicked);
+                                    }
+
+                                    std::string tmp = graph4.data.parsedAttributePairs[plotNumClicked][0];
+                                    dataPtr->parsedAttributePairs[plotNumClicked][0] = graph4.data.parsedAttributePairs[plotNumClicked][1];
+                                    dataPtr->parsedAttributePairs[plotNumClicked][1] = tmp;
+                                    for (int i = 0; i < dataPtr->parsedData.size(); i++)
+                                    {
+                                        if (dataPtr->parsedData[i][4] == plotNumClicked)
+                                        {
+                                            float tmp = dataPtr->parsedData[i][0];
+                                            dataPtr->parsedData[i][0] = dataPtr->parsedData[i][1];
+                                            dataPtr->parsedData[i][1] = tmp;
+                                            tmp = dataPtr->parsedData[i][2];
+                                            dataPtr->parsedData[i][2] = dataPtr->parsedData[i][3];
+                                            dataPtr->parsedData[i][3] = tmp;
+                                        }
+                                    }
+                                    //graph4.dataParsed.parsedData = dataPtr->parsedData;
+                                    graph4.data.parsedData = dataPtr->parsedData;
+                                    graph4.thresholdEdgeSelectionZones.clear();
+                                    graph4.zoneIdThresholdEdgesRecorded.clear();
+                                }
+                                break;
+                            case InteractiveSPC::SelectionMode::InvertX:
+                                graph4.invertPlotNum(plotNumClicked, true);
+                                break;
+						    case InteractiveSPC::SelectionMode::InvertY:
+                                graph4.invertPlotNum(plotNumClicked, false);
+                                break;
+                            case InteractiveSPC::SelectionMode::DragPlot:
+                                bool colliding = (graph4.plotNumClicked != -1);
+                                if (canDragPlots && colliding && displayData == false && reverseDataAxis == 0)
+                                {
+                                    graph4.dragging = true;
+                                    graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
+                                    /*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
+                                    graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
+                                }
+                                break;
+                        }
+
+                        if (shouldBreak) {
                             break;
                         }
 
-                        // select user rectangles mode
-                        if (selectUserRectangleMode) {
-                            if (graph4.selectedRect != nullptr) {
-                                graph4.selectedRect->setFrameColor(0, 0, 0);
-                            }
-                            graph4.selectedRect = graph4.findClickedRectangle(worldMouseX, worldMouseY);
-                            if (graph4.selectedRect != nullptr) {
-                                graph4.selectedRect->setFrameColor(255, 0, 0);
-                            }
-                        }
-                        else if (graph4.selectedRect != nullptr) {
-                            graph4.selectedRect = nullptr;
-                        }
+						
 
-                        ClassData *dataPtr = &graph4.data;
+
+                        // drawing user rectangles mode
+                        //if (drawUserRectangleMode) {
+                        //    if (drawingRectangleVertex1) {
+                        //        drawingRectangleX1 = worldMouseX;
+                        //        drawingRectangleY1 = worldMouseY;
+                        //        setDrawUserRectangleMode(true);
+                        //        graph4.userRectangleDrawGuideX = drawingRectangleX1;
+                        //        graph4.userRectangleDrawGuideY = drawingRectangleY1;
+                        //    }
+                        //    else {
+                        //        drawingRectangleX2 = worldMouseX;
+                        //        drawingRectangleY2 = worldMouseY;
+                        //        drawUserRectangleMode = false;
+                        //        graph4.userRectangles.push_back(UserRectangle(drawingRectangleX1, drawingRectangleY1, drawingRectangleX2, drawingRectangleY2, None, plotNumClicked, &graph4.data));
+                        //        setUserRectangleState(true);
+                        //        setDrawUserRectangleMode(false);
+                        //        
+
+                        //    }
+                        //    drawingRectangleVertex1 = !drawingRectangleVertex1;
+                        //    break;
+                        //}
+
+                        // select user rectangles mode
+                        //if (selectUserRectMode) {
+                        //    if (graph4.selectedRect != nullptr) {
+                        //        graph4.selectedRect->setFrameColor(0, 0, 0);
+                        //    }
+                        //    graph4.selectedRect = graph4.findClickedRectangle(worldMouseX, worldMouseY);
+                        //    if (graph4.selectedRect != nullptr) {
+                        //        graph4.selectedRect->setFrameColor(255, 0, 0);
+                        //    }
+                        //}
+                        //else if (graph4.selectedRect != nullptr) {
+                        //    graph4.selectedRect = nullptr;
+                        //}
+
+                        //ClassData *dataPtr = &graph4.data;
                      
                         // adjust thresholds
-                        if (isAdjustThresholdsMode) {
-                            graph4.clickedEdge = graph4.findClickedEdge(worldMouseX, worldMouseY);
-                            if (graph4.clickedEdge.empty()) {
-                                std::cout << "debug!";
-                            }
-                            else if (graph4.clickedEdge.size() == 2) {
-                                // get edge information
-                                int zoneId = graph4.clickedEdge[0];
-                                //int edgeId = graph4.clickedEdge[1];
-                                int direction = graph4.clickedEdge[1];
+                        //if (isAdjustThresholdsMode) {
+                        //    graph4.clickedEdge = graph4.findClickedEdge(worldMouseX, worldMouseY);
+                        //    if (graph4.clickedEdge.empty()) {
+                        //        std::cout << "debug!";
+                        //    }
+                        //    else if (graph4.clickedEdge.size() == 2) {
+                        //        // get edge information
+                        //        int zoneId = graph4.clickedEdge[0];
+                        //        //int edgeId = graph4.clickedEdge[1];
+                        //        int direction = graph4.clickedEdge[1];
 
-                                // adjust threshold
-                                graph4.thresholdBeingAdjusted = true;
-                                dataPtr->adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, direction);    
+                        //        // adjust threshold
+                        //        graph4.thresholdBeingAdjusted = true;
+                        //        dataPtr->adjustThresholds(worldMouseX, worldMouseY, graph4.plotNumClicked, zoneId, direction);    
 
-                                // recompute zone coords
-                                graph4.recomputePlotZones(plotNumClicked);
+                        //        // recompute zone coords
+                        //        graph4.recomputePlotZones(plotNumClicked);
 
-                                // recompute edges
-                                graph4.thresholdEdgeSelectionZones.clear();
-                                graph4.zoneIdThresholdEdgesRecorded.clear();
-                                graph4.worstZoneNum = -1;
-                                graph4.worstZoneNumDensity = INT32_MAX;
-                            }
-                            // update confusion matrix
-                            confusionMatrixTextBox->Text = "Computing...";
-                            confusionMatrixTextBox->Text = buildConfusionMatrixString();
-                        }
+                        //        // recompute edges
+                        //        graph4.thresholdEdgeSelectionZones.clear();
+                        //        graph4.zoneIdThresholdEdgesRecorded.clear();
+                        //        graph4.worstZoneNum = -1;
+                        //        graph4.worstZoneNumDensity = INT32_MAX;
+                        //    }
+                        //    // update confusion matrix
+                        //    confusionMatrixTextBox->Text = "Computing...";
+                        //    confusionMatrixTextBox->Text = buildConfusionMatrixString();
+                        //}
 
                         // adds plot clicked to list of plots with swapped axes
-                        if (attributeSwapMode && plotNumClicked >= 0 && plotNumClicked < graph4.data.numPlots)
-                        {
-                            if (graph4.swappedPlots.find(plotNumClicked) == graph4.swappedPlots.end())
-                            {
-                                graph4.swappedPlots.insert(plotNumClicked);
-                            }
-                            else
-                            {
-                                graph4.swappedPlots.erase(plotNumClicked);
-                            }
+                        //if (attributeSwapMode && plotNumClicked >= 0 && plotNumClicked < graph4.data.numPlots)
+                        //{
+                        //    if (graph4.swappedPlots.find(plotNumClicked) == graph4.swappedPlots.end())
+                        //    {
+                        //        graph4.swappedPlots.insert(plotNumClicked);
+                        //    }
+                        //    else
+                        //    {
+                        //        graph4.swappedPlots.erase(plotNumClicked);
+                        //    }
 
-                            std::string tmp = graph4.data.parsedAttributePairs[plotNumClicked][0];
-                            dataPtr->parsedAttributePairs[plotNumClicked][0] = graph4.data.parsedAttributePairs[plotNumClicked][1];
-                            dataPtr->parsedAttributePairs[plotNumClicked][1] = tmp;
-                            for (int i = 0; i < dataPtr->parsedData.size(); i++)
-                            {
-                                if (dataPtr->parsedData[i][4] == plotNumClicked)
-                                {
-                                    float tmp = dataPtr->parsedData[i][0];
-                                    dataPtr->parsedData[i][0] = dataPtr->parsedData[i][1];
-                                    dataPtr->parsedData[i][1] = tmp;
-                                    tmp = dataPtr->parsedData[i][2];
-                                    dataPtr->parsedData[i][2] = dataPtr->parsedData[i][3];
-                                    dataPtr->parsedData[i][3] = tmp;
-                                }
-                            }
-                            //graph4.dataParsed.parsedData = dataPtr->parsedData;
-                            graph4.data.parsedData = dataPtr->parsedData;
-                            graph4.thresholdEdgeSelectionZones.clear();
-                            graph4.zoneIdThresholdEdgesRecorded.clear();
-                        }
+                        //    std::string tmp = graph4.data.parsedAttributePairs[plotNumClicked][0];
+                        //    dataPtr->parsedAttributePairs[plotNumClicked][0] = graph4.data.parsedAttributePairs[plotNumClicked][1];
+                        //    dataPtr->parsedAttributePairs[plotNumClicked][1] = tmp;
+                        //    for (int i = 0; i < dataPtr->parsedData.size(); i++)
+                        //    {
+                        //        if (dataPtr->parsedData[i][4] == plotNumClicked)
+                        //        {
+                        //            float tmp = dataPtr->parsedData[i][0];
+                        //            dataPtr->parsedData[i][0] = dataPtr->parsedData[i][1];
+                        //            dataPtr->parsedData[i][1] = tmp;
+                        //            tmp = dataPtr->parsedData[i][2];
+                        //            dataPtr->parsedData[i][2] = dataPtr->parsedData[i][3];
+                        //            dataPtr->parsedData[i][3] = tmp;
+                        //        }
+                        //    }
+                        //    //graph4.dataParsed.parsedData = dataPtr->parsedData;
+                        //    graph4.data.parsedData = dataPtr->parsedData;
+                        //    graph4.thresholdEdgeSelectionZones.clear();
+                        //    graph4.zoneIdThresholdEdgesRecorded.clear();
+                        //}
 
                         // adds clicked plot to list of plots with inverted X axes
-                        if (isXAxisInvertMode)
-                        {
-                            graph4.invertPlotNum(plotNumClicked, true);
+                        //if (isXAxisInvertMode)
+                        //{
+                        //    graph4.invertPlotNum(plotNumClicked, true);
 
-                            // std::set<int> *xAxisInvert = &graph4.plotsWithXAxisInverted;
-                            // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
-                            // {
-                            //     xAxisInvert->insert(plotNumClicked);
-                            // }
-                            // else
-                            // {
-                            //     xAxisInvert->erase(plotNumClicked);
-                            // }
-                            // xAxisInvert = &graph4.data.plotsWithXInverted;
-                            // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
-                            // {
-                            //     xAxisInvert->insert(plotNumClicked);
-                            // }
-                            // else
-                            // {
-                            //     xAxisInvert->erase(plotNumClicked);
-                            // }
-                            // graph4.thresholdEdgeSelectionZones.clear();
-                            // graph4.zoneIdThresholdEdgesRecorded.clear();
-                        }
+                        //    // std::set<int> *xAxisInvert = &graph4.plotsWithXAxisInverted;
+                        //    // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
+                        //    // {
+                        //    //     xAxisInvert->insert(plotNumClicked);
+                        //    // }
+                        //    // else
+                        //    // {
+                        //    //     xAxisInvert->erase(plotNumClicked);
+                        //    // }
+                        //    // xAxisInvert = &graph4.data.plotsWithXInverted;
+                        //    // if (xAxisInvert->find(plotNumClicked) == xAxisInvert->end())
+                        //    // {
+                        //    //     xAxisInvert->insert(plotNumClicked);
+                        //    // }
+                        //    // else
+                        //    // {
+                        //    //     xAxisInvert->erase(plotNumClicked);
+                        //    // }
+                        //    // graph4.thresholdEdgeSelectionZones.clear();
+                        //    // graph4.zoneIdThresholdEdgesRecorded.clear();
+                        //}
 
-                        // adds clicked plot to list of plots with inverted Y axes
-                        if (isYAxisInvertMode)
-                        {
-                            graph4.invertPlotNum(plotNumClicked, false);
+                        //// adds clicked plot to list of plots with inverted Y axes
+                        //if (isYAxisInvertMode)
+                        //{
+                        //    graph4.invertPlotNum(plotNumClicked, false);
 
-                            // std::set<int> *yAxisInvert = &graph4.plotsWithYAxisInverted;
-                            // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
-                            // {
-                            //     yAxisInvert->insert(plotNumClicked);
-                            // }
-                            // else
-                            // {
-                            //     yAxisInvert->erase(plotNumClicked);
-                            // }
-                            // yAxisInvert = &graph4.data.plotsWithYInverted;
-                            // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
-                            // {
-                            //     yAxisInvert->insert(plotNumClicked);
-                            // }
-                            // else
-                            // {
-                            //     yAxisInvert->erase(plotNumClicked);
-                            // }
-                            // graph4.thresholdEdgeSelectionZones.clear();
-                            // graph4.zoneIdThresholdEdgesRecorded.clear();
-                        }
+                        //    // std::set<int> *yAxisInvert = &graph4.plotsWithYAxisInverted;
+                        //    // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
+                        //    // {
+                        //    //     yAxisInvert->insert(plotNumClicked);
+                        //    // }
+                        //    // else
+                        //    // {
+                        //    //     yAxisInvert->erase(plotNumClicked);
+                        //    // }
+                        //    // yAxisInvert = &graph4.data.plotsWithYInverted;
+                        //    // if (yAxisInvert->find(plotNumClicked) == yAxisInvert->end())
+                        //    // {
+                        //    //     yAxisInvert->insert(plotNumClicked);
+                        //    // }
+                        //    // else
+                        //    // {
+                        //    //     yAxisInvert->erase(plotNumClicked);
+                        //    // }
+                        //    // graph4.thresholdEdgeSelectionZones.clear();
+                        //    // graph4.zoneIdThresholdEdgesRecorded.clear();
+                        //}
 
-                        bool colliding = (graph4.plotNumClicked != -1);
-                        if (canDragPlots && colliding && displayData == false && reverseDataAxis == 0)
-                        {
-                            graph4.dragging = true;
-                            graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
-                            /*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
-                            graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
-                        }
+                        //bool colliding = (graph4.plotNumClicked != -1);
+                        //if (canDragPlots && colliding && displayData == false && reverseDataAxis == 0)
+                        //{
+                        //    graph4.dragging = true;
+                        //    graph4.updatePlotLocation(worldMouseX, worldMouseY, graph4.plotNumClicked);
+                        //    /*graph4.data.xPlotCoordinates[graph4.graphClicked] = worldMouseX - graph4.data.pan_x;
+                        //    graph4.data.yPlotCoordinates[graph4.graphClicked] = worldMouseY - graph4.data.pan_y;*/
+                        //}
 
                         if (displayData)
                         {

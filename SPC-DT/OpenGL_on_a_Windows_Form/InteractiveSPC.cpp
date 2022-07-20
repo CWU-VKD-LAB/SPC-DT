@@ -1583,7 +1583,8 @@ void InteractiveSPC::display()
         float backgroundTransparencyForZone = computeBackgroundTransparency(plotZones[i]);
         plotZones[i].computeSelectionZones(selectionZoneWidth);
         plotZones[i].drawZone(backgroundClassColorCoefficient, backgroundTransparencyForZone);
-        if (isAdjustThresholdsMode) {
+        //if (isAdjustThresholdsMode) {
+        if (selectionMode == AdjustThresholds) {
             plotZones[i].drawEdges();
             if (!clickedEdge.empty()) {
                 Zone selectedZone = plotZones[clickedEdge[0]];

@@ -16,6 +16,8 @@ class InteractiveSPC
 {
 
 public:
+	enum SelectionMode { InvertX, InvertY, SwapXY, DrawRect, SelectRect, DragPlot, AdjustThresholds};
+	SelectionMode selectionMode = DragPlot;
 	ClassData data;
 	parseData dataParsed;
 	FileHandling newFile;
@@ -65,7 +67,7 @@ public:
 	void updateSelectedRectangleType(int state);
 	UserRectangle* findClickedRectangle(GLfloat px, GLfloat py);
 	UserRectangle* selectedRect;
-	bool isSelectUserRectangleMode = false;
+	//bool isSelectUserRectangleMode = false;
 	
     //std::vector<std::vector<GLubyte>> userRectColorList;
 	//GLfloat rectX1;
@@ -94,7 +96,7 @@ public:
 	void mitigateOverlap(float& x, float& y, int& caseNum, int& caseClass, int& plotNum, int& pointBackgroundClass, int& pointBackgroundZone);
     /// *** USED FOR ADJUSTING DECISION ZONE THRESHOLDS
 	const int selectionZoneWidth = 10;
-    bool isAdjustThresholdsMode = false;
+    //bool isAdjustThresholdsMode = false;
     std::vector<std::vector<std::vector<float>>> thresholdEdgeSelectionZones;
     std::map<std::vector<float>, int> edgeToParserElementIndex; // map: collection of edge points -> list [ zoneId, index for (x1, y1, x2, y2) ]
     std::set<int> zoneIdThresholdEdgesRecorded;
@@ -107,7 +109,7 @@ public:
 	void InteractiveSPC::updateZoneColors(int classNum);
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
-	bool swapAttributeAxesMode = false;
+	//bool swapAttributeAxesMode = false;
     void invertPlotNum(int plotNum, bool isXAxist);
 	std::set<int> swappedPlots;
 	std::set<int> plotsWithXAxisInverted;
