@@ -42,7 +42,7 @@ struct Plot {
 	void drawPlot() {
 		// tbd
 
-		// used for panning
+		// draw plot border
 		GLfloat pan_x = 0;
 		GLfloat pan_y = 0;
 		glPushMatrix(); // Makes a new layer
