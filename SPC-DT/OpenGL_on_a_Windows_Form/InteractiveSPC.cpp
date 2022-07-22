@@ -428,7 +428,7 @@ void InteractiveSPC::mitigateOverlap(float &x, float &y, int& caseNum, int &case
     }
 }
 
-void InteractiveSPC::handleMisclassifications(float&x, float&y, int &caseClass, int& caseNum, int &pointBackgroundClass) {
+void InteractiveSPC::handleMisclassifications(float&x, float&y, int caseClass, int caseNum, int pointBackgroundClass) {
     int pointWasCorrectlyClassified = false;
 
     GLubyte classTransparency = data.classTransparencies[caseClass];
@@ -550,6 +550,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     }*/
 
     int caseClass = data.classNum[caseNum] - 1;
+    //int caseClass = data.classNum[caseNum];
 
     // get plot coordinates
     float plt1X1 = data.x1CoordPlot[plotNum];
@@ -774,9 +775,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // int pointWasCorrectlyClassified = false;
 
     // GLubyte classTransparency = data.classTransparencies[caseClass];
-
     handleMisclassifications(x1, y1, caseClass, caseNum, point1BackgroundClass);
-
     // // count misclassifications
     // std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass]; // {actual -> {predicted -> [casenum, ...]}}
     // std::map<int, std::vector<int>> * predictedClasses = &data.misclassifiedCases[caseClass];
@@ -2334,10 +2333,9 @@ void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
 int InteractiveSPC::findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
     for (int i = 0; i < plotZones.size(); i++) {
-        if (plotZones[i].plotNum == plotNum) {
-            if (plotZones[i].isPointWithinZone(px, py)) {
-                return plotZones[i].id;
-            }
+        if (plotZones[i].plotNum != plotNum) continue;
+        if (plotZones[i].isPointWithinZone(px, py)) {
+            return plotZones[i].id;
         }
     }
 
@@ -2525,6 +2523,18 @@ void InteractiveSPC::drawWorstZone() {
 
 int InteractiveSPC::findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum)
 {
+    for (int i = 0; i < plotZones.size(); i++) {
+        Zone* z = &plotZones[i];
+        if (z->plotNum != plotNum) continue;
+        if (z->isPointWithinZone(px, py)) {
+            return z->classNum;
+        }
+    }
+
+    return INT_MIN;
+
+
+
     // TODO
     // get plot num
     // int plotNum = findPlotNumOfPoint(px, py);

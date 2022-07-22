@@ -317,6 +317,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->changeUserRectColorButton = (gcnew System::Windows::Forms::Button());
             this->drawUserRectButton = (gcnew System::Windows::Forms::Button());
             this->confusionMatrixTextBox = (gcnew System::Windows::Forms::TextBox());
+            this->button3 = (gcnew System::Windows::Forms::Button());
             this->adjustThresholdsButton = (gcnew System::Windows::Forms::Button());
             this->showClassAccuraciesButton = (gcnew System::Windows::Forms::Button());
             this->button9 = (gcnew System::Windows::Forms::Button());
@@ -332,7 +333,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->button2 = (gcnew System::Windows::Forms::Button());
             this->button1 = (gcnew System::Windows::Forms::Button());
             this->button4 = (gcnew System::Windows::Forms::Button());
-            this->button3 = (gcnew System::Windows::Forms::Button());
             this->removeUserRectButton = (gcnew System::Windows::Forms::Button());
             this->button5 = (gcnew System::Windows::Forms::Button());
             this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
@@ -415,6 +415,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->panel1->Controls->Add(this->changeUserRectColorButton);
             this->panel1->Controls->Add(this->drawUserRectButton);
             this->panel1->Controls->Add(this->confusionMatrixTextBox);
+            this->panel1->Controls->Add(this->button3);
             this->panel1->Controls->Add(this->adjustThresholdsButton);
             this->panel1->Controls->Add(this->showClassAccuraciesButton);
             this->panel1->Controls->Add(this->button9);
@@ -430,7 +431,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->panel1->Controls->Add(this->button2);
             this->panel1->Controls->Add(this->button1);
             this->panel1->Controls->Add(this->button4);
-            this->panel1->Controls->Add(this->button3);
             this->panel1->ForeColor = System::Drawing::SystemColors::ControlText;
             this->panel1->Location = System::Drawing::Point(0, 0);
             this->panel1->Name = L"panel1";
@@ -443,7 +443,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->currentModeDisplay->AutoSize = true;
             this->currentModeDisplay->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
-            this->currentModeDisplay->Location = System::Drawing::Point(49, 925);
+            this->currentModeDisplay->Location = System::Drawing::Point(49, 899);
             this->currentModeDisplay->Name = L"currentModeDisplay";
             this->currentModeDisplay->Size = System::Drawing::Size(80, 16);
             this->currentModeDisplay->TabIndex = 44;
@@ -454,7 +454,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->modeLabel->AutoSize = true;
             this->modeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(0)));
-            this->modeLabel->Location = System::Drawing::Point(3, 906);
+            this->modeLabel->Location = System::Drawing::Point(3, 880);
             this->modeLabel->Name = L"modeLabel";
             this->modeLabel->Size = System::Drawing::Size(90, 16);
             this->modeLabel->TabIndex = 15;
@@ -463,7 +463,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // selectRectangleButton
             // 
             this->selectRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->selectRectangleButton->Location = System::Drawing::Point(9, 672);
+            this->selectRectangleButton->Location = System::Drawing::Point(9, 646);
             this->selectRectangleButton->Name = L"selectRectangleButton";
             this->selectRectangleButton->Size = System::Drawing::Size(174, 39);
             this->selectRectangleButton->TabIndex = 43;
@@ -475,7 +475,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->changeUserRectColorButton->Enabled = false;
             this->changeUserRectColorButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->changeUserRectColorButton->Location = System::Drawing::Point(100, 477);
+            this->changeUserRectColorButton->Location = System::Drawing::Point(100, 451);
             this->changeUserRectColorButton->Name = L"changeUserRectColorButton";
             this->changeUserRectColorButton->Size = System::Drawing::Size(80, 63);
             this->changeUserRectColorButton->TabIndex = 41;
@@ -487,7 +487,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->drawUserRectButton->Enabled = false;
             this->drawUserRectButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->drawUserRectButton->Location = System::Drawing::Point(9, 602);
+            this->drawUserRectButton->Location = System::Drawing::Point(9, 576);
             this->drawUserRectButton->Name = L"drawUserRectButton";
             this->drawUserRectButton->Size = System::Drawing::Size(88, 63);
             this->drawUserRectButton->TabIndex = 40;
@@ -499,7 +499,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->confusionMatrixTextBox->AcceptsReturn = true;
             this->confusionMatrixTextBox->Enabled = false;
-            this->confusionMatrixTextBox->Location = System::Drawing::Point(16, 282);
+            this->confusionMatrixTextBox->Location = System::Drawing::Point(15, 205);
             this->confusionMatrixTextBox->Multiline = true;
             this->confusionMatrixTextBox->Name = L"confusionMatrixTextBox";
             this->confusionMatrixTextBox->ReadOnly = true;
@@ -509,13 +509,24 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->confusionMatrixTextBox->WordWrap = false;
             this->confusionMatrixTextBox->TextChanged += gcnew System::EventHandler(this, &Form1::confusionMatrixTextBox_TextChanged);
             // 
+            // button3
+            // 
+            this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
+            this->button3->Location = System::Drawing::Point(9, 401);
+            this->button3->Name = L"button3";
+            this->button3->Size = System::Drawing::Size(173, 44);
+            this->button3->TabIndex = 8;
+            this->button3->Text = L"Drag Plots";
+            this->button3->UseVisualStyleBackColor = true;
+            this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
+            // 
             // adjustThresholdsButton
             // 
             this->adjustThresholdsButton->Enabled = false;
             this->adjustThresholdsButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->adjustThresholdsButton->Location = System::Drawing::Point(12, 202);
+            this->adjustThresholdsButton->Location = System::Drawing::Point(9, 691);
             this->adjustThresholdsButton->Name = L"adjustThresholdsButton";
-            this->adjustThresholdsButton->Size = System::Drawing::Size(173, 29);
+            this->adjustThresholdsButton->Size = System::Drawing::Size(173, 43);
             this->adjustThresholdsButton->TabIndex = 36;
             this->adjustThresholdsButton->Text = L"Adjust Thresholds";
             this->adjustThresholdsButton->UseVisualStyleBackColor = true;
@@ -525,7 +536,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->showClassAccuraciesButton->Enabled = false;
             this->showClassAccuraciesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 241);
+            this->showClassAccuraciesButton->Location = System::Drawing::Point(12, 165);
             this->showClassAccuraciesButton->Name = L"showClassAccuraciesButton";
             this->showClassAccuraciesButton->Size = System::Drawing::Size(173, 34);
             this->showClassAccuraciesButton->TabIndex = 35;
@@ -537,7 +548,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->button9->Enabled = false;
             this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button9->Location = System::Drawing::Point(9, 547);
+            this->button9->Location = System::Drawing::Point(9, 521);
             this->button9->Name = L"button9";
             this->button9->Size = System::Drawing::Size(174, 49);
             this->button9->TabIndex = 34;
@@ -549,7 +560,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->SwapAttributesButton->Enabled = false;
             this->SwapAttributesButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->SwapAttributesButton->Location = System::Drawing::Point(9, 812);
+            this->SwapAttributesButton->Location = System::Drawing::Point(9, 786);
             this->SwapAttributesButton->Name = L"SwapAttributesButton";
             this->SwapAttributesButton->Size = System::Drawing::Size(174, 34);
             this->SwapAttributesButton->TabIndex = 33;
@@ -561,7 +572,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->clearRectangleButton->Enabled = false;
             this->clearRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->clearRectangleButton->Location = System::Drawing::Point(103, 602);
+            this->clearRectangleButton->Location = System::Drawing::Point(103, 576);
             this->clearRectangleButton->Name = L"clearRectangleButton";
             this->clearRectangleButton->Size = System::Drawing::Size(85, 61);
             this->clearRectangleButton->TabIndex = 32;
@@ -573,7 +584,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->drawRectangleButton->Enabled = false;
             this->drawRectangleButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->drawRectangleButton->Location = System::Drawing::Point(9, 477);
+            this->drawRectangleButton->Location = System::Drawing::Point(9, 451);
             this->drawRectangleButton->Name = L"drawRectangleButton";
             this->drawRectangleButton->Size = System::Drawing::Size(85, 61);
             this->drawRectangleButton->TabIndex = 31;
@@ -586,7 +597,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->button7->Enabled = false;
             this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button7->Location = System::Drawing::Point(103, 767);
+            this->button7->Location = System::Drawing::Point(103, 741);
             this->button7->Name = L"button7";
             this->button7->Size = System::Drawing::Size(80, 39);
             this->button7->TabIndex = 30;
@@ -598,7 +609,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->button8->Enabled = false;
             this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button8->Location = System::Drawing::Point(9, 767);
+            this->button8->Location = System::Drawing::Point(9, 741);
             this->button8->Name = L"button8";
             this->button8->Size = System::Drawing::Size(81, 39);
             this->button8->TabIndex = 29;
@@ -614,7 +625,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->checkedListBox4->Enabled = false;
             this->checkedListBox4->ForeColor = System::Drawing::SystemColors::WindowText;
             this->checkedListBox4->FormattingEnabled = true;
-            this->checkedListBox4->Location = System::Drawing::Point(132, 869);
+            this->checkedListBox4->Location = System::Drawing::Point(132, 843);
             this->checkedListBox4->Name = L"checkedListBox4";
             this->checkedListBox4->Size = System::Drawing::Size(59, 2);
             this->checkedListBox4->TabIndex = 28;
@@ -627,7 +638,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->label9->AutoSize = true;
             this->label9->Enabled = false;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->label9->Location = System::Drawing::Point(11, 868);
+            this->label9->Location = System::Drawing::Point(11, 842);
             this->label9->Name = L"label9";
             this->label9->Size = System::Drawing::Size(88, 16);
             this->label9->TabIndex = 27;
@@ -639,7 +650,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // 
             this->checkBox1->CheckAlign = System::Drawing::ContentAlignment::TopLeft;
             this->checkBox1->Enabled = false;
-            this->checkBox1->Location = System::Drawing::Point(15, 891);
+            this->checkBox1->Location = System::Drawing::Point(15, 865);
             this->checkBox1->Name = L"checkBox1";
             this->checkBox1->Size = System::Drawing::Size(173, 31);
             this->checkBox1->TabIndex = 14;
@@ -697,17 +708,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->button4->Text = L"Upload Data";
             this->button4->UseVisualStyleBackColor = true;
             this->button4->Click += gcnew System::EventHandler(this, &Form1::button4_Click);
-            // 
-            // button3
-            // 
-            this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
-            this->button3->Location = System::Drawing::Point(12, 165);
-            this->button3->Name = L"button3";
-            this->button3->Size = System::Drawing::Size(173, 31);
-            this->button3->TabIndex = 8;
-            this->button3->Text = L"Drag Plots";
-            this->button3->UseVisualStyleBackColor = true;
-            this->button3->Click += gcnew System::EventHandler(this, &Form1::button3_Click);
             // 
             // removeUserRectButton
             // 
@@ -795,16 +795,16 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
-            this->menuStrip1->Size = System::Drawing::Size(1454, 24);
+            this->menuStrip1->Size = System::Drawing::Size(1535, 24);
             this->menuStrip1->TabIndex = 5;
             this->menuStrip1->Text = L"menuStrip1";
             // 
             // statusStrip1
             // 
             this->statusStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
-            this->statusStrip1->Location = System::Drawing::Point(0, 956);
+            this->statusStrip1->Location = System::Drawing::Point(0, 922);
             this->statusStrip1->Name = L"statusStrip1";
-            this->statusStrip1->Size = System::Drawing::Size(1454, 22);
+            this->statusStrip1->Size = System::Drawing::Size(1535, 22);
             this->statusStrip1->TabIndex = 6;
             this->statusStrip1->Text = L"statusStrip1";
             // 
@@ -902,7 +902,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->panel2->Controls->Add(this->groupBox1);
             this->panel2->Controls->Add(this->button5);
             this->panel2->Controls->Add(this->graph4);
-            this->panel2->Location = System::Drawing::Point(1240, 1);
+            this->panel2->Location = System::Drawing::Point(1326, 0);
             this->panel2->Name = L"panel2";
             this->panel2->Size = System::Drawing::Size(209, 794);
             this->panel2->TabIndex = 13;
@@ -1165,7 +1165,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->userRectangleParametersPanel->Controls->Add(this->userRectangleTypeSelection);
             this->userRectangleParametersPanel->Controls->Add(this->removeUserRectButton);
             this->userRectangleParametersPanel->Enabled = false;
-            this->userRectangleParametersPanel->Location = System::Drawing::Point(1252, 801);
+            this->userRectangleParametersPanel->Location = System::Drawing::Point(1335, 815);
             this->userRectangleParametersPanel->Name = L"userRectangleParametersPanel";
             this->userRectangleParametersPanel->Size = System::Drawing::Size(200, 100);
             this->userRectangleParametersPanel->TabIndex = 14;
@@ -1173,7 +1173,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // Form1
             // 
             this->BackColor = System::Drawing::SystemColors::Control;
-            this->ClientSize = System::Drawing::Size(1454, 978);
+            this->ClientSize = System::Drawing::Size(1535, 944);
             this->Controls->Add(this->userRectangleParametersPanel);
             this->Controls->Add(this->panel2);
             this->Controls->Add(this->label2);

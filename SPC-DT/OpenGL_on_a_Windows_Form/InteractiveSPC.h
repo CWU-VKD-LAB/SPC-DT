@@ -105,8 +105,8 @@ public:
 	std::vector<int> clickedEdge;
 	std::vector<Zone> plotZones;
 	std::map<int, Zone> zoneIdMap;
-	void InteractiveSPC::buildZoneEdges();
-	void InteractiveSPC::updateZoneColors(int classNum);
+	void buildZoneEdges();
+	void updateZoneColors(int classNum);
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	//bool swapAttributeAxesMode = false;
@@ -120,7 +120,7 @@ public:
 	
 	/// *** USED FOR DETERMINING MISCLASSIFICATION HIGHLIGHTING MODE
 	bool isHighlightMisclassficationsMode = false;
-	void handleMisclassifications(float& x, float& y, int& caseClass, int& caseNum, int& pointBackgroundClass);
+	void handleMisclassifications(float& x, float& y, int caseClass, int caseNum, int pointBackgroundClass);
 
 	/// *** USED FOR DETERMINING POINT COLORING MODE
 	bool isPointColorMode = false;
