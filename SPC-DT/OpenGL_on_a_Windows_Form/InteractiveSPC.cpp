@@ -498,9 +498,10 @@ void InteractiveSPC::updateSelectedRectangleType(int state) {
     }
 }
 
-void InteractiveSPC::adjustPointToRectangle(float &x, float &y, int &caseClass) {
+void InteractiveSPC::adjustPointToRectangle(float &x, float &y, int &caseClass, int plotNum) {
     for (int i = 0; i < userRectangles.size(); i++) {
         UserRectangle* userRect = &userRectangles[i];
+        if (userRect->plotNum != plotNum) continue;
         RectangleType type = userRect->type;
         bool shouldStop = false;
         switch (type) {
@@ -728,7 +729,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //     }
     // }
 
-    adjustPointToRectangle(x1, y1, caseClass);
+    adjustPointToRectangle(x1, y1, caseClass, plotNum);
     
     //TODO: Make work with all user rectangles
     //// condensation mode
@@ -1082,7 +1083,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //    }
     //}
 
-    adjustPointToRectangle(x2, y2, caseClass);
+    adjustPointToRectangle(x2, y2, caseClass, nextPlotNum);
 
     if (isLineColorMode && point2BackgroundClass >= 0)
     {
@@ -1606,6 +1607,9 @@ void InteractiveSPC::display()
     // draw user rectangles
     float selectModeLineWidth = 5.0;
     for (int i = 0; i < userRectangles.size(); i++) {
+        if (selectionMode != SelectRect) {
+            userRectangles[i].setFrameColor(0, 0, 0);
+        }
         userRectangles[i].drawEdges(selectModeLineWidth);
     }
 

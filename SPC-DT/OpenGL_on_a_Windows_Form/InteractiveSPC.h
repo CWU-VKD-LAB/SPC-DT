@@ -62,7 +62,7 @@ public:
 	//std::vector<GLfloat> condenseRectY2List;
     std::vector<UserRectangle> userRectangles;
 	void condensePointInRectangle(float& px, float& py, int& caseClass, UserRectangle& userRect);
-	void adjustPointToRectangle(float& x, float& y, int& caseClass);
+	void adjustPointToRectangle(float& x, float& y, int& caseClass, int plotNum);
 	void deleteSelectedRectangle();
 	void updateSelectedRectangleType(int state);
 	UserRectangle* findClickedRectangle(GLfloat px, GLfloat py);

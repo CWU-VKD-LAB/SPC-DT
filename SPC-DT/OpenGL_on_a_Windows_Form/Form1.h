@@ -445,7 +445,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->currentModeDisplay->Location = System::Drawing::Point(49, 899);
             this->currentModeDisplay->Name = L"currentModeDisplay";
-            this->currentModeDisplay->Size = System::Drawing::Size(80, 16);
+            this->currentModeDisplay->Size = System::Drawing::Size(112, 25);
             this->currentModeDisplay->TabIndex = 44;
             this->currentModeDisplay->Text = L"Drag Plots";
             // 
@@ -456,7 +456,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->modeLabel->Location = System::Drawing::Point(3, 880);
             this->modeLabel->Name = L"modeLabel";
-            this->modeLabel->Size = System::Drawing::Size(90, 16);
+            this->modeLabel->Size = System::Drawing::Size(138, 25);
             this->modeLabel->TabIndex = 15;
             this->modeLabel->Text = L"Current Mode:";
             // 
@@ -640,7 +640,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F));
             this->label9->Location = System::Drawing::Point(11, 842);
             this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(88, 16);
+            this->label9->Size = System::Drawing::Size(128, 25);
             this->label9->TabIndex = 27;
             this->label9->Text = L"Hide Classes";
             this->label9->Visible = false;
@@ -742,7 +742,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->trackBar1->Location = System::Drawing::Point(4, 71);
             this->trackBar1->Minimum = -10;
             this->trackBar1->Name = L"trackBar1";
-            this->trackBar1->Size = System::Drawing::Size(185, 45);
+            this->trackBar1->Size = System::Drawing::Size(185, 69);
             this->trackBar1->TabIndex = 9;
             this->trackBar1->Scroll += gcnew System::EventHandler(this, &Form1::trackBar1_Scroll);
             // 
@@ -753,7 +753,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->ZoomingLabel->Location = System::Drawing::Point(7, 46);
             this->ZoomingLabel->Name = L"ZoomingLabel";
-            this->ZoomingLabel->Size = System::Drawing::Size(42, 16);
+            this->ZoomingLabel->Size = System::Drawing::Size(62, 25);
             this->ZoomingLabel->TabIndex = 11;
             this->ZoomingLabel->Text = L"Zoom";
             // 
@@ -764,6 +764,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->vScrollBar1->Name = L"vScrollBar1";
             this->vScrollBar1->Size = System::Drawing::Size(42, 50);
             this->vScrollBar1->TabIndex = 7;
+            this->vScrollBar1->Visible = false;
             this->vScrollBar1->Scroll += gcnew System::Windows::Forms::ScrollEventHandler(this, &Form1::vScrollBar1_Scroll);
             // 
             // hScrollBar1
@@ -785,13 +786,14 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->PannningLabel->Location = System::Drawing::Point(6, 16);
             this->PannningLabel->Name = L"PannningLabel";
-            this->PannningLabel->Size = System::Drawing::Size(56, 16);
+            this->PannningLabel->Size = System::Drawing::Size(84, 25);
             this->PannningLabel->TabIndex = 10;
             this->PannningLabel->Text = L"Panning";
             this->PannningLabel->Visible = false;
             // 
             // menuStrip1
             // 
+            this->menuStrip1->GripMargin = System::Windows::Forms::Padding(2, 2, 0, 2);
             this->menuStrip1->ImageScalingSize = System::Drawing::Size(32, 32);
             this->menuStrip1->Location = System::Drawing::Point(0, 0);
             this->menuStrip1->Name = L"menuStrip1";
@@ -824,7 +826,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             // colorButton
             // 
             this->colorButton->Enabled = false;
-            this->colorButton->Location = System::Drawing::Point(4, 49);
+            this->colorButton->Location = System::Drawing::Point(4, 65);
             this->colorButton->Name = L"colorButton";
             this->colorButton->Size = System::Drawing::Size(192, 31);
             this->colorButton->TabIndex = 0;
@@ -859,7 +861,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->label1->Location = System::Drawing::Point(4, 1);
             this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(126, 16);
+            this->label1->Size = System::Drawing::Size(189, 25);
             this->label1->TabIndex = 12;
             this->label1->Text = L"Change Class Color";
             // 
@@ -870,9 +872,9 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
             this->comboBox1->Enabled = false;
             this->comboBox1->FormattingEnabled = true;
-            this->comboBox1->Location = System::Drawing::Point(4, 21);
+            this->comboBox1->Location = System::Drawing::Point(4, 30);
             this->comboBox1->Name = L"comboBox1";
-            this->comboBox1->Size = System::Drawing::Size(188, 21);
+            this->comboBox1->Size = System::Drawing::Size(188, 28);
             this->comboBox1->TabIndex = 1;
             this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox1_SelectedIndexChanged);
             // 
@@ -881,7 +883,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->label2->AutoSize = true;
             this->label2->Location = System::Drawing::Point(554, 8);
             this->label2->Name = L"label2";
-            this->label2->Size = System::Drawing::Size(0, 13);
+            this->label2->Size = System::Drawing::Size(0, 20);
             this->label2->TabIndex = 11;
             // 
             // panel2
@@ -913,7 +915,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->identifyWorstAreaCheckbox->Enabled = false;
             this->identifyWorstAreaCheckbox->Location = System::Drawing::Point(9, 427);
             this->identifyWorstAreaCheckbox->Name = L"identifyWorstAreaCheckbox";
-            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(124, 17);
+            this->identifyWorstAreaCheckbox->Size = System::Drawing::Size(183, 24);
             this->identifyWorstAreaCheckbox->TabIndex = 24;
             this->identifyWorstAreaCheckbox->Text = L"HIghlight Worst Area";
             this->identifyWorstAreaCheckbox->UseVisualStyleBackColor = true;
@@ -926,7 +928,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->mitigateAllOverlap->Enabled = false;
             this->mitigateAllOverlap->Location = System::Drawing::Point(9, 385);
             this->mitigateAllOverlap->Name = L"mitigateAllOverlap";
-            this->mitigateAllOverlap->Size = System::Drawing::Size(123, 17);
+            this->mitigateAllOverlap->Size = System::Drawing::Size(180, 24);
             this->mitigateAllOverlap->TabIndex = 23;
             this->mitigateAllOverlap->Text = L"Mitigate Overlap (All)";
             this->mitigateAllOverlap->UseVisualStyleBackColor = true;
@@ -938,7 +940,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->backgroundDensityColorCheckbox->Enabled = false;
             this->backgroundDensityColorCheckbox->Location = System::Drawing::Point(9, 408);
             this->backgroundDensityColorCheckbox->Name = L"backgroundDensityColorCheckbox";
-            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(163, 17);
+            this->backgroundDensityColorCheckbox->Size = System::Drawing::Size(240, 24);
             this->backgroundDensityColorCheckbox->TabIndex = 22;
             this->backgroundDensityColorCheckbox->Text = L"Background Density Coloring";
             this->backgroundDensityColorCheckbox->UseVisualStyleBackColor = true;
@@ -950,7 +952,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->mitigateOverlapCheckbox->Enabled = false;
             this->mitigateOverlapCheckbox->Location = System::Drawing::Point(9, 364);
             this->mitigateOverlapCheckbox->Name = L"mitigateOverlapCheckbox";
-            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(171, 17);
+            this->mitigateOverlapCheckbox->Size = System::Drawing::Size(252, 24);
             this->mitigateOverlapCheckbox->TabIndex = 21;
             this->mitigateOverlapCheckbox->Text = L"Mitigate Overlap (Misclassified)";
             this->mitigateOverlapCheckbox->UseVisualStyleBackColor = true;
@@ -962,7 +964,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->lineColorCheckbox->Enabled = false;
             this->lineColorCheckbox->Location = System::Drawing::Point(9, 343);
             this->lineColorCheckbox->Name = L"lineColorCheckbox";
-            this->lineColorCheckbox->Size = System::Drawing::Size(103, 17);
+            this->lineColorCheckbox->Size = System::Drawing::Size(150, 24);
             this->lineColorCheckbox->TabIndex = 20;
             this->lineColorCheckbox->Text = L"Line Color Mode";
             this->lineColorCheckbox->UseVisualStyleBackColor = true;
@@ -974,7 +976,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->pointColorMode->Enabled = false;
             this->pointColorMode->Location = System::Drawing::Point(9, 301);
             this->pointColorMode->Name = L"pointColorMode";
-            this->pointColorMode->Size = System::Drawing::Size(107, 17);
+            this->pointColorMode->Size = System::Drawing::Size(156, 24);
             this->pointColorMode->TabIndex = 19;
             this->pointColorMode->Text = L"Point Color Mode";
             this->pointColorMode->UseVisualStyleBackColor = true;
@@ -986,7 +988,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->highlightMisclassificationsCheckbox->Enabled = false;
             this->highlightMisclassificationsCheckbox->Location = System::Drawing::Point(9, 320);
             this->highlightMisclassificationsCheckbox->Name = L"highlightMisclassificationsCheckbox";
-            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(151, 17);
+            this->highlightMisclassificationsCheckbox->Size = System::Drawing::Size(223, 24);
             this->highlightMisclassificationsCheckbox->TabIndex = 18;
             this->highlightMisclassificationsCheckbox->Text = L"Highlight Misclassifications";
             this->highlightMisclassificationsCheckbox->UseVisualStyleBackColor = true;
@@ -998,7 +1000,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->lineTerminationModeCheckbox->Enabled = false;
             this->lineTerminationModeCheckbox->Location = System::Drawing::Point(9, 283);
             this->lineTerminationModeCheckbox->Name = L"lineTerminationModeCheckbox";
-            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(134, 17);
+            this->lineTerminationModeCheckbox->Size = System::Drawing::Size(196, 24);
             this->lineTerminationModeCheckbox->TabIndex = 17;
             this->lineTerminationModeCheckbox->Text = L"Line Termination Mode";
             this->lineTerminationModeCheckbox->UseVisualStyleBackColor = true;
@@ -1023,7 +1025,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->backgroundColorLightnessSlider->Location = System::Drawing::Point(3, 43);
             this->backgroundColorLightnessSlider->Maximum = 200;
             this->backgroundColorLightnessSlider->Name = L"backgroundColorLightnessSlider";
-            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 45);
+            this->backgroundColorLightnessSlider->Size = System::Drawing::Size(185, 69);
             this->backgroundColorLightnessSlider->TabIndex = 10;
             this->backgroundColorLightnessSlider->Value = 2;
             this->backgroundColorLightnessSlider->Scroll += gcnew System::EventHandler(this, &Form1::trackBar2_Scroll_1);
@@ -1035,7 +1037,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundLightness->Location = System::Drawing::Point(4, 16);
             this->backgroundLightness->Name = L"backgroundLightness";
-            this->backgroundLightness->Size = System::Drawing::Size(161, 15);
+            this->backgroundLightness->Size = System::Drawing::Size(221, 20);
             this->backgroundLightness->TabIndex = 11;
             this->backgroundLightness->Text = L"Background Color Lightness";
             // 
@@ -1057,7 +1059,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->backgroundTransparencySlider->Location = System::Drawing::Point(3, 43);
             this->backgroundTransparencySlider->Maximum = 255;
             this->backgroundTransparencySlider->Name = L"backgroundTransparencySlider";
-            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 45);
+            this->backgroundTransparencySlider->Size = System::Drawing::Size(185, 69);
             this->backgroundTransparencySlider->TabIndex = 10;
             this->backgroundTransparencySlider->Value = 100;
             this->backgroundTransparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::backgroundTransparencySlider_Scroll);
@@ -1069,7 +1071,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->backgroundTransparencyLabel->Location = System::Drawing::Point(4, 16);
             this->backgroundTransparencyLabel->Name = L"backgroundTransparencyLabel";
-            this->backgroundTransparencyLabel->Size = System::Drawing::Size(150, 15);
+            this->backgroundTransparencyLabel->Size = System::Drawing::Size(205, 20);
             this->backgroundTransparencyLabel->TabIndex = 11;
             this->backgroundTransparencyLabel->Text = L"Background Transparency";
             this->backgroundTransparencyLabel->Click += gcnew System::EventHandler(this, &Form1::backgroundTransparencyLabel_Click);
@@ -1094,7 +1096,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->classTransparencySelection->FormattingEnabled = true;
             this->classTransparencySelection->Location = System::Drawing::Point(6, 37);
             this->classTransparencySelection->Name = L"classTransparencySelection";
-            this->classTransparencySelection->Size = System::Drawing::Size(188, 21);
+            this->classTransparencySelection->Size = System::Drawing::Size(188, 28);
             this->classTransparencySelection->TabIndex = 13;
             this->classTransparencySelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::classTransparencySelection_SelectedIndexChanged);
             // 
@@ -1106,7 +1108,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->transparencySlider->Location = System::Drawing::Point(6, 64);
             this->transparencySlider->Maximum = 255;
             this->transparencySlider->Name = L"transparencySlider";
-            this->transparencySlider->Size = System::Drawing::Size(185, 45);
+            this->transparencySlider->Size = System::Drawing::Size(185, 69);
             this->transparencySlider->TabIndex = 10;
             this->transparencySlider->Value = 255;
             this->transparencySlider->Scroll += gcnew System::EventHandler(this, &Form1::transparencySlider_Scroll);
@@ -1118,7 +1120,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
             this->transparencyLabel->Location = System::Drawing::Point(6, 18);
             this->transparencyLabel->Name = L"transparencyLabel";
-            this->transparencyLabel->Size = System::Drawing::Size(128, 16);
+            this->transparencyLabel->Size = System::Drawing::Size(188, 25);
             this->transparencyLabel->TabIndex = 11;
             this->transparencyLabel->Text = L"Class Transparency";
             // 
@@ -1130,7 +1132,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
             this->userRectangleTypeSelection->FormattingEnabled = true;
             this->userRectangleTypeSelection->Location = System::Drawing::Point(76, 25);
             this->userRectangleTypeSelection->Name = L"userRectangleTypeSelection";
-            this->userRectangleTypeSelection->Size = System::Drawing::Size(121, 21);
+            this->userRectangleTypeSelection->Size = System::Drawing::Size(121, 28);
             this->userRectangleTypeSelection->TabIndex = 25;
             this->userRectangleTypeSelection->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::comboBox2_SelectedIndexChanged_1);
             // 
@@ -1141,7 +1143,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->label3->Location = System::Drawing::Point(7, 4);
             this->label3->Name = L"label3";
-            this->label3->Size = System::Drawing::Size(159, 15);
+            this->label3->Size = System::Drawing::Size(217, 20);
             this->label3->TabIndex = 12;
             this->label3->Text = L"User Rectangle Parameters";
             this->label3->Click += gcnew System::EventHandler(this, &Form1::label3_Click);
@@ -1153,7 +1155,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 static_cast<System::Byte>(0)));
             this->label4->Location = System::Drawing::Point(29, 28);
             this->label4->Name = L"label4";
-            this->label4->Size = System::Drawing::Size(36, 15);
+            this->label4->Size = System::Drawing::Size(50, 20);
             this->label4->TabIndex = 26;
             this->label4->Text = L"Type:";
             this->label4->Click += gcnew System::EventHandler(this, &Form1::label4_Click_1);
@@ -2181,6 +2183,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
     private:
         System::Void adjustThresholdsButton_Click(System::Object ^ sender, System::EventArgs ^ e)
         {
+            adjustThresholdsButtonToggle = !adjustThresholdsButtonToggle;
             if (adjustThresholdsButtonToggle)
             {
                 //adjustThresholdsButton->Text = adjustThresholdsButton->Text + " (BUTTON ACTIVE) ";
@@ -2191,7 +2194,6 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 //adjustThresholdsButton->Text = adjustThresholdsButton->Text->Substring(0, adjustThresholdsButton->Text->Length - 17);
                 currentModeDisplay->Text = this->defaultModeString;
             }
-            adjustThresholdsButtonToggle = !adjustThresholdsButtonToggle;
             OpenGL3->canDragPlots = !OpenGL3->canDragPlots;
             OpenGL3->setAdjustThresholdsMode(adjustThresholdsButtonToggle);
             OpenGL3->setConfusionMatrixTextBoxReference(confusionMatrixTextBox);
@@ -2223,11 +2225,11 @@ private: System::Void selectRectangleButton_Click(System::Object^ sender, System
     OpenGL3->toggleSelectUserRectangleMode();
     bool selectRectangleState = OpenGL3->getSelectionMode() == InteractiveSPC::SelectionMode::SelectRect;
     OpenGL3->canDragPlots = selectRectangleState;
-    if (OpenGL3->toggleSelectUserRectangleMode(removeUserRectButton) == -1) {
-        OpenGL3->canDragPlots = true;
-        MessageBox::Show("Please place at least one rectangle before trying to select it");
-        return;
-    }
+    //if (OpenGL3->toggleSelectUserRectangleMode(removeUserRectButton) == -1) {
+    //    OpenGL3->canDragPlots = true;
+    //    MessageBox::Show("Please place at least one rectangle before trying to select it");
+    //    return;
+    //}
     //selectRectangleState = !selectRectangleState;
     if (selectRectangleState) {
 		currentModeDisplay->Text = "Select Rectangle";

@@ -51,7 +51,7 @@ struct UserRectangle {
 		glEnd();
 	}
     void drawEdges(float lineThickness) {
-        glLineWidth(lineThickness);
+        //glLineWidth(lineThickness);
         drawEdges();
         glLineWidth(1.0); // TODO: replace with global line width
     }
