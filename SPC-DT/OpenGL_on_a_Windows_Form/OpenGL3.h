@@ -567,7 +567,8 @@ public
             }
 
             graph4.data.computeDecisionTreeBranches();
-            graph4.fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
+            //graph4.fillPlotLocations(); // Creates starting graph positions, and fills example data for now.
+            graph4.initializePlots();
             graph4.data.setClassColors();
             graph4.data.setContinueClassColors();
 
@@ -1322,7 +1323,8 @@ System::String ^ OpenGLForm::COpenGL3::logLineCoords(System::String ^ func)
     log = gcnew System::String("");
     for (int i = 0; i < graph4.data.plotWidth.size(); i++)
     {
-        log = log + graph4.data.xPlotCoordinates[i] + " " + graph4.data.plotWidth[i] + " ";
+        //log = log + graph4.data.xPlotCoordinates[i] + " " + graph4.data.plotWidth[i] + " ";
+        log = log + graph4.data.plots[i].getX1() + " " + graph4.data.plots[i].width + " ";
     }
 
     return func + "-" + log + "\n";
@@ -1434,7 +1436,7 @@ void OpenGLForm::COpenGL3::showTestingData()
 
 void OpenGLForm::COpenGL3::displaySelectedData()
 {
-    float rectClickedX, rectClickedY;
+    /*float rectClickedX, rectClickedY;
     int rectIndex;
 
     rectClickedX = (worldMouseX - (graph4.data.xPlotCoordinates[graph4.plotNumClicked] - graph4.data.plotWidth[graph4.plotNumClicked] / 2)) / graph4.data.plotWidth[graph4.plotNumClicked];
@@ -1460,7 +1462,7 @@ void OpenGLForm::COpenGL3::displaySelectedData()
         {
             graph4.data.dataTransparency[i] = 0.1;
         }
-    }
+    }*/
 }
 
 void OpenGLForm::COpenGL3::setReverseDataX()

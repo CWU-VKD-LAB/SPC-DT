@@ -12,6 +12,7 @@
 #include <fstream>
 #include <map>
 #include <set>
+#include "Plot.h"
 
 #pragma once
 
@@ -247,6 +248,8 @@ public:
     std::map<int, std::map<int, std::set<int>>> plotNumZoneTotalMisclassifiedCases;
     int maxCasesPerPlotZone = 0;
     std::set<int> zonesWithDarkBackgrounds;
+
+	std::vector<Plot> plots;
 
 	void computeClassAccuracies() {
 		if (casesPerClass.size() == 0) {
@@ -500,7 +503,7 @@ public:
 
 	/// <summary>	Holds different dimensions of x data. </summary>
 	std::vector<std::vector<float> > xdata;
-	std::vector<double> x1CoordPlot, x2CoordPlot, y1CoordPlot, y2CoordPlot;
+	//std::vector<double> x1CoordPlot, x2CoordPlot, y1CoordPlot, y2CoordPlot;
 	std::vector<float> dataTransparency;
 	std::vector<float> classTransparencies;
 	bool hdDisplay; //to display high dimension data
@@ -532,10 +535,10 @@ public:
 	std::vector<float> originalYPlotCoordinates;
 
 	/// <summary>	These hold x &amp; y coordinates for each graph position. </summary>
-	std::vector<float> xPlotCoordinates;
+	//std::vector<float> xPlotCoordinates;
 	bool fOpen;
 	/// <summary>	The yPlotCoordinates. </summary>
-	std::vector<float> yPlotCoordinates;
+	//std::vector<float> yPlotCoordinates;
 
 
 	// for zooming and panning ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -616,15 +619,15 @@ public:
 		}
 		strparsedData.clear();
 		values.clear();
-		x1CoordPlot.clear();
-		x2CoordPlot.clear();
-		xPlotCoordinates.clear();
+		//x1CoordPlot.clear();
+		//x2CoordPlot.clear();
+		//xPlotCoordinates.clear();
 		xclasses.clear();
 		xdata.clear();
 		xmax = 0;
-		y1CoordPlot.clear();
-		y2CoordPlot.clear();
-		yPlotCoordinates.clear();
+		/*y1CoordPlot.clear();
+		y2CoordPlot.clear();*/
+		//yPlotCoordinates.clear();
 		yclasses.clear();
 		ydata.clear();
 		ymax = 0;
@@ -643,8 +646,8 @@ public:
 		yclasses.clear();
 		originalXPlotCoordinates.clear();
 		originalYPlotCoordinates.clear();
-		xPlotCoordinates.clear();
-		yPlotCoordinates.clear();
+		//xPlotCoordinates.clear();
+		//yPlotCoordinates.clear();
 		classNum.clear();
 		parsedAttributePairs.clear();
 		parsedData.clear();
@@ -655,10 +658,10 @@ public:
 		plotNumToMisclassifiedCases.clear();
 		plotNumToTotalCases.clear();
 		plotNumZoneTotalCases.clear();
-		x1CoordPlot.clear();
-		x2CoordPlot.clear();
-		y1CoordPlot.clear();
-		y2CoordPlot.clear();
+		//x1CoordPlot.clear();
+		//x2CoordPlot.clear();
+		//y1CoordPlot.clear();
+		//y2CoordPlot.clear();
 	}
 
 	/* Input: Position of graph -- Creates a new empty graph */
@@ -672,105 +675,105 @@ public:
 	/// <param name="y">	The y coordinate. </param>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void drawPlot(float x, float y, float plotW, float plotH, int plotNum) 
-	{
-			
-			glPushMatrix(); // Makes a new layer
-			glTranslatef(x + pan_x, y + pan_y, 0.0f);	
-			glScalef((plotW / 2), (plotH / 2), 0.0f);
-			//glRotatef(45, 1, 1, 1);
-			glBegin(GL_LINE_STRIP);
-			glColor3ub(0, 0, 0); // Line color
-			glVertex2f(nonOrthoX1[plotNum], nonOrthoY1[plotNum]); //defines Y axis -1 for 90 degrees, change the first element to change angle	
-			glVertex2f(-1, 1);
-			glVertex2f(nonOrthoX2[plotNum], nonOrthoY2[plotNum]); //defines X axis, change the second element to change angle	
-			glEnd();
-			glPopMatrix(); // Removes the layer
+	//void drawPlot(float x, float y, float plotW, float plotH, int plotNum) 
+	//{
+	//		
+	//		glPushMatrix(); // Makes a new layer
+	//		glTranslatef(x + pan_x, y + pan_y, 0.0f);	
+	//		glScalef((plotW / 2), (plotH / 2), 0.0f);
+	//		//glRotatef(45, 1, 1, 1);
+	//		glBegin(GL_LINE_STRIP);
+	//		glColor3ub(0, 0, 0); // Line color
+	//		glVertex2f(nonOrthoX1[plotNum], nonOrthoY1[plotNum]); //defines Y axis -1 for 90 degrees, change the first element to change angle	
+	//		glVertex2f(-1, 1);
+	//		glVertex2f(nonOrthoX2[plotNum], nonOrthoY2[plotNum]); //defines X axis, change the second element to change angle	
+	//		glEnd();
+	//		glPopMatrix(); // Removes the layer
 
-			/*float labelsDistanceFromPlot = 10;
-			float xLabelLocation = labelsDistanceFromPlot + 10;*/
-			float lineSeparation = 18;
-			float xLabelVerticalOffset = 17;
-			float yLabelVerticalOffset = xLabelVerticalOffset + lineSeparation;
-			std::string xLabelStr = "x:" + parsedAttributePairs[plotNum][0] + " ";
-			std::string yLabelStr = "y:" + parsedAttributePairs[plotNum][1] + " ";
-			std::string labelsStr = xLabelStr + yLabelStr;
-			char* xLabelArr = &xLabelStr[0];
-			char* yLabelArr = &yLabelStr[0];
-			/*float plotHeight = nonOrthoY2[i] - nonOrthoY1[i];
-			float plotWidth = nonOrthoX2[i] - nonOrthoX1[i];*/
-			float plotWidth = x2CoordPlot[plotNum] - x1CoordPlot[plotNum];
-			float plotHeight = y2CoordPlot[plotNum] - y1CoordPlot[plotNum];
-			float fractionOfWidth = plotWidth / 3;
-			drawBitmapText(xLabelArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + xLabelVerticalOffset);
-			drawBitmapText(yLabelArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + yLabelVerticalOffset);
-			
+	//		/*float labelsDistanceFromPlot = 10;
+	//		float xLabelLocation = labelsDistanceFromPlot + 10;*/
+	//		float lineSeparation = 18;
+	//		float xLabelVerticalOffset = 17;
+	//		float yLabelVerticalOffset = xLabelVerticalOffset + lineSeparation;
+	//		std::string xLabelStr = "x:" + parsedAttributePairs[plotNum][0] + " ";
+	//		std::string yLabelStr = "y:" + parsedAttributePairs[plotNum][1] + " ";
+	//		std::string labelsStr = xLabelStr + yLabelStr;
+	//		char* xLabelArr = &xLabelStr[0];
+	//		char* yLabelArr = &yLabelStr[0];
+	//		/*float plotHeight = nonOrthoY2[i] - nonOrthoY1[i];
+	//		float plotWidth = nonOrthoX2[i] - nonOrthoX1[i];*/
+	//		float plotWidth = x2CoordPlot[plotNum] - x1CoordPlot[plotNum];
+	//		float plotHeight = y2CoordPlot[plotNum] - y1CoordPlot[plotNum];
+	//		float fractionOfWidth = plotWidth / 3;
+	//		drawBitmapText(xLabelArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + xLabelVerticalOffset);
+	//		drawBitmapText(yLabelArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + yLabelVerticalOffset);
+	//		
 
-			int precision = 4;
+	//		int precision = 4;
 
-			// draw axes ranges
-            std::string attr1 = parsedAttributePairs[plotNum][0];
-            std::string attr2 = parsedAttributePairs[plotNum][1];
-			//std::string xLowRange = std::to_string((int)attributeMinMax[attr1][0]);
-			std::string xLowRange = std::to_string(attributeMinMax[attr1][0]).substr(0, precision);
-            std::string xHighRange = std::to_string(attributeMinMax[attr1][1]).substr(0, precision);
-            //std::string yLowRange = std::to_string((int)attributeMinMax[attr2][0]);
-			std::string yLowRange = std::to_string(attributeMinMax[attr2][0]).substr(0, precision);
-            std::string yHighRange = std::to_string(attributeMinMax[attr2][1]).substr(0, precision);
+	//		// draw axes ranges
+ //           std::string attr1 = parsedAttributePairs[plotNum][0];
+ //           std::string attr2 = parsedAttributePairs[plotNum][1];
+	//		//std::string xLowRange = std::to_string((int)attributeMinMax[attr1][0]);
+	//		std::string xLowRange = std::to_string(attributeMinMax[attr1][0]).substr(0, precision);
+ //           std::string xHighRange = std::to_string(attributeMinMax[attr1][1]).substr(0, precision);
+ //           //std::string yLowRange = std::to_string((int)attributeMinMax[attr2][0]);
+	//		std::string yLowRange = std::to_string(attributeMinMax[attr2][0]).substr(0, precision);
+ //           std::string yHighRange = std::to_string(attributeMinMax[attr2][1]).substr(0, precision);
 
 
-			// TODO: needs some work
-			if (plotsWithXInverted.find(plotNum) != plotsWithXInverted.end()) {
-				std::string tmp = xLowRange;
-				xLowRange = xHighRange;
-				xHighRange = tmp;
-			}
+	//		// TODO: needs some work
+	//		if (plotsWithXInverted.find(plotNum) != plotsWithXInverted.end()) {
+	//			std::string tmp = xLowRange;
+	//			xLowRange = xHighRange;
+	//			xHighRange = tmp;
+	//		}
 
-			if (plotsWithYInverted.find(plotNum) != plotsWithYInverted.end()) {
-				std::string tmp = yLowRange;
-				yLowRange = yHighRange;
-				yHighRange = tmp;
-			}
+	//		if (plotsWithYInverted.find(plotNum) != plotsWithYInverted.end()) {
+	//			std::string tmp = yLowRange;
+	//			yLowRange = yHighRange;
+	//			yHighRange = tmp;
+	//		}
 
-			if (attr1 == attr2) {
-				std::cout << "debug";
-			}
+	//		if (attr1 == attr2) {
+	//			std::cout << "debug";
+	//		}
 
-            drawBitmapText(&xLowRange[0], x1CoordPlot[plotNum], y2CoordPlot[plotNum] + 1.5 * lineSeparation);
-            drawBitmapText(&xHighRange[0], x2CoordPlot[plotNum] - xHighRange.length() / 2, y2CoordPlot[plotNum] + 1.5 * lineSeparation);
-            drawBitmapText(&yLowRange[0], x1CoordPlot[plotNum] - ((float)precision / 1.5f) * lineSeparation, y2CoordPlot[plotNum]);
-            drawBitmapText(&yHighRange[0], x1CoordPlot[plotNum] - ((float)precision / 1.5f) * lineSeparation, y1CoordPlot[plotNum] + yHighRange.length() / 2);
+ //           drawBitmapText(&xLowRange[0], x1CoordPlot[plotNum], y2CoordPlot[plotNum] + 1.5 * lineSeparation);
+ //           drawBitmapText(&xHighRange[0], x2CoordPlot[plotNum] - xHighRange.length() / 2, y2CoordPlot[plotNum] + 1.5 * lineSeparation);
+ //           drawBitmapText(&yLowRange[0], x1CoordPlot[plotNum] - ((float)precision / 1.5f) * lineSeparation, y2CoordPlot[plotNum]);
+ //           drawBitmapText(&yHighRange[0], x1CoordPlot[plotNum] - ((float)precision / 1.5f) * lineSeparation, y1CoordPlot[plotNum] + yHighRange.length() / 2);
 
-			// debug draw plot num
-			std::string plot = "plotId:" + std::to_string(plotNum);
-			char* plotAsArr = &plot[0];
-			float plotIdOffset = yLabelVerticalOffset + lineSeparation;
-			drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + plotIdOffset);
-			//if (!fOpen)
-			//{
-			//	for (int p = 0; p < parsedData.size(); p++)
-			//	{
-			//		glColor4ub(255, 0, 0, 1);
-			//		glRectf(xPlotCoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]],
-			//			    yPlotCoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]],
-			//			    xPlotCoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]],
-			//			    yPlotCoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]]);
-			//	}
-			//	glColor4ub(255, 0, 0, 1);
-			//	glRectf(xPlotCoordinates[0] - graphwidth[0] / 2, yPlotCoordinates[0] + graphheight[0] / 2,
-			//		xPlotCoordinates[0] - graphwidth[0] / 2 + 0.255 * graphwidth[0], yPlotCoordinates[0] - graphheight[0] / 2);
-			//	/*glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2, data.yPlotCoordinates[1] + data.graphheight[1] / 2,
-			//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
-			//	glColor4ub(0, 255, 0, 1);
-			//	glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.yPlotCoordinates[1] + data.graphheight[1] / 2,
-			//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
-			//	glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0 * data.graphwidth[1], data.yPlotCoordinates[1] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1],
-			//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 1 * data.graphheight[1]);
-			//	glColor4ub(169, 169, 169, 6);
-			//	glRectf(data.xPlotCoordinates[0] - data.graphwidth[0] / 2 + 0.255 * data.graphwidth[0], data.yPlotCoordinates[0] + data.graphheight[0] / 2 - 0 * data.graphheight[1],
-			//		data.xPlotCoordinates[0] - data.graphwidth[0] / 2 + 1 * data.graphwidth[0], data.yPlotCoordinates[0] + data.graphheight[0] / 2 - 1 * data.graphheight[1]);*/
-			//}
-	}
+	//		// debug draw plot num
+	//		std::string plot = "plotId:" + std::to_string(plotNum);
+	//		char* plotAsArr = &plot[0];
+	//		float plotIdOffset = yLabelVerticalOffset + lineSeparation;
+	//		drawBitmapText(plotAsArr, x1CoordPlot[plotNum] + fractionOfWidth, y2CoordPlot[plotNum] + plotIdOffset);
+	//		//if (!fOpen)
+	//		//{
+	//		//	for (int p = 0; p < parsedData.size(); p++)
+	//		//	{
+	//		//		glColor4ub(255, 0, 0, 1);
+	//		//		glRectf(xPlotCoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][0] * graphwidth[parsedData[p][4]],
+	//		//			    yPlotCoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][1] * graphheight[parsedData[p][4]],
+	//		//			    xPlotCoordinates[parsedData[p][4]] - graphwidth[parsedData[p][4]] / 2 + parsedData[p][2] * graphwidth[parsedData[p][4]],
+	//		//			    yPlotCoordinates[parsedData[p][4]] + graphheight[parsedData[p][4]] / 2 - parsedData[p][3] * graphheight[parsedData[p][4]]);
+	//		//	}
+	//		//	glColor4ub(255, 0, 0, 1);
+	//		//	glRectf(xPlotCoordinates[0] - graphwidth[0] / 2, yPlotCoordinates[0] + graphheight[0] / 2,
+	//		//		xPlotCoordinates[0] - graphwidth[0] / 2 + 0.255 * graphwidth[0], yPlotCoordinates[0] - graphheight[0] / 2);
+	//		//	/*glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2, data.yPlotCoordinates[1] + data.graphheight[1] / 2,
+	//		//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
+	//		//	glColor4ub(0, 255, 0, 1);
+	//		//	glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0.458 * data.graphwidth[1], data.yPlotCoordinates[1] + data.graphheight[1] / 2,
+	//		//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1]);
+	//		//	glRectf(data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 0 * data.graphwidth[1], data.yPlotCoordinates[1] + data.graphheight[1] / 2 - 0.505 * data.graphheight[1],
+	//		//		data.xPlotCoordinates[1] - data.graphwidth[1] / 2 + 1 * data.graphwidth[1], data.yPlotCoordinates[0] + data.graphheight[1] / 2 - 1 * data.graphheight[1]);
+	//		//	glColor4ub(169, 169, 169, 6);
+	//		//	glRectf(data.xPlotCoordinates[0] - data.graphwidth[0] / 2 + 0.255 * data.graphwidth[0], data.yPlotCoordinates[0] + data.graphheight[0] / 2 - 0 * data.graphheight[1],
+	//		//		data.xPlotCoordinates[0] - data.graphwidth[0] / 2 + 1 * data.graphwidth[0], data.yPlotCoordinates[0] + data.graphheight[0] / 2 - 1 * data.graphheight[1]);*/
+	//		//}
+	//}
 
 	bool is_digits(const std::string &str)
 	{
@@ -927,59 +930,59 @@ public:
 		std::cout << "debug treedepth" << rootDepth;
 	}
 
-	void calculateTerminationPoint(int i) {
-		int classnum = classNum[i] - 1;
-		for (int j = 0; j < dataTerminationIndex[i]; j++) {
-			float px = xPlotCoordinates[j];
-			float py = yPlotCoordinates[j];
-			px -= (plotWidth[j] / 2);
-			py += (plotHeight[j] / 2);
-			float x1Coord = plotWidth[j] * xdata[i][j];
-			float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
-			float x1CoordTrans = x1Coord + (px + pan_x);
-			float y1CoordTrans = y1Coord + (py + pan_y);
+	//void calculateTerminationPoint(int i) {
+	//	int classnum = classNum[i] - 1;
+	//	for (int j = 0; j < dataTerminationIndex[i]; j++) {
+	//		float px = xPlotCoordinates[j];
+	//		float py = yPlotCoordinates[j];
+	//		px -= (plotWidth[j] / 2);
+	//		py += (plotHeight[j] / 2);
+	//		float x1Coord = plotWidth[j] * xdata[i][j];
+	//		float y1Coord = -plotHeight[j] * ydata[i][j]; //height of plot is constant = 328.5
+	//		float x1CoordTrans = x1Coord + (px + pan_x);
+	//		float y1CoordTrans = y1Coord + (py + pan_y);
 
-			int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
+	//		int backgroundClass = findBackgroundClassOfPoint(x1CoordTrans, y1CoordTrans);
 
-			if (backgroundClass >= 0) {
-				std::cout << "debug";
-				if (backgroundClass == classnum) {
-					if (j < 2) {
-						dataTerminationIndex[i] = 2; // might need to be 2
-					}
-					else {
-						dataTerminationIndex[i] = j;
-					}
-				}
-			}
-			else {
-				// TODO
-			}
-		}
-	}
+	//		if (backgroundClass >= 0) {
+	//			std::cout << "debug";
+	//			if (backgroundClass == classnum) {
+	//				if (j < 2) {
+	//					dataTerminationIndex[i] = 2; // might need to be 2
+	//				}
+	//				else {
+	//					dataTerminationIndex[i] = j;
+	//				}
+	//			}
+	//		}
+	//		else {
+	//			// TODO
+	//		}
+	//	}
+	//}
 
-	int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
-		// TODO
-		int resultClass = 0;
-		for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which plot we are looking at?
-			int classNumber = parsedData[p][5];
-			int plot = parsedData[p][4];
-			GLfloat x1 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][0] * plotWidth[plot];
-			GLfloat y1 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][1] * plotHeight[plot];
-			GLfloat x2 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][2] * plotWidth[plot];
-			GLfloat y2 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][3] * plotHeight[plot];
-			if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
-				resultClass = classNumber;
-			} // Check to see if these need to be rearranged.
-			std::cout << "debug" << x1 << x2 << y1 << y2;
-		}
+	//int findBackgroundClassOfPoint(GLfloat px, GLfloat py) {
+	//	// TODO
+	//	int resultClass = 0;
+	//	for (int p = 0; p < parsedData.size(); p++) { // Will we need to state which plot we are looking at?
+	//		int classNumber = parsedData[p][5];
+	//		int plot = parsedData[p][4];
+	//		GLfloat x1 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][0] * plotWidth[plot];
+	//		GLfloat y1 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][1] * plotHeight[plot];
+	//		GLfloat x2 = xPlotCoordinates[plot] - plotWidth[plot] / 2 + parsedData[p][2] * plotWidth[plot];
+	//		GLfloat y2 = yPlotCoordinates[plot] + plotHeight[plot] / 2 - parsedData[p][3] * plotHeight[plot];
+	//		if (isPointWithinRect(px, py, x1, y1, x2, y2)) {
+	//			resultClass = classNumber;
+	//		} // Check to see if these need to be rearranged.
+	//		std::cout << "debug" << x1 << x2 << y1 << y2;
+	//	}
 
-		if (resultClass != -1) {
-			std::cout << "debug";
-		}
+	//	if (resultClass != -1) {
+	//		std::cout << "debug";
+	//	}
 
-		return resultClass;
-	}
+	//	return resultClass;
+	//}
 
 	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
 		bool result = false;
@@ -998,8 +1001,10 @@ public:
 		//}
 
 		// compute where mouse is in plot
-		float centerX = xPlotCoordinates[plotId];
-		float centerY = yPlotCoordinates[plotId];
+		//float centerX = xPlotCoordinates[plotId];
+		//float centerY = yPlotCoordinates[plotId];
+		float centerX = plots[plotId].centerX;
+		float centerY = plots[plotId].centerY;
 		float x1 = centerX - plotWidth[plotId] / 2;
 		float x2 = centerX + plotWidth[plotId] / 2;
 		float y1 = centerY - plotHeight[plotId] / 2;

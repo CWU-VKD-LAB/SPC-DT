@@ -1,1 +1,156 @@
-<HTML><HEAD><style type="text/css">.BodyStyle {color:black;font-family:Trebuchet MS;font-size:12px}</style></HEAD><BODY class="BodyStyle"><FONT FACE="Trebuchet MS" SIZE=1><table width="100%"><tr><th bgcolor="#00CC99">Supervised Learning 1 (C4.5)</th></tr></table><A NAME="Parameters"><table width="100%"><tr><th bgcolor="#0099CC">Parameters</th></tr></table></A><P><TABLE class="BodyStyle" cellspacing=2 cellpadding=2><TR BGCOLOR="#E0E0E0"><TH colspan=2>Decision tree (C4.5) parameters</TH></TR><TR BGCOLOR="#EFEFEF"><TD>Min size of leaves</TD><TD align=right>5</TD></TR><TR BGCOLOR="#EFEFEF"><TD>Confidence-level for pessimistic</TD><TD align=right>0.25</TD></TR></table><HR><A NAME="Summary"><table width="100%"><tr><th bgcolor="#0099CC">Results</th></tr></table></A><P><P><H2>Classifier performances</H2><TABLE class="BodyStyle" cellspacing=2 cellpadding=2><TR BGCOLOR="#60CAB3"><TH>Error rate</TH><TD align=center>0.0456</TD></TR><TR BGCOLOR="#E0E0E0"><TH>Values prediction</TH><TH>Confusion matrix</TH></TR><TR BGCOLOR="#EFEFEF"><TD valign=top><TABLE class="BodyStyle" cellspacing=2 cellpadding=2><TR BGCOLOR="#789ADA"><TH>Value</TH><TH>Recall</TH><TH>1-Precision</TH></TR><TR BGCOLOR="#ACCAF0"><TH>g</TH><TD align=right>0.9956</TD><TD align=right>0.0628</TD></TR><TR BGCOLOR="#ACCAF0"><TH>b</TH><TD align=right>0.8810</TD><TD align=right>0.0089</TD></TR></table></TD><TD><P><TABLE class="BodyStyle" cellspacing=2 cellpadding=2><TR BGCOLOR="#789ADA"><TH></TH><TH width=60>g</TH><TH width=60>b</TH><TH width=60 BGCOLOR="#60CAB3">Sum</TH></TR><TR><TH BGCOLOR="#789ADA">g</TH><TD BGCOLOR="#ACCAF0" align=right>224</TD><TD BGCOLOR="#ACCAF0" align=right>1</TD><TD BGCOLOR="#9FDFD1" align=right>225</TD></TR><TR><TH BGCOLOR="#789ADA">b</TH><TD BGCOLOR="#ACCAF0" align=right>15</TD><TD BGCOLOR="#ACCAF0" align=right>111</TD><TD BGCOLOR="#9FDFD1" align=right>126</TD></TR><TR><TH BGCOLOR="#60CAB3">Sum</TH><TD BGCOLOR="#9FDFD1" align=right>239</TD><TD BGCOLOR="#9FDFD1" align=right>112</TD><TD BGCOLOR="#9FDFD1" align=right>351</TD></TR></table></TD></TR></table><HR><P><H2>Classifier characteristics</H2><h3>Data description</h3><TABLE class="BodyStyle" cellspacing=2 cellpadding=2><TR BGCOLOR="#EFEFEF"><th>Target attribute</th><td>class (2 values)</td></tr><TR BGCOLOR="#EFEFEF"><th># descriptors</th><td>34</td></tr></table><H3>Tree description</H3><TABLE class="BodyStyle" cellspacing=2 cellpadding=2><TR BGCOLOR="#ACCAF0"><TD>Number of nodes</TD><TD align=right width=60>11</TD></TR><TR BGCOLOR="#ACCAF0"><TD>Number of leaves</TD><TD align=right width=60>6</TD></TR></table><P><H3>Decision tree</H3><UL><LI>E < 0.0414 then class = <b>b</b> (100.00 % of 67 examples)<LI>E >= 0.0414<UL><LI>A < 0.5000 then class = <b>b</b> (100.00 % of 19 examples)<LI>A >= 0.5000<UL><LI>C < 0.1408 then class = <b>b</b> (100.00 % of 11 examples)<LI>C >= 0.1408<UL><LI>H < -0.9872 then class = <b>b</b> (100.00 % of 8 examples)<LI>H >= -0.9872<UL><LI>N < -0.6079 then class = <b>b</b> (85.71 % of 7 examples)<LI>N >= -0.6079 then class = <b>g</b> (93.72 % of 239 examples)</UL></UL></UL></UL></UL><HR>Computation time : 15 ms.<BR>Created at 3/7/2022 1:21:56 PM</body></html>
+<HTML>
+
+<HEAD>
+    <style type="text/css">
+        .BodyStyle {
+            color: black;
+            font-family: Trebuchet MS;
+            font-size: 12px
+        }
+    </style>
+</HEAD>
+
+<BODY class="BodyStyle">
+    <FONT FACE="Trebuchet MS" SIZE=1>
+        <table width="100%">
+            <tr>
+                <th bgcolor="#00CC99">Supervised Learning 1 (C4.5)</th>
+            </tr>
+        </table><A NAME="Parameters">
+            <table width="100%">
+                <tr>
+                    <th bgcolor="#0099CC">Parameters</th>
+                </tr>
+            </table>
+        </A>
+        <P>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#E0E0E0">
+                <TH colspan=2>Decision tree (C4.5) parameters</TH>
+            </TR>
+            <TR BGCOLOR="#EFEFEF">
+                <TD>Min size of leaves</TD>
+                <TD align=right>5</TD>
+            </TR>
+            <TR BGCOLOR="#EFEFEF">
+                <TD>Confidence-level for pessimistic</TD>
+                <TD align=right>0.25</TD>
+            </TR>
+        </table>
+        <HR><A NAME="Summary">
+            <table width="100%">
+                <tr>
+                    <th bgcolor="#0099CC">Results</th>
+                </tr>
+            </table>
+        </A>
+        <P>
+        <P>
+        <H2>Classifier performances</H2>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#60CAB3">
+                <TH>Error rate</TH>
+                <TD align=center>0.0456</TD>
+            </TR>
+            <TR BGCOLOR="#E0E0E0">
+                <TH>Values prediction</TH>
+                <TH>Confusion matrix</TH>
+            </TR>
+            <TR BGCOLOR="#EFEFEF">
+                <TD valign=top>
+                    <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+                        <TR BGCOLOR="#789ADA">
+                            <TH>Value</TH>
+                            <TH>Recall</TH>
+                            <TH>1-Precision</TH>
+                        </TR>
+                        <TR BGCOLOR="#ACCAF0">
+                            <TH>g</TH>
+                            <TD align=right>0.9956</TD>
+                            <TD align=right>0.0628</TD>
+                        </TR>
+                        <TR BGCOLOR="#ACCAF0">
+                            <TH>b</TH>
+                            <TD align=right>0.8810</TD>
+                            <TD align=right>0.0089</TD>
+                        </TR>
+                    </table>
+                </TD>
+                <TD>
+                    <P>
+                    <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+                        <TR BGCOLOR="#789ADA">
+                            <TH></TH>
+                            <TH width=60>g</TH>
+                            <TH width=60>b</TH>
+                            <TH width=60 BGCOLOR="#60CAB3">Sum</TH>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#789ADA">g</TH>
+                            <TD BGCOLOR="#ACCAF0" align=right>224</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>1</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>225</TD>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#789ADA">b</TH>
+                            <TD BGCOLOR="#ACCAF0" align=right>15</TD>
+                            <TD BGCOLOR="#ACCAF0" align=right>111</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>126</TD>
+                        </TR>
+                        <TR>
+                            <TH BGCOLOR="#60CAB3">Sum</TH>
+                            <TD BGCOLOR="#9FDFD1" align=right>239</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>112</TD>
+                            <TD BGCOLOR="#9FDFD1" align=right>351</TD>
+                        </TR>
+                    </table>
+                </TD>
+            </TR>
+        </table>
+        <HR>
+        <P>
+        <H2>Classifier characteristics</H2>
+        <h3>Data description</h3>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#EFEFEF">
+                <th>Target attribute</th>
+                <td>class (2 values)</td>
+            </tr>
+            <TR BGCOLOR="#EFEFEF">
+                <th># descriptors</th>
+                <td>34</td>
+            </tr>
+        </table>
+        <H3>Tree description</H3>
+        <TABLE class="BodyStyle" cellspacing=2 cellpadding=2>
+            <TR BGCOLOR="#ACCAF0">
+                <TD>Number of nodes</TD>
+                <TD align=right width=60>11</TD>
+            </TR>
+            <TR BGCOLOR="#ACCAF0">
+                <TD>Number of leaves</TD>
+                <TD align=right width=60>6</TD>
+            </TR>
+        </table>
+        <P>
+        <H3>Decision tree</H3>
+        <UL>
+            <LI>E < 0.0414 then class=<b>b</b> (100.00 % of 67 examples)
+            <LI>E >= 0.0414<UL>
+                    <LI>A < 0.5000 then class=<b>b</b> (100.00 % of 19 examples)
+                    <LI>A >= 0.5000<UL>
+                            <LI>C < 0.1408 then class=<b>b</b> (100.00 % of 11 examples)
+                            <LI>C >= 0.1408<UL>
+                                    <LI>H < -0.9872 then class=<b>b</b> (100.00 % of 8 examples)
+                                    <LI>H >= -0.9872<UL>
+                                            <LI>N < -0.6079 then class=<b>b</b> (85.71 % of 7 examples)
+                                            <LI>N >= -0.6079 then class = <b>g</b> (93.72 % of 239 examples)
+                                        </UL>
+                                </UL>
+                        </UL>
+                </UL>
+        </UL>
+        <HR>Computation time : 15 ms.<BR>Created at 3/7/2022 1:21:56 PM
+</body>
+
+</html>

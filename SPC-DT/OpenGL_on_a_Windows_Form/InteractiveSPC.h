@@ -31,7 +31,7 @@ public:
 
 	InteractiveSPC(ClassData&, parseData&, double, double);
 
-	void fillPlotLocations();
+	//void fillPlotLocations();
 
 	/* Drawing data sets. */
 
@@ -46,10 +46,10 @@ public:
     std::vector<int> getParserElementsWithPlotNum(int plotNum);
 
 	// Calculates termination nodes for each datapoint
-	void calculateDataTerminationPoints();
+	//void calculateDataTerminationPoints();
 
 	// *** USED FOR DRAWING LINE COLORS
-	int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
+	//int findBackgroundClassOfPoint(GLfloat px, GLfloat py);
 	int findBackgroundClassOfPoint(GLfloat px, GLfloat py, int plotNum);
 	int findBackgroundZoneIdOfPoint(GLfloat px, GLfloat py, int plotNum);
 	int findPlotNumOfPoint(GLfloat px, GLfloat py);
@@ -107,10 +107,14 @@ public:
 	std::map<int, Zone> zoneIdMap;
 	void buildZoneEdges();
 	void updateZoneColors(int classNum);
+	bool zonesNotBuilt = true;
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
-	//bool swapAttributeAxesMode = false;
-    void invertPlotNum(int plotNum, bool isXAxist);
+	bool swapAttributeAxesMode = false;
+    void invertPlotNumAxis(int plotNum, bool isXAxis);
+    void swapPlotNumAxes(int plotNum);
+	void initializePlots();
+
 	std::set<int> swappedPlots;
 	std::set<int> plotsWithXAxisInverted;
 	std::set<int> plotsWithYAxisInverted;
@@ -165,7 +169,7 @@ public:
 	//std::vector<GLubyte> HSLtoRGB(std::vector<float> hsl);
 	bool isPointWithinRect(GLfloat px, GLfloat py, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
 	//bool shouldLineBeClipped(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, bool* startPointCode, bool* endPointCode);
-	int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
+	//int getClassNumFromPoint(GLfloat px, GLfloat py, int currentDataIndex);
 
 	float computeBackgroundTransparency(Zone &zone);
 	void computeZoneEdges(Zone &zone);
