@@ -110,7 +110,7 @@ void InteractiveSPC::initializePlots() {
 
     // initialize plot objects
     for (int i = 0; i < numPlots; i++) {
-        data.plots.push_back(Plot(i, data.attributeMinMax, data.parsedAttributePairs[i][0], data.parsedAttributePairs[i][1]));
+        data.plots.push_back(Plot(i, data.attributeMinMax, data.parsedAttributePairs[i][0], data.parsedAttributePairs[i][1], &data.classes));
     }
 
     // Compute spans for each depth
@@ -668,7 +668,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 
     int caseClass = data.classNum[caseNum] - 1;
     Plot* point1Plot = &data.plots[plotNum];
-
+    
     // get plot coordinates
     //float plt1X1 = data.x1CoordPlot[plotNum];
     //float plt1Y1 = data.y1CoordPlot[plotNum];
@@ -715,6 +715,8 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
     }
 
+    point1Plot->classifyPoint(x1, y1, caseNum, caseClass);
+	
     Zone* point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
 
     if (point1PlotZone == nullptr) {
@@ -1766,7 +1768,7 @@ void InteractiveSPC::display()
             Zone z = Zone(i, destinationPlot, type, 20.0f, color, 
                 &data.parsedData, &data.maxCasesPerPlotZone, &data.plotNumZoneTotalCases, 
                 &isBackgroundDensityColoringMode, &backgroundClassColorCoefficient, 
-                &backgroundTransparency);
+                &backgroundTransparency, &data.classes);
             data.plots[plotNum].addZone(z);
         }
         zonesNotBuilt = false;
@@ -2513,7 +2515,7 @@ void InteractiveSPC::swapPlotNumAxes(int plotNum) {
     data.plots[plotNum].swapAxes();
 }
 
-void InteractiveSPC::invertPlotNumAxis(int plotNum, bool isXAxis) {
+void InteractiveSPC::invertPlotNum(int plotNum, bool isXAxis) {
     data.plots[plotNum].invertAxis(isXAxis);
     // std::vector<int> parserElementsWithPlotNum = getParserElementsWithPlotNum(plotNum);
     // if (isXAxis) {

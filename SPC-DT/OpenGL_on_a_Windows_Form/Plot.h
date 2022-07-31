@@ -10,8 +10,9 @@ struct Plot {
 	std::string attribute1Name, attribute2Name;
 	std::map<std::string, std::vector<float>>* attributeMinMax;
 	bool isXInverted, isYInverted, isXYSwapped, isSingleAttributePlot;
+	std::vector<int>* classes;
 
-	Plot(int id, std::map<std::string, std::vector<float>>& attributeMinMax, std::string &attribute1Name, std::string &attribute2Name) {
+	Plot(int id, std::map<std::string, std::vector<float>>& attributeMinMax, std::string &attribute1Name, std::string &attribute2Name, std::vector<int>* classes) {
 		plotNum = id;
 		this->attributeMinMax = &attributeMinMax;
 		this->attribute1Name = attribute1Name;
@@ -20,6 +21,7 @@ struct Plot {
 		isYInverted = false;
 		isXYSwapped = false;
 		isSingleAttributePlot = false;
+		this->classes = classes;
 		if (attribute1Name == attribute2Name) {
 			isSingleAttributePlot = true;
 		}
@@ -30,6 +32,34 @@ struct Plot {
 		this->centerY = centerY;
 		this->width = width;
 		this->height = height;
+	}
+
+	int classifyPoint(GLfloat px, GLfloat py, int caseNum, int caseClass) {
+		Zone* zone = getZoneThatContainsPoint(px, py);
+		if (zone == nullptr) {
+			return INT_MIN;
+		}
+		zone->classifyPoint(caseNum, caseClass);
+		return zone->classNum;
+	}
+
+	std::vector<std::map<int, int>> getZoneAccuracies() {
+		std::map<int, int> correctlyClassified; // class -> numCases
+		std::map<int, int> misclassified; // class -> numCases (num cases incorrectly classified as class)
+		
+		for (int i = 0; i < zones.size(); i++) {
+			std::map<int, std::vector<int>> zoneAccuracy = zones[i].getAccuracies();
+			for (int j = 0; j < classes->size(); j++) {
+				int curClass = classes->at(j);
+				correctlyClassified[curClass] += zoneAccuracy[curClass][0];
+				misclassified[curClass] += zoneAccuracy[curClass][1];
+			}
+		}
+		
+		std::vector<std::map<int, int>> accuracies;
+		accuracies.push_back(correctlyClassified);
+		accuracies.push_back(misclassified);
+		return accuracies;
 	}
 
 	void draw() {

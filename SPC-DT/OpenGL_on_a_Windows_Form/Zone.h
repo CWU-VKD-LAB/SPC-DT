@@ -34,6 +34,10 @@ struct Zone
     GLfloat *backgroundClassColorCoeff;
     GLfloat *backgroundTransparencyGlobal;
     bool *isBackgroundDensityColoringMode;
+    std::vector<int> correctlyClassifiedCases;
+    std::vector<int> misclassifiedCases;
+    std::map<int, int> misclassfiedCaseActualClass;
+    std::vector<int>* classes;
     // Edge* edges[4]; // left, top, right, bottom
 
     Zone() {}
@@ -43,7 +47,8 @@ struct Zone
          std::map<int, std::map<int, std::set<int>>> *plotNumZoneTotalCases,
          bool *isBackgroundDensityColoringMode,
          GLfloat *backgroundClassColorCoeff,
-         GLfloat *backgroundTransparencyGlobal)
+         GLfloat *backgroundTransparencyGlobal,
+         std::vector<int> *classes)
     {
         this->id = i;
         this->x1 = &parsedData->at(id)[0]; 
@@ -61,6 +66,45 @@ struct Zone
         this->isBackgroundDensityColoringMode = isBackgroundDensityColoringMode;
         this->backgroundClassColorCoeff = backgroundClassColorCoeff;
         this->backgroundTransparencyGlobal = backgroundTransparencyGlobal;
+        this->classes = classes;
+    }
+
+    void classifyPoint(int caseNum, int caseClass) {
+        if (classNum < 0) return;
+        if (caseClass != classNum) {
+            addMisclassifiedCase(caseNum, caseClass);
+        }
+        else {
+            addCorrectlyClassifiedCase(caseNum);
+        }
+    }
+
+    void clearClassifications() {
+        misclassifiedCases.clear();
+        correctlyClassifiedCases.clear();
+    }
+
+    void addMisclassifiedCase(int caseNum, int caseClass) {
+        if (std::find(misclassifiedCases.begin(), misclassifiedCases.end(), caseNum) == misclassifiedCases.end()) {
+            misclassifiedCases.push_back(caseNum);
+            misclassfiedCaseActualClass[caseNum] = caseClass;
+        }
+    }
+
+    void addCorrectlyClassifiedCase(int caseNum) {
+        if (std::find(correctlyClassifiedCases.begin(), correctlyClassifiedCases.end(), caseNum) == correctlyClassifiedCases.end()) {
+            correctlyClassifiedCases.push_back(caseNum);
+        }
+    }
+
+    std::map<int, std::vector<int>> getAccuracies() {
+        std::map<int, std::vector<int>> accuracies; // class -> [correct, misclassiedAsClass]
+        for (int i = 0; i < classes->size(); i++) {
+            int curClass = classes->at(i);
+            accuracies[curClass].push_back(correctlyClassifiedCases.size());
+            accuracies[curClass].push_back(misclassifiedCases.size());
+        }
+        return accuracies;
     }
 
     // Zone(GLfloat& x1, GLfloat& y1, GLfloat& x2, GLfloat& y2, int id, int destinationPlot, int classNum, ZoneType type, float selectionZoneWidth, std::vector<float>* color, std::vector<std::vector<float>> &parsedData) {

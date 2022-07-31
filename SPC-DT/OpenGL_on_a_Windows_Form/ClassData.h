@@ -269,6 +269,11 @@ public:
 	}
 
 	std::map<int, float> computeAccuracy() {
+		std::vector< std::vector<std::map<int, int>>> debugList;
+		for (int i = 0; i < plots.size(); i++) {
+			std::vector<std::map<int, int>> plotAccuracy = plots[i].getZoneAccuracies(); // zones : [ {class -> correctlyClassified , class -> misclassified}
+			debugList.push_back(plotAccuracy);
+		}
 		// Compute accuracy
 		std::map<int, float> accuracyMap;
 		std::vector<float> accuraciesByClass;

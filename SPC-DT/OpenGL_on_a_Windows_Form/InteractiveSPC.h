@@ -111,7 +111,7 @@ public:
 
 	/// *** USED FOR DETERMINING ATTRIBUTE SWAP MODE
 	bool swapAttributeAxesMode = false;
-    void invertPlotNumAxis(int plotNum, bool isXAxis);
+    void invertPlotNum(int plotNum, bool isXAxis);
     void swapPlotNumAxes(int plotNum);
 	void initializePlots();
 
