@@ -51,6 +51,7 @@ struct Plot {
 			std::map<int, std::vector<int>> zoneAccuracy = zones[i].getAccuracies();
 			for (int j = 0; j < classes->size(); j++) {
 				int curClass = classes->at(j);
+				if (curClass < 0) continue;
 				correctlyClassified[curClass] += zoneAccuracy[curClass][0];
 				misclassified[curClass] += zoneAccuracy[curClass][1];
 			}
