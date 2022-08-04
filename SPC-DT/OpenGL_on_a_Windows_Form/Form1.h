@@ -1440,6 +1440,8 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 // populate user rectangle types
                 this->userRectangleTypeSelection->Items->Add("None");
                 this->userRectangleTypeSelection->Items->Add("Condense");
+                this->userRectangleTypeSelection->Items->Add("Exclude");
+
                 //this->userRectangleTypeSelection->Items->Add("Exclude");
                 //this->userRectangleTypeSelection->Items->Add("Expand");
                 lineTerminationModeCheckbox->Checked = false;
@@ -1689,6 +1691,8 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
                 // populate user rectangle types
                 this->userRectangleTypeSelection->Items->Add("None");
                 this->userRectangleTypeSelection->Items->Add("Condense");
+                this->userRectangleTypeSelection->Items->Add("Exclude");
+
 
                 data.numOfClasses = OpenGL3->getClassSize();
 
@@ -2243,6 +2247,7 @@ private: System::Void selectRectangleButton_Click(System::Object^ sender, System
     this->userRectangleTypeSelection->Items->Clear();
     this->userRectangleTypeSelection->Items->Add("None");
     this->userRectangleTypeSelection->Items->Add("Condense");
+    this->userRectangleTypeSelection->Items->Add("Exclude");
 }
 private: System::Void comboBox2_SelectedIndexChanged_1(System::Object^ sender, System::EventArgs^ e) {
     int state = userRectangleTypeSelection->SelectedIndex;

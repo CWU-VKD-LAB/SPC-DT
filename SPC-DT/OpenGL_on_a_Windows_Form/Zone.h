@@ -98,12 +98,12 @@ struct Zone
     }
 
     std::map<int, std::vector<int>> getAccuracies() {
-        std::map<int, std::vector<int>> accuracies; // class -> [correct, misclassiedAsClass]
-        for (int i = 0; i < classes->size(); i++) {
-            int curClass = classes->at(i);
-            accuracies[curClass].push_back(correctlyClassifiedCases.size());
-            accuracies[curClass].push_back(misclassifiedCases.size());
-        }
+        std::map<int, std::vector<int>> accuracies; // class -> [num correct, num misclassiedAsClass]
+        //for (int i = 0; i < classes->size(); i++) {
+        //    int curClass = classes->at(i);
+        //    accuracies[curClass].push_back(correctlyClassifiedCases.size());
+        //    accuracies[curClass].push_back(misclassifiedCases.size());
+        //}
         return accuracies;
     }
 

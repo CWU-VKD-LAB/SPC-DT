@@ -50,6 +50,10 @@ struct UserRectangle {
     }
 	void drawEdges() {
         computeRealCoords();
+        if (type == Exclude) {
+            glColor3ub(255, 255, 255);
+            glRectf(realX1, realY1, realX2, realY2);
+        }
         glColor3ub(frameColor[0], frameColor[1], frameColor[2]);
         glBegin(GL_LINE_LOOP);
         glVertex2f(realX1, realY1);

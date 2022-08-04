@@ -606,8 +606,11 @@ void InteractiveSPC::updateSelectedRectangleType(int state) {
         case 0: // none
             selectedRect->type = None;
             break;
-        case 1:
+        case 1: // condense
             selectedRect->type = Condense;
+            break;
+        case 2: // exclude
+            selectedRect->type = Exclude;
             break;
             // more to come...
         }
@@ -644,7 +647,7 @@ void InteractiveSPC::adjustPointToRectangle(float &x, float &y, int &caseClass, 
                 shouldStop = true;
             }
             break;
-        case Exclude:
+        case Exclude: // hapens earlier in stack (before classification)
             // TODO: coming soon
         case Expand:
             // TODO: coming soon
@@ -715,7 +718,22 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
     }
 
-    point1Plot->classifyPoint(x1, y1, caseNum, caseClass);
+	// check if point1 is within a no classify rectangle
+    bool shouldClassify = true;
+    for (int i = 0; i < userRectangles.size(); i++) {
+		UserRectangle* userRect = &userRectangles[i];
+		if (userRect->plotNum != plotNum) continue;
+		if (userRect->type == Exclude) {
+			if (userRect->isPointWithinRect(x1, y1)) {
+                shouldClassify = false;
+                break;
+			}
+		}
+    }
+
+    if (shouldClassify) {
+        point1Plot->classifyPoint(x1, y1, caseNum, caseClass);
+    }
 	
     Zone* point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
 

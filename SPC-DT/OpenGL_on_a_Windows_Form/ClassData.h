@@ -1061,9 +1061,9 @@ public:
 		}
 
         //debug
-        if (std::find(adjoiningEdges.begin(), adjoiningEdges.end(), &parsedData[zone]) != adjoiningEdges.end()) {
-            std::cout << "debug";
-        }
+        //if (std::find(adjoiningEdges.begin(), adjoiningEdges.end(), &parsedData[zone]) != adjoiningEdges.end()) {
+        //    std::cout << "debug";
+        //}
 
         // adjust parser elements
         if (direction % 2 == 0) {
@@ -1079,10 +1079,17 @@ public:
                 adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotY;
             }
         }
+		clearClassifications();
 		zonesWithDarkBackgrounds.clear();
 		plotNumZoneTotalCases.clear();
 		plotNumZoneTotalMisclassifiedCases.clear();
     }
+	
+	void clearClassifications() {
+		for (int i = 0; i < plots.size(); i++) {
+			plots[i].clearClassifications();
+		}
+	}
 };
 
 /**

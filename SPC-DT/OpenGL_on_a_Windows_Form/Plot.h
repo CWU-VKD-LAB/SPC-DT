@@ -63,6 +63,12 @@ struct Plot {
 		return accuracies;
 	}
 
+	void clearClassifications() {
+		for (int i = 0; i < zones.size(); i++) {
+			zones[i].clearClassifications();
+		}
+	}
+
 	void draw() {
 		// draw plot
 		drawPlot();
