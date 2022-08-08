@@ -100,7 +100,7 @@ public:
     std::vector<std::vector<std::vector<float>>> thresholdEdgeSelectionZones;
     std::map<std::vector<float>, int> edgeToParserElementIndex; // map: collection of edge points -> list [ zoneId, index for (x1, y1, x2, y2) ]
     std::set<int> zoneIdThresholdEdgesRecorded;
-    std::vector<int> findClickedEdge(GLfloat px, GLfloat py);
+    std::vector<int> findClickedEdge(GLfloat px, GLfloat py, int plotNumClicked);
 	void recomputePlotZones(int& plotNum);
 	std::vector<int> clickedEdge;
 	std::vector<Zone> plotZones;
@@ -163,6 +163,7 @@ public:
 	void drawRectangle(UserRectangle rectToDraw);
 	void drawRectangle(float rect_x1, float rect_x2, float rect_y1, float rect_y2, float r, float g, float b);
 	void drawRectanglesOnGray();
+	void drawZoneEdges();
 	void setBackgroundTransparency(float alpha);
 	void setBackgroundColorLightness(float lightness);
 	//std::vector<float> RGBtoHSL(std::vector<float> classColor);

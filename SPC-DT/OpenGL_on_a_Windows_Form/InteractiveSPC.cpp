@@ -761,6 +761,12 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
 	int point1BackgroundZone = point1PlotZone->id;
     mitigateOverlap(x1, y1, caseNum, caseClass, plotNum, point1BackgroundClass, point1BackgroundZone);
+    adjustPointToRectangle(x1, y1, caseClass, plotNum);
+    if (shouldClassify) {
+        handleMisclassifications(x1, y1, caseClass, caseNum, point1BackgroundClass);
+    }
+
+
 
     // // Get class and zone id of the data point
     // int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
@@ -888,7 +894,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     //     }
     // }
 
-    adjustPointToRectangle(x1, y1, caseClass, plotNum);
+    //adjustPointToRectangle(x1, y1, caseClass, plotNum);
     
     //TODO: Make work with all user rectangles
     //// condensation mode
@@ -935,7 +941,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // int pointWasCorrectlyClassified = false;
 
     // GLubyte classTransparency = data.classTransparencies[caseClass];
-    handleMisclassifications(x1, y1, caseClass, caseNum, point1BackgroundClass);
+    //handleMisclassifications(x1, y1, caseClass, caseNum, point1BackgroundClass);
     // // count misclassifications
     // std::vector<int>* misclassifiedClassList = &data.misclassifiedCases[caseClass][point1BackgroundClass]; // {actual -> {predicted -> [casenum, ...]}}
     // std::map<int, std::vector<int>> * predictedClasses = &data.misclassifiedCases[caseClass];
@@ -1794,7 +1800,7 @@ void InteractiveSPC::display()
 
 	// draw all plots
     for (int i = 0; i < data.plots.size(); i++) {
-        data.plots[i].draw();
+        data.plots[i].draw(selectionMode == SelectionMode::AdjustThresholds);
     }
 
     //// draw zone objects
@@ -3051,16 +3057,36 @@ UserRectangle* InteractiveSPC::findClickedRectangle(GLfloat px, GLfloat py) {
     return result;
 }
 
-std::vector<int> InteractiveSPC::findClickedEdge(GLfloat px, GLfloat py) {
-    std::vector<int> result;
-    for (int i = 0; i < plotZones.size(); i++) {
-        result = plotZones[i].findEdgeForPoint(px, py);
-        if (result.empty()) {
-            continue;
+void InteractiveSPC::drawZoneEdges() {
+    for (int i = 0; i < data.plots.size(); i++) {
+        Plot* plt = &data.plots[i];
+        for (int j = 0; j < plt->zones.size(); j++) {
+            Zone* zone = &plt->zones[j];
+            zone->drawEdges();
         }
+    }
+}
+
+std::vector<int> InteractiveSPC::findClickedEdge(GLfloat px, GLfloat py, int plotNumClicked) {
+    std::vector<int> result;
+    if (plotNumClicked < 0) return result;
+    Plot* plt = &data.plots[plotNumClicked];
+    for (int i = 0; i < plt->zones.size(); i++) {
+		Zone* zone = &plt->zones[i];
+        std::vector<int> edge = zone->findEdgeForPoint(px, py);
+        if (edge.empty()) continue;
+		result = edge;
         break;
     }
-    return result;
+	return result;
+    //for (int i = 0; i < plotZones.size(); i++) {
+    //    result = plotZones[i].findEdgeForPoint(px, py);
+    //    if (result.empty()) {
+    //        continue;
+    //    }
+    //    break;
+    //}
+    //return result;
     //std::vector<int> result;
     //for (int zoneId = 0; zoneId < thresholdEdgeSelectionZones.size(); zoneId++) {
     //    std::vector<std::vector<float>> zoneEdges = thresholdEdgeSelectionZones[zoneId];

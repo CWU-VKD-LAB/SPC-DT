@@ -49,12 +49,19 @@ struct Plot {
 		
 		for (int i = 0; i < zones.size(); i++) {
 			std::map<int, std::vector<int>> zoneAccuracy = zones[i].getAccuracies();
-			for (int j = 0; j < classes->size(); j++) {
-				int curClass = classes->at(j);
-				if (curClass < 0) continue;
-				correctlyClassified[curClass] += zoneAccuracy[curClass][0];
-				misclassified[curClass] += zoneAccuracy[curClass][1];
-			}
+			int curClass = zones[i].classNum;
+			if (curClass < 0) continue;
+			correctlyClassified[curClass] += zoneAccuracy[curClass][0];
+			misclassified[curClass] += zoneAccuracy[curClass][1];
+
+
+
+			//for (int j = 0; j < classes->size(); j++) {
+			//	int curClass = classes->at(j);
+			//	if (curClass < 0) continue;
+			//	correctlyClassified[curClass] += zoneAccuracy[curClass][0];
+			//	misclassified[curClass] += zoneAccuracy[curClass][1];
+			//}
 		}
 		
 		std::vector<std::map<int, int>> accuracies;
@@ -69,11 +76,11 @@ struct Plot {
 		}
 	}
 
-	void draw() {
+	void draw(bool isAdjustThresholdsMode) {
 		// draw plot
 		drawPlot();
 		// draw zones
-		drawZones();
+		drawZones(isAdjustThresholdsMode);
 	}
 	
 	void drawPlot() {
@@ -153,9 +160,9 @@ struct Plot {
 		drawBitmapText(plotAsArr, getX1() + fractionOfWidth, getY2() + plotIdOffset);
 	}
 	
-	void drawZones() {
+	void drawZones(bool isAdjustThresholdMode) {
 		for (int i = 0; i < zones.size(); i++) {
-			zones[i].drawZone();
+			zones[i].drawZone(isAdjustThresholdMode);
 		}
 	}
 

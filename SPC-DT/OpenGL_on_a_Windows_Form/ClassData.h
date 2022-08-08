@@ -274,6 +274,7 @@ public:
 			std::vector<std::map<int, int>> plotAccuracy = plots[i].getZoneAccuracies(); // zones : [ {class -> correctlyClassified , class -> misclassified}
 			debugList.push_back(plotAccuracy);
 		}
+
 		// Compute accuracy
 		std::map<int, float> accuracyMap;
 		std::vector<float> accuraciesByClass;
@@ -1047,7 +1048,7 @@ public:
 			}
 		}
 
-		int indexToCheck = (direction + 2) % 4; // parser representation: x1, y1, x2, y2
+		int indexToCheck = (direction + 2) % 4; // parser representation: x1, y1, x2, y2 ::::: left, bottom, right, top
 
 		// get all parser elements that share the selected edge
 		std::vector<std::vector<float>*> adjoiningEdges;

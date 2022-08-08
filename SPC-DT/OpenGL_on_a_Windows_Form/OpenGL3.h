@@ -911,7 +911,8 @@ public
                                 }
                                 break;
                             case InteractiveSPC::SelectionMode::AdjustThresholds:
-                                graph4.clickedEdge = graph4.findClickedEdge(worldMouseX, worldMouseY);
+                                graph4.drawZoneEdges();
+                                graph4.clickedEdge = graph4.findClickedEdge(worldMouseX, worldMouseY, plotNumClicked);
                                 if (graph4.clickedEdge.empty()) {
                                     std::cout << "debug!";
                                 }

@@ -99,6 +99,10 @@ struct Zone
 
     std::map<int, std::vector<int>> getAccuracies() {
         std::map<int, std::vector<int>> accuracies; // class -> [num correct, num misclassiedAsClass]
+        std::vector<int> classifications;
+        classifications.push_back(correctlyClassifiedCases.size());
+        classifications.push_back(misclassifiedCases.size());
+        accuracies[classNum] = classifications;
         //for (int i = 0; i < classes->size(); i++) {
         //    int curClass = classes->at(i);
         //    accuracies[curClass].push_back(correctlyClassifiedCases.size());
@@ -172,13 +176,16 @@ struct Zone
         std::vector<GLubyte> rgb = HSLtoRGB(hsl);
         glColor4ub(rgb[0], rgb[1], rgb[2], transparency);
     }
-    void drawZone()
+    void drawZone(bool isAdjustThresholdsMode)
     {
         //updateFromParser();
         // computeRealCoordinates();
         GLfloat backgroundTransparency = computeBackgroundTransparency();
         setColor(backgroundTransparency);
         glRectf(getRealX1(), getRealY1(), getRealX2(), getRealY2());
+        if (isAdjustThresholdsMode) {
+            drawEdges();
+        }
     }
     void computeSelectionZones(float selectionWidth)
     {
