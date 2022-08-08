@@ -154,6 +154,10 @@ public:
 	bool isHighlightWorstAreaMode = false;
     void drawWorstZone();
 
+    // for exclusion zones
+    std::set<int> excludedCases;
+
+
 	/* This method takes the passed mouse click coordinates and finds the graph clicked on. */
 	float findClickedGraph(double x, double y);
 	int findClickedCoordinate(double x, double y);

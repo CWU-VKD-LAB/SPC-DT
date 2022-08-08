@@ -726,9 +726,14 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
 		if (userRect->type == Exclude) {
 			if (userRect->isPointWithinRect(x1, y1)) {
                 shouldClassify = false;
+                excludedCases.insert(caseNum);
                 break;
 			}
 		}
+    }
+
+    if (shouldClassify && excludedCases.find(caseNum) != excludedCases.end()) {
+        excludedCases.erase(caseNum);
     }
 
     if (shouldClassify) {
