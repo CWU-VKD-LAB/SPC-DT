@@ -718,34 +718,67 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
         y1 = plt1Y2 - plotHeight * y1 + data.pan_y;
     }
 
+    Zone* point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
+    if (point1PlotZone == nullptr) return -1;
+    int point1BackgroundClass = point1PlotZone->classNum;
+	int point1BackgroundZone = point1PlotZone->id;
+
 	// check if point1 is within a no classify rectangle
     bool shouldClassify = true;
     for (int i = 0; i < userRectangles.size(); i++) {
 		UserRectangle* userRect = &userRectangles[i];
 		if (userRect->plotNum != plotNum) continue;
-		if (userRect->type == Exclude) {
-			if (userRect->isPointWithinRect(x1, y1)) {
+		if (userRect->type == Exclude) { // if current rect is an exclusion zone
+			if (userRect->isPointWithinRect(x1, y1)) { // if point is within the exclusion zone
                 shouldClassify = false;
-                excludedCases.insert(caseNum);
+                if (data.excludedCases.find(caseNum) == data.excludedCases.end()) { // if case has not already been excluded
+                    if (point1PlotZone->type == ZoneType::Decision) { // if zone is a decision zone
+                        data.excludedCases.insert(caseNum);
+                        if (caseClass >= 0) {
+                            if (caseClass != point1PlotZone->classNum) { // if case does not match decision zone class
+                                data.classMisclassifiedCaseCount[caseClass]--;
+                                std::vector<int>* misclassifiedCases = &data.misclassifiedCases[caseClass][point1BackgroundClass];
+                                auto find = std::find(misclassifiedCases->begin(), misclassifiedCases->end(), caseNum);
+                                if (find != misclassifiedCases->end()) {
+                                    misclassifiedCases->erase(find);
+                                }
+                            }
+                        }
+                    }
+                }
                 break;
 			}
 		}
     }
 
-    if (shouldClassify && excludedCases.find(caseNum) != excludedCases.end()) {
-        excludedCases.erase(caseNum);
+    // if we should classify the point, it is in a decicision zone, and it's in the excluded cases list, remove it from the excluded cases list
+    if (shouldClassify && point1PlotZone->type == ZoneType::Decision && data.excludedCases.find(caseNum) != data.excludedCases.end()) {
+        data.excludedCases.erase(caseNum);
     }
 
+    // if we are supposed to classify the point, classify it 
     if (shouldClassify) {
         point1Plot->classifyPoint(x1, y1, caseNum, caseClass);
     }
 	
-    Zone* point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
-
+    // if the zone that point is in is null, return
     if (point1PlotZone == nullptr) {
         std::cout << "debug";
         point1PlotZone = point1Plot->getZoneThatContainsPoint(x1, y1);
         return -1;
+    }
+
+    // check if there are any exclusion zones, if not clear the excluded list
+    bool excludeRectFound = false;
+	for (int i = 0; i < userRectangles.size(); i++) {
+		UserRectangle* userRect = &userRectangles[i];
+        if (userRect->type == Exclude) {
+            excludeRectFound = true;
+            break;
+        }
+    }
+    if (!excludeRectFound) {
+        data.excludedCases.clear();
     }
 
     // debug
@@ -761,10 +794,7 @@ int InteractiveSPC::drawData(float x1, float y1, int caseNum, int plotNum)
     // y1 = plt1Y2 - (plt1Y2 - plt1Y1) * y1 + data.pan_y;
 
     // mitigate overlap
-    //int point1BackgroundClass = findBackgroundClassOfPoint(x1, y1, plotNum);
-    int point1BackgroundClass = point1PlotZone->classNum;
-    //int point1BackgroundZone = findBackgroundZoneIdOfPoint(x1, y1, plotNum);
-	int point1BackgroundZone = point1PlotZone->id;
+    
     mitigateOverlap(x1, y1, caseNum, caseClass, plotNum, point1BackgroundClass, point1BackgroundZone);
     adjustPointToRectangle(x1, y1, caseClass, plotNum);
     if (shouldClassify) {
@@ -3067,7 +3097,7 @@ void InteractiveSPC::drawZoneEdges() {
         Plot* plt = &data.plots[i];
         for (int j = 0; j < plt->zones.size(); j++) {
             Zone* zone = &plt->zones[j];
-            zone->drawEdges();
+            zone->drawEdges();            
         }
     }
 }

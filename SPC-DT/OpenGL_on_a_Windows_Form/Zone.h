@@ -38,6 +38,7 @@ struct Zone
     std::vector<int> misclassifiedCases;
     std::map<int, int> misclassfiedCaseActualClass;
     std::vector<int>* classes;
+    std::set<int> excludedCases;
     // Edge* edges[4]; // left, top, right, bottom
 
     Zone() {}
@@ -196,20 +197,20 @@ struct Zone
         edgeSelectionZones[0][1][0] = getRealX1() + selectionWidth * 0.5;
         edgeSelectionZones[0][1][1] = getRealY2();
         // bottom edge
-        edgeSelectionZones[1][0][0] = getRealX1();
-        edgeSelectionZones[1][0][1] = getRealY2() + selectionWidth * 0.5;
-        edgeSelectionZones[1][1][0] = getRealX2();
-        edgeSelectionZones[1][1][1] = getRealY2() - selectionWidth * 0.5;
+        edgeSelectionZones[3][0][0] = getRealX1();
+        edgeSelectionZones[3][0][1] = getRealY2() + selectionWidth * 0.5;
+        edgeSelectionZones[3][1][0] = getRealX2();
+        edgeSelectionZones[3][1][1] = getRealY2() - selectionWidth * 0.5;
         // right edge
         edgeSelectionZones[2][0][0] = getRealX2() - selectionWidth * 0.5;
         edgeSelectionZones[2][0][1] = getRealY1();
         edgeSelectionZones[2][1][0] = getRealX2() + selectionWidth * 0.5;
         edgeSelectionZones[2][1][1] = getRealY2();
         // top edge
-        edgeSelectionZones[3][0][0] = getRealX1();
-        edgeSelectionZones[3][0][1] = getRealY1() + selectionWidth * 0.5;
-        edgeSelectionZones[3][1][0] = getRealX2();
-        edgeSelectionZones[3][1][1] = getRealY1() - selectionWidth * 0.5;
+        edgeSelectionZones[1][0][0] = getRealX1();
+        edgeSelectionZones[1][0][1] = getRealY1() + selectionWidth * 0.5;
+        edgeSelectionZones[1][1][0] = getRealX2();
+        edgeSelectionZones[1][1][1] = getRealY1() - selectionWidth * 0.5;
     }
     void computeSelectionZones()
     {
@@ -238,6 +239,7 @@ struct Zone
     }
     void drawEdges()
     {
+        drawSelectionZones();
         // drawSelectionZones(); // debug
         glColor4ub(0, 0, 0, 255);
         glBegin(GL_LINE_LOOP);
@@ -249,20 +251,22 @@ struct Zone
     }
     void drawSelectionZones()
     {
+        computeSelectionZones();
         for (int i = 0; i < 4; i++)
         {
-            glBegin(GL_POINTS);
-            glColor3ub(255, 0, 0);
-            glVertex2f(edgeSelectionZones[i][0][0], edgeSelectionZones[i][0][1]);
-            glColor3ub(0, 255, 0);
-            glVertex2f(edgeSelectionZones[i][1][0], edgeSelectionZones[i][1][1]);
-            glEnd();
-            glBegin(GL_LINE);
-            glVertex2f(edgeSelectionZones[i][0][0], edgeSelectionZones[i][0][1]);
-            glVertex2f(edgeSelectionZones[i][1][0], edgeSelectionZones[i][1][1]);
-            glEnd();
+            //glBegin(GL_POINTS);
+            //glColor3ub(255, 0, 0);
+            //glVertex2f(edgeSelectionZones[i][0][0], edgeSelectionZones[i][0][1]);
+            //glColor3ub(0, 255, 0);
+            //glVertex2f(edgeSelectionZones[i][1][0], edgeSelectionZones[i][1][1]);
+            //glEnd();
+            //glBegin(GL_LINE);
+            //glVertex2f(edgeSelectionZones[i][0][0], edgeSelectionZones[i][0][1]);
+            //glVertex2f(edgeSelectionZones[i][1][0], edgeSelectionZones[i][1][1]);
+            //glEnd();
 
-            glBegin(GL_POLYGON);
+            glColor4ub(255, 0, 0, 128);
+            glBegin(GL_LINE_LOOP);
             // draw a rectangle
             glVertex2f(edgeSelectionZones[i][0][0], edgeSelectionZones[i][0][1]);
             glVertex2f(edgeSelectionZones[i][1][0], edgeSelectionZones[i][0][1]);

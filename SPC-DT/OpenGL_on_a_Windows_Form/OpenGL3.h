@@ -936,7 +936,6 @@ public
                                     graph4.worstZoneNumDensity = INT32_MAX;
                                 }
                                 // update confusion matrix
-                                confusionMatrixTextBox->Text = "Computing...";
                                 confusionMatrixTextBox->Text = buildConfusionMatrixString();
                                 break;
                             case InteractiveSPC::SelectionMode::SwapXY:

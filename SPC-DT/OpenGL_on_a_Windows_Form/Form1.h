@@ -2123,45 +2123,7 @@ private: System::Windows::Forms::Label^ currentModeDisplay;
     private:
         System::Void showClassAccuraciesButton_Click(System::Object ^ sender, System::EventArgs ^ e)
         {
-            std::vector<std::vector<int>> confusionMatrix = OpenGL3->computeConfusionMatrix();
-            String ^ displayString = "Real\tPredicted Class\r\n";
-            displayString += "Class\t";
-            for (int i = 0; i < confusionMatrix[0].size(); i++)
-            {
-                displayString += confusionMatrix[0][i];
-                if (i < (confusionMatrix[0].size() - 1))
-                {
-                    displayString += "\t";
-                }
-            }
-            displayString += "\r\n";
-            for (int i = 1; i < confusionMatrix.size(); i++)
-            {
-                std::vector<int> row = confusionMatrix[i];
-                for (int j = 0; j < row.size(); j++)
-                {
-                    displayString += row[j];
-                    if (j != row.size() - 1)
-                    {
-                        displayString += "\t";
-                    }
-                }
-                displayString += "\r\n" + "\r\n";
-            }
-
-            std::map<int, float> accuracies = OpenGL3->computeAccuracy();
-
-            for (auto i = accuracies.begin(); i != accuracies.end(); ++i)
-            {
-                if (i->first == -1)
-                    continue; // skip average for now
-                displayString += "Class " + i->first + " Accuracy:\t" + i->second + "\r\n";
-            }
-
-            displayString += "Total Accuracy:\t" + accuracies[-1];
-
-            confusionMatrixTextBox->Text = displayString;
-
+            updateConfusionMatrix();
             //MessageBox::Show(displayString);
         }
 
@@ -2262,6 +2224,47 @@ private: System::Void removeUserRectButton_Click(System::Object^ sender, System:
     OpenGL3->removeSelectedUserRectangle();
     userRectangleTypeSelection->Enabled = enabled;
     enabled = !enabled;
+}
+void updateConfusionMatrix() {
+    std::vector<std::vector<int>> confusionMatrix = OpenGL3->computeConfusionMatrix();
+    String^ displayString = "Real\tPredicted Class\r\n";
+    displayString += "Class\t";
+    for (int i = 0; i < confusionMatrix[0].size(); i++)
+    {
+        displayString += confusionMatrix[0][i];
+        if (i < (confusionMatrix[0].size() - 1))
+        {
+            displayString += "\t";
+        }
+    }
+    displayString += "\r\n";
+    for (int i = 1; i < confusionMatrix.size(); i++)
+    {
+        std::vector<int> row = confusionMatrix[i];
+        for (int j = 0; j < row.size(); j++)
+        {
+            displayString += row[j];
+            if (j != row.size() - 1)
+            {
+                displayString += "\t";
+            }
+        }
+        displayString += "\r\n" + "\r\n";
+    }
+
+    std::map<int, float> accuracies = OpenGL3->computeAccuracy();
+
+    for (auto i = accuracies.begin(); i != accuracies.end(); ++i)
+    {
+        if (i->first == -1)
+            continue; // skip average for now
+        displayString += "Class " + i->first + " Accuracy:\t" + i->second + "\r\n";
+    }
+
+    displayString += "Total Accuracy:\t" + accuracies[-1];
+
+    confusionMatrixTextBox->Text = displayString;
+
 }
 };
 }

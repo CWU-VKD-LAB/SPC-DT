@@ -251,6 +251,8 @@ public:
 
 	std::vector<Plot> plots;
 
+	std::set<int> excludedCases;
+
 	void computeClassAccuracies() {
 		if (casesPerClass.size() == 0) {
 			computeNumCasesPerClass();
@@ -305,12 +307,16 @@ public:
 		return accuracyMap;
 	}
 
+	void updateConfusionMatrix() {
+		computeConfusionMatrix();
+	}
+
 	std::vector<std::vector<int>> computeConfusionMatrix() {
 		std::vector<std::vector<int>> confusionMatrix;
 
-		if (casesPerClass.size() == 0) {
+		//if (casesPerClass.size() == 0) {
 			computeNumCasesPerClass();
-		}
+		//}
 		
 		std::vector<int> firstRowOfConfusionMatrix;
 		for (int i = 0; i < classes.size(); i++) {
@@ -332,10 +338,9 @@ public:
 
 				if (predictedClass == currentClass) {
 					confusionMatrixRow.push_back(casesPerClass[currentClass] - classMisclassifiedCaseCount[currentClass]);
-					continue;
+				} else { 
+					confusionMatrixRow.push_back(misclassifiedCases[currentClass][predictedClass].size()); 
 				}
-				
-				confusionMatrixRow.push_back(misclassifiedCases[currentClass][predictedClass].size());
 			}
 			confusionMatrix.push_back(confusionMatrixRow);
 		}
@@ -344,12 +349,12 @@ public:
 	}
 
 	std::vector<std::vector<float>> getClassAccuracies() {
-		if (casesPerClass.size() == 0) {
+		//if (casesPerClass.size() == 0) {
 			computeNumCasesPerClass();
-		}
-		if (classAccuracy.size() == 0) {
+		//}
+		//if (classAccuracy.size() == 0) {
 			computeClassAccuracies();
-		}
+		//}
 		// list will hold class accuracies: classAccuraciesAsList[i] = vector: [class, classAccuracy]
 		std::vector<std::vector<float>> classAccuraciesAsList;
 		for (int i = 0; i < classes.size(); i++) {
@@ -364,16 +369,27 @@ public:
 	}
 
 	void computeNumCasesPerClass() {
-		for (int i = 0; i < classNum.size(); i++) {
-			int curClass = classNum[i] - minClassNum;
-			// have to account for classes being non zero based
-			if (casesPerClass.find(curClass) != casesPerClass.end()) {
-				casesPerClass[curClass]++;
-			}
-			else {
-				casesPerClass[curClass] = 1;
-			}
- 		}
+        casesPerClass.clear();
+        for (int i = 0; i < normalizedValues.size(); i++) {
+            if (excludedCases.find(i) != excludedCases.end()) continue;
+            int curClass = normalizedValues[i][normalizedValues[i].size() - 1] - minClassNum;
+            if (curClass < 0) continue;
+            if (casesPerClass.find(curClass) == casesPerClass.end()) {
+                casesPerClass[curClass] = 1;
+            } else {
+                casesPerClass[curClass]++;
+            }
+        }
+		// for (int i = 0; i < classNum.size(); i++) {
+		// 	int curClass = classNum[i] - minClassNum;
+		// 	// have to account for classes being non zero based
+		// 	if (casesPerClass.find(curClass) != casesPerClass.end()) {
+		// 		casesPerClass[curClass]++;
+		// 	}
+		// 	else {
+		// 		casesPerClass[curClass] = 1;
+		// 	}
+ 		// }
 		std::cout << "debug";
 	}
 
@@ -1011,18 +1027,24 @@ public:
 		//float centerY = yPlotCoordinates[plotId];
 		float centerX = plots[plotId].centerX;
 		float centerY = plots[plotId].centerY;
-		float x1 = centerX - plotWidth[plotId] / 2;
-		float x2 = centerX + plotWidth[plotId] / 2;
-		float y1 = centerY - plotHeight[plotId] / 2;
-		float y2 = centerY + plotHeight[plotId] / 2;
+		float x1 = plots[plotId].getX1();
+		float x2 = plots[plotId].getX2();
+		float y1 = plots[plotId].getY1();
+		float y2 = plots[plotId].getY2();
+		float width = max(x1, x2) - min(x1, x2);
+		float height = max(y1, y2) - min(y1, y1);
+		//float x1 = centerX - plotWidth[plotId] / 2;
+		//float x2 = centerX + plotWidth[plotId] / 2;
+		//float y1 = centerY - plotHeight[plotId] / 2;
+		//float y2 = centerY + plotHeight[plotId] / 2;
 
 		// compute what percent of the plot the mouse is at
         // check to make sure we can do division
-        if (x2 - x1 == 0 || y1 - y2 == 0) {
+        if (width == 0 || height == 0) {
             return;
         }
-		float mouseLocationOnPlotX = (worldMouseX - x1) / (x2 - x1);
-		float mouseLocationOnPlotY = (worldMouseY - y2) / (y1 - y2);
+		float mouseLocationOnPlotX = (worldMouseX - min(x1,x2)) / width;
+		float mouseLocationOnPlotY = 1.0f - (worldMouseY - min(y1,y2)) / height;
 
 		// adjust bounds (can't be more or less than (0.0, 1.0))
 		if (worldMouseX > max(x1, x2)) {
@@ -1080,17 +1102,17 @@ public:
                 adjoiningEdges[i]->at(indexToCheck) = mouseLocationOnPlotY;
             }
         }
-		clearClassifications();
+		//clearClassifications();
 		zonesWithDarkBackgrounds.clear();
 		plotNumZoneTotalCases.clear();
 		plotNumZoneTotalMisclassifiedCases.clear();
     }
 	
-	void clearClassifications() {
-		for (int i = 0; i < plots.size(); i++) {
-			plots[i].clearClassifications();
-		}
-	}
+	//void clearClassifications() {
+	//	for (int i = 0; i < plots.size(); i++) {
+	//		plots[i].clearClassifications();
+	//	}
+	//}
 };
 
 /**

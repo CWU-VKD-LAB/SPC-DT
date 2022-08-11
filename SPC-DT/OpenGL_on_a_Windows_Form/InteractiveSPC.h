@@ -155,7 +155,7 @@ public:
     void drawWorstZone();
 
     // for exclusion zones
-    std::set<int> excludedCases;
+    //std::set<int> excludedCases;
 
 
 	/* This method takes the passed mouse click coordinates and finds the graph clicked on. */
