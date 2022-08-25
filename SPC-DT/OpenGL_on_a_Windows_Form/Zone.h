@@ -239,7 +239,7 @@ struct Zone
     }
     void drawEdges()
     {
-        drawSelectionZones();
+        //drawSelectionZones();
         // drawSelectionZones(); // debug
         glColor4ub(0, 0, 0, 255);
         glBegin(GL_LINE_LOOP);
